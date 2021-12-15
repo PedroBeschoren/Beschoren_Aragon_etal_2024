@@ -11,7 +11,7 @@ If a package is installed, it will be loaded. If any are not installed, the miss
 from CRAN and then loaded.
 ```{r results=hide}
 
-
+#test git
 
 ## First specify the packages of interest
 packages <- c("devtools",# needed to install some packages
