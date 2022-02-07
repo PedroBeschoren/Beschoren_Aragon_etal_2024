@@ -1,0 +1,148 @@
+---
+title: "9_important_taxa_overrepresentation"
+author: "Pedro"
+date: "2/7/2022"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+
+# 9.0 important taxa overrepresentation
+Here we take the output of script 8 that defines teh ASVs that were importnat, and then look into the taxonomies of important taxa. It tests if  these taxa are overperesented in the importnat subset, when compared to the full subset. 
+
+This script will awnser the following question: if 6 out of 17 taxa in RF_importnat of B.Ole roots are from f__Commonadacea, and 211 out of 2453 of the taxas in B.Ole roots are from f__Commonadacea, are these proportions similar or different?
+
+# 9.1 important taxa overrepresentation
+set a list of important taxa based on the list of important ASVs
+```{r}
+
+
+#list of ASVs tagged as important (chunk # 8.6.1b )
+simplified_ASV_importance_scores
+
+
+# get the ASV names of any ASV that had any tag (that is, remove uninportnat ASVS)
+important_ASV_list<-lapply(simplified_ASV_importance_scores, function(x)
+  row.names(x[x$sum_of_tags>0,]))
+
+#as taxas above expected in neutral definitions were not defined in root samples but were explored in other figures, let's remove them from this analysis
+important_ASV_list<-lapply(simplified_ASV_importance_scores, function(x){
+  x<-x[,c(-2, -5)]
+  x$sum_of_tags<-rowSums(x)
+  row.names(x[x$sum_of_tags>0,])
+})
+  
+
+
+
+# make list by hand as mapply fails us
+ps_imp_taxa_l<-list(
+  subset_taxa(ps_list_rarefied$Arabidopsis_thaliana.Root, 
+              (taxa_names(ps_list_rarefied$Arabidopsis_thaliana.Root) %in% important_ASV_list$Arabidopsis_thaliana.Root)),
+  
+  subset_taxa(ps_list_rarefied$Arabidopsis_thaliana.Soil, 
+              (taxa_names(ps_list_rarefied$Arabidopsis_thaliana.Soil) %in% important_ASV_list$Arabidopsis_thaliana.Soil)),
+  
+  subset_taxa(ps_list_rarefied$Brassica_oleraceae.Root, 
+              (taxa_names(ps_list_rarefied$Brassica_oleraceae.Root) %in% important_ASV_list$Brassica_oleraceae.Root)),
+  
+  subset_taxa(ps_list_rarefied$Brassica_oleraceae.Soil, 
+                        (taxa_names(ps_list_rarefied$Brassica_oleraceae.Soil) %in% important_ASV_list$Brassica_oleraceae.Soil)))
+# assign names to list
+names(ps_imp_taxa_l)<-c("Arabidopsis_thaliana.Root",
+                         "Arabidopsis_thaliana.Soil",
+                         "Brassica_oleraceae.Root",
+                        "Brassica_oleraceae.Soil")
+
+
+```
+
+
+
+
+# 9.2 prepare data and calculate proportions with fisher's exact test
+
+Note that Pedro failed to automate the proportion-testing fucntion despite Karen's help. There was a problem on the loop when it is called inside the function: objects "i" in the loop were literally passed as charather "i", so classes/orders could not be found. the same code works fine when hard-coded, so here I just overwrite the inputs and outputs, sourcing the code several times as if it was an actual function 
+
+```{r}
+############### define the phyloseq objects overritng them. instead of copy-pasting the code, I just srouce a script and save the result
+
+ps_important_taxa<-ps_imp_taxa_l$Arabidopsis_thaliana.Root
+ps_all_taxa<-ps_list_rarefied$Arabidopsis_thaliana.Root
+source("./Code/Functions/fisher_test_on_taxa_levels.R") 
+fisher_result_AT_root<-fisher_result
+
+ps_important_taxa<-ps_imp_taxa_l$Arabidopsis_thaliana.Soil
+ps_all_taxa<-ps_list_rarefied$Arabidopsis_thaliana.Soil
+source("./Code/Functions/fisher_test_on_taxa_levels.R") 
+fisher_result_AT_soil<-fisher_result
+
+ps_important_taxa<-ps_imp_taxa_l$Brassica_oleraceae.Root
+ps_all_taxa<-ps_list_rarefied$Brassica_oleraceae.Root
+source("./Code/Functions/fisher_test_on_taxa_levels.R") 
+fisher_result_BO_root<-fisher_result
+
+ps_important_taxa<-ps_imp_taxa_l$Brassica_oleraceae.Soil
+ps_all_taxa<-ps_list_rarefied$Brassica_oleraceae.Soil
+source("./Code/Functions/fisher_test_on_taxa_levels.R") 
+fisher_result_BO_soil<-fisher_result
+
+#saves all into a single list
+fisher_result_l<-list(fisher_result_AT_root,
+                      fisher_result_AT_soil,
+                      fisher_result_BO_root,
+                      fisher_result_BO_soil)
+
+#adjust anmes of new list
+names(fisher_result_l)<-c("fisher_result_AT_root",
+                          "fisher_result_AT_soil",
+                          "fisher_result_BO_root",
+                          "fisher_result_BO_soil")
+
+
+```
+
+
+# 9.3 extract p values and odds ratio
+Now that we have large lists of fisher tests, let's fishe out important metrics for visualization
+```{r}
+#output
+fisher_result_l
+
+map(fisher_result_BO_root,1) # p values
+map(fisher_result_BO_root,1)[map(fisher_result_BO_root,1)<0.05] # significant p values 
+map(fisher_result_BO_root,3)[map(fisher_result_BO_root,1)<0.05] # odds ration from significat tests
+
+
+
+
+#apply FDR correction to the p values
+fdr_p_fisher_l<-lapply(fisher_result_l, function (x){
+  #single df with all p values
+  pvector<-do.call(rbind.data.frame, map(x,1))
+  
+  # adjust the p value with fdr, then save as a list
+  adjusted_p<-p.adjust(p = pvector[[1]],
+                          method = "fdr")%>%
+                      as.list()
+  # adjust names
+  names(adjusted_p)<-names(x)
+
+  return(adjusted_p)
+  
+})
+
+# subset of FDR adjusted significant p values 
+lapply (fdr_p_fisher_l, function (x) 
+  x[x<0.05])
+
+# odds ratio for each fisher comparison
+lapply(fisher_result_l, function(x) map(x,3))
+
+
+
+
+
+```
+
