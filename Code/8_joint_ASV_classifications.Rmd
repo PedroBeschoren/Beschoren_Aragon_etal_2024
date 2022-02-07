@@ -269,7 +269,109 @@ above_neutral_tags
 
 ```
 
+## 8.3.3 Above expected as coded in networks
+This definition follows the legend on the network plot: we should tag ASVs present in:
+1) all treatment but not in controls
+2) above expected in 1-2 treatments, but not in control
+3) above expected in all treatments and control
+WARNING! This code may overlap the conde in the previous chunk!
 
+```{r}
+#generate list of shared above-expected ASVs for BO and AT
+venn_asv_list_BO<-ps_venn(uni_4model_BO_above,"MeJA_treatment", plot = FALSE)
+venn_asv_list_AT<-ps_venn(uni_4model_AT_above,"MeJA_treatment", plot = FALSE)
+
+# vector of shared treatments    
+shared_treat2<-c("MeJA_0.1__MeJA_1.0__oral_secretion",
+                "MeJA_0.1__MeJA_1.0", 
+                "MeJA_0.1__oral_secretion" , 
+                "MeJA_1.0__oral_secretion",
+                "control__MeJA_0.1__MeJA_1.0__oral_secretion",
+                "MeJA_0.1",
+                "MeJA_1.0",
+                "oral_secretion"
+                ) 
+
+
+
+
+
+# we want a new taxa classification propriety named "above_expected_in" which shows in which treatments is this ASV occuring above expected values.  this function will add this definition for each compartment of the venn diagram
+add_venn_compartment_to_physeq<-function(venn_asv_list, physeq_not_listed){
+  lapply(names(venn_asv_list), function(x) {
+mutate(filter(as.data.frame(tax_table(physeq_not_listed)), #base input object
+              taxa_names(physeq_not_listed)%in%venn_asv_list[[x]]), #taxa names present in the phyloseq object and in the slice of the venn list
+       above_expected_in=paste(x)) # this assings the Venn diagram compartment to the ASVs in the node df
+  })
+}
+
+
+
+
+############################################################################################################
+############ apply custom function and tag definition to AT_soil. ########################################## 
+############################################################################################################
+
+venn_list_physeq_AT<-add_venn_compartment_to_physeq(venn_asv_list =venn_asv_list_AT, 
+                               physeq_not_listed = ASV_importance_physeq_list$Arabidopsis_thaliana.Soil)
+
+
+
+#now merge that list into a single dataframe, removing the other node metrics in AT_soil....
+venn_compartments_AT<-as.data.frame(do.call(rbind, venn_list_physeq_AT))["above_expected_in"]
+
+
+
+#now give the 2 a tag 1/0 definitions for AT_soil
+venn_compartments_AT<-mutate(venn_compartments_AT, 
+                        above_as_tagged_in_network = if_else( #create new varible
+                                condition = venn_compartments_AT$above_expected_in%in%shared_treat2, # in logical vector..
+                                true = 1,
+                                false = 0))%>% # and then...
+                      as.matrix()%>% #coerce it into a matrix
+                      tax_table() # turn it into a phyloseq object tax table
+
+
+
+############################################################################################################
+################# repeat the code to apply it to BO_soil. ################################################## 
+############################################################################################################
+
+venn_list_physeq_BO<-add_venn_compartment_to_physeq(venn_asv_list =venn_asv_list_BO, 
+                               physeq_not_listed = ASV_importance_physeq_list$Brassica_oleraceae.Soil)
+    
+
+
+#now merge that list into a single dataframe, removing the other node metrics in AT_soil....
+venn_compartments_BO<-as.data.frame(do.call(rbind, venn_list_physeq_BO))["above_expected_in"]
+
+
+# create new variable on the new df
+venn_compartments_BO<-mutate(venn_compartments_BO, 
+                        above_as_tagged_in_network = if_else( #create new varible
+                                condition = venn_compartments_BO$above_expected_in%in%shared_treat2, # in logical vector..
+                                true = 1,
+                                false = 0))%>% # and then...
+                      as.matrix()%>% #coerce it into a matrix
+                      tax_table() # turn it into a phyloseq object tax table
+
+
+
+
+
+# merge into a single phyloseq list of above_neutral classifications
+above_neutral_tags<-mapply(function(x,y)
+  merge_phyloseq (x,y),
+x = above_neutral_tags, #this is the output 1 from chunk 8.3.1 ; it is updated with new output
+y = list(venn_compartments_AT,venn_compartments_BO),
+SIMPLIFY = FALSE)
+
+
+#output 
+above_neutral_tags
+
+
+```
 
 # 8.4 -  DIFFERENTIAL ABUNDANCE ###############################################
 based on 5.4 add differential abudance classification to phyloseq object 
@@ -466,13 +568,14 @@ ASV_importance_physeq_list_merged_df[c(1,3)]<-lapply(ASV_importance_physeq_list_
   mutate(x,
          is_above_expected = 0,
          above_in_2_treatments_absent_control = 0,
-         above_only_in_control = 0))
+         above_only_in_control = 0,
+         above_as_tagged_in_network = 0))
 
 
 scoring_variables<-c("important_in_rf", #random forest def
                       "is_keystone_taxa", "is_module_hub", "is_module_connector", # network def
                       "abundant_in_treatment", "abundant_in_control", "abundant_in_2_treatments_simultaneously", #deseq2 def 
-                      "is_above_expected", "above_in_2_treatments_absent_control", "above_only_in_control") # neutral  def
+                      "is_above_expected", "above_in_2_treatments_absent_control", "above_only_in_control", "above_as_tagged_in_network") # neutral  def
 
 # makes df only containing the imporance scores, as numeric variables
 ASV_importance_scores<-lapply( ASV_importance_physeq_list_merged_df, function (x)
@@ -494,9 +597,9 @@ ASV_importance_scores
 simplified_ASV_importance_scores<-lapply (ASV_importance_scores, function (x)
                                         mutate(x, has_network_tag = rowSums(x[,2:4]), #merged the network tags
                                                  is_differentially_abundant = rowSums(x[,5:6]))%>% #merged the deseqq tags
-         select(important_in_rf, is_above_expected, has_network_tag,is_differentially_abundant )) # select a part of the df
+         select(important_in_rf, above_as_tagged_in_network, has_network_tag,is_differentially_abundant )) # select a part of the df
 
-
+# NOTE: ON jAN/2022 PEDRO FILTERED THE ABOVE EXPECTED. INSTEAD OF ACCEPTING ALL ASVS WITH ANY TAG, NOW WE ONLY INCLUDE ASVS AS TAGGED IN THE NETWORK
 
 
 #NOTE: BO_soil has 3 ASVs with 2 network tags simultaneously. with this line, we adjust it's sum to 1

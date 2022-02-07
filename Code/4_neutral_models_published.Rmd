@@ -340,9 +340,16 @@ ps_venn(uni_4model_BO_below,"MeJA_treatment")
 
 
 
-#get ASV  names in each intersection
-ps_venn(uni_4model_BO_above,"MeJA_treatment", weight = TRUE)
-venn_asv_list<-ps_venn(uni_4model_BO_above,"MeJA_treatment", plot = FALSE)
+
+
+#saves the asvs highlighted as exclusive on Venn
+venn_taxa_BO<-ps_venn(uni_4model_BO_above,"MeJA_treatment", plot = FALSE)
+
+# gets the taxonomy of taxa present in all treatment but absent in contorl
+tax_table(subset_taxa(uni_4model_BO_above, taxa_names(uni_4model_BO_above) %in% venn_taxa_BO$MeJA_0.1__MeJA_1.0__oral_secretion))
+
+
+
 
 
 ```
@@ -374,9 +381,6 @@ uni_4model_BO_above_CSS<-make_CSS_physeq(uni_4model_BO_above)
 uni_4model_BO_asPredicted_CSS<-make_CSS_physeq(uni_4model_BO_asPredicted)
 uni_4model_BO_below_CSS<-make_CSS_physeq(uni_4model_BO_below)
 
-test<-list(uni_4model_BO_above_CSS, uni_4model_AT_above_CSS)
-
-names(test)<-c("Brassica_oleraceae.Soil", "Arabdopsis_thaliana.Soil")
 ### plot above
 nmds_uni_4model_BO_above_CSS <- phyloseq::ordinate(uni_4model_BO_above_CSS, 
                              method ="NMDS", 
@@ -633,12 +637,16 @@ uni_4model_AT_above<-remove_tree_and_merge(AT_4_model_above)
 uni_4model_AT_asPredicted<-remove_tree_and_merge(AT_4_model_asPredicted)
 uni_4model_AT_below<-remove_tree_and_merge(AT_4_model_below)
 
-#based on 4 models of BO, now we see a lot fo exclusive taxa
+#based on 4 models of AT, now we see a lot fo exclusive taxa
 ps_venn(uni_4model_AT_above,"MeJA_treatment")
 ps_venn(uni_4model_AT_asPredicted,"MeJA_treatment")
 ps_venn(uni_4model_AT_below,"MeJA_treatment")
 
+#saves the asvs highlighted as exclusive on Venn
+venn_taxa_AT<-ps_venn(uni_4model_AT_above,"MeJA_treatment", plot = FALSE)
 
+# gets the taxonomy of taxa present in all treatment but absent in contorl
+tax_table(subset_taxa(uni_4model_AT_above, taxa_names(uni_4model_AT_above) %in% venn_taxa_AT$MeJA_0.1__MeJA_1.0__oral_secretion))
 
 
 ```
@@ -996,7 +1004,7 @@ permanovas_AT_100<-hundred_permanovas_on_random_otu(ps_list_CSS$Arabidopsis_thal
 
 ```
 
-### 4.9.1b run 100 permanovas on randomly selected OTUs
+### 4.9.1b run 100 permanovas on randomly selected OTUs. here we simply collect X otus from the full table
 
 ```{r}
 
@@ -1272,8 +1280,8 @@ tax_table(subset_taxa(neutral_heat_tree_BO,
 
 # quick plot bar with relative abudances, just to show how outdated it is
  silly_plot<-psmelt(transform_sample_counts(neutral_heat_tree_BO, function(x) x / sum(x) ))
- silly_plot$Phylum <- as.character(data$Phylum)
- silly_plot$Class <- as.character(data$Class)
+ silly_plot$Phylum <- as.character(silly_plot$Phylum)
+ silly_plot$Class <- as.character(silly_plot$Class)
 
 # phyla level
  p <- ggplot(data=silly_plot, aes(x=MeJA_treatment, y=Abundance/6, fill=Phylum))
@@ -1293,7 +1301,7 @@ p + geom_bar(aes(), stat="identity", position="stack")+
  
  
  
- 
+ ################### matrix of heat trees, BO
 
 
 #remove unecessary taxonomic indo (dada2id, "S__" and" above_selected)
@@ -1331,6 +1339,8 @@ neutral_heat$data$diff_table$treatment_1
 tail(neutral_heat$data$otu_table)
 
 
+heat_tree
+
 #plot matrix tree
 set.seed(1)
 heat_tree_matrix(neutral_heat,
@@ -1346,7 +1356,7 @@ heat_tree_matrix(neutral_heat,
                  node_color_axis_label = "Log2 ratio median proportions",
                  layout = "davidson-harel", # The primary layout algorithm
                  initial_layout = "reingold-tilford", # The layout algorithm that initializes node locations
-                 output_file = "differential_heat_tree_BO.pdf") # Saves the plot as a pdf file
+                 output_file = ".\R output\differential_heat_tree_BO.pdf") # Saves the plot as a pdf file
 
 
 
@@ -1354,16 +1364,17 @@ heat_tree_matrix(neutral_heat,
 
 
 
-##################### list of matrixes of ehatmaps
+ 
+ ################### matrix of heat trees, AT 
 
 
 #remove unecessary taxonomic indo (dada2id, "S__" and" above_selected)
-tax_table(neutral_heat_tree)<-tax_table(neutral_heat_tree)[,1:6]
+tax_table(neutral_heat_tree_AT)<-tax_table(neutral_heat_tree_AT)[,1:6]
 
 
 
 # transform from phyloseq to  taxmap object
-test<-parse_phyloseq(neutral_heat_tree)
+test<-parse_phyloseq(neutral_heat_tree_AT)
 
 
 
@@ -1405,7 +1416,7 @@ heat_tree_matrix(test,
                  node_color_axis_label = "Log2 ratio median proportions",
                  layout = "davidson-harel", # The primary layout algorithm
                  initial_layout = "reingold-tilford", # The layout algorithm that initializes node locations
-                 output_file = "differential_heat_tree.pdf") # Saves the plot as a pdf file
+                 output_file = ".\R output\differential_heat_tree_AT.pdf") # Saves the plot as a pdf file
 
 
 
