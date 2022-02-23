@@ -113,16 +113,21 @@ our data (processed in qiime2) was saved in BIOM format, making importing easier
 
 # This will load all the essential data (OTU frequencies, representative sequences, mapping files with metadata, taxonomy, phylogenetic tree) for a single phyloseq object
 physeq<-import_biom("./Data/Pilot_phyloseq_input_FeatureTable_metadata_taxonomy.biom",
-                 #   treefilename="./Data/tree.nwk", # we havent'really used the tree, and it makes merging of phyloseq object complicated. thus, we are not loading it inside R
+                    #treefilename="./Data/tree.nwk", # we havent'really used the tree, and it makes merging of phyloseq object complicated. thus, we are not loading it inside R
                     refseqfilename="./Data/dna-sequences.fasta")
+
+physeq #Give a look to the object
+refseq(physeq) #example
+
 
 # let's check the imported objects. Often errors will arise from typos when filling up the data sheets 
 head(otu_table(physeq))
-head(sample_data(physeq))
-head(tax_table(physeq))
+head(sample_data(physeq)) #Metadata information
+head(tax_table(physeq)) #IDs and taxonomy
+
 
 # note that dada2 will give us horrible OTU names, let's change this with a custom function
-source("./Code/Functions/backup_and_rename.R") # source will load the function inside the Code fodler of this R project
+source("./Code/Functions/backup_and_rename.R") # source will load the function inside the Code folder of this R project
 
 #this will run the custom fucntion and update the physeq object
 physeq<-backup_and_rename(physeq) # this function runs slow sinde the chuck but fast on the console.... to solve this, click on the gear and set "chucnk output in teh console" instead of "chunk output inline"
@@ -142,7 +147,9 @@ Decontamination with the decontam package only removed a single OTU from analysi
 # Before we proceed, let's prepere phyloseq object for decontamination using the decontam package
 physeq_norm<-transform_sample_counts(physeq, function(OTU) OTU/sum(OTU)) # transforms to relative frequency
 colSums(otu_table(physeq_norm)) # checks if sums are 1
-sample_data(physeq_norm)$is.neg <- sample_data(physeq_norm)$Plant_species == "Blank" # set negatives as TRUE in a  new column
+sample_data(physeq_norm)$is.neg <- ssample_data(physeq_norm)$Plant_specie== "Blank" # set negatives as TRUE in a  new column
+tail(sample_data(physeq_norm)$is.neg) #Checking that last sample is indeed TRUE
+
 
 # decontaminate! read details on decontam package. use at least 3 blank samples for minimal decontamination. grouping your blanks in batches (such as sampling blanks, DNA extraction blanks, PCR blanks) can help you remove contaminants according different sources. Try to obtain the DNA concentration from the PCR product to include this variable in the decontamination process.
 decontam_output <- isContaminant(physeq_norm,
@@ -174,12 +181,16 @@ ggplot(data=physeq_norm_df_pa, aes(x=pa.neg, y=pa.pos, color=contaminant)) +
 
 #clean physeq object by removing contaminant OTUS, then remove blank sample 
 physeq_decontaminated <- prune_taxa(!taxa_names(physeq) %in% contaminants, physeq) # keep only taxa that are not in the list of contaminants
-physeq_decontaminated <- subset_samples(physeq_decontaminated, colSums(otu_table(physeq_decontaminated))>0)
+physeq_decontaminated <- subset_samples(physeq_decontaminated, colSums(otu_table(physeq_decontaminated))>0) # to check if we lost samples in the way : no
 
 #clean physeq object by removing blank samples
 physeq_decontaminated <- subset_samples(physeq_decontaminated, Plant_species != "Blank")
 
-# DECONTAMINATION CONCLUSION: decontamination was quite useless, removing a single ASV! a single blank per library won't be enought
+#compare both physeq
+physeq_decontaminated
+physeq
+
+# DECONTAMINATION CONCLUSION: decontamination was quite useless, removing a single ASV! a single blank per library won't be enough
 
 #now that we finished decontamination, let's remove unecessary objects and liberate some memory
 rm(physeq_norm_df_pa, physeq_norm_pa_pos,physeq_norm_pa,physeq_norm)
@@ -196,8 +207,13 @@ Here, we remove this plant sequences according the taxonomy given to the ASV by 
 ```{r}
 
 # First, a quick check to detect the presence of  o__Chloroplast or f__Mitochondria
-plot_bar(subset_taxa(physeq_decontaminated, Order=="o__Chloroplast"),facet_grid=~Sample_type) # this shows we do have some plastid DNA arround
+plot_bar(subset_taxa(physeq_decontaminated, Order=="o__Chloroplast"),facet_grid=~Sample_type) # this shows we do have some plastid DNA arround, plot_bar is from the phyloseq package
 plot_bar(subset_taxa(physeq_decontaminated, Family=="f__Mitochondria"),facet_grid=~Sample_type) # this shows we do have some mitochndrial DNA arround
+
+summary(
+  sample_sums(subset_taxa(physeq_decontaminated, Family=="f__Mitochondria"))
+  /sample_sums(physeq_decontaminated))  #percentage of mitochondrial DNA per sample
+# On average is about 1.6% , minimum is 0 and maximum is 8.1%, so pretty good 
 
 
 #load and run  the fucntion that will remove the plant DNA. press F2 after selecting the custom function to open it on a new tab
@@ -225,10 +241,10 @@ now that our sequences are free of contaminants and plant DNA, let's remove read
 physeq_filtered<-physeq_clean#... but first let's save the non-filtered phyloseq object in separate
 otu_table(physeq_filtered) <- otu_table(physeq_filtered)[which (rowSums(otu_table(physeq_filtered)) > 8),] #this drops ~3000 taxa. 
 
-#let's see how many sequences were kept after this filtering
+#let's see how many sequences (reads) were kept after this filtering
 sum(sample_sums(physeq_filtered))/sum(sample_sums(physeq_clean))*100 
 
-# we kept 99.48% of sequences. let's now compare the histograms
+# we kept 99.2% of sequences. let's now compare the histograms
 ggplot() + 
   geom_density(aes(x=sample_sums(physeq_filtered)),fill=3, alpha=0.5) + 
   geom_density(aes(x=sample_sums(physeq_clean)),fill=1, alpha=0.5) 
@@ -258,12 +274,14 @@ sample_data(physeq_clean)$Sample_type<-as.factor(sample_data(physeq_clean)$Sampl
 #draw rarefaction curve
 # here we want to find a plateau: despite increase in the number of DNA reads, we do not increase the number of observed species. essentially, sequencing was deep enought to saturate your sampling effort.
 physeq_filtered_df <- as.data.frame(otu_table(physeq_filtered))
+physeq_filtered_df[1:10, 1:10]
+
 rarecurve(t(physeq_filtered_df), 
           col = sample_data(physeq_filtered)$Sample_type, 
           label = FALSE, 
           step = 200,
-          main="Rarefaction at 8652 reads, 8+ occurences, 43 out of 4572 taxa lost; 33% of sequences retained ", ylab = "Number of ASVs", xlab = "Number of DNA reads",
-          abline(v = min(sample_sums(physeq_filtered)), col="red", lwd=3, lty=2))
+          main="Rarefaction at 8678 reads, 8+ occurences, 45 out of 4943 taxa lost; 33% of sequences retained ", ylab = "Number of ASVs", xlab = "Number of DNA reads",
+          abline(v = min(sample_sums(physeq_filtered)), col="red", lwd=3, lty=2)) #minimum sample size in the physeq object
 
 #rarefraction curve is actually quite ok! we won't lose much ASV diversity if we cut at the minimal depth. of course, this is after all the filtering, which removed most rare species
 
@@ -272,14 +290,15 @@ set.seed(100) # set a random seed so that whenever you re-run this code you draw
 min(sample_sums(physeq_filtered)) #minumum library size
 sort.default(colSums(otu_table(physeq_filtered))) # sometimes you might want to lose/remove one or more samples that have a very low library size. you would have to ballance the number of samples with the minimum number of sequences. in this particular dataset, we won't cut any samples as the rarefaction curve looks very good
 
-physeq_filtered_rarefied = rarefy_even_depth(physeq_filtered, 
+physeq_filtered_rarefied <- rarefy_even_depth(physeq_filtered, 
                                              sample.size = min(sample_sums(physeq_filtered)), 
                                              rngseed = FALSE, replace = TRUE, 
                                              trimOTUs = TRUE, verbose = TRUE) 
 
 
+# doesn't matter here, after rarefaction we can week singletons 
 # this will remove any singleton randomly put in place
-otu_table(physeq_filtered_rarefied) <- otu_table(physeq_filtered_rarefied)[which                                                                        (rowSums(otu_table(physeq_filtered_rarefied)) >= 1),] 
+# otu_table(physeq_filtered_rarefied) <- otu_table(physeq_filtered_rarefied)[which                                                                        (rowSums(otu_table(physeq_filtered_rarefied)) >= 1),] 
 
 # at this point all your samples should have an identical library size
 colSums(otu_table(physeq_filtered_rarefied))
@@ -291,22 +310,30 @@ any(taxa_sums(physeq_filtered_rarefied) == 0)
 sum(otu_table(physeq_filtered_rarefied))/sum(otu_table(physeq_filtered))
 
 #this is your final phyloseq object
-physeq_filtered_rarefied
+physeq_filtered_rarefied 
+save(physeq_filtered_rarefied, file = "./Data/physeq_filtered_rarefied.Rdata")
 
-# results of rarefraction: no ASV lost, no samples lost. this is because we used a high filtering (option 1.3c), rarefaction curve achieved a plateau, and minimul library size was not too low.
+# results of rarefraction: 45 out of 4943 ASVs lost, no samples lost. this is because we used a high filtering (option 1.3c), rarefaction curve achieved a plateau, and minimum library size was not too low.
 
 #assing meja treatment as a factor
 sample_data(physeq_filtered_rarefied)$MeJA_treatment<-as.factor(sample_data(physeq_filtered_rarefied)$MeJA_treatment)
 
 # splits rarefied phyloseq object into several lists
 pslist_sp_rarefied<-phyloseq_sep_variable(physeq_filtered_rarefied, variable = "Plant_species")
+pslist_sp_rarefied
+
 # one list of 2 phyloseq objects for root/soil samples
 pslist_root_soil_rarefied<-phyloseq_sep_variable(physeq_filtered_rarefied, variable = "Sample_type") 
+pslist_root_soil_rarefied
+
 # one list of 4 phyloseq objects for sample type + species
 ps_list_rarefied<-phyloseq_sep_variable(physeq_filtered_rarefied, variable = c("Plant_species","Sample_type"))
 
-##### *** THIS DATA IS NOW READY FOR ANALYSIS *** ##########
+ps_list_rarefied$Arabidopsis_thaliana.Root #with $ you can call for sections/sub-sets of the list
+ps_list_rarefied["Arabidopsis_thaliana.Root"] #One bracket gives you back a list of 1
+ps_list_rarefied[["Arabidopsis_thaliana.Root"]] #This is not a list, only a physeq object 
 
+##### *** THIS DATA IS NOW READY FOR ANALYSIS *** ##########
 
 ```
  
