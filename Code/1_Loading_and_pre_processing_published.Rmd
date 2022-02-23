@@ -113,7 +113,7 @@ our data (processed in qiime2) was saved in BIOM format, making importing easier
 
 # This will load all the essential data (OTU frequencies, representative sequences, mapping files with metadata, taxonomy, phylogenetic tree) for a single phyloseq object
 physeq<-import_biom("./Data/Pilot_phyloseq_input_FeatureTable_metadata_taxonomy.biom",
-                 #   treefilename="./Data/tree.nwk", #we havent'really used the tree, and it makes merging of phyloseq object complicated. thus, we are not loading it inside R
+                 #   treefilename="./Data/tree.nwk", # we havent'really used the tree, and it makes merging of phyloseq object complicated. thus, we are not loading it inside R
                     refseqfilename="./Data/dna-sequences.fasta")
 
 # let's check the imported objects. Often errors will arise from typos when filling up the data sheets 
