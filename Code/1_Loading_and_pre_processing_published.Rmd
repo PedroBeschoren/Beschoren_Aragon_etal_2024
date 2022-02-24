@@ -335,10 +335,14 @@ ps_list_rarefied[["Arabidopsis_thaliana.Root"]] #This is not a list, only a phys
 
 ##### *** THIS DATA IS NOW READY FOR ANALYSIS *** ##########
 
+#clean environment
+rm(decontam_output, physeq_decontaminated, physeq_clean, physeq, physeq_filtered_df)
+
 ```
+
  
 #### 1.4b Metagenomseq
-We use this package to be able to normalize library sizes without using rarefaction and also accounting for sparsity (high number of zeros in the dataset). This is done by considering the counts up to a certain quantile (comulative sum scaling, CSS). We will perform this wiht the  metagenomseq package.
+We use this package to be able to normalize library sizes without using rarefaction and also accounting for sparsity (high number of zeros in the dataset). This is done by considering the counts up to a certain quantile ([cumulative sum scaling, CSS](https://www.metagenomics.wiki/tools/16s/norm/css)). We will perform this with the metagenomseq package.
 
 We will use CSS-normalized data for beta diversity analysis: ordinations, permanovas and beta dispersion
 ```{r}
@@ -348,7 +352,7 @@ MRexp_objt<-phyloseq_to_metagenomeSeq(physeq_filtered)
 # normalizes the object by cummulative sum scaling, a widely used method
 cumNorm(MRexp_objt) 
 
-#here you can acess the abundance matrix normalized by cummulative sum scaling. you could overwirte the phyloseq object with this
+#here you can access the abundance matrix normalized by cumulative sum scaling. you could overiwtte the phyloseq object with this
 CSS_matrix <- MRcounts(MRexp_objt, norm = TRUE, log = TRUE) # using a log scale will essentially reduce the impact of common species and increase the impact of rare species
 
 #make a new phyloseq object...
@@ -360,11 +364,8 @@ otu_table(physeq_filtered_CSS)<-otu_table(CSS_matrix, taxa_are_rows = TRUE)
 #this is your final phyloseq object
 physeq_filtered_CSS
 
-
-
 #assing meja treatment as a factor
 sample_data(physeq_filtered_CSS)$MeJA_treatment<-as.factor(sample_data(physeq_filtered_CSS)$MeJA_treatment)
-
 
 #creating lists of phyloseq objects
 # one list of 2 for B.ole and A.tha
@@ -383,9 +384,8 @@ ps_list_CSS<-phyloseq_sep_variable(physeq_filtered_CSS, variable = c("Plant_spec
 
 ```{r}
 
-#now that we have multiple ways of looking at our data, let's make a list of different normlization options
+#now that we have multiple ways of looking at our data, let's make a list of different normalization options
 normalization_listed<-list(physeq_filtered_CSS,physeq_filtered_rarefied,physeq_filtered)
-
 
 names(normalization_listed)<-c("physeq_filtered_CSS",
                                "physeq_filtered_rarefied",
