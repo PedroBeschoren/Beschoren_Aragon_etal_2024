@@ -1307,6 +1307,19 @@ p + geom_bar(aes(), stat="identity", position="stack")+
 #remove unecessary taxonomic indo (dada2id, "S__" and" above_selected)
 tax_table(neutral_heat_tree_BO)<-tax_table(neutral_heat_tree_BO)[,1:6]
 
+# let's remove the "r__"ranks from the taxonomy, they can be useful but will polute our plot
+tax_table(neutral_heat_tree_BO)[, colnames(tax_table(neutral_heat_tree_BO))] <- gsub(tax_table(neutral_heat_tree_BO)[, colnames(tax_table(neutral_heat_tree_BO))],     pattern = "[a-z]__", replacement = "")
+
+#NORMALIZE DATASET
+
+set.seed(104250)
+neutral_heat_tree_BO<- rarefy_even_depth(neutral_heat_tree_BO,
+                                        sample.size = min(sample_sums(neutral_heat_tree_BO)), 
+                                        rngseed = FALSE, 
+                                        replace = TRUE, 
+                                        trimOTUs = TRUE, 
+                                        verbose = TRUE) 
+
 # transform from phyloseq to  taxmap object
 neutral_heat<-parse_phyloseq(neutral_heat_tree_BO)
 
@@ -1339,7 +1352,6 @@ neutral_heat$data$diff_table$treatment_1
 tail(neutral_heat$data$otu_table)
 
 
-heat_tree
 
 #plot matrix tree
 set.seed(1)
@@ -1352,11 +1364,14 @@ heat_tree_matrix(neutral_heat,
                  node_color_trans = "linear", # The default is scaled by circle area
                  node_color_interval = c(-3, 3), # The range of `log2_median_ratio` to display
                  edge_color_interval = c(-3, 3), # The range of `log2_median_ratio` to display
+               #  key_size = 0,
+              #   label_small_trees = TRUE,
+               #  node_label_size = 0.01,
                  node_size_axis_label = "Number of OTUs",
                  node_color_axis_label = "Log2 ratio median proportions",
                  layout = "davidson-harel", # The primary layout algorithm
                  initial_layout = "reingold-tilford", # The layout algorithm that initializes node locations
-                 output_file = ".\R output\differential_heat_tree_BO.pdf") # Saves the plot as a pdf file
+                 output_file = "./R output/differential_heat_tree_BO_noKey.pdf") # Saves the plot as a pdf file
 
 
 
@@ -1370,6 +1385,21 @@ heat_tree_matrix(neutral_heat,
 
 #remove unecessary taxonomic indo (dada2id, "S__" and" above_selected)
 tax_table(neutral_heat_tree_AT)<-tax_table(neutral_heat_tree_AT)[,1:6]
+
+
+# let's remove the "r__"ranks from the taxonomy, they can be useful but will polute our plot
+tax_table(neutral_heat_tree_AT)[, colnames(tax_table(neutral_heat_tree_AT))] <- gsub(tax_table(neutral_heat_tree_AT)[, colnames(tax_table(neutral_heat_tree_AT))],     pattern = "[a-z]__", replacement = "")
+
+
+
+#NORMALIZE DATASET
+set.seed(104250)
+neutral_heat_tree_AT<- rarefy_even_depth(neutral_heat_tree_AT,
+                                        sample.size = min(sample_sums(neutral_heat_tree_AT)), 
+                                        rngseed = FALSE, 
+                                        replace = TRUE, 
+                                        trimOTUs = TRUE, 
+                                        verbose = TRUE) 
 
 
 
@@ -1416,10 +1446,64 @@ heat_tree_matrix(test,
                  node_color_axis_label = "Log2 ratio median proportions",
                  layout = "davidson-harel", # The primary layout algorithm
                  initial_layout = "reingold-tilford", # The layout algorithm that initializes node locations
-                 output_file = ".\R output\differential_heat_tree_AT.pdf") # Saves the plot as a pdf file
+                 output_file = "./R output/differential_heat_tree_AT.pdf") # Saves the plot as a pdf file
 
 
 
 ```
+
+
+
+
+# 4.11 Alpha Diversity of ASVs selected by neutral models
+
+```{r}
+
+#make list of ps objects
+pslit_neutraly_selected<-list(uni_4model_AT_above,
+                              uni_4model_BO_above)
+
+#adjust anems on that list
+names(pslit_neutraly_selected)<-c("uni_4model_AT_above", 
+                                  "uni_4model_BO_above")
+
+#plot diveristy from that list
+lapply(pslit_neutraly_selected, function (x)
+plot_richness(x, x="MeJA_treatment", measures=c("Shannon"), color="Plant_species")+
+  theme_bw()+
+  theme(axis.text.x = element_text(angle = 90))+
+  labs(color = "Plant species")+
+  ylab("Shannon diversity"))
+
+
+
+
+
+
+
+diversity_list<-lapply(pslit_neutraly_selected,add_diversity_to_physeq_object)
+
+# check levenes homogeniety over the list
+lapply(diversity_list, function (x)
+  leveneTest((Shannon) ~ MeJA_treatment*Plant_species, data = x))
+
+# since our initial object has been sliced into multiple parts, the anova is much simpler
+#build model
+aov_list<-lapply(diversity_list, function (x)
+  aov(lm((Shannon) ~ Block +  MeJA_treatment, data = x)))
+
+#run anova
+lapply(aov_list, anova)
+
+#check tukey
+lapply(aov_list, function(x)
+  TukeyHSD(x, "MeJA_treatment"))
+
+
+
+
+
+```
+
 
 # Neutral model analysis finished. Proceed to script 5_differential_abundance!
