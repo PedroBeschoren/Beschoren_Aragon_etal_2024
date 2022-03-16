@@ -1321,41 +1321,41 @@ neutral_heat_tree_BO<- rarefy_even_depth(neutral_heat_tree_BO,
                                         verbose = TRUE) 
 
 # transform from phyloseq to  taxmap object
-neutral_heat<-parse_phyloseq(neutral_heat_tree_BO)
+neutral_metacoder_BO<-parse_phyloseq(neutral_heat_tree_BO)
 
 #get abundance per taxon
-neutral_heat$data$tax_abund<-calc_taxon_abund(obj = neutral_heat, 
+neutral_metacoder_BO$data$tax_abund<-calc_taxon_abund(obj = neutral_metacoder_BO, 
                                       data = "otu_table",
-                                      cols = neutral_heat$data$sample_data$sample_id)
+                                      cols = neutral_metacoder_BO$data$sample_data$sample_id)
 #get occuence of per sample type
-neutral_heat$data$tax_occ <- calc_n_samples(obj = neutral_heat, 
+neutral_metacoder_BO$data$tax_occ <- calc_n_samples(obj = neutral_metacoder_BO, 
                                     data = "tax_abund", 
-                                    groups = neutral_heat$data$sample_data$MeJA_treatment, 
-                                    cols = neutral_heat$data$sample_data$sample_id)
+                                    groups = neutral_metacoder_BO$data$sample_data$MeJA_treatment, 
+                                    cols = neutral_metacoder_BO$data$sample_data$sample_id)
 
 
 ############################## now, let's plot a matrix heat tree for the MeJA comparisons
 
 
-neutral_heat$data$diff_table <- compare_groups(obj = neutral_heat,
+neutral_metacoder_BO$data$diff_table <- compare_groups(obj = neutral_metacoder_BO,
                                       dataset = "tax_abund",
-                                      cols = neutral_heat$data$sample_data$sample_id, # What columns of sample data to use
-                                      groups = neutral_heat$data$sample_data$MeJA_treatment) # What category each sample is assigned to
+                                      cols = neutral_metacoder_BO$data$sample_data$sample_id, # What columns of sample data to use
+                                      groups = neutral_metacoder_BO$data$sample_data$MeJA_treatment) # What category each sample is assigned to
 
 # set differental log ratio to 0 based on adjusted p values
-neutral_heat$data$diff_table$log2_median_ratio[neutral_heat$data$diff_table$wilcox_p_value > 0.05] <- 0
+neutral_metacoder_BO$data$diff_table$log2_median_ratio[neutral_metacoder_BO$data$diff_table$wilcox_p_value > 0.05] <- 0
 
 
 #check this object to find terminal leaves that are consistent across treatments, then...
 # highlight a taxonomic rank with lots of members being differentially selected
-neutral_heat$data$diff_table$treatment_1
-tail(neutral_heat$data$otu_table)
+neutral_metacoder_BO$data$diff_table$treatment_1
+tail(neutral_metacoder_BO$data$otu_table)
 
 
 
 #plot matrix tree
 set.seed(1)
-heat_tree_matrix(neutral_heat,
+heat_tree_matrix(neutral_metacoder_BO,
                  data = "diff_table",
                  node_size = n_obs, # n_obs is a function that calculates, in this case, the number of OTUs per taxon
                  node_label = taxon_names,
@@ -1364,11 +1364,11 @@ heat_tree_matrix(neutral_heat,
                  node_color_trans = "linear", # The default is scaled by circle area
                  node_color_interval = c(-3, 3), # The range of `log2_median_ratio` to display
                  edge_color_interval = c(-3, 3), # The range of `log2_median_ratio` to display
-               #  key_size = 0,
-              #   label_small_trees = TRUE,
-               #  node_label_size = 0.01,
-                 node_size_axis_label = "Number of OTUs",
-                 node_color_axis_label = "Log2 ratio median proportions",
+                 key_size = 0,
+                 label_small_trees = TRUE,
+                 node_label_size = n_obs/10,
+                 node_size_axis_label = "Size: Number of OTUs",
+                 node_color_axis_label = "Color: Log2 ratio median proportions",
                  layout = "davidson-harel", # The primary layout algorithm
                  initial_layout = "reingold-tilford", # The layout algorithm that initializes node locations
                  output_file = "./R output/differential_heat_tree_BO_noKey.pdf") # Saves the plot as a pdf file
@@ -1467,6 +1467,24 @@ pslit_neutraly_selected<-list(uni_4model_AT_above,
 names(pslit_neutraly_selected)<-c("uni_4model_AT_above", 
                                   "uni_4model_BO_above")
 
+
+
+#re-rarefy datset
+pslit_neutraly_selected<-lapply(pslit_neutraly_selected, function (x){
+             set.seed(104250)
+             output<- rarefy_even_depth(x,
+                                        sample.size = min(sample_sums(x)), 
+                                        rngseed = FALSE, 
+                                        replace = TRUE, 
+                                        trimOTUs = TRUE, 
+                                        verbose = TRUE)
+             return(output)
+}) 
+
+
+
+
+
 #plot diveristy from that list
 lapply(pslit_neutraly_selected, function (x)
 plot_richness(x, x="MeJA_treatment", measures=c("Shannon"), color="Plant_species")+
@@ -1499,11 +1517,229 @@ lapply(aov_list, anova)
 lapply(aov_list, function(x)
   TukeyHSD(x, "MeJA_treatment"))
 
+#Lets see this on a simple boxplot for Shannon diversity index
+ggplot(rbind(diversity_list$AT_above_rerarefied,
+             diversity_list$BO_above_rerarefied),
+      aes(x =MeJA_treatment, y = Shannon, fill=Plant_species))+
+  geom_boxplot()+
+  theme_bw()+
+  facet_wrap(~Sample_type)
+
+
+
+dim(rbind(diversity_list$AT_above_rerarefied,
+      diversity_list$BO_above_rerarefied))
+```
+
+
+# 4.12  correlate alpha diversity to full dataset to selected ASV dataset
+```{r}
+
+
+# determine shannon diversity and observed number of taxa with a custom function
+diversity_per_taxon <- function(ps_object, taxa_level, data_partition) {
+  # this function provides diversity of each taxon in a phyloseq object in 3 steps
+  
+# the inputs for this function are: 
+  
+  # 1 - ps_object = one phyloseq object 
+  # 2 - taxa_level = a QUOTED taxonomic level in your phyloseq object, like Class or Order
+  # 3 - data_partition = a QUOTED label of your ps_object
+
+# the output is a df showing observed number fo taxa and shannon diversity within each of the defined taxa_level 
+
+  
+# step 1: list the taxa present in the ps object, at the requested taxon level    
+taxon_list_output<-as.character(tax_table(ps_object)[,taxa_level])
+taxon_list_output<-taxon_list_output[taxon_list_output != "f__uncultured"]
+taxon_list_output<-names(which(table(taxon_list_output)>0))%>%
+na.omit()%>%
+unique()%>%
+as.list(c())
+  
+
+
+# step 2: calculate diversity in each member of the taxa level
+shannon_diversity_l<-list()
+observed_taxa_l<-list()
+for(i in taxon_list_output) {
+shannon_diversity_l[i]<-estimate_richness(prune_taxa(taxa = tax_table(ps_object)
+                                                            [,taxa_level] %in% i,
+                                                     x= ps_object),
+                                          split = FALSE,
+                                          measures = "Shannon" )
+
+observed_taxa_l[i]<-estimate_richness(prune_taxa(taxa = tax_table(ps_object)
+                                                        [,taxa_level] %in% i,
+                                                 x= ps_object),
+                                          split = FALSE,
+                                          measures = "Observed" )
+}
+
+
+# step 3: join oserved taxa and shannon diversity in a df
+shannon_df<-t(as.data.frame(shannon_diversity_l))
+observed_df<-t(as.data.frame(observed_taxa_l))
+colnames(shannon_df)<-paste0("Shannon_", data_partition, sep = "")
+colnames(observed_df)<-paste0("Observed_", data_partition, sep = "")
+diversity_df<-merge(shannon_df,
+                    observed_df,
+                    by = 0)
+colnames(diversity_df)[1]<-taxa_level
+
+return(diversity_df)
+}
+
+# it is a bit repetitive but I ran out of time to further automate this
+
+###########################
+####### class level ####### 
+###########################
+above_expected_Class<-lapply(pslit_neutraly_selected, function (x)
+  diversity_per_taxon(ps_object = x,
+                      taxa_level = "Class",
+                      data_partition = "above_expected"))
+
+full_dataset_Class<-lapply(ps_list_rarefied[c(2,4)], function (x)
+  diversity_per_taxon(ps_object = x,
+                      taxa_level = "Class",
+                      data_partition = "full_dataset"))
+
+# join 2 dfs of step 3
+full_VS_selected_Class<-mapply(function (x,y)
+  left_join(x,
+            y,
+            by = "Class"),
+  x = above_expected_Class,
+  y = full_dataset_Class,
+  SIMPLIFY = FALSE)
+
+
+
+
+
+
+###########################
+####### Order level ####### 
+###########################
+above_expected_Order<-lapply(pslit_neutraly_selected, function (x)
+  diversity_per_taxon(ps_object = x,
+                      taxa_level = "Order",
+                      data_partition = "above_expected"))
+
+full_dataset_Order<-lapply(ps_list_rarefied[c(2,4)], function (x)
+  diversity_per_taxon(ps_object = x,
+                      taxa_level = "Order",
+                      data_partition = "full_dataset"))
+
+# join 2 dfs of step 3
+full_VS_selected_Order<-mapply(function (x,y)
+  left_join(x,
+            y,
+            by = "Order"),
+  x = above_expected_Order,
+  y = full_dataset_Order,
+  SIMPLIFY = FALSE)
+
+
+
+
+
+
+###########################
+####### Family level ###### 
+###########################
+above_expected_Family<-lapply(pslit_neutraly_selected, function (x)
+  diversity_per_taxon(ps_object = x,
+                      taxa_level = "Family",
+                      data_partition = "above_expected"))
+
+full_dataset_Family<-lapply(ps_list_rarefied[c(2,4)], function (x)
+  diversity_per_taxon(ps_object = x,
+                      taxa_level = "Family",
+                      data_partition = "full_dataset"))
+
+# join 2 dfs of step 3
+full_VS_selected_Family<-mapply(function (x,y)
+  left_join(x,
+            y,
+            by = "Family"),
+  x = above_expected_Family,
+  y = full_dataset_Family,
+  SIMPLIFY = FALSE)
+
+####################################################
+####### Done! Diversity per taxon calculated ####### 
+####################################################
+
+
+# final output from divesity per taxon calculation
+full_VS_selected_Class
+full_VS_selected_Order
+full_VS_selected_Family
+
+
+# make plot - correlation between observed umber of taxa in the full data VS selected subset
+plot_diversity_correlation<-function(full_VS_selected_TaxaLevel){
+untitled_plot_list<-lapply(full_VS_selected_TaxaLevel, function(z)
+ggplot(data=z,aes(x=Observed_full_dataset,y=Observed_above_expected ))+
+  geom_point() +
+  geom_smooth(method="lm")+ #values of y are based on the values of x
+  labs(subtitle = paste("Spearman rank correlation:",
+                        stats::cor(z$Observed_full_dataset,
+                                  z$Observed_above_expected,
+                                  method = "spearman" ),
+                        sep = " "))+
+  geom_text_repel(aes(label=z[z$Observed_above_expected>10,1]), data = z[z$Observed_above_expected>10,]))
+
+tiles_list<-names(untitled_plot_list) 
+
+Plot_list<-mapply(function (x,z) # use mapply again to put those listed names in the list of plots
+  x + ggtitle(z),
+  x = untitled_plot_list,
+  z = tiles_list, 
+  SIMPLIFY = FALSE)
+return(Plot_list)
+
+}
+
+plot_diversity_correlation(full_VS_selected_Class)
+plot_diversity_correlation(full_VS_selected_Order)
+plot_diversity_correlation(full_VS_selected_Family)
+
+
+# the loop not working properly! AT and BO data partions are being overwirnt on top of each other
+# loop over taxa levels
+taxa_levels<-c("Class", "Order", "Family")
+
+above_expected<-list()
+full_dataset<-list()
+full_VS_selected<-list()
+for (i in taxa_levels){
+above_expected[i]<-lapply(pslit_neutraly_selected, function (x)
+  diversity_per_taxon(ps_object = x,
+                      taxa_level = i,
+                      data_partition = "above_expected"))
+
+full_dataset[i]<-lapply(ps_list_rarefied[c(2,4)], function (x)
+  diversity_per_taxon(ps_object = x,
+                      taxa_level = i,
+                      data_partition = "full_dataset"))
+
+# join 2 dfs of step 3
+full_VS_selected[i]<-mapply(function (x,y)
+  left_join(x,
+            y,
+            by = "Row.names"), # this might change depending on  diversity_per_taxon()
+  x = above_expected,
+  y = full_dataset,
+  SIMPLIFY = FALSE)
+}
+
+
 
 
 
 
 ```
-
-
 # Neutral model analysis finished. Proceed to script 5_differential_abundance!
