@@ -184,6 +184,9 @@ dip_result1<-beta_disp_plotAndTest(normalization_listed, "Sample_type")
 dip_result2<-beta_disp_plotAndTest(normalization_listed, "Plant_species")
 dip_result3<-beta_disp_plotAndTest(ps_list_CSS, "MeJA_treatment")
 
+
+str(ps_list_CSS)
+
 # that was much better! note that we calculate the homogeniety within the function, acess the P value of the test, and then palce it on the plot
 #It's common to take a lot of time to handle an aparently simple problem when wirting these fucntions. pedro took ~3h to make the "group" in the fucntion be correctly evaluated and executed...
 
