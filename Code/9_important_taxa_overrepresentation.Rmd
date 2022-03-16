@@ -105,14 +105,22 @@ names(fisher_result_l)<-c("fisher_result_AT_root",
 
 
 # 9.3 extract p values and odds ratio
-Now that we have large lists of fisher tests, let's fishe out important metrics for visualization
+Now that we have large lists of fisher tests, let's fish out important metrics for visualization
 ```{r}
+
 #output
 fisher_result_l
 
-map(fisher_result_BO_root,1) # p values
-map(fisher_result_BO_root,1)[map(fisher_result_BO_root,1)<0.05] # significant p values 
-map(fisher_result_BO_root,3)[map(fisher_result_BO_root,1)<0.05] # odds ration from significat tests
+
+
+# non-adjusted p values for each fisher comparison
+lapply(fisher_result_l, function(x) map(x,1))
+
+# confidence interval of odds ratio for each fisher comparison
+lapply(fisher_result_l, function(x) map(x,2))
+
+# odds ratio for each fisher comparison
+lapply(fisher_result_l, function(x) map(x,3))
 
 
 
@@ -137,12 +145,162 @@ fdr_p_fisher_l<-lapply(fisher_result_l, function (x){
 lapply (fdr_p_fisher_l, function (x) 
   x[x<0.05])
 
-# odds ratio for each fisher comparison
-lapply(fisher_result_l, function(x) map(x,3))
-
-
+min3_adjustp<-str(lapply (fdr_p_fisher_l, function (x) 
+  x[x<0.1]))
 
 
 
 ```
+
+
+
+
+
+
+# 9.4 make a heat tree of important taxa
+metacoder heat trees are made to visualize differences in taxonomic composition, so let's incoporate p and odds ratio values into such trees
+```{r}
+
+fisher_to_heatTree<-function(fisher_output_l,
+                             ps_important_taxa_l){
+#######################################
+######## make metacoder object ######## 
+#######################################
+imp_heat_ps<-ps_important_taxa_l
+
+#remove unecessary taxonomic indo (dada2id, "S__" and" above_selected)
+tax_table(imp_heat_ps)<-tax_table(imp_heat_ps)[,1:6]
+
+# transform from phyloseq to  taxmap object
+imp_heat<-parse_phyloseq(imp_heat_ps)
+
+
+
+#######################################
+######## aplly fdr to fisher ######## 
+#######################################
+
+#apply FDR correction to the p values
+
+  #single df with all p values
+  pvector<-do.call(rbind.data.frame, map(fisher_output_l,1))
+  
+  # adjust the p value with fdr, then save as a list
+  adjusted_p<-p.adjust(p = pvector[[1]],
+                          method = "fdr")%>%
+                      as.list()
+  # adjust names
+  names(adjusted_p)<-names(fisher_output_l)
+
+  
+
+#this is the name that mustch match our fisher p list
+taxon_id_metacoder<-lapply(imp_heat$taxa, function (x)
+                                                    x$get_name())%>%
+                                                    map(1)
+
+
+# now turn that list into a df
+taxon_id_metacoder<-do.call(rbind.data.frame, map(taxon_id_metacoder,1))
+
+# and change column name
+colnames(taxon_id_metacoder)<-"taxa_id"
+
+# truns the p values into a dataframe
+adjusted_p_input<-as.data.frame(t(as.data.frame(adjusted_p)))%>%
+  rownames_to_column()
+
+#change column names
+colnames(adjusted_p_input)<-c("taxa_id", "fdr_p")
+  
+# now join both df
+fdr_for_heatTree<-left_join(taxon_id_metacoder,
+                            adjusted_p_input,
+                            by = "taxa_id")
+
+
+
+#######################################################################
+################### add fold changes! ########################################
+#######################################################################
+
+
+# get odds ratio for each taxa
+odd_list<- map(fisher_output_l,3)%>%
+  map(1)
+
+# truns the p values into a dataframe
+odd_list<-as.data.frame(t(as.data.frame(odd_list)))%>%
+  rownames_to_column()
+
+#change column names
+colnames(odd_list)<-c("taxa_id", "odds_ratio")
+
+# now join both df
+fisher_for_heatTree<-left_join(fdr_for_heatTree,
+                            odd_list,
+                            by = "taxa_id")
+
+
+
+
+#NAs will crash metadore. let's change them with 0.9999 for now
+fisher_for_heatTree[is.na(fisher_for_heatTree)]<-"0.99999"
+
+#change structure to numeric
+fisher_for_heatTree$fdr_p<-as.numeric(fisher_for_heatTree$fdr_p)
+fisher_for_heatTree$odds_ratio<-as.numeric(fisher_for_heatTree$odds_ratio)
+
+
+#now let's dim p values above 0.1, or else we can get counfounded
+#fisher_for_heatTree$fdr_p[fisher_for_heatTree$fdr_p>0.1]<-1
+
+
+
+
+
+
+
+#######################################################################
+############### now plot the heat tree ############### 
+#######################################################################
+
+
+
+set.seed(1)
+      output<- heat_tree(imp_heat,
+                 node_size = fisher_for_heatTree$odds_ratio, # n_obs is a function that calculates, in this case, the number of OTUs per taxon
+                 node_color = fisher_for_heatTree$fdr_p,
+                 node_label = taxon_names,
+                 node_size_axis_label = "Size: oods_ratio",
+                 node_color_interval = c(0, 0.15),
+                 edge_color_interval = c(0, 0.15),
+                 node_color_range = c("darkgreen", "seagreen", "yellowgreen", "grey"),
+                 edge_color_range = c("darkgreen", "seagreen", "yellowgreen", "grey"),
+                 node_color_axis_label = "Color: FDR-adjusted p",
+                 layout = "davidson-harel", # The primary layout algorithm
+                 initial_layout = "reingold-tilford") # The layout algorithm that initializes node locations
+
+      return(output)
+}
+
+
+quantative_palette
+
+
+
+mapply(function(x,y)
+    fisher_to_heatTree(x,y),
+    x = fisher_result_l,
+    y = ps_imp_taxa_l,
+    SIMPLIFY = FALSE)
+
+
+```
+
+
+
+
+
+
 
