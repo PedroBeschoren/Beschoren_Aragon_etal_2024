@@ -681,7 +681,7 @@ eigen_correlation<-function(data="relative abundance",community="community detec
 ############# adjustInput_run_eigen_correlation_adjustOutput ################
 #**********************************************#
 
-# these function will adjst input and output data from the eigen_correlation()  function
+# these function will adjust input and output data from the eigen_correlation()  function
 # it helps you correlate experimental metadata of a phyloseq object to module composition of an igraph object
 # first, prepare igraph object to be be used as input to eigen_correlation() ; it is necessary to adjust weights and define categories as numerical varaibles
 #NOTE: the names of the metadata variables are hard-coded within this function! If you have other metadata you have to change it by hand inside the function like a barbarian. uga-bunga!
@@ -694,7 +694,7 @@ adjustInput_run_eigen_correlation_adjustOutput<-function(igraph_obj, phyloseq_ob
   test_ps_meta<-as(sample_data(phyloseq_obj),"data.frame")
   test_ps_meta$leaf_dry_weight<-as.numeric(test_ps_meta$leaf_dry_weight)
   test_ps_meta$MYC2_at_fold_DD<-as.numeric(test_ps_meta$MYC2_at_fold_DD)
-  test_ps_meta$lox2_at_fold_DDct <-as.numeric(test_ps_meta$lox2_at_fold_DDct )
+  test_ps_meta$lox2_at_fold_DD <-as.numeric(test_ps_meta$lox2_at_fold_DD )
   
   #remove weights to calculate modularity
   E(igraph_obj)$weight<-1
@@ -706,7 +706,7 @@ adjustInput_run_eigen_correlation_adjustOutput<-function(igraph_obj, phyloseq_ob
   biom_eigen<-eigen_correlation( data = as.data.frame(t(otu_table(phyloseq_obj))),
                                  community = community_data,
                                  metadata = test_ps_meta,
-                                 categories= c("leaf_dry_weight", "MYC2_at_fold_DD", "lox2_at_fold_DDct"))
+                                 categories= c("leaf_dry_weight", "MYC2_at_fold_DD", "lox2_at_fold_DD"))
   
   # this gives Freq as an integer of number of nodes in module and community.sizes as a factor with the name of the module. merge it with the main object
   module_sizes<-as.data.frame(sizes(community_data))%>%

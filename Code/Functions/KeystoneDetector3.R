@@ -1,6 +1,6 @@
 # This function detect keystone ataxa based on degree, closeness centrality and betweeness centrality
 # instead of picking a top%, the function considers a Z distribution of the metrics, and then pinpoints otus with significantly higher metrics
-# it requires a dataframe with node metrics and the 95% StrainMatch taxonomy ID
+# it requires a dataframe with node metrics 
 # the output is list with a chart indicating keystones and a dataframe indicating the same kesytones
 
 KeystoneDetector3<-function(nodes_stats){
