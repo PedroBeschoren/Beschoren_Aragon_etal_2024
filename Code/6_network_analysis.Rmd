@@ -245,8 +245,19 @@ node_metrics<-mapply(function(x,y)
 list_network_metrics<-do.call(rbind.data.frame, 
                               Map(c,map(ZiPi_listed,2),list_partial_network_metrics)) 
 
+#make a PCA of network metrics
+library(ggbiplot)
+list_network_metrics.pca <- prcomp(select(list_network_metrics, -Median_module_size ), scale. = TRUE)
+ggbiplot(list_network_metrics.pca, 
+         obs.scale = 1, 
+         var.scale = 1,
+         labels = row.names(list_network_metrics)) +
+  scale_color_discrete(name = '') +
+  theme(legend.direction = 'horizontal', legend.position = 'top')
+
+
 #save these network metrics externally
-write.csv(list_network_metrics, "./R output/metrics.csv")
+write.csv(list_network_metrics, "./R output/netwrok_metrics.csv")
 
 
 
@@ -708,9 +719,31 @@ hist(complete_node_metrics_withFitClass[[4]]$neutral_score)
 
 ```
 
+###### 6.6.8 - export data on keystone, connector and hub nodes ####
+test/trail, might not be used
+
+```{r}
+#input data
+complete_node_metrics_withFitClass
+
+# keep only relevant nodes
+relevant_nodes<-lapply(complete_node_metrics_withFitClass, function(x)
+filter(x, 
+  #      Zi > 2.5 |
+   #      Pi > 0.62 |
+         keystone_taxa == "Keystone"))
+
+lapply(relevant_nodes, function(x)
+  if_else(x$Zi>2.5, "Module hub", "")
+  )
 
 
-## BUG ### 6.7 - Correlate netowrk module structure to plant metadata ####
+
+
+```
+
+
+### 6.7 - Correlate netowrk module structure to plant metadata ####
 
 
 
@@ -731,13 +764,18 @@ ps_list_network_rarefied<-lapply(ps_list_network, function(x)
 
 # run the custom function adjustInput_run_eigen_correlation_adjustOutput() to adjust input adn output of eigen_correlation() , besides runing eigen_correlation(). Here we run it in lists
 module_and_metadata_correlations<-mapply(function (x,y)
-                                         adjustInput_run_eigen_correlation_adjustOutput(igraph_obj = x,
-                                                                                        phyloseq_ob = y),
+                                         adjustInput_run_eigen_correlation_adjustOutput(igraph_obj = x,                                                                              phyloseq_ob = y),
                                          x = listed_igraph,
-                                         y= ps_list_network_rarefied, #as noted above, this has been rarefied after the cut-off point to be in the network input
-                                         SIMPLIFY = FALSE
-                                         )
+                                         y = ps_list_network_rarefied, #as noted above, this has been rarefied after the cut-off point to be in the network input
+                                         SIMPLIFY = FALSE)
+                                         
 
+# remove modules disconnected from the main graph from the metadata correlations
+module_and_metadata_correlations<- mapply(function (x,y)
+                                      x[x$module_number %in% y$module,],
+                                      x = module_and_metadata_correlations,
+                                      y = complete_node_metrics_withFitClass,
+                                      SIMPLIFY = FALSE)
 
 
 #now make plots with titles according your lists. note that the name of the metadata variables is hard-coded within the function
@@ -758,6 +796,7 @@ plot_module_and_metadata_correlations_output(module_and_metadata_correlations)
 
 #if it works, proceed to laugh maniacally
 
+# PROBLEM: INCLUDES MODULES THAT ARE NOT PART OF THE MAIN COMPONENT
 
 # for 102 netowkrs, we removel modules without any metadata correlations  and check if sub-community strucuture of the module is similar across netowrks that also have modules with positive/negative correlations ("are the sub-communities correlated to metadata similar across treatments?")
   
