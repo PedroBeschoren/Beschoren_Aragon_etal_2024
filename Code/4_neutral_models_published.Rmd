@@ -1498,8 +1498,11 @@ plot_richness(x, x="MeJA_treatment", measures=c("Shannon"), color="Plant_species
 
 
 
-
+# calculates alpha diversity
 diversity_list<-lapply(pslit_neutraly_selected,add_diversity_to_physeq_object)
+
+#only o__Rhizobiales
+diversity_list<-lapply(pslit_neutraly_selected,function (x) add_diversity_to_physeq_object(subset_taxa(x, Order == "o__Rhizobiales" )))
 
 # check levenes homogeniety over the list
 lapply(diversity_list, function (x)
@@ -1526,9 +1529,6 @@ ggplot(rbind(diversity_list$AT_above_rerarefied,
   facet_wrap(~Sample_type)
 
 
-
-dim(rbind(diversity_list$AT_above_rerarefied,
-      diversity_list$BO_above_rerarefied))
 ```
 
 
@@ -1680,7 +1680,7 @@ full_VS_selected_Family
 
 
 # make plot - correlation between observed umber of taxa in the full data VS selected subset
-plot_diversity_correlation<-function(full_VS_selected_TaxaLevel){
+plot_observed_correlation<-function(full_VS_selected_TaxaLevel){
 untitled_plot_list<-lapply(full_VS_selected_TaxaLevel, function(z)
 ggplot(data=z,aes(x=Observed_full_dataset,y=Observed_above_expected ))+
   geom_point() +
@@ -1703,9 +1703,39 @@ return(Plot_list)
 
 }
 
-plot_diversity_correlation(full_VS_selected_Class)
-plot_diversity_correlation(full_VS_selected_Order)
-plot_diversity_correlation(full_VS_selected_Family)
+plot_observed_correlation(full_VS_selected_Class)
+plot_observed_correlation(full_VS_selected_Order)
+plot_observed_correlation(full_VS_selected_Family)
+
+
+
+plot_shannon_correlation<-function(full_VS_selected_TaxaLevel){
+untitled_plot_list<-lapply(full_VS_selected_TaxaLevel, function(z)
+ggplot(data=z[z$Shannon_above_expected>0,], #only includes shannon >0
+       aes(x=Shannon_full_dataset,y=Shannon_above_expected ))+
+  geom_point() +
+  geom_smooth(method="loess")+ #values of y are based on the values of x
+  labs(subtitle = paste("Spearman rank correlation:",
+                        stats::cor(z$Shannon_full_dataset,
+                                  z$Shannon_above_expected,
+                                  method = "spearman" ),
+                        sep = " "))+
+  geom_text_repel(aes(label=z[z$Shannon_above_expected>0,1]), data = z[z$Shannon_above_expected>0,]))
+
+tiles_list<-names(untitled_plot_list) 
+
+Plot_list<-mapply(function (x,z) # use mapply again to put those listed names in the list of plots
+  x + ggtitle(z),
+  x = untitled_plot_list,
+  z = tiles_list, 
+  SIMPLIFY = FALSE)
+return(Plot_list)
+}
+
+plot_shannon_correlation(full_VS_selected_Class)
+plot_shannon_correlation(full_VS_selected_Order)
+plot_shannon_correlation(full_VS_selected_Family)
+
 
 
 # the loop not working properly! AT and BO data partions are being overwirnt on top of each other
