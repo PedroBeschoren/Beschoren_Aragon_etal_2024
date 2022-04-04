@@ -745,20 +745,44 @@ lapply(relevant_nodes, function(x)
 
 ### 6.7 - Correlate netowrk module structure to plant metadata ####
 
+### 6.7a - normalize counts ### 
 
-
+siec-easi usues it's own normalization options. here we must normalized the subset ps object used as input in the networks (only including the most frequnt/abudnant ASVs) so we can correlate these abudnances to plant metadata
 ```{r}
+# first, let's transform the phyloseq object into an MR experiment object
+
+MRexp_objt_l<-map(ps_list_network,phyloseq_to_metagenomeSeq)
+
+# normalizes the object by cummulative sum scaling, a widely used method
+map(MRexp_objt_l,cumNorm)
+
+#here you can acess the abundance matrix normalized by cummulative sum scaling. you could overwirte the phyloseq object with this
+CSS_matrix_l <- lapply(MRexp_objt_l, function (x)
+  MRcounts(x, norm = TRUE, log = TRUE)) # using a log scale will essentially reduce the impact of common species and increase the impact of rare species
+
+#make a new phyloseq object...
+ps_list_network_CSS<-ps_list_network
+
+# and now change it's taxa table
+ps_list_network_CSS<- mapply(function (x,y){
+otu_table(x)<-otu_table(y, taxa_are_rows = TRUE)
+      return(x)
+      },
+      x = ps_list_network_CSS,
+      y = CSS_matrix_l,
+      SIMPLIFY = FALSE)
+
+#this is your normalized otu table
+ps_list_network_CSS$Arabidopsis_thaliana.Root@otu_table
 
 
-# before we correlated ASV abundance to metadata, we must normalize the original phyloseq object  - speic.easi had it's own nomalization
-# I am not sure on how CSS normalization would affect this, so I will use rarefaction to be conservative
-set.seed(100)
-ps_list_network_rarefied<-lapply(ps_list_network, function(x)
-  rarefy_even_depth(x, 
-                  sample.size = min(sample_sums(x)), 
-                  rngseed = FALSE, replace = TRUE, 
-                  trimOTUs = TRUE, verbose = TRUE) 
-  )# we don't seem to lose any OTU with this process - this is expected as rare OTUs had already been removed
+
+``` 
+
+
+### 6.7b -calculate correlations ####
+now that we normalized the input data for eigengene calculations, we can use it as an input
+```{r}
 
 
 
@@ -766,7 +790,7 @@ ps_list_network_rarefied<-lapply(ps_list_network, function(x)
 module_and_metadata_correlations<-mapply(function (x,y)
                                          adjustInput_run_eigen_correlation_adjustOutput(igraph_obj = x,                                                                              phyloseq_ob = y),
                                          x = listed_igraph,
-                                         y = ps_list_network_rarefied, #as noted above, this has been rarefied after the cut-off point to be in the network input
+                                         y = ps_list_network_CSS,
                                          SIMPLIFY = FALSE)
                                          
 
