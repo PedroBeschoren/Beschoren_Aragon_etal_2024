@@ -880,4 +880,30 @@ write.csv(x = igraph::as_data_frame(listed_igraph$Brassica_oleraceae.Soil),
 
 ```
 
+# a plot for module and genera degree
+```{r}
+complete_node_metrics_withFitClass$Arabidopsis_thaliana.Root
+
+# check which is the most highly connected module
+lapply(complete_node_metrics_withFitClass, function(x)
+ggplot(x,
+       aes(x = as.factor(module), y = Degree))+
+  geom_boxplot()+
+  geom_point(position = "jitter", alpha = 0.5, aes( color = Phylum)))
+
+# check which is the most highly connected module
+lapply(complete_node_metrics_withFitClass, function(x)
+ggplot(x,
+       aes(x = Genus, y = Degree))+
+  geom_boxplot()+
+  geom_point(position = "jitter", alpha = 0.5, aes( color = Phylum)))+
+  theme(axis.text.x = element_text(angle = 90))
+
+
+
+
+
+
+
+```
 
