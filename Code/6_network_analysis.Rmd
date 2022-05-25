@@ -745,7 +745,7 @@ lapply(relevant_nodes, function(x)
 
 ### 6.7 - Correlate netowrk module structure to plant metadata ####
 
-### 6.7a - normalize counts ### 
+### 6.7 a - normalize counts ### 
 
 siec-easi usues it's own normalization options. here we must normalized the subset ps object used as input in the networks (only including the most frequnt/abudnant ASVs) so we can correlate these abudnances to plant metadata
 ```{r}
@@ -777,10 +777,22 @@ ps_list_network_CSS$Arabidopsis_thaliana.Root@otu_table
 
 
 
+#### as an alternative, rerefy this ps object (neede for eiveristy calculation)
+set.seed(100)
+ps_list_network_rarefied <- lapply(ps_list_network, function (x)
+                           rarefy_even_depth(x, 
+                                             sample.size = min(sample_sums(x)), 
+                                             rngseed = FALSE, 
+                                             replace = TRUE, 
+                                             trimOTUs = TRUE, 
+                                             verbose = TRUE)) 
+
+
+
 ``` 
 
 
-### 6.7b -calculate correlations ####
+### 6.7 b -calculate correlations ####
 now that we normalized the input data for eigengene calculations, we can use it as an input
 ```{r}
 
@@ -826,6 +838,185 @@ plot_module_and_metadata_correlations_output(module_and_metadata_correlations)
   
 
 ```
+
+### 6.7 c - plot module and genera degree ####
+
+```{r}
+
+complete_node_metrics_withFitClass
+
+
+  # first 6 modules, class
+lapply(complete_node_metrics_withFitClass, function(df_nodes){
+  
+  tax_count<-dplyr::count(x = df_nodes,Class)
+  
+  df_nodes_taxCount<-left_join(df_nodes,tax_count)
+  
+  df_nodes_taxCount<-filter(df_nodes_taxCount, Class !="NA")
+  
+ggplot(data = filter(df_nodes_taxCount, module<7, n>2),
+        aes(x = as.factor(Class), y = log(freq_in_4slice) , fill = as.factor(module)  ))+
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))+
+  geom_boxplot(aes())
+})
+
+
+  # first 6 modules, Order
+lapply(complete_node_metrics_withFitClass, function(df_nodes){
+  
+  tax_count<-dplyr::count(x = df_nodes,Order)
+  
+  df_nodes_taxCount<-left_join(df_nodes,tax_count)
+  
+  df_nodes_taxCount<-filter(df_nodes_taxCount, Order !="NA")
+  
+ggplot(data = filter(df_nodes_taxCount, module<7, n>2),
+        aes(x = as.factor(Order), y = log(freq_in_4slice) , fill = as.factor(module)  ))+
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))+
+  geom_boxplot(aes())
+})
+
+  # first 6 modules, Family
+lapply(complete_node_metrics_withFitClass, function(df_nodes){
+  
+  tax_count<-dplyr::count(x = df_nodes,Family)
+  
+  df_nodes_taxCount<-left_join(df_nodes,tax_count)
+  
+  df_nodes_taxCount<-filter(df_nodes_taxCount, Family !="NA")
+  
+ggplot(data = filter(df_nodes_taxCount, module<7, n>2),
+        aes(x = as.factor(Family), y = log(freq_in_4slice) , fill = as.factor(module)  ))+
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))+
+  geom_boxplot(aes())
+})
+
+  # first 6 modules, Genus
+lapply(complete_node_metrics_withFitClass, function(df_nodes){
+  
+  tax_count<-dplyr::count(x = df_nodes,Genus)
+  
+  df_nodes_taxCount<-left_join(df_nodes,tax_count)
+  
+  df_nodes_taxCount<-filter(df_nodes_taxCount, Genus !="NA")
+  
+ggplot(data = filter(df_nodes_taxCount, module<7, n>2),
+        aes(x = as.factor(Genus), y = log(freq_in_4slice) , fill = as.factor(module)  ))+
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))+
+  geom_boxplot(aes())
+})
+
+      
+
+
+
+
+
+
+lapply(complete_node_metrics_withFitClass, function(df_nodes)
+  df_nodes%>%
+    group_by(as.factor(module))%>%
+    summarise(mean_degree = mean(Degree), 
+              mean_closeness = mean(ClosenessCentrality),
+              mean_betweness = mean(BetwenessCentrality),
+              mean_Zi = mean(Zi),
+              mean_Pi = mean(Pi),
+              number_of_nodes = n()))
+
+
+genus_metrics<-lapply(complete_node_metrics_withFitClass, function(df_nodes)
+  df_nodes%>%
+    group_by(as.factor(Genus ))%>%
+    summarise(mean_degree = mean(Degree), 
+              mean_closeness = mean(ClosenessCentrality),
+              mean_betweness = mean(BetwenessCentrality),
+              mean_Zi = mean(Zi),
+              mean_Pi = mean(Pi),
+              number_of_modules_present = n((module)),
+              number_of_nodes = n()))
+
+lapply(genus_metrics, function (x)
+  x[x$number_of_nodes>5,])
+
+
+
+lapply(complete_node_metrics_withFitClass, function (x)
+  x[x$number_of_nodes>5,])
+
+
+# modules with interesting correlations to metadata
+# what taxa these modules share? do they have taxa that are exclusive or more abundant than in other modules?
+
+filter(complete_node_metrics_withFitClass$Arabidopsis_thaliana.Root, module == 3)
+filter(complete_node_metrics_withFitClass$Arabidopsis_thaliana.Soil, module == 3)
+filter(complete_node_metrics_withFitClass$Brassica_oleraceae.Root, module == 2)
+filter(complete_node_metrics_withFitClass$Brassica_oleraceae.Soil, module == 5)
+
+
+
+
+dplyr::count(x = filter(complete_node_metrics_withFitClass$Arabidopsis_thaliana.Root, module == 3),
+             Order)
+dplyr::count(x = filter(complete_node_metrics_withFitClass$Arabidopsis_thaliana.Root, module == 3),
+             Family)
+dplyr::count(x = filter(complete_node_metrics_withFitClass$Arabidopsis_thaliana.Root, module == 3),
+             Genus)
+
+
+filter(complete_node_metrics_withFitClass$Arabidopsis_thaliana.Soil, module == 3)%>%
+  group_by(Order)%>%
+  summarise(Order_n = n(),
+            sum_freq = sum(freq_in_4slice))
+
+
+
+
+```
+# ballon plots
+
+here we make a baloon plot showing the classes per modules, but the output is still too complex to find a pattern between the modules that correlated to lox2 or not
+```{r}
+mapply(function (x,y){
+
+network_melted<-psmelt(x)
+
+diversity_order<-diversity_per_taxon(ps_object = x,
+                      taxa_level = "Order",
+                      data_partition = "network")
+
+module_size<- dplyr::count(y, module)
+
+
+network_melted<-left_join(network_melted,y)
+
+network_melted<-left_join(network_melted, diversity_order)
+
+network_melted<-left_join(network_melted,module_size )
+
+
+network_melted$Family<-as.character(network_melted$Family)
+ 
+ baloon<-ggballoonplot(data=filter(network_melted,n>2),
+               x = "module",
+               y = "Class",
+               size = "Abundance",
+               fill = "Shannon_network",
+               color = "Shannon_network",
+               xticks.by = 1,
+               size.range = c(4, 16))+
+   scale_fill_viridis()+
+ scale_color_viridis()
+ 
+ return(baloon)
+ 
+},
+x = ps_list_network_rarefied,
+y = complete_node_metrics_withFitClass,
+SIMPLIFY = FALSE)
+
+```
+
 ##### 6.8 - Export network data ####
 we will now use the edge file to import it as a network file to cytoscape. then we can importe the node proprieties to the enw visualizations
 ```{r}
