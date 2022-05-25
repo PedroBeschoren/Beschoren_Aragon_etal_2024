@@ -155,7 +155,7 @@ map(boruta_feature_rf_repeatedcv, confusionMatrix)
 
 
 
-
+boruta_feature_rf_repeatedcv$Arabidopsis_thaliana.Root$method
 
 
 
@@ -172,27 +172,6 @@ map(boruta_feature_rf_repeatedcv, confusionMatrix)
 ##############################################################################################################
 # add the rf classification as part of the OTU taxonomy
 ##############################################################################################################
-#to a single object, returning dataframe
-tax_table(ps_list_rarefied$Arabidopsis_thaliana.Root)%>%
-  as.data.frame()%>%
-mutate(random_forest_relevance = 
-         if_else(taxa_names(ps_list_rarefied$Arabidopsis_thaliana.Root)%in%boruta_ASV_list$Arabidopsis_thaliana.Root == TRUE,"important", "uninportant"))
-
-# to a list of dataframes      
-rf_added_tax<-mapply(function (x,y)
-  tax_table(x)%>% #get tax table of the phyloseq object...
-  as.data.frame()%>% # turn it into a dataframe so mutate can work
-mutate(random_forest_relevance = # make anew variable caled random_forest_relevance, where...
-         if_else(taxa_names(x)%in%y == TRUE,"important", "uninportant")),#%>% # if the taxa names are present in the boruta list of selected ASVs, tag them as inportant
-#  tax_table(), # make it a phyloseq object again #this still needs adjustment
-  x =ps_list_rarefied,
-  y =boruta_ASV_list, 
-  SIMPLIFY = FALSE)       
-
-# see taxonomies of RF asvs
-important_rf_l<-lapply(rf_added_tax, function(x)
-  tax_table(filter(x, random_forest_relevance == "important")))
-
 
 
 # to a list of dataframes      
@@ -206,9 +185,12 @@ mutate(random_forest_relevance = # make anew variable caled random_forest_releva
   y =boruta_ASV_list, 
   SIMPLIFY = FALSE)   
 
-
+# export to add to network visualizations
 write.csv(select(rf_added_tax$Arabidopsis_thaliana.Soil, random_forest_relevance), "at_soil_rfimp.csv", row.names = TRUE)
 write.csv(select(rf_added_tax$Brassica_oleraceae.Soil, random_forest_relevance), "bo_soil_rfimp.csv", row.names = TRUE)
+write.csv(select(rf_added_tax$Arabidopsis_thaliana.Root, random_forest_relevance), "at_root_rfimp.csv", row.names = TRUE)
+write.csv(select(rf_added_tax$Brassica_oleraceae.Root, random_forest_relevance), "bo_root_rfimp.csv", row.names = TRUE)
+
 
 
 ```
@@ -243,10 +225,17 @@ map(rf_important_ps_l, tax_table)
 
 rf_heat_tree<-rf_important_ps_l
 
+plot_bar(rf_important_ps_l$Arabidopsis_thaliana.Root)
+
+rf_heat_tree$merged<-merge_phyloseq(rf_heat_tree$Arabidopsis_thaliana.Root,
+                                     rf_heat_tree$Arabidopsis_thaliana.Soil,
+                                     rf_heat_tree$Brassica_oleraceae.Root,
+                                     rf_heat_tree$Brassica_oleraceae.Soil)
 
 make_list_of_heat_trees<-function(phyloseq_object){
 #remove unecessary taxonomic indo (dada2id, "S__" and" above_selected)
-tax_table(phyloseq_object)<-tax_table(phyloseq_object)[,c(1:6)]
+#tax_table(phyloseq_object)<-tax_table(phyloseq_object)[,c(1:6)]
+
 
 
 
@@ -283,8 +272,9 @@ set.seed(1)
 heat_tree(test,
                  node_size = n_obs, # n_obs is a function that calculates, in this case, the number of OTUs per taxon
                  node_label = taxon_names,
-                 node_size_axis_label = "Number of OTUs",
-                 node_color_axis_label = "Log2 ratio median proportions",
+                 node_color = control,
+                 node_size_axis_label = "Number of samples present",
+                 node_color_axis_label = "ASV count",
                  layout = "davidson-harel", # The primary layout algorithm
                  initial_layout = "reingold-tilford") # The layout algorithm that initializes node locations
                #  output_file = ".\R output\differential_heat_tree_AT.pdf") # Saves the plot as a pdf file
@@ -308,32 +298,41 @@ lapply(rf_heat_tree, function (x) make_list_of_heat_trees(x))
 ```{r}
 
 
+
+
+  #get boruta stats of ASVs confirmed to be important
+rf_importance_byOTU<-lapply(fixed_boruta_objt_list, function (x)
+   filter(attStats(x), decision=="Confirmed")%>%
+    rownames_to_column(var = "OTU"))
+
+#turn ps object into a dataframe
+melted_ps<-lapply(rf_important_ps_l, psmelt)
+
+ # join melted ps object created above with the boruta stats
+ rf_ASVs_df<-mapply(function (x,y)
+                    left_join(x,y),
+                    x = melted_ps,
+                    y = rf_importance_byOTU,
+                    SIMPLIFY = FALSE)
+ 
+
+
 # quick plot bar with relative abudances, for a quick overview of dity data
- silly_plot<-psmelt(transform_sample_counts(rf_important_ps_l$Arabidopsis_thaliana.Soil, function(x) x / sum(x) ))
- silly_plot$Phylum <- as.character(data$Phylum)
- silly_plot$Class <- as.character(data$Class)
-
-# phyla level
-ggplot(data=silly_plot, aes(x=MeJA_treatment, y =Abundance, fill=Order))+
-geom_bar(aes(), stat="identity", position="stack")+
-scale_fill_hue()+
-theme_bw()
-
-
-ggplot(data=silly_plot, aes(x=OTU, y =Abundance, fill=MeJA_treatment))+
-geom_bar(aes(), stat="identity", position="stack")+
-scale_fill_hue()+
-theme_bw()
+lapply(rf_ASVs_df, function(x)
+  
+  ggplot(data=x, aes(x=OTU, y =Abundance, fill=MeJA_treatment ))+
+  geom_boxplot(aes())+
+  scale_fill_hue()+
+  theme_bw()+
+  geom_line(data = x, aes(x=OTU, y = meanImp), size = 2)+
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) )
 
 
+diff(rf_ASVs_df$Arabidopsis_thaliana.Root$Abundance)/diff(rf_ASVs_df$Arabidopsis_thaliana.Root$meanImp)
+diff(ylim.prim)/diff(ylim.sec)
 
+filter(attStats(fixed_boruta_objt_list$Arabidopsis_thaliana.Root)$meanImp, decision=="Confirmed")
 
-
-
-psmelt(transform_sample_counts(merge_phyloseq(rf_important_ps_l[[1]],
-               rf_important_ps_l[[2]],
-               rf_important_ps_l[[3]],
-               rf_important_ps_l[[4]])
 
 ```
 
