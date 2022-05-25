@@ -1089,9 +1089,7 @@ ggplot(x,
   geom_boxplot()+
   theme(axis.text.x = element_text(angle = 90))+
   geom_point(position = "jitter", alpha = 0.5, aes( color = Phylum)))
-  
-
-
+ 
 
 
 
