@@ -1738,6 +1738,11 @@ plot_shannon_correlation(full_VS_selected_Family)
 
 
 
+#check how much$ of the taxa diversity is retained
+
+full_VS_selected_Order$uni_4model_BO_above$Observed_above_expected / full_VS_selected_Order$uni_4model_BO_above$Observed_full_dataset
+
+
 # the loop not working properly! AT and BO data partions are being overwirnt on top of each other
 # loop over taxa levels
 taxa_levels<-c("Class", "Order", "Family")
