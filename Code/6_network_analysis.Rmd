@@ -796,7 +796,8 @@ ps_list_network_rarefied <- lapply(ps_list_network, function (x)
 now that we normalized the input data for eigengene calculations, we can use it as an input
 ```{r}
 
-
+# this is a new piece of code
+sum (1+1)
 
 # run the custom function adjustInput_run_eigen_correlation_adjustOutput() to adjust input adn output of eigen_correlation() , besides runing eigen_correlation(). Here we run it in lists
 module_and_metadata_correlations<-mapply(function (x,y)
