@@ -324,8 +324,9 @@ lapply(rf_ASVs_df, function(x)
   geom_boxplot(aes())+
   scale_fill_hue()+
   theme_bw()+
+  theme(axis.title.x = element_blank())+
   geom_line(data = x, aes(x=OTU, y = meanImp), size = 2)+
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) )
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1)) )
 
 
 diff(rf_ASVs_df$Arabidopsis_thaliana.Root$Abundance)/diff(rf_ASVs_df$Arabidopsis_thaliana.Root$meanImp)
