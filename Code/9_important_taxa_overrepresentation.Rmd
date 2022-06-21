@@ -63,42 +63,20 @@ names(ps_imp_taxa_l)<-c("Arabidopsis_thaliana.Root",
 
 # 9.2 prepare data and calculate proportions with fisher's exact test
 
-Note that Pedro failed to automate the proportion-testing fucntion despite Karen's help. There was a problem on the loop when it is called inside the function: objects "i" in the loop were literally passed as charather "i", so classes/orders could not be found. the same code works fine when hard-coded, so here I just overwrite the inputs and outputs, sourcing the code several times as if it was an actual function 
+note: There was a problem on the loop when it is called inside the function: objects "i" in the loop were literally passed as charather "i", so classes/orders could not be found. the same code works fine when hard-coded. this was a problem when using phyloseq::subset_taxa(), but not now when using phyloseq::prune_taxa() 
 
 ```{r}
-############### define the phyloseq objects overritng them. instead of copy-pasting the code, I just srouce a script and save the result
-
-ps_important_taxa<-ps_imp_taxa_l$Arabidopsis_thaliana.Root
-ps_all_taxa<-ps_list_rarefied$Arabidopsis_thaliana.Root
+# source the function that calculates fisher tests for every taxonomic level
 source("./Code/Functions/fisher_test_on_taxa_levels.R") 
-fisher_result_AT_root<-fisher_result
 
-ps_important_taxa<-ps_imp_taxa_l$Arabidopsis_thaliana.Soil
-ps_all_taxa<-ps_list_rarefied$Arabidopsis_thaliana.Soil
-source("./Code/Functions/fisher_test_on_taxa_levels.R") 
-fisher_result_AT_soil<-fisher_result
+# run the custom function voer 2 lists of philoseq objects, one with imporntat taxa and other with the full taxa (for every partition)
+fisher_result_l<-mapply(function (x,y)
+                   fisher_all_taxa_groups(ps_important_taxa = x, ps_all_taxa = y),
+                   x = ps_imp_taxa_l,
+                   y = ps_list_rarefied,
+                   SIMPLIFY = FALSE)
 
-ps_important_taxa<-ps_imp_taxa_l$Brassica_oleraceae.Root
-ps_all_taxa<-ps_list_rarefied$Brassica_oleraceae.Root
-source("./Code/Functions/fisher_test_on_taxa_levels.R") 
-fisher_result_BO_root<-fisher_result
 
-ps_important_taxa<-ps_imp_taxa_l$Brassica_oleraceae.Soil
-ps_all_taxa<-ps_list_rarefied$Brassica_oleraceae.Soil
-source("./Code/Functions/fisher_test_on_taxa_levels.R") 
-fisher_result_BO_soil<-fisher_result
-
-#saves all into a single list
-fisher_result_l<-list(fisher_result_AT_root,
-                      fisher_result_AT_soil,
-                      fisher_result_BO_root,
-                      fisher_result_BO_soil)
-
-#adjust anmes of new list
-names(fisher_result_l)<-c("fisher_result_AT_root",
-                          "fisher_result_AT_soil",
-                          "fisher_result_BO_root",
-                          "fisher_result_BO_soil")
 
 
 ```
@@ -140,6 +118,8 @@ fdr_p_fisher_l<-lapply(fisher_result_l, function (x){
   return(adjusted_p)
   
 })
+
+
 
 # subset of FDR adjusted significant p values 
 lapply (fdr_p_fisher_l, function (x) 
@@ -283,9 +263,6 @@ set.seed(1)
 
       return(output)
 }
-
-
-quantative_palette
 
 
 
