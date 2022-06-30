@@ -2,30 +2,34 @@
 
 ## Welcome MICROP PhD students & other collaborators!
 
-This repository holds the **full** data and code for the WUR-ENTO MeJA pilot experiment where we test different methyl jasmonate concentration to stress *Arabdopsis thaliana* and *Brassica oleraceae*. We then evaluate rhizosphere and endosphere microbial communities with various methods. this project is in manuscript draft stage, so no new analysis will be performed.
+This repository holds the **full** data and code for the WUR-ENTO MeJA pilot experiment where we test different methyl jasmonate concentration to stress *Arabidopsis thaliana* and *Brassica oleraceae*. We then evaluate rhizosphere and endosphere microbial communities with various methods. this project is in manuscript draft stage, so no new analysis will be performed.
 
-#### These are the main analysis methods enployed
+#### These are the main analysis methods employed
     * Permanovas, beta dispersion and NMDS ordinations oc CSS normalized microbiome data
-    * basic alpha diversity analisis
-    * Neutral model per treatment using species+compartment as the source
+    * basic alpha diversity analysis
+    * Neutral model per treatment using species + compartment as the source
         * follow-up with above-expected communities ordinations and heat tree visualization
         * follow-up with diversity indexes within every single taxonomic group
-    * Classic DeSeq2 analysis for differentially abudnant ASVs
-    * Random Forest, defining ASVs that predic treatment classes
+    * Classic DeSeq2 analysis for differentially abundant ASVs
+    * Random Forest, defining ASVs that predict treatment classes
     * Network analysis, defining keystone taxa, module connectors and module hubs
-    * Summarization of ASVs classified as importnat by random forest, networks and deseq with fisher tests
+    * Summarization of ASVs classified as important by random forest, networks and deseq with fisher tests
     * visualization of ASV taxonomies with heat trees
 
 ### How to make use of this repository & run the analysis
 
-After you clone/download all contnent, you can use renv::restore() to install all packages with the right versions. 
-The first chunk of script 1_Loading_and_pre_processing_published will load all the libraries necessary for the analysis.
-you could then continue running scripts from 1 to 9, executing all analysis serially.
-Script 1 loads the data and perofrms all normalization, rarefaction, etc. it provides the phyloseq objects acessed in other scripts.
-Script 2-7 are rather independent from each other, as long as the phyloseq objects from script 1 are available. note that my 16GB 4-core i7 system takes ~2h to calculate the networks and ~2h to calculate random forest.
-Script 8 requires all the objects generated in scripts 2-7.
-script 9 requires script 8, the output is a nice summary of the whole pipeline.
-Otherwise, just load "./R output/all_output_saved.RData" to get all processed objects.
+
+0 - After you clone/download all content, you can use renv::restore() to install all packages with the right versions. 
+
+1 - The first chunk of script 1_Loading_and_pre_processing_published will load all the libraries necessary for the analysis.
+
+2 - you could then continue running scripts from 1 to 9, executing all analysis serially. Otherwise, just load "./R output/all_output_saved.RData" to get all processed objects.
+
+    *Script 1 loads the data and performs all normalization, rarefaction, etc. it provides the phyloseq objects accessed in other scripts.
+    *Script 2-7 are rather independent from each other, as long as the phyloseq objects from script 1 are available. note that my 16GB 4-core i7 system takes ~2h to calculate the networks and ~2h to calculate random forest.
+    *Script 8 requires all the objects generated in scripts 2-7.
+    *script 9 requires script 8, the output is a nice summary of the whole pipeline.
+
 
 #### please do not alter the files you can see in this repository
 
@@ -33,18 +37,19 @@ Do you have a suggestion? **good, I would love to see it!** Please fork, commit 
 
 ### Suggested tutorials
 
-**R studio** has a lot of handy tools & horkeys I keep learning about: https://www.rstudio.com/resources/webinars/programming-part-1-writing-code-in-rstudio/
+
+**R studio** has a lot of handy tools & hotkeys I keep learning about: https://www.rstudio.com/resources/webinars/programming-part-1-writing-code-in-rstudio/
 
 **R project** files are essential to organize your files and working directories: https://www.rstudio.com/resources/webinars/managing-part-1-projects-in-rstudio/
 
-**renv** is a R package that manges R manage packages for you: https://rstudio.github.io/renv/articles/renv.html
+**renv** is a R package that manages R manage packages for you: https://rstudio.github.io/renv/articles/renv.html
 
-**R markdown** allows you to organize your code into digestable chunks of code, and let's you better organize sections within your script: https://www.rstudio.com/resources/webinars/getting-started-with-r-markdown/ 
+**R markdown** allows you to organize your code into digestible chunks of code, and let's you better organize sections within your script: https://www.rstudio.com/resources/webinars/getting-started-with-r-markdown/ 
 
 **Git & GitHub** allow for proper version control and can be integrated with R Studio. it has a steep learning curve but it's well worth the time if you want to be proficient in computation
     * https://www.rstudio.com/resources/webinars/managing-part-2-github-and-rstudio/
     * https://www.geo.uzh.ch/microsite/reproducible_research/post/rr-rstudio-git/
-    
+
 **phyloseq** is an essential package for this pipeline: https://joey711.github.io/phyloseq/
 
 **Metacoder** is a nice new tool to creat heat trees for phylogenetic-comprehesive figures of sets of ASVs: https://grunwaldlab.github.io/metacoder_documentation/
