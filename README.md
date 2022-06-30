@@ -24,7 +24,8 @@ This repository holds the **full** data and code for the WUR-ENTO MeJA pilot exp
 
 2 - you could then continue running scripts from 1 to 9, executing all analysis serially. Otherwise, just load "./R output/all_output_saved.RData" to get all processed objects.
 
-    * Script 1 loads the data and performs all normalization, rarefaction, etc. it provides the phyloseq objects accessed in other scripts.
+
+    *Script 1 loads the data and performs all normalization, rarefaction, etc. it provides the phyloseq objects accessed in other scripts.
     *Script 2-7 are rather independent from each other, as long as the phyloseq objects from script 1 are available. note that my 16GB 4-core i7 system takes ~2h to calculate the networks and ~2h to calculate random forest.
     *Script 8 requires all the objects generated in scripts 2-7.
     *script 9 requires script 8, the output is a nice summary of the whole pipeline.
@@ -47,10 +48,10 @@ Do you have a suggestion? **good, I would love to see it!** Please fork, commit 
 **Git & GitHub** allow for proper version control and can be integrated with R Studio. it has a steep learning curve but it's well worth the time if you want to be proficient in computation
     * https://www.rstudio.com/resources/webinars/managing-part-2-github-and-rstudio/
     * https://www.geo.uzh.ch/microsite/reproducible_research/post/rr-rstudio-git/
-    
+
 **phyloseq** is an essential package for this pipeline: https://joey711.github.io/phyloseq/
 
-**Metacoder** is a nice new tool to creat heat trees for phylogenetic-comprehensive figures of sets of ASVs: https://grunwaldlab.github.io/metacoder_documentation/
+**Metacoder** is a nice new tool to creat heat trees for phylogenetic-comprehesive figures of sets of ASVs: https://grunwaldlab.github.io/metacoder_documentation/
 
 **lists** can be used to store multiple dataframes or phyloseq objects, which can then be looped in lapply and mapply: https://www.youtube.com/watch?v=Rjb7sDfq_Jg
 
