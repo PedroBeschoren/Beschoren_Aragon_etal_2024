@@ -968,6 +968,10 @@ return(permanovas_100)
 permanovas_BO_100<-hundred_permanovas_on_random_otu(ps_list_CSS$Brassica_oleraceae.Soil, BO_4_model_above)
 permanovas_AT_100<-hundred_permanovas_on_random_otu(ps_list_CSS$Arabidopsis_thaliana.Soil, AT_4_model_above)
 
+# test on rarefied data as well because the input to neutral models is rarefied
+permanovas_BO_100<-hundred_permanovas_on_random_otu(ps_list_rarefied$Brassica_oleraceae.Soil, BO_4_model_above)
+permanovas_AT_100<-hundred_permanovas_on_random_otu(ps_list_rarefied$Arabidopsis_thaliana.Soil, AT_4_model_above)
+
 ```
 
 
