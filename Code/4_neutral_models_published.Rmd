@@ -970,48 +970,7 @@ permanovas_AT_100<-hundred_permanovas_on_random_otu(ps_list_CSS$Arabidopsis_thal
 
 ```
 
-### 4.9.1b run 100 permanovas on randomly selected OTUs. here we simply collect X otus from the full table
 
-```{r}
-
-
-hundred_permanovas_on_random_otu<-  function (CSS_fraction,uni_4model) {
-  # the input is one of the 4-split fraction of the CSS-normalized phyloseq object as the first argument
-  # thes econd argument is the phyloseq object contaning only the OTUs classified as above expected
-  # The output is a list of 100 permanovas
-  
-# collect a list of random OTUS, 100 times
-set.seed(92342347)
-rand_otu<-replicate(100, sample(taxa_names(CSS_fraction), nrow(tax_table(uni_4model)), replace=FALSE)) #performs randomization oepration 100 times. the number of OTUs randomly sampled will be equal the the numebr of OTUs in the above-selected phyloseq objects
-
-#turn the n_rows x 100df into a list of 100 vectors
-Rand_otus_100_lists<-list() #make empty list
-for(i in 1:ncol(rand_otu)) {             # Using for-loop to add columns to list
-  Rand_otus_100_lists[[i]] <- rand_otu[ , i]
-}
-
-#make 100 phyloseq objects with the same number of OTUs as the above_selected models
-list_100_phyloseqs <- lapply(Rand_otus_100_lists, function (x)
-  prune_taxa(x, CSS_fraction)) # keep taxa only in the ranodm list
-
-
-
-
-#Permanova
-## the function permanova_with_blocks() is defined in  2.3.1 - Run PERMANOVA 
-
-set.seed(9247)
-permanovas_100<-permanova_with_blocks(list_100_phyloseqs, "MeJA_treatment + Block")
-return(permanovas_100)
-}
-
-
-# now, make the 100 permanovas on random sets of OTUs, using a total number of OTUs equal to the OTUs selected as above aoccurence
-
-permanovas_BO_100<-hundred_permanovas_on_random_otu(ps_list_CSS$Brassica_oleraceae.Soil, uni_4model_BO_above)
-permanovas_AT_100<-hundred_permanovas_on_random_otu(ps_list_CSS$Arabidopsis_thaliana.Soil, uni_4model_AT_above)
-
-```
 
 #### 4.9.2 acess the P, F and R2 values of the 100 permanovas for each species, then put it into a single object for both species
 
