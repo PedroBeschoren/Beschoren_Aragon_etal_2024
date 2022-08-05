@@ -354,67 +354,48 @@ tax_table(subset_taxa(uni_4model_BO_above, taxa_names(uni_4model_BO_above) %in% 
 
 ```
 
-#### 4.6.6 re-normalize data and plot it
+#### 4.6.6 plot sub-communities separated by neutral models
+should I really re-normalize? I'm thinking it was a bad idea
 
 ```{r}
 ##########
 
 
-#this takes a physeq object and applies the CSS normalization to it
-make_CSS_physeq<-function (physeq){
-#perform CCS normalization..........................
-MRexp_objt<-phyloseq_to_metagenomeSeq(physeq)
-
-#here you can acess the abundance matrix normalized by cummulative sum scaling. you could overwirte the phyloseq object with this
-CSS_matrix <- MRcounts(MRexp_objt, norm = TRUE, log = TRUE) # using a log scale will essentially reduce the impact of common species and increase the impact of rare species
-
-#make a new phyloseq object...
-uni_4model_BO_above_CSS<-physeq
-
-# and now change it's taxa table
-otu_table(uni_4model_BO_above_CSS)<-otu_table(CSS_matrix, taxa_are_rows = TRUE)
-
-return(uni_4model_BO_above_CSS)
-}
-
-uni_4model_BO_above_CSS<-make_CSS_physeq(uni_4model_BO_above)
-uni_4model_BO_asPredicted_CSS<-make_CSS_physeq(uni_4model_BO_asPredicted)
-uni_4model_BO_below_CSS<-make_CSS_physeq(uni_4model_BO_below)
 
 ### plot above
-nmds_uni_4model_BO_above_CSS <- phyloseq::ordinate(uni_4model_BO_above_CSS, 
+nmds_uni_4model_BO_above <- phyloseq::ordinate(uni_4model_BO_above, 
                              method ="NMDS", 
                              distance="bray", 
                              try=200,
                              autotransform=TRUE) 
 
 
-plot_ordination(physeq = uni_4model_BO_above_CSS, 
-                ordination = nmds_uni_4model_BO_above_CSS, 
+plot_ordination(physeq = uni_4model_BO_above, 
+                ordination = nmds_uni_4model_BO_above, 
                 type = "sample",
                 color= "MeJA_treatment")
 ### plot  predicted
-nmds_uni_4model_BO_asPredicted_CSS <- phyloseq::ordinate(uni_4model_BO_asPredicted_CSS, 
+nmds_uni_4model_BO_asPredicted <- phyloseq::ordinate(uni_4model_BO_asPredicted, 
                              method ="NMDS", 
                              distance="bray", 
                              try=200,
                              autotransform=TRUE) 
 
-plot_ordination(physeq = uni_4model_BO_asPredicted_CSS, 
-                ordination = nmds_uni_4model_BO_asPredicted_CSS, 
+plot_ordination(physeq = uni_4model_BO_asPredicted, 
+                ordination = nmds_uni_4model_BO_asPredicted, 
                 type = "sample",
                 color= "MeJA_treatment")
 
 ### plot below
-nmds_uni_4model_BO_below_CSS <- phyloseq::ordinate(uni_4model_BO_below_CSS, 
+nmds_uni_4model_BO_below <- phyloseq::ordinate(uni_4model_BO_below, 
                              method ="NMDS", 
                              distance="bray", 
                              try=200,
                              autotransform=TRUE) 
 
 
-plot_ordination(physeq = uni_4model_BO_below_CSS, 
-                ordination = nmds_uni_4model_BO_below_CSS, 
+plot_ordination(physeq = uni_4model_BO_below, 
+                ordination = nmds_uni_4model_BO_below, 
                 type = "sample",
                 color= "MeJA_treatment")
 #
@@ -428,14 +409,14 @@ plot_ordination(physeq = uni_4model_BO_below_CSS,
 
 ### let's put these fit class splits into a list and apply the custom beta diversity fucntions from script 2
 
-BO_soil_predicted_list_CSS<-list(uni_4model_BO_above_CSS,
-                                 uni_4model_BO_asPredicted_CSS,
-                                 uni_4model_BO_below_CSS)
+BO_soil_predicted_list<-list(uni_4model_BO_above,
+                                 uni_4model_BO_asPredicted,
+                                 uni_4model_BO_below)
 
 
-names(BO_soil_predicted_list_CSS)<-c("uni_4model_BO_above_CSS",
-                                     "uni_4model_BO_asPredicted_CSS",
-                                     "uni_4model_BO_below_CSS")
+names(BO_soil_predicted_list)<-c("uni_4model_BO_above",
+                                     "uni_4model_BO_asPredicted",
+                                     "uni_4model_BO_below")
 
 #beta dispersion
 dip_result4<-beta_disp_plotAndTest(BO_soil_predicted_list_CSS, "MeJA_treatment")
@@ -651,68 +632,53 @@ tax_table(subset_taxa(uni_4model_AT_above, taxa_names(uni_4model_AT_above) %in% 
 
 ```
 
-#### 4.7.6 re-normalize data and plot it
+#### 4.7.6 sub-communities separated by neutral models
 
 ```{r}
 ##########
 
 
-#this takes a physeq object and applies the CSS normalization to it
-make_CSS_physeq<-function (physeq){
-#perform CCS normalization..........................
-MRexp_objt<-phyloseq_to_metagenomeSeq(physeq)
 
-#here you can acess the abundance matrix normalized by cummulative sum scaling. you could overwirte the phyloseq object with this
-CSS_matrix <- MRcounts(MRexp_objt, norm = TRUE, log = TRUE) # using a log scale will essentially reduce the impact of common species and increase the impact of rare species
 
-#make a new phyloseq object...
-uni_4model_AT_above_CSS<-physeq
-
-# and now change it's taxa table
-otu_table(uni_4model_AT_above_CSS)<-otu_table(CSS_matrix, taxa_are_rows = TRUE)
-
-return(uni_4model_AT_above_CSS)
-}
-
-uni_4model_AT_above_CSS<-make_CSS_physeq(uni_4model_AT_above)
-uni_4model_AT_asPredicted_CSS<-make_CSS_physeq(uni_4model_AT_asPredicted)
-uni_4model_AT_below_CSS<-make_CSS_physeq(uni_4model_AT_below)
+uni_4model_AT_above<-(uni_4model_AT_above)
+uni_4model_AT_asPredicted<-(uni_4model_AT_asPredicted)
+uni_4model_AT_below<-(uni_4model_AT_below)
 
 
 ### plot above
-nmds_uni_4model_AT_above_CSS <- phyloseq::ordinate(uni_4model_AT_above_CSS, 
+nmds_uni_4model_AT_above <- phyloseq::ordinate(uni_4model_AT_above, 
                              method ="NMDS", 
                              distance="bray", 
                              try=200,
                              autotransform=TRUE) 
 
 
-plot_ordination(physeq = uni_4model_AT_above_CSS, 
-                ordination = nmds_uni_4model_AT_above_CSS, 
+plot_ordination(physeq = uni_4model_AT_above, 
+                ordination = nmds_uni_4model_AT_above, 
                 type = "sample",
                 color= "MeJA_treatment")
 ### plot  predicted
-nmds_uni_4model_AT_asPredicted_CSS <- phyloseq::ordinate(uni_4model_AT_asPredicted_CSS, 
+nmds_uni_4model_AT_asPredicted <- phyloseq::ordinate(uni_4model_AT_asPredicted, 
                              method ="NMDS", 
                              distance="bray", 
                              try=200,
                              autotransform=TRUE) 
 
-plot_ordination(physeq = uni_4model_AT_asPredicted_CSS, 
-                ordination = nmds_uni_4model_AT_asPredicted_CSS, 
+plot_ordination(physeq = uni_4model_AT_asPredicted, 
+                ordination = nmds_uni_4model_AT_asPredicted, 
                 type = "sample",
                 color= "MeJA_treatment")
 
 ### plot below
-nmds_uni_4model_AT_below_CSS <- phyloseq::ordinate(uni_4model_AT_below_CSS, 
+nmds_uni_4model_AT_below <- phyloseq::ordinate(uni_4model_AT_below, 
                              method ="NMDS", 
                              distance="bray", 
                              try=200,
                              autotransform=TRUE) 
 
 
-plot_ordination(physeq = uni_4model_AT_below_CSS, 
-                ordination = nmds_uni_4model_AT_below_CSS, 
+plot_ordination(physeq = uni_4model_AT_below, 
+                ordination = nmds_uni_4model_AT_below, 
                 type = "sample",
                 color= "MeJA_treatment")
 #
@@ -725,33 +691,33 @@ plot_ordination(physeq = uni_4model_AT_below_CSS,
 
 ### let's put these fit class splits into a list and apply the custom beta diversity fucntions from script 2
 
-AT_soil_predicted_list_CSS<-list(uni_4model_AT_above_CSS,
-                                 uni_4model_AT_asPredicted_CSS,
-                                 uni_4model_AT_below_CSS)
+AT_soil_predicted_list<-list(uni_4model_AT_above,
+                                 uni_4model_AT_asPredicted,
+                                 uni_4model_AT_below)
 
 
-names(AT_soil_predicted_list_CSS)<-c("uni_4model_AT_above_CSS",
-                                     "uni_4model_AT_asPredicted_CSS",
-                                     "uni_4model_AT_below_CSS")
+names(AT_soil_predicted_list)<-c("uni_4model_AT_above",
+                                     "uni_4model_AT_asPredicted",
+                                     "uni_4model_AT_below")
 
 #beta dispersion
-dip_result4<-beta_disp_plotAndTest(AT_soil_predicted_list_CSS, "MeJA_treatment")
+dip_result4<-beta_disp_plotAndTest(AT_soil_predicted_list, "MeJA_treatment")
 
 #Permanova
-permanova_with_blocks(AT_soil_predicted_list_CSS, "MeJA_treatment + Block") 
+permanova_with_blocks(AT_soil_predicted_list, "MeJA_treatment + Block") 
 
 #pairwise1
-lapply(AT_soil_predicted_list_CSS, function (x)
+lapply(AT_soil_predicted_list, function (x)
   adonis.pair(dist.mat= phyloseq::distance(otu_table(x), method="bray"),
               Factor= as.factor(as(phyloseq::sample_data(x),"data.frame")$MeJA_treatment)))
 
 
 #pairwise2
-parwise_above<-pairwise.adonis2(phyloseq::distance(otu_table(AT_soil_predicted_list_CSS[[1]]), method="bray") ~ MeJA_treatment+Block, data = as(phyloseq::sample_data(AT_soil_predicted_list_CSS[[1]]),"data.frame"), strata="Block")
+parwise_above<-pairwise.adonis2(phyloseq::distance(otu_table(AT_soil_predicted_list[[1]]), method="bray") ~ MeJA_treatment+Block, data = as(phyloseq::sample_data(AT_soil_predicted_list[[1]]),"data.frame"), strata="Block")
 
-parwise_aspredicted<-pairwise.adonis2(phyloseq::distance(otu_table(AT_soil_predicted_list_CSS[[2]]), method="bray") ~ MeJA_treatment+Block, data = as(phyloseq::sample_data(AT_soil_predicted_list_CSS[[2]]),"data.frame"), strata="Block")
+parwise_aspredicted<-pairwise.adonis2(phyloseq::distance(otu_table(AT_soil_predicted_list[[2]]), method="bray") ~ MeJA_treatment+Block, data = as(phyloseq::sample_data(AT_soil_predicted_list[[2]]),"data.frame"), strata="Block")
 
-parwise_below<-pairwise.adonis2(phyloseq::distance(otu_table(AT_soil_predicted_list_CSS[[3]]), method="bray") ~ MeJA_treatment+Block, data = as(phyloseq::sample_data(AT_soil_predicted_list_CSS[[3]]),"data.frame"), strata="Block")
+parwise_below<-pairwise.adonis2(phyloseq::distance(otu_table(AT_soil_predicted_list[[3]]), method="bray") ~ MeJA_treatment+Block, data = as(phyloseq::sample_data(AT_soil_predicted_list[[3]]),"data.frame"), strata="Block")
 
 #put all those pairwise comparison objects into a list
 Pairwise_list<-list(parwise_above,
