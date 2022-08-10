@@ -1493,6 +1493,7 @@ as.list(c())
 # step 2: calculate diversity in each member of the taxa level
 shannon_diversity_l<-list()
 observed_taxa_l<-list()
+simpson_diversity_l<-list()
 for(i in taxon_list_output) {
 shannon_diversity_l[i]<-estimate_richness(prune_taxa(taxa = tax_table(ps_object)
                                                             [,taxa_level] %in% i,
@@ -1505,18 +1506,35 @@ observed_taxa_l[i]<-estimate_richness(prune_taxa(taxa = tax_table(ps_object)
                                                  x= ps_object),
                                           split = FALSE,
                                           measures = "Observed" )
+
+simpson_diversity_l[i]<-estimate_richness(prune_taxa(taxa = tax_table(ps_object)
+                                                        [,taxa_level] %in% i,
+                                                 x= ps_object),
+                                          split = FALSE,
+                                          measures = "Simpson" )
 }
 
 
 # step 3: join oserved taxa and shannon diversity in a df
 shannon_df<-t(as.data.frame(shannon_diversity_l))
 observed_df<-t(as.data.frame(observed_taxa_l))
+simpson_df<-t(as.data.frame(simpson_diversity_l))
 colnames(shannon_df)<-paste0("Shannon_", data_partition, sep = "")
 colnames(observed_df)<-paste0("Observed_", data_partition, sep = "")
+colnames(simpson_df)<-paste0("Simpson_", data_partition, sep = "")
+
 diversity_df<-merge(shannon_df,
                     observed_df,
                     by = 0)
+
+
+
+
 colnames(diversity_df)[1]<-taxa_level
+
+diversity_df$Simpson_above_expected<- simpson_df
+
+
 
 return(diversity_df)
 }
@@ -1615,6 +1633,7 @@ plot_observed_correlation<-function(full_VS_selected_TaxaLevel){
 untitled_plot_list<-lapply(full_VS_selected_TaxaLevel, function(z)
 ggplot(data=z,aes(x=Observed_full_dataset,y=Observed_above_expected ))+
   geom_point() +
+  theme_bw()+
   geom_smooth(method="loess")+ #values of y are based on the values of x
   labs(subtitle = paste("Spearman rank correlation:",
                         stats::cor(z$Observed_full_dataset,
@@ -1640,11 +1659,14 @@ plot_observed_correlation(full_VS_selected_Family)
 
 
 
+
+
 plot_shannon_correlation<-function(full_VS_selected_TaxaLevel){
 untitled_plot_list<-lapply(full_VS_selected_TaxaLevel, function(z)
 ggplot(data=z[z$Shannon_above_expected>0,], #only includes shannon >0
        aes(x=Shannon_full_dataset,y=Shannon_above_expected ))+
   geom_point() +
+   theme_bw()+
   geom_smooth(method="loess")+ #values of y are based on the values of x
   labs(subtitle = paste("Spearman rank correlation:",
                         stats::cor(z$Shannon_full_dataset,
@@ -1669,38 +1691,42 @@ plot_shannon_correlation(full_VS_selected_Family)
 
 
 
+
+plot_simpson_correlation<-function(full_VS_selected_TaxaLevel){
+untitled_plot_list<-lapply(full_VS_selected_TaxaLevel, function(z)
+ggplot(data=z[z$Simpson_above_expected >0,], #only includes shannon >0
+       aes(x=Simpson_full_dataset,y=Simpson_above_expected  ))+
+  geom_point() +
+   theme_bw()+
+  geom_smooth(method="loess")+ #values of y are based on the values of x
+  labs(subtitle = paste("Spearman rank correlation:",
+                        stats::cor(z$Simpson_full_dataset,
+                                  z$Simpson_above_expected ,
+                                  method = "spearman" ),
+                        sep = " "))+
+  geom_text_repel(aes(label=z[z$Simpson_above_expected >0,1]), data = z[z$Simpson_above_expected >0,]))
+
+tiles_list<-names(untitled_plot_list) 
+
+Plot_list<-mapply(function (x,z) # use mapply again to put those listed names in the list of plots
+  x + ggtitle(z),
+  x = untitled_plot_list,
+  z = tiles_list, 
+  SIMPLIFY = FALSE)
+return(Plot_list)
+}
+
+plot_simpson_correlation(full_VS_selected_Class)
+plot_simpson_correlation(full_VS_selected_Order)
+plot_simpson_correlation(full_VS_selected_Family)
+
+
 #check how much$ of the taxa diversity is retained
 
 full_VS_selected_Order$uni_4model_BO_above$Observed_above_expected / full_VS_selected_Order$uni_4model_BO_above$Observed_full_dataset
 
 
-# the loop not working properly! AT and BO data partions are being overwirnt on top of each other
-# loop over taxa levels
-taxa_levels<-c("Class", "Order", "Family")
-
-above_expected<-list()
-full_dataset<-list()
-full_VS_selected<-list()
-for (i in taxa_levels){
-above_expected[i]<-lapply(pslit_neutraly_selected, function (x)
-  diversity_per_taxon(ps_object = x,
-                      taxa_level = i,
-                      data_partition = "above_expected"))
-
-full_dataset[i]<-lapply(ps_list_rarefied[c(2,4)], function (x)
-  diversity_per_taxon(ps_object = x,
-                      taxa_level = i,
-                      data_partition = "full_dataset"))
-
-# join 2 dfs of step 3
-full_VS_selected[i]<-mapply(function (x,y)
-  left_join(x,
-            y,
-            by = "Row.names"), # this might change depending on  diversity_per_taxon()
-  x = above_expected,
-  y = full_dataset,
-  SIMPLIFY = FALSE)
-}
+# the loop is not working properly, so i deleted the code for it! AT and BO data partions are being overwirnt on top of each other
 
 
 
