@@ -1479,10 +1479,14 @@ diversity_per_taxon <- function(ps_object, taxa_level, data_partition) {
 
 # the output is a df showing observed number fo taxa and shannon diversity within each of the defined taxa_level 
 
+# let's remove the "r__"ranks from the taxonomy, they can be useful but will polute our plot
+tax_table(ps_object)[, colnames(tax_table(ps_object))] <- gsub(tax_table(ps_object)[, colnames(tax_table(ps_object))],     pattern = "[a-z]__", replacement = "")
+  
+  
   
 # step 1: list the taxa present in the ps object, at the requested taxon level    
 taxon_list_output<-as.character(tax_table(ps_object)[,taxa_level])
-taxon_list_output<-taxon_list_output[taxon_list_output != "f__uncultured"]
+taxon_list_output<-taxon_list_output[taxon_list_output != "uncultured"]
 taxon_list_output<-names(which(table(taxon_list_output)>0))%>%
 na.omit()%>%
 unique()%>%
@@ -1523,20 +1527,25 @@ colnames(shannon_df)<-paste0("Shannon_", data_partition, sep = "")
 colnames(observed_df)<-paste0("Observed_", data_partition, sep = "")
 colnames(simpson_df)<-paste0("Simpson_", data_partition, sep = "")
 
+#i had to join the df in separate steps. I'm sure this is not a cleaver way to do it but it works well enought
 diversity_df<-merge(shannon_df,
                     observed_df,
                     by = 0)
 
+diversity_df2<-merge(shannon_df,
+                    simpson_df,
+                    by = 0)
 
 
 
 colnames(diversity_df)[1]<-taxa_level
+colnames(diversity_df2)[1]<-taxa_level
 
-diversity_df$Simpson_above_expected<- simpson_df
+output<-dplyr::left_join(diversity_df, diversity_df2)
 
 
 
-return(diversity_df)
+return(output)
 }
 
 # it is a bit repetitive but I ran out of time to further automate this
@@ -1634,13 +1643,10 @@ untitled_plot_list<-lapply(full_VS_selected_TaxaLevel, function(z)
 ggplot(data=z,aes(x=Observed_full_dataset,y=Observed_above_expected ))+
   geom_point() +
   theme_bw()+
+  xlab(label = "Number of taxa in full dataset")+
+  ylab(label = "Number of taxa in above-expected subset")+
   geom_smooth(method="loess")+ #values of y are based on the values of x
-  labs(subtitle = paste("Spearman rank correlation:",
-                        stats::cor(z$Observed_full_dataset,
-                                  z$Observed_above_expected,
-                                  method = "spearman" ),
-                        sep = " "))+
-  geom_text_repel(aes(label=z[z$Observed_above_expected>10,1]), data = z[z$Observed_above_expected>10,]))
+  geom_text_repel(aes(label=z[z$Observed_above_expected>10,1]), data = z[z$Observed_above_expected>10,], size = 3))
 
 tiles_list<-names(untitled_plot_list) 
 
@@ -1667,13 +1673,10 @@ ggplot(data=z[z$Shannon_above_expected>0,], #only includes shannon >0
        aes(x=Shannon_full_dataset,y=Shannon_above_expected ))+
   geom_point() +
    theme_bw()+
+    xlab(label = "Shannon diversity in full dataset")+
+  ylab(label = "Shannon diversity in above-expected subset")+
   geom_smooth(method="loess")+ #values of y are based on the values of x
-  labs(subtitle = paste("Spearman rank correlation:",
-                        stats::cor(z$Shannon_full_dataset,
-                                  z$Shannon_above_expected,
-                                  method = "spearman" ),
-                        sep = " "))+
-  geom_text_repel(aes(label=z[z$Shannon_above_expected>0,1]), data = z[z$Shannon_above_expected>0,]))
+    geom_text_repel(aes(label=z[z$Shannon_above_expected>0,1]), data = z[z$Shannon_above_expected>0,], size = 3))
 
 tiles_list<-names(untitled_plot_list) 
 
@@ -1694,17 +1697,14 @@ plot_shannon_correlation(full_VS_selected_Family)
 
 plot_simpson_correlation<-function(full_VS_selected_TaxaLevel){
 untitled_plot_list<-lapply(full_VS_selected_TaxaLevel, function(z)
-ggplot(data=z[z$Simpson_above_expected >0,], #only includes shannon >0
-       aes(x=Simpson_full_dataset,y=Simpson_above_expected  ))+
+ggplot(data=z[z$Simpson_above_expected>0,], #only includes shannon >0
+       aes(x=Simpson_full_dataset,y=Simpson_above_expected ))+
   geom_point() +
    theme_bw()+
+  xlab(label = "Simpson diversity in full dataset")+
+  ylab(label = "Simpson diversity in above-expected subset")+
   geom_smooth(method="loess")+ #values of y are based on the values of x
-  labs(subtitle = paste("Spearman rank correlation:",
-                        stats::cor(z$Simpson_full_dataset,
-                                  z$Simpson_above_expected ,
-                                  method = "spearman" ),
-                        sep = " "))+
-  geom_text_repel(aes(label=z[z$Simpson_above_expected >0,1]), data = z[z$Simpson_above_expected >0,]))
+    geom_text_repel(aes(label=z[z$Simpson_above_expected >0,1]), data = z[z$Simpson_above_expected >0,], size = 3))
 
 tiles_list<-names(untitled_plot_list) 
 
