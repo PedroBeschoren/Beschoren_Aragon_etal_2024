@@ -422,6 +422,7 @@ names(BO_soil_predicted_list)<-c("uni_4model_BO_above",
 dip_result4<-beta_disp_plotAndTest(BO_soil_predicted_list_CSS, "MeJA_treatment")
 
 #Permanova
+set.seed(5235)
 permanova_with_blocks(BO_soil_predicted_list_CSS, "MeJA_treatment + Block") 
 
 #pairwise1
@@ -704,6 +705,7 @@ names(AT_soil_predicted_list)<-c("uni_4model_AT_above",
 dip_result4<-beta_disp_plotAndTest(AT_soil_predicted_list, "MeJA_treatment")
 
 #Permanova
+set.seed(5235)
 permanova_with_blocks(AT_soil_predicted_list, "MeJA_treatment + Block") 
 
 #pairwise1
@@ -1613,7 +1615,7 @@ plot_observed_correlation<-function(full_VS_selected_TaxaLevel){
 untitled_plot_list<-lapply(full_VS_selected_TaxaLevel, function(z)
 ggplot(data=z,aes(x=Observed_full_dataset,y=Observed_above_expected ))+
   geom_point() +
-  geom_smooth(method="lm")+ #values of y are based on the values of x
+  geom_smooth(method="loess")+ #values of y are based on the values of x
   labs(subtitle = paste("Spearman rank correlation:",
                         stats::cor(z$Observed_full_dataset,
                                   z$Observed_above_expected,
