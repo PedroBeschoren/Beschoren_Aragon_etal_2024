@@ -47,7 +47,6 @@ packages <- c("devtools",# needed to install some packages
              "viridis") # prety colors for deseq2 heatmaps
 
 
-
 ## Now load or install & load packages 
 lapply(
   packages,
@@ -66,6 +65,8 @@ biocManager_packages <- c(
              "decontam", # to make use of no-template blank DNA extractions
              "metagenomeSeq", # to normalize library sizes without rarefying them
              "DESeq2") # used for differential abundance analysis
+
+
 
 ## Now load or install & load packages managed by BiocManager
 lapply(
@@ -125,7 +126,7 @@ head(tax_table(physeq))
 source("./Code/Functions/backup_and_rename.R") # source will load the function inside the Code fodler of this R project
 
 #this will run the custom fucntion and update the physeq object
-physeq<-backup_and_rename(physeq) # this function runs slow sinde the chuck but fast on the console.... to solve this, click on the gear and set "chucnk output in teh console" instead of "chunk output inline"
+physeq<-backup_and_rename(physeq) # this function runs slow inside the chuck but fast on the console.... to solve this, click on the gear and set "chuck output in the console" instead of "chunk output inline"
 
 
 #we must now adjust some factors as numeric because some functions will only work if their input is in the right category
