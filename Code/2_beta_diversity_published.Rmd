@@ -215,7 +215,7 @@ metadata<-as(sample_data(physeq_filtered_CSS),"data.frame")
 perm2<-how(within = Within (type = "free"), # permute observations freely within the blocks. got to ask Fred how to handle grid arrangements!
            blocks = metadata$Block, # define blocks
            nperm=999)# n of permutations
-
+set.seed(5235)
 # now let's calculate the permanova
 adonis2(phyloseq::distance(t(otu_table(physeq_filtered_CSS)), method="bray") # this is your distance matrix of OTU abundances 
         ~ MeJA_treatment*Plant_species*Sample_type + Block, # this is your model
