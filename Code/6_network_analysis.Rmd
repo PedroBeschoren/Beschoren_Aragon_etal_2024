@@ -157,7 +157,7 @@ by changing parameters I improved from ~ 20 metrics similar to random to just 2 
 # The Real_VS_random_networks() custom function will compare the real network wiht 100 random networks, returning metrics that are different form random (average +/- SD) as TRUE
 
 #run the custom function on a a list of networks
-list_random_VS_real<-map(listed_igraph,Real_VS_random_networks)
+list_random_VS_real_1000<-map(listed_igraph,Real_VS_random_networks)
 
 as.data.frame(map(list_random_VS_real,2)) # is the real network different from the random network?
 
