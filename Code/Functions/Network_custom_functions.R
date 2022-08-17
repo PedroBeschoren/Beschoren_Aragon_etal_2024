@@ -124,7 +124,7 @@ Generate.metrics.randomNet<-function (igraph_object){
   Network_transitivity<-transitivity(igraph_object)
   
   # calculate shortest path (geodesic) distance
-  Network_mean_shortest_path<-mean_distance(igraph_object)
+  Network_mean_shortest_path<-mean_distance(igraph_posWeight)
   
   # calculates modules 
   cluster_fast_greedy(igraph_NullWeight) # cannot use negative weights, but assigns modules
@@ -188,13 +188,13 @@ Generate.metrics.randomNet<-function (igraph_object){
 # note that it calls the custom function Generate.metrics.randomNet() defined above
 Real_VS_random_networks<- function(igraph_object){
   
-  
+  set.seed(101)
   
   # calculate 100 random netowrks and their metrics
-  rand_list<-replicate(100,Generate.metrics.randomNet(rewire(igraph_object,each_edge(1))))
+  rand_list<-replicate(1000,Generate.metrics.randomNet(rewire(igraph_object,each_edge(1))))
   
   #put 100 random networks in a  dataframe
-  rand_df<-data.frame(matrix(unlist(rand_list), nrow=100, byrow=TRUE, dimnames = list(1:100,colnames(rand_list))),check.names = FALSE)
+  rand_df<-data.frame(matrix(unlist(rand_list), nrow=1000, byrow=TRUE, dimnames = list(1:1000,colnames(rand_list))),check.names = FALSE)
   
   # get means and SD of random networks
   rand_mean<-sapply(rand_df, mean)

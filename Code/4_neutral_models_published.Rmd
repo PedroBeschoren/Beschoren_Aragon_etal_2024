@@ -354,67 +354,48 @@ tax_table(subset_taxa(uni_4model_BO_above, taxa_names(uni_4model_BO_above) %in% 
 
 ```
 
-#### 4.6.6 re-normalize data and plot it
+#### 4.6.6 plot sub-communities separated by neutral models
+should I really re-normalize? I'm thinking it was a bad idea
 
 ```{r}
 ##########
 
 
-#this takes a physeq object and applies the CSS normalization to it
-make_CSS_physeq<-function (physeq){
-#perform CCS normalization..........................
-MRexp_objt<-phyloseq_to_metagenomeSeq(physeq)
-
-#here you can acess the abundance matrix normalized by cummulative sum scaling. you could overwirte the phyloseq object with this
-CSS_matrix <- MRcounts(MRexp_objt, norm = TRUE, log = TRUE) # using a log scale will essentially reduce the impact of common species and increase the impact of rare species
-
-#make a new phyloseq object...
-uni_4model_BO_above_CSS<-physeq
-
-# and now change it's taxa table
-otu_table(uni_4model_BO_above_CSS)<-otu_table(CSS_matrix, taxa_are_rows = TRUE)
-
-return(uni_4model_BO_above_CSS)
-}
-
-uni_4model_BO_above_CSS<-make_CSS_physeq(uni_4model_BO_above)
-uni_4model_BO_asPredicted_CSS<-make_CSS_physeq(uni_4model_BO_asPredicted)
-uni_4model_BO_below_CSS<-make_CSS_physeq(uni_4model_BO_below)
 
 ### plot above
-nmds_uni_4model_BO_above_CSS <- phyloseq::ordinate(uni_4model_BO_above_CSS, 
+nmds_uni_4model_BO_above <- phyloseq::ordinate(uni_4model_BO_above, 
                              method ="NMDS", 
                              distance="bray", 
                              try=200,
                              autotransform=TRUE) 
 
 
-plot_ordination(physeq = uni_4model_BO_above_CSS, 
-                ordination = nmds_uni_4model_BO_above_CSS, 
+plot_ordination(physeq = uni_4model_BO_above, 
+                ordination = nmds_uni_4model_BO_above, 
                 type = "sample",
                 color= "MeJA_treatment")
 ### plot  predicted
-nmds_uni_4model_BO_asPredicted_CSS <- phyloseq::ordinate(uni_4model_BO_asPredicted_CSS, 
+nmds_uni_4model_BO_asPredicted <- phyloseq::ordinate(uni_4model_BO_asPredicted, 
                              method ="NMDS", 
                              distance="bray", 
                              try=200,
                              autotransform=TRUE) 
 
-plot_ordination(physeq = uni_4model_BO_asPredicted_CSS, 
-                ordination = nmds_uni_4model_BO_asPredicted_CSS, 
+plot_ordination(physeq = uni_4model_BO_asPredicted, 
+                ordination = nmds_uni_4model_BO_asPredicted, 
                 type = "sample",
                 color= "MeJA_treatment")
 
 ### plot below
-nmds_uni_4model_BO_below_CSS <- phyloseq::ordinate(uni_4model_BO_below_CSS, 
+nmds_uni_4model_BO_below <- phyloseq::ordinate(uni_4model_BO_below, 
                              method ="NMDS", 
                              distance="bray", 
                              try=200,
                              autotransform=TRUE) 
 
 
-plot_ordination(physeq = uni_4model_BO_below_CSS, 
-                ordination = nmds_uni_4model_BO_below_CSS, 
+plot_ordination(physeq = uni_4model_BO_below, 
+                ordination = nmds_uni_4model_BO_below, 
                 type = "sample",
                 color= "MeJA_treatment")
 #
@@ -428,19 +409,20 @@ plot_ordination(physeq = uni_4model_BO_below_CSS,
 
 ### let's put these fit class splits into a list and apply the custom beta diversity fucntions from script 2
 
-BO_soil_predicted_list_CSS<-list(uni_4model_BO_above_CSS,
-                                 uni_4model_BO_asPredicted_CSS,
-                                 uni_4model_BO_below_CSS)
+BO_soil_predicted_list<-list(uni_4model_BO_above,
+                                 uni_4model_BO_asPredicted,
+                                 uni_4model_BO_below)
 
 
-names(BO_soil_predicted_list_CSS)<-c("uni_4model_BO_above_CSS",
-                                     "uni_4model_BO_asPredicted_CSS",
-                                     "uni_4model_BO_below_CSS")
+names(BO_soil_predicted_list)<-c("uni_4model_BO_above",
+                                     "uni_4model_BO_asPredicted",
+                                     "uni_4model_BO_below")
 
 #beta dispersion
 dip_result4<-beta_disp_plotAndTest(BO_soil_predicted_list_CSS, "MeJA_treatment")
 
 #Permanova
+set.seed(5235)
 permanova_with_blocks(BO_soil_predicted_list_CSS, "MeJA_treatment + Block") 
 
 #pairwise1
@@ -651,68 +633,53 @@ tax_table(subset_taxa(uni_4model_AT_above, taxa_names(uni_4model_AT_above) %in% 
 
 ```
 
-#### 4.7.6 re-normalize data and plot it
+#### 4.7.6 sub-communities separated by neutral models
 
 ```{r}
 ##########
 
 
-#this takes a physeq object and applies the CSS normalization to it
-make_CSS_physeq<-function (physeq){
-#perform CCS normalization..........................
-MRexp_objt<-phyloseq_to_metagenomeSeq(physeq)
 
-#here you can acess the abundance matrix normalized by cummulative sum scaling. you could overwirte the phyloseq object with this
-CSS_matrix <- MRcounts(MRexp_objt, norm = TRUE, log = TRUE) # using a log scale will essentially reduce the impact of common species and increase the impact of rare species
 
-#make a new phyloseq object...
-uni_4model_AT_above_CSS<-physeq
-
-# and now change it's taxa table
-otu_table(uni_4model_AT_above_CSS)<-otu_table(CSS_matrix, taxa_are_rows = TRUE)
-
-return(uni_4model_AT_above_CSS)
-}
-
-uni_4model_AT_above_CSS<-make_CSS_physeq(uni_4model_AT_above)
-uni_4model_AT_asPredicted_CSS<-make_CSS_physeq(uni_4model_AT_asPredicted)
-uni_4model_AT_below_CSS<-make_CSS_physeq(uni_4model_AT_below)
+uni_4model_AT_above<-(uni_4model_AT_above)
+uni_4model_AT_asPredicted<-(uni_4model_AT_asPredicted)
+uni_4model_AT_below<-(uni_4model_AT_below)
 
 
 ### plot above
-nmds_uni_4model_AT_above_CSS <- phyloseq::ordinate(uni_4model_AT_above_CSS, 
+nmds_uni_4model_AT_above <- phyloseq::ordinate(uni_4model_AT_above, 
                              method ="NMDS", 
                              distance="bray", 
                              try=200,
                              autotransform=TRUE) 
 
 
-plot_ordination(physeq = uni_4model_AT_above_CSS, 
-                ordination = nmds_uni_4model_AT_above_CSS, 
+plot_ordination(physeq = uni_4model_AT_above, 
+                ordination = nmds_uni_4model_AT_above, 
                 type = "sample",
                 color= "MeJA_treatment")
 ### plot  predicted
-nmds_uni_4model_AT_asPredicted_CSS <- phyloseq::ordinate(uni_4model_AT_asPredicted_CSS, 
+nmds_uni_4model_AT_asPredicted <- phyloseq::ordinate(uni_4model_AT_asPredicted, 
                              method ="NMDS", 
                              distance="bray", 
                              try=200,
                              autotransform=TRUE) 
 
-plot_ordination(physeq = uni_4model_AT_asPredicted_CSS, 
-                ordination = nmds_uni_4model_AT_asPredicted_CSS, 
+plot_ordination(physeq = uni_4model_AT_asPredicted, 
+                ordination = nmds_uni_4model_AT_asPredicted, 
                 type = "sample",
                 color= "MeJA_treatment")
 
 ### plot below
-nmds_uni_4model_AT_below_CSS <- phyloseq::ordinate(uni_4model_AT_below_CSS, 
+nmds_uni_4model_AT_below <- phyloseq::ordinate(uni_4model_AT_below, 
                              method ="NMDS", 
                              distance="bray", 
                              try=200,
                              autotransform=TRUE) 
 
 
-plot_ordination(physeq = uni_4model_AT_below_CSS, 
-                ordination = nmds_uni_4model_AT_below_CSS, 
+plot_ordination(physeq = uni_4model_AT_below, 
+                ordination = nmds_uni_4model_AT_below, 
                 type = "sample",
                 color= "MeJA_treatment")
 #
@@ -725,33 +692,34 @@ plot_ordination(physeq = uni_4model_AT_below_CSS,
 
 ### let's put these fit class splits into a list and apply the custom beta diversity fucntions from script 2
 
-AT_soil_predicted_list_CSS<-list(uni_4model_AT_above_CSS,
-                                 uni_4model_AT_asPredicted_CSS,
-                                 uni_4model_AT_below_CSS)
+AT_soil_predicted_list<-list(uni_4model_AT_above,
+                                 uni_4model_AT_asPredicted,
+                                 uni_4model_AT_below)
 
 
-names(AT_soil_predicted_list_CSS)<-c("uni_4model_AT_above_CSS",
-                                     "uni_4model_AT_asPredicted_CSS",
-                                     "uni_4model_AT_below_CSS")
+names(AT_soil_predicted_list)<-c("uni_4model_AT_above",
+                                     "uni_4model_AT_asPredicted",
+                                     "uni_4model_AT_below")
 
 #beta dispersion
-dip_result4<-beta_disp_plotAndTest(AT_soil_predicted_list_CSS, "MeJA_treatment")
+dip_result4<-beta_disp_plotAndTest(AT_soil_predicted_list, "MeJA_treatment")
 
 #Permanova
-permanova_with_blocks(AT_soil_predicted_list_CSS, "MeJA_treatment + Block") 
+set.seed(5235)
+permanova_with_blocks(AT_soil_predicted_list, "MeJA_treatment + Block") 
 
 #pairwise1
-lapply(AT_soil_predicted_list_CSS, function (x)
+lapply(AT_soil_predicted_list, function (x)
   adonis.pair(dist.mat= phyloseq::distance(otu_table(x), method="bray"),
               Factor= as.factor(as(phyloseq::sample_data(x),"data.frame")$MeJA_treatment)))
 
 
 #pairwise2
-parwise_above<-pairwise.adonis2(phyloseq::distance(otu_table(AT_soil_predicted_list_CSS[[1]]), method="bray") ~ MeJA_treatment+Block, data = as(phyloseq::sample_data(AT_soil_predicted_list_CSS[[1]]),"data.frame"), strata="Block")
+parwise_above<-pairwise.adonis2(phyloseq::distance(otu_table(AT_soil_predicted_list[[1]]), method="bray") ~ MeJA_treatment+Block, data = as(phyloseq::sample_data(AT_soil_predicted_list[[1]]),"data.frame"), strata="Block")
 
-parwise_aspredicted<-pairwise.adonis2(phyloseq::distance(otu_table(AT_soil_predicted_list_CSS[[2]]), method="bray") ~ MeJA_treatment+Block, data = as(phyloseq::sample_data(AT_soil_predicted_list_CSS[[2]]),"data.frame"), strata="Block")
+parwise_aspredicted<-pairwise.adonis2(phyloseq::distance(otu_table(AT_soil_predicted_list[[2]]), method="bray") ~ MeJA_treatment+Block, data = as(phyloseq::sample_data(AT_soil_predicted_list[[2]]),"data.frame"), strata="Block")
 
-parwise_below<-pairwise.adonis2(phyloseq::distance(otu_table(AT_soil_predicted_list_CSS[[3]]), method="bray") ~ MeJA_treatment+Block, data = as(phyloseq::sample_data(AT_soil_predicted_list_CSS[[3]]),"data.frame"), strata="Block")
+parwise_below<-pairwise.adonis2(phyloseq::distance(otu_table(AT_soil_predicted_list[[3]]), method="bray") ~ MeJA_treatment+Block, data = as(phyloseq::sample_data(AT_soil_predicted_list[[3]]),"data.frame"), strata="Block")
 
 #put all those pairwise comparison objects into a list
 Pairwise_list<-list(parwise_above,
@@ -1002,50 +970,13 @@ return(permanovas_100)
 permanovas_BO_100<-hundred_permanovas_on_random_otu(ps_list_CSS$Brassica_oleraceae.Soil, BO_4_model_above)
 permanovas_AT_100<-hundred_permanovas_on_random_otu(ps_list_CSS$Arabidopsis_thaliana.Soil, AT_4_model_above)
 
-```
-
-### 4.9.1b run 100 permanovas on randomly selected OTUs. here we simply collect X otus from the full table
-
-```{r}
-
-
-hundred_permanovas_on_random_otu<-  function (CSS_fraction,uni_4model) {
-  # the input is one of the 4-split fraction of the CSS-normalized phyloseq object as the first argument
-  # thes econd argument is the phyloseq object contaning only the OTUs classified as above expected
-  # The output is a list of 100 permanovas
-  
-# collect a list of random OTUS, 100 times
-set.seed(92342347)
-rand_otu<-replicate(100, sample(taxa_names(CSS_fraction), nrow(tax_table(uni_4model)), replace=FALSE)) #performs randomization oepration 100 times. the number of OTUs randomly sampled will be equal the the numebr of OTUs in the above-selected phyloseq objects
-
-#turn the n_rows x 100df into a list of 100 vectors
-Rand_otus_100_lists<-list() #make empty list
-for(i in 1:ncol(rand_otu)) {             # Using for-loop to add columns to list
-  Rand_otus_100_lists[[i]] <- rand_otu[ , i]
-}
-
-#make 100 phyloseq objects with the same number of OTUs as the above_selected models
-list_100_phyloseqs <- lapply(Rand_otus_100_lists, function (x)
-  prune_taxa(x, CSS_fraction)) # keep taxa only in the ranodm list
-
-
-
-
-#Permanova
-## the function permanova_with_blocks() is defined in  2.3.1 - Run PERMANOVA 
-
-set.seed(9247)
-permanovas_100<-permanova_with_blocks(list_100_phyloseqs, "MeJA_treatment + Block")
-return(permanovas_100)
-}
-
-
-# now, make the 100 permanovas on random sets of OTUs, using a total number of OTUs equal to the OTUs selected as above aoccurence
-
-permanovas_BO_100<-hundred_permanovas_on_random_otu(ps_list_CSS$Brassica_oleraceae.Soil, uni_4model_BO_above)
-permanovas_AT_100<-hundred_permanovas_on_random_otu(ps_list_CSS$Arabidopsis_thaliana.Soil, uni_4model_AT_above)
+# test on rarefied data as well because the input to neutral models is rarefied
+permanovas_BO_100<-hundred_permanovas_on_random_otu(ps_list_rarefied$Brassica_oleraceae.Soil, BO_4_model_above)
+permanovas_AT_100<-hundred_permanovas_on_random_otu(ps_list_rarefied$Arabidopsis_thaliana.Soil, AT_4_model_above)
 
 ```
+
+
 
 #### 4.9.2 acess the P, F and R2 values of the 100 permanovas for each species, then put it into a single object for both species
 
@@ -1548,10 +1479,14 @@ diversity_per_taxon <- function(ps_object, taxa_level, data_partition) {
 
 # the output is a df showing observed number fo taxa and shannon diversity within each of the defined taxa_level 
 
+# let's remove the "r__"ranks from the taxonomy, they can be useful but will polute our plot
+tax_table(ps_object)[, colnames(tax_table(ps_object))] <- gsub(tax_table(ps_object)[, colnames(tax_table(ps_object))],     pattern = "[a-z]__", replacement = "")
+  
+  
   
 # step 1: list the taxa present in the ps object, at the requested taxon level    
 taxon_list_output<-as.character(tax_table(ps_object)[,taxa_level])
-taxon_list_output<-taxon_list_output[taxon_list_output != "f__uncultured"]
+taxon_list_output<-taxon_list_output[taxon_list_output != "uncultured"]
 taxon_list_output<-names(which(table(taxon_list_output)>0))%>%
 na.omit()%>%
 unique()%>%
@@ -1562,6 +1497,7 @@ as.list(c())
 # step 2: calculate diversity in each member of the taxa level
 shannon_diversity_l<-list()
 observed_taxa_l<-list()
+simpson_diversity_l<-list()
 for(i in taxon_list_output) {
 shannon_diversity_l[i]<-estimate_richness(prune_taxa(taxa = tax_table(ps_object)
                                                             [,taxa_level] %in% i,
@@ -1574,20 +1510,42 @@ observed_taxa_l[i]<-estimate_richness(prune_taxa(taxa = tax_table(ps_object)
                                                  x= ps_object),
                                           split = FALSE,
                                           measures = "Observed" )
+
+simpson_diversity_l[i]<-estimate_richness(prune_taxa(taxa = tax_table(ps_object)
+                                                        [,taxa_level] %in% i,
+                                                 x= ps_object),
+                                          split = FALSE,
+                                          measures = "Simpson" )
 }
 
 
 # step 3: join oserved taxa and shannon diversity in a df
 shannon_df<-t(as.data.frame(shannon_diversity_l))
 observed_df<-t(as.data.frame(observed_taxa_l))
+simpson_df<-t(as.data.frame(simpson_diversity_l))
 colnames(shannon_df)<-paste0("Shannon_", data_partition, sep = "")
 colnames(observed_df)<-paste0("Observed_", data_partition, sep = "")
+colnames(simpson_df)<-paste0("Simpson_", data_partition, sep = "")
+
+#i had to join the df in separate steps. I'm sure this is not a cleaver way to do it but it works well enought
 diversity_df<-merge(shannon_df,
                     observed_df,
                     by = 0)
-colnames(diversity_df)[1]<-taxa_level
 
-return(diversity_df)
+diversity_df2<-merge(shannon_df,
+                    simpson_df,
+                    by = 0)
+
+
+
+colnames(diversity_df)[1]<-taxa_level
+colnames(diversity_df2)[1]<-taxa_level
+
+output<-dplyr::left_join(diversity_df, diversity_df2)
+
+
+
+return(output)
 }
 
 # it is a bit repetitive but I ran out of time to further automate this
@@ -1684,13 +1642,11 @@ plot_observed_correlation<-function(full_VS_selected_TaxaLevel){
 untitled_plot_list<-lapply(full_VS_selected_TaxaLevel, function(z)
 ggplot(data=z,aes(x=Observed_full_dataset,y=Observed_above_expected ))+
   geom_point() +
-  geom_smooth(method="lm")+ #values of y are based on the values of x
-  labs(subtitle = paste("Spearman rank correlation:",
-                        stats::cor(z$Observed_full_dataset,
-                                  z$Observed_above_expected,
-                                  method = "spearman" ),
-                        sep = " "))+
-  geom_text_repel(aes(label=z[z$Observed_above_expected>10,1]), data = z[z$Observed_above_expected>10,]))
+  theme_bw()+
+  xlab(label = "Number of taxa in full dataset")+
+  ylab(label = "Number of taxa in above-expected subset")+
+  geom_smooth(method="loess")+ #values of y are based on the values of x
+  geom_text_repel(aes(label=z[z$Observed_above_expected>10,1]), data = z[z$Observed_above_expected>10,], size = 3))
 
 tiles_list<-names(untitled_plot_list) 
 
@@ -1709,18 +1665,18 @@ plot_observed_correlation(full_VS_selected_Family)
 
 
 
+
+
 plot_shannon_correlation<-function(full_VS_selected_TaxaLevel){
 untitled_plot_list<-lapply(full_VS_selected_TaxaLevel, function(z)
 ggplot(data=z[z$Shannon_above_expected>0,], #only includes shannon >0
        aes(x=Shannon_full_dataset,y=Shannon_above_expected ))+
   geom_point() +
+   theme_bw()+
+    xlab(label = "Shannon diversity in full dataset")+
+  ylab(label = "Shannon diversity in above-expected subset")+
   geom_smooth(method="loess")+ #values of y are based on the values of x
-  labs(subtitle = paste("Spearman rank correlation:",
-                        stats::cor(z$Shannon_full_dataset,
-                                  z$Shannon_above_expected,
-                                  method = "spearman" ),
-                        sep = " "))+
-  geom_text_repel(aes(label=z[z$Shannon_above_expected>0,1]), data = z[z$Shannon_above_expected>0,]))
+    geom_text_repel(aes(label=z[z$Shannon_above_expected>0,1]), data = z[z$Shannon_above_expected>0,], size = 3))
 
 tiles_list<-names(untitled_plot_list) 
 
@@ -1738,38 +1694,41 @@ plot_shannon_correlation(full_VS_selected_Family)
 
 
 
+
+plot_simpson_correlation<-function(full_VS_selected_TaxaLevel){
+untitled_plot_list<-lapply(full_VS_selected_TaxaLevel, function(z)
+ggplot(data=z[z$Simpson_above_expected>0,], #only includes shannon >0
+       aes(x=Simpson_full_dataset,y=Simpson_above_expected ))+
+  geom_point() +
+   theme_bw()+
+  xlab(label = "Simpson diversity in full dataset")+
+  ylab(label = "Simpson diversity in above-expected subset")+
+  geom_smooth(method="loess")+ #values of y are based on the values of x
+    geom_text_repel(aes(label=z[z$Simpson_above_expected >0,1]), data = z[z$Simpson_above_expected >0,], size = 3))
+
+tiles_list<-names(untitled_plot_list) 
+
+Plot_list<-mapply(function (x,z) # use mapply again to put those listed names in the list of plots
+  x + ggtitle(z),
+  x = untitled_plot_list,
+  z = tiles_list, 
+  SIMPLIFY = FALSE)
+return(Plot_list)
+}
+
+plot_simpson_correlation(full_VS_selected_Class)
+plot_simpson_correlation(full_VS_selected_Order)
+plot_simpson_correlation(full_VS_selected_Family)
+
+
+
+
 #check how much$ of the taxa diversity is retained
 
 full_VS_selected_Order$uni_4model_BO_above$Observed_above_expected / full_VS_selected_Order$uni_4model_BO_above$Observed_full_dataset
 
 
-# the loop not working properly! AT and BO data partions are being overwirnt on top of each other
-# loop over taxa levels
-taxa_levels<-c("Class", "Order", "Family")
-
-above_expected<-list()
-full_dataset<-list()
-full_VS_selected<-list()
-for (i in taxa_levels){
-above_expected[i]<-lapply(pslit_neutraly_selected, function (x)
-  diversity_per_taxon(ps_object = x,
-                      taxa_level = i,
-                      data_partition = "above_expected"))
-
-full_dataset[i]<-lapply(ps_list_rarefied[c(2,4)], function (x)
-  diversity_per_taxon(ps_object = x,
-                      taxa_level = i,
-                      data_partition = "full_dataset"))
-
-# join 2 dfs of step 3
-full_VS_selected[i]<-mapply(function (x,y)
-  left_join(x,
-            y,
-            by = "Row.names"), # this might change depending on  diversity_per_taxon()
-  x = above_expected,
-  y = full_dataset,
-  SIMPLIFY = FALSE)
-}
+# the loop is not working properly, so i deleted the code for it! AT and BO data partions are being overwirnt on top of each other
 
 
 

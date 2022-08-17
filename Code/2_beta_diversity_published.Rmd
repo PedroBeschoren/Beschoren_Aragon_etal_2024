@@ -121,6 +121,7 @@ NMDS_Root_soil[2]# the second list element will have the NMDS plots, for both ro
 
 
 NMDS_AT_BO<-NMDS_listing(pslist_sp_CSS)
+set.seed(5235)
 NMDS_4_slice<-NMDS_listing(ps_list_CSS)
 
 
@@ -182,6 +183,7 @@ return(list(bet_disp_PCOa_plot,bet_disp_boxplot))
 # now that we have a custom function, we can run it across all lists and variables
 dip_result1<-beta_disp_plotAndTest(normalization_listed, "Sample_type")
 dip_result2<-beta_disp_plotAndTest(normalization_listed, "Plant_species")
+set.seed(5235)
 dip_result3<-beta_disp_plotAndTest(ps_list_CSS, "MeJA_treatment")
 
 
@@ -213,7 +215,7 @@ metadata<-as(sample_data(physeq_filtered_CSS),"data.frame")
 perm2<-how(within = Within (type = "free"), # permute observations freely within the blocks. got to ask Fred how to handle grid arrangements!
            blocks = metadata$Block, # define blocks
            nperm=999)# n of permutations
-
+set.seed(5235)
 # now let's calculate the permanova
 adonis2(phyloseq::distance(t(otu_table(physeq_filtered_CSS)), method="bray") # this is your distance matrix of OTU abundances 
         ~ MeJA_treatment*Plant_species*Sample_type + Block, # this is your model
