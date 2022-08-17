@@ -1,0 +1,30 @@
+---
+title: "10_plant_traits"
+author: "Marcela Aragon"
+date: "8/17/2022"
+editor_options: 
+  chunk_output_type: console
+---
+
+# 10.0 Plant traits 
+
+During the experiment, several plant traits were measured to characterize the plant's phenotypic response to the different stress treatments. For both *A. thaliana* and *B. oleracea* 1. Dry weight, 2. Leaf area, 3. Leaf length and 4.Leaf width were measured and additionally 5.Number of fruits and 6.Inflorescence dry weight were measure only for Arabidopsis as plants were already flowering. 
+
+Finally, as both plants are phenotypically different *per se* we compared the effects of the treatments between them using Cohen's D 
+
+## 10.1 Dry weight
+
+## 10.2 Leaf area
+
+## 10.3 Leaf lenght
+
+## 10.4 Leaf width 
+
+## 10.5 Number of Fruits (Arabidopsis)
+
+## 10.6 Inforescence dry weight (Arabidopsis)
+
+## 10.7 Cohen's D comparison 
+
+
+
