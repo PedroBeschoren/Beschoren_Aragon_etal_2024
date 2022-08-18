@@ -522,7 +522,20 @@ lapply(pslit_neutraly_selected, function(x)
 lapply(ps_imp_taxa_l, function(x)
   diversity_test_MeJA(ps_object = subset_taxa(x, Family == "f__Comamonadaceae")))
 
+# rejoin phyloseq objecs
+diversity_test(ps_object = subset_taxa(merge_phyloseq(
+                                                     ps_imp_taxa_l$Arabidopsis_thaliana.Root,
+                                                     ps_imp_taxa_l$Arabidopsis_thaliana.Soil,
+                                                     ps_imp_taxa_l$Brassica_oleraceae.Root,
+                                                     ps_imp_taxa_l$Brassica_oleraceae.Soil),
+                                       Family == "f__Comamonadaceae"))
+                                        
 
+# rejoin phyloseq objecs
+diversity_test_oneSampleType(ps_object = subset_taxa(merge_phyloseq(pslit_neutraly_selected$uni_4model_AT_above,
+                                                      pslit_neutraly_selected$uni_4model_BO_above),
+                                       Family == "f__Comamonadaceae"))
+                                        
 
 
 
