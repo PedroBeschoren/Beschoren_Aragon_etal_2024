@@ -129,7 +129,21 @@ ntb <- normTransform(ps_deseq) # defaults to log2(x+1)
 log2.norm.countsb <- assay(ntb)[select_listed, ] #these colnames should match rownames(df)
 df <- as.data.frame(colData(ps_deseq)[,c("MeJA_treatment", "Sample_type", "Plant_species")])
 row.names(df)<-row.names(as.data.frame(colData(ps_deseq)))
-df_row <- as.data.frame((tax_table(physeq_filtered))[,c("Class")])
+df_row <- as.data.frame((tax_table(physeq_filtered))[,c("Family")])
+# this chnk of code lets us remove some families form the legend
+df_row$main_families<-df_row$Family %in%  c("f__Burkholderiaceae", # define if the family is on this list of famillies...
+                                             "f__Chitinophagaceae",
+                                             "f__Comamonadaceae",
+                                             "f__Flavobacteriaceae",
+                                             "f__Oxalobacteraceae",
+                                             "f__Rhizobiaceae",
+                                             "f__Sphingobacteriaceae",
+                                             "f__Streptomycetaceae",
+                                             "f__Xanthobacteraceae")
+df_row<-mutate(df_row, main_fam = if_else(main_families=="TRUE", df_row$Family, "Other" ))%>% # make new variable: if the family is on the lsit of families, add it to the new variale, if not wirte is as "Other"
+  select(main_fam) # remove old columns
+
+#now plot the ehatmap
 pheatmap::pheatmap(log2.norm.countsb, color=viridis(24), annotation_col=df, annotation_row=df_row, main="log2(counts + 1)", 
                    scale="none", fontsize_row = 3, fontsize_col = 8)
 
