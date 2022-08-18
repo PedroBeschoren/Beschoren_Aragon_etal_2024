@@ -72,6 +72,11 @@ ggplot(total_diversity, aes(x =MeJA_treatment, y = Shannon, fill=Plant_species))
   theme_bw()+
   facet_wrap(~Sample_type)
 
+ggplot(total_diversity, aes(x =MeJA_treatment, y = Shannon))+
+  geom_boxplot()+
+  theme_bw()
+
+
 
 # sample type (root/soil) has a huge effect on diversity (which we knew before we started the experiment), which depends on species (and we could see this on the first plot). let's try to further separate this, slicing out dataset into lists
 
