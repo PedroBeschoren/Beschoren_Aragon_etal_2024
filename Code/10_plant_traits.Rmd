@@ -8,15 +8,304 @@ editor_options:
 
 # 10.0 Plant traits 
 
-During the experiment, several plant traits were measured to characterize the plant's phenotypic response to the different stress treatments. For both *A. thaliana* and *B. oleracea* 1. Dry weight, 2. Leaf area, 3. Leaf length and 4.Leaf width were measured and additionally 5.Number of fruits and 6.Inflorescence dry weight were measure only for Arabidopsis as plants were already flowering. 
+During the experiment, several plant traits were measured to characterize the plant's phenotypic response to the different stress treatments. For both *A. thaliana* and *B. oleracea* 1. Dry weight was measured. Additionally 2. Leaf area, 3. Leaf length and 4.Leaf width were measured only for *B. oleraceae* and  5.Number of fruits and 6.Inflorescence dry weight were measure only for Arabidopsis as plants were already flowering. 
 
 Finally, as both plants are phenotypically different *per se* we compared the effects of the treatments between them using Cohen's D 
 
+## Setting up R-studio
+
+```{r}
+
+# set working directory to project directory 
+
+# this will load all key libraries for the whole project
+library(vegan)
+library(Hmisc)
+#library(tyRa)
+#library(MicEco)
+library(tibble)
+library(ggpubr)
+library(DHARMa)
+library(lmtest)
+library(fitdistrplus)
+library(emmeans)
+library(AICcmodavg)
+library(jtools)
+library(car)
+library(multcompView)
+library(multcomp)
+source("./renv/0_load_libraries.R")
+
+# increases memory limit used by R
+memory.limit(size = 350000)
+
+
+
+```
+
+## Settings for plots
+
+```{r}
+
+# Setting up white background for plots
+theme_set(theme_bw())
+
+# Set colors 
+color_treatments <- hcl.colors(4,palette="Geyser")
+color_treatments <- c("#E6C186", "#B8CDAE", "#008585", "#C7522B")
+
+color_species <- c("#009E73", "#D55E00")
+
+# Set axis looks
+axis_looks <- theme(axis.text.x = element_text(colour = "black", size = 10,
+                                               face = "bold", angle=45, hjust=1))+
+  theme(axis.text.y = element_text(colour = "black", size = 12, face = "bold"))+
+  theme(axis.title=element_text(size=15, face = "bold"))+
+  theme(axis.title.y = element_text(margin = margin(t = 0, r = 20, b = 0, l = 0)))+
+  theme(panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank())
+
+
+
+```
+
+
+
+## 1.02 load data 
+
+```{r}
+# load data 
+traits <- read.csv("./Data/MeJA_Plant_traits_raw.csv")
+str(traits)
+
+traits[c(1:6)] <- lapply(traits[c(1:6)], factor)
+
+#removing X column 
+traits <- traits[-c(19)]
+
+#ordering levels
+levels(traits$species)
+levels(traits$treatment)
+
+#summary
+summary(traits)
+
+#df for Atha
+Atha <- traits %>% dplyr::filter(species == "Arabidopsis_thaliana")
+
+#df for Bole
+Bole <- traits %>% dplyr::filter(species == "Brassica_oleraceae")
+
+#df list 
+l_sp <- list(Atha, Bole)
+names(l_sp) <- c("Arabidopsis_thaliana", "Brassica_oleraceae")
+
+```
+
+
+
+
 ## 10.1 Dry weight
+
+### Plots
+
+```{r}
+
+#Boxplot both
+p.dw.2 <- ggplot(data = traits,
+                    mapping = aes(x = treatment, y = ldry_weight), colour= treatment)+
+  geom_boxplot(mapping = aes(fill= treatment), position = position_dodge(width = 0.8), lwd=0.8)+
+  geom_jitter(mapping = aes(fill = treatment),
+                         shape = 21, size = 1.8, color = "black", position = position_dodge(width = 0.8))+
+  scale_fill_manual(values = color_treatments)+
+  labs(y="Shoot biomass(g dry weight)", x=" ") +
+  facet_wrap(~species, scales = "free_y")+
+  axis_looks
+
+#Boxplot Atha
+p.dw.Atha <- ggplot(data = l_sp$Arabidopsis_thaliana,
+                    mapping = aes(x = treatment, y = ldry_weight), colour= treatment)+
+  geom_boxplot(mapping = aes(fill= treatment), position = position_dodge(width = 0.8), lwd=0.8)+
+  geom_jitter(mapping = aes(fill = treatment),
+                         shape = 21, size = 1.8, color = "black", position = position_dodge(width = 0.8))+
+  scale_fill_manual(values = color_treatments)+
+  labs(y="Shoot biomass(g dry weight)", x=" ") +
+  axis_looks
+  
+#Boxplot Bole
+p.dw.Bole <- ggplot(data = l_sp$Brassica_oleraceae,
+                    mapping = aes(x = treatment, y = ldry_weight), colour= treatment)+
+  geom_boxplot(mapping = aes(fill= treatment), position = position_dodge(width = 0.8), lwd=0.8)+
+  geom_jitter(mapping = aes(fill = treatment),
+                         shape = 21, size = 1.8, color = "black", position = position_dodge(width = 0.8))+
+  scale_fill_manual(values = color_treatments)+
+  labs(y="Shoot biomass(g dry weight)", x=" ") +
+  axis_looks
+
+#save plots
+
+
+
+```
+
+### Data analysis
+
+```{r}
+#Arabidopsis
+
+#Checking data distribution
+continuous_distribution_plot_table(Atha$ldry_weight) #normal 
+hist(Atha$ldry_weight)
+
+#GLM
+glm.Atha <- glm_gaussian_Withdf(l_sp$Arabidopsis_thaliana) #Full, but not significant 
+summ(glm.Atha$Full)
+
+#no differences in A.thaliana biomass (p=0.34)
+
+#Brassica 
+continuous_distribution_plot_table(Bole$ldry_weight) #normal 
+hist(Bole$ldry_weight)
+
+#GLM
+glm.Bole <- glm_gaussian_Withdf(l_sp$Brassica_oleraceae) #Optimal, but not significant 
+
+#LM
+glm.Bole2 <- lm(
+  ldry_weight ~ treatment + Block, 
+  data = l_sp$Brassica_oleraceae)
+
+simulateResiduals(glm.Bole2, plot = T) #ok
+
+anova(glm.Bole2)
+summary(glm.Bole2)$r.squared
+
+summ(glm.Bole$Optimal)
+summary_model(glm.Bole$Optimal, glm.Bole$Null)
+
+#Post-hoc
+emm.Bole <- emmeans(ref_grid(glm.Bole2), pairwise ~ treatment)
+plot(emm.Bole$emmeans, comparisons = TRUE)
+
+cld <- cld(emm.Bole,
+           alpha = 0.05,
+           Letters = letters,
+           adjust = "tukey")
+
+```
+
+There's only difference between 0.1 and 1% MeJA, but not against control. 
 
 ## 10.2 Leaf area
 
+### Plots
+
+```{r}
+
+#Boxplot Bole
+p.la.Bole <- ggplot(data = l_sp$Brassica_oleraceae,
+                    mapping = aes(x = treatment, y = leaf_area), colour= treatment)+
+  geom_boxplot(mapping = aes(fill= treatment), position = position_dodge(width = 0.8), lwd=0.8)+
+  geom_jitter(mapping = aes(fill = treatment),
+                         shape = 21, size = 1.8, color = "black", position = position_dodge(width = 0.8))+
+  scale_fill_manual(values = color_treatments)+
+  labs(y="Leaf area(cm2)", x=" ") +
+  axis_looks
+
+#save plots
+
+```
+
+### Data analysis
+
+```{r}
+
+#Brassica 
+continuous_distribution_plot_table(Bole$leaf_area) #normal 
+hist(Bole$leaf_area)
+
+#LM
+lm.la.Bole <- lm(
+  leaf_area ~ treatment + Block, 
+  data = l_sp$Brassica_oleraceae)
+
+simulateResiduals(lm.la.Bole, plot = T) #ok
+
+Anova(lm.la.Bole)
+summary(lm.la.Bole)$r.squared
+#summary(lm.la.Bole)
+
+#Post-hoc
+emm.la.Bole <- emmeans(ref_grid(lm.la.Bole), pairwise ~ treatment)
+
+plot(emm.la.Bole$emmeans, comparisons = TRUE)
+
+cld.la <- cld(emm.la.Bole,
+           alpha = 0.05,
+           Letters = letters,
+           adjust = "tukey")
+
+```
+
+MeJA 1% had significantly lower leaf area than the rest of the treatments. 
+
 ## 10.3 Leaf lenght
+### Plots
+
+```{r}
+
+#Boxplot Bole
+p.l.Bole <- ggplot(data = l_sp$Brassica_oleraceae,
+                    mapping = aes(x = treatment, y = length), colour= treatment)+
+  geom_boxplot(mapping = aes(fill= treatment), position = position_dodge(width = 0.8), lwd=0.8)+
+  geom_jitter(mapping = aes(fill = treatment),
+                         shape = 21, size = 1.8, color = "black", position = position_dodge(width = 0.8))+
+  scale_fill_manual(values = color_treatments)+
+  labs(y="Leaf length (cm)", x=" ") +
+  axis_looks
+
+#save plots
+
+```
+
+### Data analysis
+
+```{r}
+
+#Brassica 
+
+#remove NA
+Bole <- Bole %>% 
+        dplyr::filter(id != "31") %>% droplevels()
+
+#check distribution
+continuous_distribution_plot_table(Bole$length) #normal 
+hist(Bole$length)
+
+#LM
+lm.l.Bole <- lm(
+  length ~ treatment + Block, 
+  data = l_sp$Brassica_oleraceae)
+
+simulateResiduals(lm.l.Bole, plot = T) #ok
+
+Anova(lm.l.Bole)
+summary(lm.l.Bole)$r.squared
+#summary(lm.la.Bole)
+
+#Post-hoc
+emm.la.Bole <- emmeans(ref_grid(lm.la.Bole), pairwise ~ treatment)
+
+plot(emm.la.Bole$emmeans, comparisons = TRUE)
+
+cld.la <- cld(emm.la.Bole,
+           alpha = 0.05,
+           Letters = letters,
+           adjust = "tukey")
+
+```
+
+
 
 ## 10.4 Leaf width 
 
@@ -25,6 +314,9 @@ Finally, as both plants are phenotypically different *per se* we compared the ef
 ## 10.6 Inforescence dry weight (Arabidopsis)
 
 ## 10.7 Cohen's D comparison 
+
+Reference suggested by Pedro: https://nph.onlinelibrary.wiley.com/doi/full/10.1111/nph.15504 
+
 
 
 
