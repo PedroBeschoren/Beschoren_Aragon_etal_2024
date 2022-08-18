@@ -11,7 +11,10 @@ If a package is installed, it will be loaded. If any are not installed, the miss
 from CRAN and then loaded.
 ```{r results=hide}
 
-#test git
+# set library pack to family experiment library on marcela's computer
+#.libPaths("~/RProjects/Family_experiment/renv/ibrary/R-4.1/x86_64-w64-mingw32")
+#n.libPaths()
+
 
 ## First specify the packages of interest
 packages <- c("devtools",# needed to install some packages
@@ -370,3 +373,12 @@ normalization_listed
 ```
 
 # Data ready for analysis! proceed to scrip 2_Beta_Diversity!
+
+Save Robjects 
+
+```{r}
+
+save.image("./R output/env.1_Loading_and_pre_processing.RData")
+
+```
+
