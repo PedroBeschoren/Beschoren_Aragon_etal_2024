@@ -34,6 +34,8 @@ library(jtools)
 library(car)
 library(multcompView)
 library(multcomp)
+library(lsr)
+library(effsize)
 source("./renv/0_load_libraries.R")
 
 # increases memory limit used by R
@@ -63,15 +65,13 @@ axis_looks <- theme(axis.text.x = element_text(colour = "black", size = 10,
   theme(axis.title=element_text(size=15, face = "bold"))+
   theme(axis.title.y = element_text(margin = margin(t = 0, r = 20, b = 0, l = 0)))+
   theme(panel.grid.major = element_blank(),
-        panel.grid.minor = element_blank())
-
-
+        panel.grid.minor = element_blank())+
 
 ```
 
 
 
-## 1.02 load data 
+## Load data 
 
 ```{r}
 # load data 
@@ -91,8 +91,8 @@ levels(traits$treatment)
 summary(traits)
 
 #df for Atha
-Atha <- traits %>% dplyr::filter(species == "Arabidopsis_thaliana")
-
+Atha <- traits %>% dplyr::filter(species == "Arabidopsis_thaliana") %>% 
+                   mutate(aboveground_dw = ldry_weight + inflorescence)
 #df for Bole
 Bole <- traits %>% dplyr::filter(species == "Brassica_oleraceae")
 
@@ -102,8 +102,17 @@ names(l_sp) <- c("Arabidopsis_thaliana", "Brassica_oleraceae")
 
 ```
 
+## Load functions
+```{r}
+
+#functions to check data distribution and run GLMs
+
+source("./Code/Functions/data_distribution_and_GLM_functions.R")
+
+```
 
 
+**Look for ways of saving plots with par and making a single figure with plots**
 
 ## 10.1 Dry weight
 
@@ -112,7 +121,7 @@ names(l_sp) <- c("Arabidopsis_thaliana", "Brassica_oleraceae")
 ```{r}
 
 #Boxplot both
-p.dw.2 <- ggplot(data = traits,
+p.dw.spp <- ggplot(data = traits,
                     mapping = aes(x = treatment, y = ldry_weight), colour= treatment)+
   geom_boxplot(mapping = aes(fill= treatment), position = position_dodge(width = 0.8), lwd=0.8)+
   geom_jitter(mapping = aes(fill = treatment),
@@ -159,17 +168,23 @@ hist(Atha$ldry_weight)
 
 #GLM
 glm.Atha <- glm_gaussian_Withdf(l_sp$Arabidopsis_thaliana) #Full, but not significant 
+Anova(glm.Atha$Full)
 summ(glm.Atha$Full)
 
-#no differences in A.thaliana biomass (p=0.34)
+#no effect of treatment (p=0.8855) nor block (p=0.1391)in A.thaliana biomass (p=0.34)
 
 #Brassica 
 continuous_distribution_plot_table(Bole$ldry_weight) #normal 
 hist(Bole$ldry_weight)
 
 #GLM
-glm.Bole <- glm_gaussian_Withdf(l_sp$Brassica_oleraceae) #Optimal, but not significant 
+glm.Bole <- glm_gaussian_Withdf(l_sp$Brassica_oleraceae) #Optimal
+Anova(glm.Bole$Full)
+summ(glm.Bole$Full, digits = 4) #significant difference 
 
+#no effect of treatment (p=0.8855) nor block (p=0.1391)in A.thaliana biomass (p=0.34)
+
+####-Anova
 #LM
 glm.Bole2 <- lm(
   ldry_weight ~ treatment + Block, 
@@ -183,8 +198,10 @@ summary(glm.Bole2)$r.squared
 summ(glm.Bole$Optimal)
 summary_model(glm.Bole$Optimal, glm.Bole$Null)
 
+#### Anova 
+
 #Post-hoc
-emm.Bole <- emmeans(ref_grid(glm.Bole2), pairwise ~ treatment)
+emm.Bole <- emmeans(ref_grid(glm.Bole$Full), pairwise ~ treatment)
 plot(emm.Bole$emmeans, comparisons = TRUE)
 
 cld <- cld(emm.Bole,
@@ -194,7 +211,10 @@ cld <- cld(emm.Bole,
 
 ```
 
-There's only difference between 0.1 and 1% MeJA, but not against control. 
+* No effect of treatment (p=0.8855) nor block (p=0.1391)in A.thaliana biomass (LM, p=0.34)
+* Significant effect of treatment (p=0.004578) and no effect of Block (p=0.065722) in B. oleracea biomass (LM, p=0.0029)
+
+--> There's only difference between 0.1 and 1% MeJA, but not against control for *B. oleraceae*, for *A. thaliana* there's no difference in dry weight. 
 
 ## 10.2 Leaf area
 
@@ -232,8 +252,7 @@ lm.la.Bole <- lm(
 simulateResiduals(lm.la.Bole, plot = T) #ok
 
 Anova(lm.la.Bole)
-summary(lm.la.Bole)$r.squared
-#summary(lm.la.Bole)
+summary(lm.la.Bole)
 
 #Post-hoc
 emm.la.Bole <- emmeans(ref_grid(lm.la.Bole), pairwise ~ treatment)
@@ -250,6 +269,7 @@ cld.la <- cld(emm.la.Bole,
 MeJA 1% had significantly lower leaf area than the rest of the treatments. 
 
 ## 10.3 Leaf lenght
+
 ### Plots
 
 ```{r}
@@ -290,30 +310,355 @@ lm.l.Bole <- lm(
 simulateResiduals(lm.l.Bole, plot = T) #ok
 
 Anova(lm.l.Bole)
-summary(lm.l.Bole)$r.squared
-#summary(lm.la.Bole)
+summary(lm.la.Bole)
+
+
+```
+
+No effect of treatment nor block on leaf area for *B. oleracea*
+
+## 10.4 Leaf width 
+### Plots
+
+```{r}
+
+#Boxplot Bole
+p.w.Bole <- ggplot(data = l_sp$Brassica_oleraceae,
+                    mapping = aes(x = treatment, y = width), colour= treatment)+
+  geom_boxplot(mapping = aes(fill= treatment), position = position_dodge(width = 0.8), lwd=0.8)+
+  geom_jitter(mapping = aes(fill = treatment),
+                         shape = 21, size = 1.8, color = "black", position = position_dodge(width = 0.8))+
+  scale_fill_manual(values = color_treatments)+
+  labs(y="Leaf width (cm)", x=" ") +
+  axis_looks
+
+#save plots
+
+```
+
+### Data analysis
+
+```{r}
+
+#Brassica 
+
+#check distribution
+#continuous_distribution_plot_table(Bole$width) #normal 
+hist(Bole$width)
+
+#LM
+lm.w.Bole <- lm(
+  width ~ treatment + Block, 
+  data = l_sp$Brassica_oleraceae)
+
+simulateResiduals(lm.w.Bole, plot = T) #ok
+
+Anova(lm.w.Bole)
+summary(lm.w.Bole)
+
+```
+
+No significant effect of treatment nor block on leaf width for *B. oleracea*
+
+## 10.5 Number of Fruits (Arabidopsis)
+
+### Plots
+```{r}
+
+#Boxplot Atha
+p.nf.Atha <- ggplot(data = l_sp$Arabidopsis_thaliana,
+                    mapping = aes(x = treatment, y =number_fruits ), colour= treatment)+
+  geom_boxplot(mapping = aes(fill= treatment), position = position_dodge(width = 0.8), lwd=0.8)+
+  geom_jitter(mapping = aes(fill = treatment),
+                         shape = 21, size = 1.8, color = "black", position = position_dodge(width = 0.8))+
+  scale_fill_manual(values = color_treatments)+
+  labs(y="number of siliques/plant", x=" ") +
+  axis_looks
+
+#save plots
+
+```
+
+### Data analysis
+
+```{r}
+
+#Arabidopsis 
+
+#check distribution
+continuous_distribution_plot_table(Atha$number_fruits) #normal - gamma 
+hist(Atha$number_fruits)
+
+#LM
+lm.nf.Atha <- lm(
+  number_fruits ~ treatment + Block, 
+  data = l_sp$Arabidopsis_thaliana)
+
+simulateResiduals(lm.nf.Atha, plot = T) #not ok
+
+#GLM with Gamma distribution
+glm.nf.Atha <- glm (number_fruits ~ treatment + Block,
+               family = Gamma (link = "log"),
+               data = l_sp$Arabidopsis_thaliana)
+
+simulateResiduals(glm.nf.Atha, plot = T) #ok
+
+Anova(glm.nf.Atha)
+summary(glm.nf.Atha)
+summ(glm.nf.Atha, digits = 4)
 
 #Post-hoc
-emm.la.Bole <- emmeans(ref_grid(lm.la.Bole), pairwise ~ treatment)
+emm.nf.Atha <- emmeans(ref_grid(glm.nf.Atha), pairwise ~ treatment, type="response")
 
-plot(emm.la.Bole$emmeans, comparisons = TRUE)
+plot(emm.nf.Atha$emmeans, comparisons = TRUE)
 
-cld.la <- cld(emm.la.Bole,
+cld.nf <- cld(emm.nf.Atha,
            alpha = 0.05,
            Letters = letters,
            adjust = "tukey")
 
 ```
 
+There was significantly less numbers of siliques on Arabidopsis plants treated with MeJA 1% compared to the other treatments. 
 
-
-## 10.4 Leaf width 
-
-## 10.5 Number of Fruits (Arabidopsis)
 
 ## 10.6 Inforescence dry weight (Arabidopsis)
 
+### Plots
+```{r}
+
+#Boxplot Atha
+p.inf.Atha <- ggplot(data = l_sp$Arabidopsis_thaliana,
+                    mapping = aes(x = treatment, y =inflorescence ), colour= treatment)+
+  geom_boxplot(mapping = aes(fill= treatment), position = position_dodge(width = 0.8), lwd=0.8)+
+  geom_jitter(mapping = aes(fill = treatment),
+                         shape = 21, size = 1.8, color = "black", position = position_dodge(width = 0.8))+
+  scale_fill_manual(values = color_treatments)+
+  labs(y="inflorescence dry weight", x=" ") +
+  axis_looks
+
+#save plots
+
+```
+
+### Data analysis
+
+```{r}
+
+#Arabidopsis 
+
+#check distribution
+continuous_distribution_plot_table(Atha$inflorescence) #normal - gamma 
+hist(Atha$inflorescence)
+
+#LM
+lm.inf.Atha <- lm(
+  inflorescence ~ treatment + Block, 
+  data = l_sp$Arabidopsis_thaliana)
+
+simulateResiduals(lm.inf.Atha, plot = T) #not ok
+
+Anova(lm.inf.Atha)
+summary(lm.inf.Atha)
+
+#Post-hoc
+emm.inf.Atha <- emmeans(ref_grid(lm.inf.Atha), pairwise ~ treatment)
+
+plot(emm.inf.Atha$emmeans, comparisons = TRUE)
+
+cld.inf <- cld(emm.inf.Atha,
+           alpha = 0.05,
+           Letters = letters,
+           adjust = "tukey")
+
+```
+
+## 10.8 Aboveground dry weight (Arabidopsis)
+
+### Plots
+```{r}
+
+#Boxplot Atha
+p.ab.Atha <- ggplot(data = l_sp$Arabidopsis_thaliana,
+                    mapping = aes(x = treatment, y =aboveground_dw ), colour= treatment)+
+  geom_boxplot(mapping = aes(fill= treatment), position = position_dodge(width = 0.8), lwd=0.8)+
+  geom_jitter(mapping = aes(fill = treatment),
+                         shape = 21, size = 1.8, color = "black", position = position_dodge(width = 0.8))+
+  scale_fill_manual(values = color_treatments)+
+  labs(y="aboveground dry weight", x=" ") +
+  axis_looks
+
+#save plots
+
+```
+
+### Data analysis
+
+```{r}
+
+#Arabidopsis 
+
+#check distribution
+continuous_distribution_plot_table(Atha$aboveground_dw) #normal - gamma 
+hist(Atha$aboveground_dw)
+
+#LM
+lm.ab.Atha <- lm(
+  aboveground_dw ~ treatment + Block, 
+  data = l_sp$Arabidopsis_thaliana)
+
+simulateResiduals(lm.ab.Atha, plot = T) #not ok
+
+Anova(lm.ab.Atha)
+summary(lm.ab.Atha)
+
+#Post-hoc
+emm.ab.Atha <- emmeans(ref_grid(lm.ab.Atha), pairwise ~ treatment)
+
+plot(emm.ab.Atha$emmeans, comparisons = TRUE)
+
+cld.inf <- cld(emm.ab.Atha,
+           alpha = 0.05,
+           Letters = letters,
+           adjust = "tukey")
+
+```
+
+Even when using full aboveground weight there's no effect of treatment on A. thaliana dry biomass (although now differences seem bigger)
+
+
 ## 10.7 Cohen's D comparison 
+
+### Plots
+```{r}
+
+```
+
+
+### Data analysis 
+```{r}
+#try with lsr package
+
+Ctrl.Bo <- Bole %>% 
+           dplyr::filter(treatment == "control") %>% .$ldry_weight
+          
+  
+MeJA_0.1.Bo <- Bole %>% 
+           dplyr::filter(treatment == "MeJA_0.1") %>% .$ldry_weight
+
+MeJA_1.Bo <- Bole %>% 
+           dplyr::filter(treatment == "MeJA_1.0") %>% .$ldry_weight
+  
+OS.Bo <- Bole %>% 
+           dplyr::filter(treatment == "oral_secretion") %>% .$ldry_weight
+
+
+cohensD(Ctrl.Bo, MeJA_0.1.Bo) #small 
+cohensD(Ctrl.Bo, MeJA_1.Bo) #very high
+cohensD(Ctrl.Bo, OS.Bo) #very low
+
+#with effsize
+
+cohen.d(Ctrl.Bo, MeJA_0.1.Bo) #small
+cohen.d(Ctrl.Bo, MeJA_1.Bo) #high
+cohen.d(Ctrl.Bo, OS.Bo) #nothing 
+
+#Arabidopsis
+
+Ctrl.At <- Atha %>% 
+           dplyr::filter(treatment == "control") %>% .$aboveground_dw
+          
+  
+MeJA_0.1.At <- Atha %>% 
+           dplyr::filter(treatment == "MeJA_0.1") %>% .$aboveground_dw
+
+MeJA_1.At <- Atha %>% 
+           dplyr::filter(treatment == "MeJA_1.0") %>% .$aboveground_dw
+  
+OS.At <- Atha %>% 
+           dplyr::filter(treatment == "oral_secretion") %>% .$aboveground_dw
+
+#with effsize
+
+cohen.d(Ctrl.At, MeJA_0.1.At) #nothing
+cohen.d(Ctrl.At, MeJA_1.At) #medium
+cohen.d(Ctrl.At, OS.At) #nothing  
+
+
+```
+
+
+```{r}
+
+#using Giauque et al., XXXX reference
+
+z <- yuju(Bole, ldry_weight)
+
+
+
+
+yuju <- function(x, y){
+
+  
+Ctrl<- x%>% 
+           dplyr::filter(treatment == "control") %>% .$y
+          
+  
+MeJA_0.1<- x %>% 
+           dplyr::filter(treatment == "MeJA_0.1") %>% .$y
+
+MeJA_1 <- x %>% 
+           dplyr::filter(treatment == "MeJA_1.0") %>% .$y
+  
+OS <- x %>% 
+           dplyr::filter(treatment == "oral_secretion") %>% .$y
+
+list <- list(Ctrl, MeJA_0.1, MeJA_1, OS)
+
+return(list)
+
+}
+
+
+
+df_dw <- group_by(Bole, treatment) %>%
+  dplyr::summarise(
+    n = dplyr::n(),
+    mean = mean(ldry_weight, na.rm = TRUE),
+    sd = sd(ldry_weight, na.rm = TRUE)) %>%
+    mutate(trait="ldry_weight")%>%
+    mutate(species="Bole")%>%
+    mutate("N-1" = n-1)%>%
+    mutate(S2 = sd^2)
+
+
+a <- (df_dw$`N-1`[1]*df_dw$S2[1])+(df_dw$`N-1`[2]*df_dw$S2[2])
+b <- df_dw$n[1]+df_dw$n[2]-2
+S <- sqrt(a/b)
+c <- (df_dw$mean[2]-df_dw$mean[1])
+d <- c/S
+
+#it's the same 
+
+
+cohensD.MeJA0.1 <- function(x){
+  
+  #x is a df
+  
+  A <- 
+  
+  
+}
+]
+
+
+
+
+
+```
+
+
+
 
 Reference suggested by Pedro: https://nph.onlinelibrary.wiley.com/doi/full/10.1111/nph.15504 
 
