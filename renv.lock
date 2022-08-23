@@ -368,6 +368,16 @@
       "Hash": "7dc9be3558a910226d64a2040520dc7f",
       "Requirements": []
     },
+    "Rtsne": {
+      "Package": "Rtsne",
+      "Version": "0.16",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "e921b89ef921905fc89b95886675706d",
+      "Requirements": [
+        "Rcpp"
+      ]
+    },
     "S4Vectors": {
       "Package": "S4Vectors",
       "Version": "0.28.1",
@@ -409,6 +419,17 @@
         "glmnet",
         "huge",
         "pulsar"
+      ]
+    },
+    "TH.data": {
+      "Package": "TH.data",
+      "Version": "1.1-1",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "69df2ed9b1a021e89e22cb95e5222860",
+      "Requirements": [
+        "MASS",
+        "survival"
       ]
     },
     "VGAM": {
@@ -1204,23 +1225,6 @@
         "zip"
       ]
     },
-    "ggbiplot": {
-      "Package": "ggbiplot",
-      "Version": "0.55",
-      "Source": "GitHub",
-      "RemoteType": "github",
-      "RemoteHost": "api.github.com",
-      "RemoteRepo": "ggbiplot",
-      "RemoteUsername": "vqv",
-      "RemoteRef": "HEAD",
-      "RemoteSha": "7325e880485bea4c07465a0304c470608fffb5d9",
-      "Hash": "15a56f59159161ce6ec761f9deef8e78",
-      "Requirements": [
-        "ggplot2",
-        "plyr",
-        "scales"
-      ]
-    },
     "ggfittext": {
       "Package": "ggfittext",
       "Version": "0.9.1",
@@ -1231,6 +1235,22 @@
         "ggplot2",
         "shades",
         "stringi"
+      ]
+    },
+    "ggfortify": {
+      "Package": "ggfortify",
+      "Version": "0.4.14",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "2dab5a481a2e8f8fa44c8ef327601324",
+      "Requirements": [
+        "dplyr",
+        "ggplot2",
+        "gridExtra",
+        "scales",
+        "stringr",
+        "tibble",
+        "tidyr"
       ]
     },
     "ggplot2": {
@@ -1667,6 +1687,16 @@
         "nloptr"
       ]
     },
+    "lmtest": {
+      "Package": "lmtest",
+      "Version": "0.9-40",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "c6fafa6cccb1e1dfe7f7d122efd6e6a7",
+      "Requirements": [
+        "zoo"
+      ]
+    },
     "magrittr": {
       "Package": "magrittr",
       "Version": "2.0.3",
@@ -1765,6 +1795,27 @@
         "nlme"
       ]
     },
+    "microbiome": {
+      "Package": "microbiome",
+      "Version": "1.12.0",
+      "Source": "Bioconductor",
+      "git_url": "https://git.bioconductor.org/packages/microbiome",
+      "git_branch": "RELEASE_3_12",
+      "git_last_commit": "44e86d2",
+      "git_last_commit_date": "2020-10-27",
+      "Hash": "eb9cf4466b42488447e5c74f6cf053a3",
+      "Requirements": [
+        "Rtsne",
+        "dplyr",
+        "ggplot2",
+        "phyloseq",
+        "reshape2",
+        "scales",
+        "tibble",
+        "tidyr",
+        "vegan"
+      ]
+    },
     "mime": {
       "Package": "mime",
       "Version": "0.12",
@@ -1800,6 +1851,20 @@
       "Hash": "eaee7d2a6f3ed4491df868611cb064cc",
       "Requirements": [
         "Rcpp"
+      ]
+    },
+    "multcomp": {
+      "Package": "multcomp",
+      "Version": "1.4-19",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "2702bacb9c351c55b1c34990099a9c48",
+      "Requirements": [
+        "TH.data",
+        "codetools",
+        "mvtnorm",
+        "sandwich",
+        "survival"
       ]
     },
     "multtest": {
@@ -2608,6 +2673,16 @@
       "Requirements": [
         "curl",
         "xml2"
+      ]
+    },
+    "sandwich": {
+      "Package": "sandwich",
+      "Version": "3.0-2",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "dd5af939b8690baa8ee0bca996e99924",
+      "Requirements": [
+        "zoo"
       ]
     },
     "sass": {

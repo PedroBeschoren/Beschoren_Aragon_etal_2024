@@ -187,10 +187,6 @@ list_partial_network_metrics<-map(listed_igraph,Generate_RealNetworks_metrics)
 ```
 
 
-##### 6.6 - Define network node proprieties ####
-
-With metrics like these we can detect keystone species and find patterns that set modules apart
-
 ###### 6.6.1 - Generate node metrics ####
 
 ```{r}
@@ -246,14 +242,14 @@ list_network_metrics<-do.call(rbind.data.frame,
                               Map(c,map(ZiPi_listed,2),list_partial_network_metrics)) 
 
 #make a PCA of network metrics
-library(ggbiplot)
-list_network_metrics.pca <- prcomp(select(list_network_metrics, -Median_module_size ), scale. = TRUE)
-ggbiplot(list_network_metrics.pca, 
-         obs.scale = 1, 
-         var.scale = 1,
-         labels = row.names(list_network_metrics)) +
-  scale_color_discrete(name = '') +
-  theme(legend.direction = 'horizontal', legend.position = 'top')
+library(ggfortify)
+autoplot(list_network_metrics.pca,
+         label = TRUE,
+         loadings = TRUE, 
+         loadings.colour = 'red',
+         loadings.label = TRUE, 
+         loadings.label.size = 3)+
+  theme_bw()
 
 
 #save these network metrics externally
