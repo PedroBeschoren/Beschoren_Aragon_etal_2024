@@ -794,13 +794,26 @@ only for Arabidopsis thaliana there's a significant effect of the treatment in t
 
 ## 10.7 Cohen's D comparison 
 
-### Plots
+START with joining df of qpcr with traits 
+
+For tomorrow, plot the standardized mean difference (cohen's D) with confidence intervals for:  
+
+* dry biomass BO
+* leaf area BO
+* inflorescence weight AT
+* Number of siliques AT
+* LOX2 expression for both AT and BO 
+
+### Cohen's D
 ```{r}
+
+
+
 
 ```
 
 
-### Data analysis 
+### Plots  
 ```{r}
 #try with lsr package
 
