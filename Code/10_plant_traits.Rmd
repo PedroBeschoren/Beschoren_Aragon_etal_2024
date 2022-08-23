@@ -36,6 +36,7 @@ library(multcompView)
 library(multcomp)
 library(lsr)
 library(effsize)
+library(gridExtra)
 source("./renv/0_load_libraries.R")
 
 # increases memory limit used by R
@@ -566,17 +567,17 @@ cohen.d(Ctrl.Bo, OS.Bo) #nothing
 #Arabidopsis
 
 Ctrl.At <- Atha %>% 
-           dplyr::filter(treatment == "control") %>% .$aboveground_dw
+           dplyr::filter(treatment == "control") %>% .$inflorescence
           
   
 MeJA_0.1.At <- Atha %>% 
-           dplyr::filter(treatment == "MeJA_0.1") %>% .$aboveground_dw
+           dplyr::filter(treatment == "MeJA_0.1") %>% .$inflorescence
 
 MeJA_1.At <- Atha %>% 
-           dplyr::filter(treatment == "MeJA_1.0") %>% .$aboveground_dw
+           dplyr::filter(treatment == "MeJA_1.0") %>% .$inflorescence
   
 OS.At <- Atha %>% 
-           dplyr::filter(treatment == "oral_secretion") %>% .$aboveground_dw
+           dplyr::filter(treatment == "oral_secretion") %>% .$inflorescence
 
 #with effsize
 
@@ -621,13 +622,13 @@ return(list)
 
 
 
-df_dw <- group_by(Bole, treatment) %>%
+df_dw <- group_by(Atha, treatment) %>%
   dplyr::summarise(
     n = dplyr::n(),
-    mean = mean(ldry_weight, na.rm = TRUE),
-    sd = sd(ldry_weight, na.rm = TRUE)) %>%
-    mutate(trait="ldry_weight")%>%
-    mutate(species="Bole")%>%
+    mean = mean(inflorescence, na.rm = TRUE),
+    sd = sd(inflorescence, na.rm = TRUE)) %>%
+    mutate(trait="inflorescence")%>%
+    mutate(species="Atha")%>%
     mutate("N-1" = n-1)%>%
     mutate(S2 = sd^2)
 
@@ -657,11 +658,21 @@ cohensD.MeJA0.1 <- function(x){
 
 ```
 
-
+It's the same as if using function `cohen.d` from `effsize` package 
 
 
 Reference suggested by Pedro: https://nph.onlinelibrary.wiley.com/doi/full/10.1111/nph.15504 
 
+#Final Figures
 
+```{r}
+
+plots<- list(p.dw.Bole, p.la.Bole, p.inf.Atha, p.nf.Atha) 
+
+Plots_spp <- marrangeGrob(plots, nrow=2, ncol=2, top = "Plant traits")
+
+ggsave(Plots_spp, file="./R output/plant_traits.pdf")
+
+```
 
 
