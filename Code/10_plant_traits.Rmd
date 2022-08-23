@@ -54,10 +54,17 @@ memory.limit(size = 350000)
 theme_set(theme_bw())
 
 # Set colors 
-color_treatments <- hcl.colors(4,palette="Geyser")
-color_treatments <- c("#E6C186", "#B8CDAE", "#008585", "#C7522B")
 
-color_species <- c("#009E73", "#D55E00")
+#colors & treatments 
+color_treatments <- c("#999999", "#E69F00", "#56B4E9", "#009E73")
+names(color_treatments) <- c("Control", "MeJA 0.1mM", "MeJA 1mM", "P. brassicae OS")
+
+#color_treatments <- hcl.colors(4,palette="Geyser")
+#color_treatments <- c("#E6C186", "#B8CDAE", "#008585", "#C7522B")
+
+#color_species <- c("#009E73", "#D55E00")
+
+#color_compartment <- c()
 
 # Set axis looks
 axis_looks <- theme(axis.text.x = element_text(colour = "black", size = 10,
@@ -528,6 +535,92 @@ cld.inf <- cld(emm.ab.Atha,
 Even when using full aboveground weight there's no effect of treatment on A. thaliana dry biomass (although now differences seem bigger)
 
 
+## 10.8 Gene expression
+
+For now import metadata df in which gene expression measurements are available, after excel file is found, join the excel df with `traits` df by matchin the sample names (i.e. 1_Root) to the plant ID number 
+
+
+```{r}
+
+#open gene expression df 
+qpcr <- read.csv("./Data/qPCR_output.csv")
+qpcr[1:6] <- lapply(qpcr[1:6], as.factor)
+qpcr <- qpcr %>% 
+        dplyr::select(id,Block,species,treatment, MYC2_at_fold_DD, lox2_at_fold_DD)%>% 
+        dplyr::rename(myc2 = MYC2_at_fold_DD, lox2=lox2_at_fold_DD)
+
+qpcr <- qpcr %>% 
+        tidyr::pivot_longer(cols=5:6,
+                     names_to="gene",
+                     values_to="rel_exp")
+
+
+#make summary df
+qpcr.summ <- dplyr::group_by(qpcr, species, treatment, gene) %>%
+  dplyr::summarise(
+    n = dplyr::n(),
+    mean = mean(rel_exp, na.rm=TRUE),
+    sd = sd(rel_exp, na.rm=TRUE),
+    se = sd/sqrt(n)) 
+
+```
+
+
+###Plots
+```{r}
+#Arabidopsis 
+
+#Lox2
+p.lox2.Atha <- ggplot(data = subset(qpcr.summ, species=="Arabidopsis_thaliana" & gene =="lox2"),
+                    mapping = aes(x = treatment, y = mean), colour= treatment)+
+  geom_bar(mapping = aes(fill = treatment), color="black", size=0.8, stat = "summary", position = position_dodge(width = 0.8))+
+  geom_errorbar(aes(ymin=mean-se, ymax=mean+se), width=.4, size=0.8, position = position_dodge(width = 0.8))+
+  scale_fill_manual(values = color_treatments)+
+  labs(y="relative expression of LOX2", x=" ") +
+  axis_looks
+
+#Myc2
+p.myc2.Atha <- ggplot(data = subset(qpcr.summ, species=="Arabidopsis_thaliana" & gene =="myc2"),
+                    mapping = aes(x = treatment, y = mean), colour= treatment)+
+  geom_bar(mapping = aes(fill = treatment), color="black", size=0.8, stat = "summary", position = position_dodge(width = 0.8))+
+  geom_errorbar(aes(ymin=mean-se, ymax=mean+se), width=.4, size=0.8, position = position_dodge(width = 0.8))+
+  scale_fill_manual(values = color_treatments)+
+  labs(y="relative expression of MYC2", x=" ") +
+  axis_looks
+
+#Brassica
+#Lox2
+p.lox2.Bole <- ggplot(data = subset(qpcr.summ, species=="Brassica_oleraceae" & gene =="lox2"),
+                    mapping = aes(x = treatment, y = mean), colour= treatment)+
+  geom_bar(mapping = aes(fill = treatment), color="black", size=0.8, stat = "summary", position = position_dodge(width = 0.8))+
+  geom_errorbar(aes(ymin=mean-se, ymax=mean+se), width=.4, size=0.8, position = position_dodge(width = 0.8))+
+  scale_fill_manual(values = color_treatments)+
+  labs(y="relative expression of LOX2", x=" ") +
+  axis_looks
+
+#Myc2
+p.myc2.Bole <- ggplot(data = subset(qpcr.summ, species=="Brassica_oleraceae" & gene =="myc2"),
+                    mapping = aes(x = treatment, y = mean), colour= treatment)+
+  geom_bar(mapping = aes(fill = treatment), color="black", size=0.8, stat = "summary", position = position_dodge(width = 0.8))+
+  geom_errorbar(aes(ymin=mean-se, ymax=mean+se), width=.4, size=0.8, position = position_dodge(width = 0.8))+
+  scale_fill_manual(values = color_treatments)+
+  labs(y="relative expression of MYC2", x=" ") +
+  axis_looks
+
+plots_genes <- list(p.lox2.Atha, p.lox2.Bole, p.myc2.Atha, p.myc2.Bole)
+
+```
+
+
+
+
+###Data analysis
+```{r}
+
+```
+
+
+
 ## 10.7 Cohen's D comparison 
 
 ### Plots
@@ -663,15 +756,24 @@ It's the same as if using function `cohen.d` from `effsize` package
 
 Reference suggested by Pedro: https://nph.onlinelibrary.wiley.com/doi/full/10.1111/nph.15504 
 
+
+
+
 #Final Figures
 
 ```{r}
+
+aspect_ratio <- 1.5
+height <- 7
+
 
 plots<- list(p.dw.Bole, p.la.Bole, p.inf.Atha, p.nf.Atha) 
 
 Plots_spp <- marrangeGrob(plots, nrow=2, ncol=2, top = "Plant traits")
 
-ggsave(Plots_spp, file="./R output/plant_traits.pdf")
+ggsave(Plots_spp,
+       height = 7, width = 7 * aspect_ratio,
+       file="./R output/plant_traits.pdf")
 
 ```
 
