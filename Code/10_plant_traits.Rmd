@@ -68,12 +68,16 @@ names(color_treatments) <- c("Control", "MeJA 0.1mM", "MeJA 1mM", "P. brassicae 
 
 # Set axis looks
 axis_looks <- theme(axis.text.x = element_text(colour = "black", size = 10,
-                                               face = "bold", angle=45, hjust=1))+
-  theme(axis.text.y = element_text(colour = "black", size = 12, face = "bold"))+
-  theme(axis.title=element_text(size=15, face = "bold"))+
-  theme(axis.title.y = element_text(margin = margin(t = 0, r = 20, b = 0, l = 0)))+
+                                               face = "bold", angle=0, hjust=0.5))+
+  theme(axis.text.y = element_text(colour = "black", size = 10, face = "bold"))+
+  theme(axis.title=element_text(size=12, face = "bold"))+
+  theme(axis.title.y = element_text(margin = margin(t = 0, r = 10, b = 0, l = 0)))+
   theme(panel.grid.major = element_blank(),
         panel.grid.minor = element_blank())+
+  theme(legend.position="none")
+
+treatment_names <- c("control" = "Control", "MeJA_0.1" = "0.1 mM \n MeJA",
+                      "MeJA_1.0" = "1.0 mM \n MeJA", "oral_secretion"="P. brassicae \n OS")
 
 ```
 
@@ -577,6 +581,7 @@ p.lox2.Atha <- ggplot(data = subset(qpcr.summ, species=="Arabidopsis_thaliana" &
   geom_errorbar(aes(ymin=mean-se, ymax=mean+se), width=.4, size=0.8, position = position_dodge(width = 0.8))+
   scale_fill_manual(values = color_treatments)+
   labs(y="relative expression of LOX2", x=" ") +
+  scale_x_discrete(labels=treatment_names)+
   axis_looks
 
 #Myc2
