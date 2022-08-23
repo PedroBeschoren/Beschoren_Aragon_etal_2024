@@ -203,8 +203,17 @@ plot_titles<-names(neutral_list_BO_soil)
 
 # one plot for each list element
 Neutral_plots_list_BO_soil<-mapply(function(x,y) 
-  plot_sncm_fit(x, title=y),
+  plot_sncm_fit(x, title=y)+
+    theme_bw(),
   neutral_list_BO_soil,plot_titles, SIMPLIFY = FALSE)
+
+# arrange 4 plots in 1 figure
+ggarrange(Neutral_plots_list_BO_soil$control,
+          Neutral_plots_list_BO_soil$MeJA_0.1,
+          Neutral_plots_list_BO_soil$MeJA_1.0,
+          Neutral_plots_list_BO_soil$oral_secretion + rremove("x.text"), 
+          labels = c("A", "B", "C", "D"),
+          ncol = 2, nrow = 2)
 
 
 
@@ -373,7 +382,8 @@ nmds_uni_4model_BO_above <- phyloseq::ordinate(uni_4model_BO_above,
 plot_ordination(physeq = uni_4model_BO_above, 
                 ordination = nmds_uni_4model_BO_above, 
                 type = "sample",
-                color= "MeJA_treatment")
+                color= "MeJA_treatment")+
+                theme_bw()
 ### plot  predicted
 nmds_uni_4model_BO_asPredicted <- phyloseq::ordinate(uni_4model_BO_asPredicted, 
                              method ="NMDS", 
@@ -463,7 +473,7 @@ pairwise_output
 
 ```
 
-# 4.7 one model for each AT_soil treatment, using all BO_soil samples as a pool
+# 4.7 one model for each AT_soil treatment, using all AT_soil samples as a pool
 
 ### 4.7.1 make new physeq object and neutral models
 
@@ -487,10 +497,22 @@ neutral_list_AT_soil<- lapply(ps_list_treat$Arabidopsis_thaliana.Soil, function(
 plot_titles<-names(neutral_list_AT_soil)
 
 # one plot for each list element
-Neutral_plots_list<-mapply(function(x,y) 
-  plot_sncm_fit(x, title=y),
+Neutral_plots_list_AT_soil<-mapply(function(x,y) 
+  plot_sncm_fit(x, title=y)+
+    theme_bw(),
   neutral_list_AT_soil,plot_titles, SIMPLIFY = FALSE)
 ########################
+
+
+
+# arrange 4 plots in 1 figure
+ggarrange(Neutral_plots_list_AT_soil$control,
+          Neutral_plots_list_AT_soil$MeJA_0.1,
+          Neutral_plots_list_AT_soil$MeJA_1.0,
+          Neutral_plots_list_AT_soil$oral_secretion + rremove("x.text"), 
+          labels = c("A", "B", "C", "D"),
+          ncol = 2, nrow = 2)
+
 
 
 
@@ -657,7 +679,8 @@ nmds_uni_4model_AT_above <- phyloseq::ordinate(uni_4model_AT_above,
 plot_ordination(physeq = uni_4model_AT_above, 
                 ordination = nmds_uni_4model_AT_above, 
                 type = "sample",
-                color= "MeJA_treatment")
+                color= "MeJA_treatment")+
+                theme_bw()
 ### plot  predicted
 nmds_uni_4model_AT_asPredicted <- phyloseq::ordinate(uni_4model_AT_asPredicted, 
                              method ="NMDS", 
@@ -1295,9 +1318,6 @@ heat_tree_matrix(neutral_metacoder_BO,
                  node_color_trans = "linear", # The default is scaled by circle area
                  node_color_interval = c(-3, 3), # The range of `log2_median_ratio` to display
                  edge_color_interval = c(-3, 3), # The range of `log2_median_ratio` to display
-                 key_size = 0,
-                 label_small_trees = TRUE,
-                 node_label_size = n_obs/10,
                  node_size_axis_label = "Size: Number of OTUs",
                  node_color_axis_label = "Color: Log2 ratio median proportions",
                  layout = "davidson-harel", # The primary layout algorithm

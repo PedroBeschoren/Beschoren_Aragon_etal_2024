@@ -134,9 +134,6 @@ min3_adjustp<-str(lapply (fdr_p_fisher_l, function (x)
 
 
 
-
-
-
 # 9.4 make a heat tree of important taxa
 metacoder heat trees are made to visualize differences in taxonomic composition, so let's incoporate p and odds ratio values into such trees
 ```{r}
