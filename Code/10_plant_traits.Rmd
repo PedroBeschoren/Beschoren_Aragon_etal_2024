@@ -19,10 +19,9 @@ Finally, as both plants are phenotypically different *per se* we compared the ef
 # set working directory to project directory 
 
 # this will load all key libraries for the whole project
+library(tidyr)
 library(vegan)
 library(Hmisc)
-#library(tyRa)
-#library(MicEco)
 library(tibble)
 library(ggpubr)
 library(DHARMa)
@@ -41,8 +40,6 @@ source("./renv/0_load_libraries.R")
 
 # increases memory limit used by R
 memory.limit(size = 350000)
-
-
 
 ```
 
@@ -67,17 +64,24 @@ names(color_treatments) <- c("Control", "MeJA 0.1mM", "MeJA 1mM", "P. brassicae 
 #color_compartment <- c()
 
 # Set axis looks
-axis_looks <- theme(axis.text.x = element_text(colour = "black", size = 10,
+axis_looks <- theme(axis.text.x = element_text(colour = "black", size = 12,
                                                face = "bold", angle=0, hjust=0.5))+
   theme(axis.text.y = element_text(colour = "black", size = 10, face = "bold"))+
-  theme(axis.title=element_text(size=12, face = "bold"))+
+  theme(axis.title=element_text(size=15, face = "bold"))+
   theme(axis.title.y = element_text(margin = margin(t = 0, r = 10, b = 0, l = 0)))+
   theme(panel.grid.major = element_blank(),
         panel.grid.minor = element_blank())+
-  theme(legend.position="none")
+  theme(legend.position="none")+
+  theme(plot.background = element_blank(),
+    panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank(),
+    panel.border = element_blank())+
+  theme(axis.line = element_line(colour = "black", 
+                      size = 0.8, linetype = "solid"))
+
 
 treatment_names <- c("control" = "Control", "MeJA_0.1" = "0.1 mM \n MeJA",
-                      "MeJA_1.0" = "1.0 mM \n MeJA", "oral_secretion"="P. brassicae \n OS")
+                      "MeJA_1.0" = "1 mM \n MeJA", "oral_secretion"="P. brassicae \n OS")
 
 ```
 
@@ -113,6 +117,8 @@ l_sp <- list(Atha, Bole)
 names(l_sp) <- c("Arabidopsis_thaliana", "Brassica_oleraceae")
 
 ```
+merge df with qpcr data for later 
+
 
 ## Load functions
 ```{r}
@@ -123,8 +129,6 @@ source("./Code/Functions/data_distribution_and_GLM_functions.R")
 
 ```
 
-
-**Look for ways of saving plots with par and making a single figure with plots**
 
 ## 10.1 Dry weight
 
@@ -162,9 +166,6 @@ p.dw.Bole <- ggplot(data = l_sp$Brassica_oleraceae,
   scale_fill_manual(values = color_treatments)+
   labs(y="Shoot biomass(g dry weight)", x=" ") +
   axis_looks
-
-#save plots
-
 
 
 ```
@@ -322,8 +323,6 @@ lm.l.Bole <- lm(
 simulateResiduals(lm.l.Bole, plot = T) #ok
 
 Anova(lm.l.Bole)
-summary(lm.la.Bole)
-
 
 ```
 
@@ -547,17 +546,16 @@ For now import metadata df in which gene expression measurements are available, 
 ```{r}
 
 #open gene expression df 
-qpcr <- read.csv("./Data/qPCR_output.csv")
-qpcr[1:6] <- lapply(qpcr[1:6], as.factor)
-qpcr <- qpcr %>% 
+qpcr.w <- read.csv("./Data/qPCR_output.csv")
+qpcr.w[1:6] <- lapply(qpcr.w[1:6], as.factor)
+qpcr.w <- qpcr.w %>% 
         dplyr::select(id,Block,species,treatment, MYC2_at_fold_DD, lox2_at_fold_DD)%>% 
         dplyr::rename(myc2 = MYC2_at_fold_DD, lox2=lox2_at_fold_DD)
 
-qpcr <- qpcr %>% 
+qpcr <- qpcr.w %>% 
         tidyr::pivot_longer(cols=5:6,
                      names_to="gene",
                      values_to="rel_exp")
-
 
 #make summary df
 qpcr.summ <- dplyr::group_by(qpcr, species, treatment, gene) %>%
@@ -581,6 +579,7 @@ p.lox2.Atha <- ggplot(data = subset(qpcr.summ, species=="Arabidopsis_thaliana" &
   geom_errorbar(aes(ymin=mean-se, ymax=mean+se), width=.4, size=0.8, position = position_dodge(width = 0.8))+
   scale_fill_manual(values = color_treatments)+
   labs(y="relative expression of LOX2", x=" ") +
+  labs(title = "Atha")+
   scale_x_discrete(labels=treatment_names)+
   axis_looks
 
@@ -591,8 +590,13 @@ p.myc2.Atha <- ggplot(data = subset(qpcr.summ, species=="Arabidopsis_thaliana" &
   geom_errorbar(aes(ymin=mean-se, ymax=mean+se), width=.4, size=0.8, position = position_dodge(width = 0.8))+
   scale_fill_manual(values = color_treatments)+
   labs(y="relative expression of MYC2", x=" ") +
+  labs(title = "Atha")+
+  scale_x_discrete(labels=treatment_names)+
   axis_looks
+```
 
+
+```{r}
 #Brassica
 #Lox2
 p.lox2.Bole <- ggplot(data = subset(qpcr.summ, species=="Brassica_oleraceae" & gene =="lox2"),
@@ -601,6 +605,8 @@ p.lox2.Bole <- ggplot(data = subset(qpcr.summ, species=="Brassica_oleraceae" & g
   geom_errorbar(aes(ymin=mean-se, ymax=mean+se), width=.4, size=0.8, position = position_dodge(width = 0.8))+
   scale_fill_manual(values = color_treatments)+
   labs(y="relative expression of LOX2", x=" ") +
+  labs(title = "Bole")+
+  scale_x_discrete(labels=treatment_names)+
   axis_looks
 
 #Myc2
@@ -610,6 +616,8 @@ p.myc2.Bole <- ggplot(data = subset(qpcr.summ, species=="Brassica_oleraceae" & g
   geom_errorbar(aes(ymin=mean-se, ymax=mean+se), width=.4, size=0.8, position = position_dodge(width = 0.8))+
   scale_fill_manual(values = color_treatments)+
   labs(y="relative expression of MYC2", x=" ") +
+  labs(title = "Bole")+
+  scale_x_discrete(labels=treatment_names)+
   axis_looks
 
 plots_genes <- list(p.lox2.Atha, p.lox2.Bole, p.myc2.Atha, p.myc2.Bole)
@@ -617,13 +625,171 @@ plots_genes <- list(p.lox2.Atha, p.lox2.Bole, p.myc2.Atha, p.myc2.Bole)
 ```
 
 
-
-
 ###Data analysis
+
+#### LOX2
 ```{r}
+
+#Arabidopsis
+qpcr.Atha <- dplyr::filter(qpcr.w, species=="Arabidopsis_thaliana")
+
+#check distribution
+continuous_distribution_plot_table(qpcr.Atha$lox2) #not normal, gamma 
+hist(qpcr.Atha$lox2)
+
+#LM
+lm.lox2.Atha <- lm(
+  lox2 ~ treatment, 
+  data = qpcr.Atha)
+
+simulateResiduals(lm.lox2.Atha, plot = T) #okay but residuals not normal 
+
+aov_residuals<-residuals(lm.lox2.Atha) 
+shapiro.test(aov_residuals) #not normal 
+
+#GLM with Gamma distribution
+glm.lox2.Atha <- glm (lox2 ~ treatment,
+               family = Gamma (link = "log"),
+               data = qpcr.Atha)
+
+simulateResiduals(glm.lox2.Atha, plot = T) #ok
+
+Anova(glm.lox2.Atha)
+summary(glm.lox2.Atha)
+summ(glm.lox2.Atha, digits = 4)
+
+#Post-hoc
+emm.lox2.Atha <- emmeans(ref_grid(glm.lox2.Atha), pairwise ~ treatment, type="response")
+
+plot(emm.lox2.Atha$emmeans, comparisons = TRUE)
+
+cld.lox2.Atha <- cld(emm.lox2.Atha,
+           alpha = 0.05,
+           Letters = letters,
+           adjust = "tukey")
+
+#Brassica
+
+qpcr.Bole <- dplyr::filter(qpcr.w, species=="Brassica_oleraceae")
+
+#check distribution
+continuous_distribution_plot_table(qpcr.Bole$lox2) #not normal, gamma 
+hist(qpcr.Bole$lox2)
+
+#LM
+lm.lox2.Bole <- lm(
+  lox2 ~ treatment, 
+  data = qpcr.Atha)
+
+simulateResiduals(lm.lox2.Bole, plot = T) #not ok
+
+aov_residuals<-residuals(lm.lox2.Bole) 
+shapiro.test(aov_residuals) #not normal 
+
+#GLM with Gamma distribution
+glm.lox2.Bole <- glm (lox2 ~ treatment,
+               family = Gamma (link = "log"),
+               data = qpcr.Bole)
+
+simulateResiduals(glm.lox2.Bole, plot = T) #ok
+
+Anova(glm.lox2.Bole)
+summary(glm.lox2.Bole)
+summ(glm.lox2.Bole, digits = 4)
+
+#Post-hoc
+emm.lox2.Bole <- emmeans(ref_grid(glm.lox2.Bole), pairwise ~ treatment, type="response")
+
+plot(emm.lox2.Bole$emmeans, comparisons = TRUE)
+
+cld.lox2.Bole <- multcomp::cld(emm.lox2.Bole,
+           alpha = 0.05,
+           Letters = letters,
+           adjust = "tukey")
 
 ```
 
+In both Brassica oleracea and Arabidopsis thaliana there's a significant effect of the treatment in the relative expression levels of LOX2, specifically plants treated with the higuest concentration of MeJA had higuer expression of LOX2 compared to controls. 
+
+#### MYC2
+```{r}
+
+#check distribution
+continuous_distribution_plot_table(qpcr.Atha$myc2) #not normal, gamma 
+hist(qpcr.Atha$myc2)
+
+#LM
+lm.myc2.Atha <- lm(
+  myc2 ~ treatment, 
+  data = qpcr.Atha)
+
+Anova(lm.myc2.Atha)
+
+simulateResiduals(lm.myc2.Atha, plot = T) #okay 
+aov_residuals<-residuals(lm.myc2.Atha) 
+shapiro.test(aov_residuals) #okay 
+
+#GLM with Gamma distribution
+glm.myc2.Atha <- glm (myc2 ~ treatment,
+               family = Gamma (link = "log"),
+               data = qpcr.Atha)
+
+simulateResiduals(glm.myc2.Atha, plot = T) #ok
+
+Anova(glm.myc2.Atha)
+summary(glm.myc2.Atha)
+summ(glm.myc2.Atha, digits = 4)
+
+#Post-hoc
+emm.myc2.Atha <- emmeans(ref_grid(lm.myc2.Atha), pairwise ~ treatment, type="response")
+
+plot(emm.myc2.Atha$emmeans, comparisons = TRUE)
+
+cld.myc2.Atha <- cld(emm.myc2.Atha,
+           alpha = 0.05,
+           Letters = letters,
+           adjust = "tukey")
+
+#Brassica
+
+#check distribution
+continuous_distribution_plot_table(qpcr.Bole$myc2) #not normal, gamma or lognormal
+hist(qpcr.Bole$myc2)
+
+#LM
+lm.myc2.Bole <- lm(
+  myc2 ~ treatment, 
+  data = qpcr.Bole)
+
+simulateResiduals(lm.myc2.Bole, plot = T) #not ok
+
+aov_residuals<-residuals(lm.myc2.Bole) 
+shapiro.test(aov_residuals) #not normal 
+
+#GLM with Gamma distribution
+glm.myc2.Bole <- glm (myc2 ~ treatment,
+               family = Gamma (link = "log"),
+               data = qpcr.Bole)
+
+simulateResiduals(glm.myc2.Bole, plot = T) #ok
+
+Anova(glm.myc2.Bole)
+summary(glm.myc2.Bole)
+summ(glm.myc2.Bole, digits = 4)
+
+#Post-hoc
+emm.myc2.Bole <- emmeans(ref_grid(glm.myc2.Bole), pairwise ~ treatment, type="response")
+
+plot(emm.myc2.Bole$emmeans, comparisons = TRUE)
+
+cld.myc2.Bole <- multcomp::cld(emm.myc2.Bole,
+           alpha = 0.05,
+           Letters = letters,
+           adjust = "tukey")
+
+```
+
+only for Arabidopsis thaliana there's a significant effect of the treatment in the relative expression levels of MYC2, specifically, plants treated with the higuest concentration of MeJA had higuer expression of MYC2 compared to controls. 
 
 
 ## 10.7 Cohen's D comparison 
@@ -760,7 +926,6 @@ It's the same as if using function `cohen.d` from `effsize` package
 
 
 Reference suggested by Pedro: https://nph.onlinelibrary.wiley.com/doi/full/10.1111/nph.15504 
-
 
 
 
