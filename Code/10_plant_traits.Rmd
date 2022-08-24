@@ -836,9 +836,106 @@ For tomorrow, plot the standardized mean difference (cohen's D) with confidence 
 * inflorescence weight AT
 * Number of siliques AT
 * LOX2 expression for both AT and BO 
+* MYC2 expression for both AT and BO 
+
+```{r}
+
+
+
+
+
+Ctrl<- Bole %>% 
+       dplyr::filter(treatment == "control") %>% .$ldry_weight
+          
+  
+MeJA_0.1 <- Bole %>% 
+           dplyr::filter(treatment == "MeJA_0.1") %>% .$ldry_weight
+
+MeJA_1 <- Bole %>% 
+           dplyr::filter(treatment == "MeJA_1.0") %>% .$ldry_weight
+  
+OS <- Bole %>% 
+           dplyr::filter(treatment == "oral_secretion") %>% .$ldry_weight
+
+d_MeJA0.1 <- cohen.d(Ctrl, MeJA_0.1) 
+d_MeJA1.0 <- cohen.d(Ctrl, MeJA_1) 
+d_OS <- cohen.d(Ctrl, OS) 
+
+
+a <- as.data.frame(t(unlist(d_MeJA0.1))) %>% 
+      mutate(treatment="MeJA0.1")             
+
+
+
+```
+
+
+
+
 
 ### Cohen's D
 ```{r}
+#using lsr package
+
+trait <- "ldry_weight"
+variable<- noquote("ldry_weight")
+
+cohensD_per_trait <- function(df, variable){
+  
+  #variable <- noquote(trait)
+  print(df$variable)
+  
+}  
+  
+
+try <- cohensD_per_trait(Bole, variable)
+
+
+
+
+
+  Ctrl<- df %>% 
+       dplyr::filter(treatment == "control") %>%
+    .$[[trait]] 
+  
+return(Ctrl)
+  
+}
+
+
+
+
+Ctrl<- Bole %>% 
+       dplyr::filter(treatment == "control") %>% .$trait
+          
+  
+MeJA_0.1.Bo <- Bole %>% 
+           dplyr::filter(treatment == "MeJA_0.1") %>% .$ldry_weight
+
+MeJA_1.Bo <- Bole %>% 
+           dplyr::filter(treatment == "MeJA_1.0") %>% .$ldry_weight
+  
+OS.Bo <- Bole %>% 
+           dplyr::filter(treatment == "oral_secretion") %>% .$ldry_weight
+
+
+
+
+# let's check now if sample type differ per species. note that this function uses Blocks as strata
+permanova_with_blocks<-function(phyloseq_list, rhs_model){
+  # phyloseq_list = list of phyloseq objects
+  # RHS_model = right hand side model, such as MeJA_treatment*Sample_type + Block
+  lapply(phyloseq_list, function (x){
+    lhs_data<-phyloseq::distance(t(otu_table(x)), method="bray")
+    rhs_model_in<- paste(rhs_model)
+    form<- as.formula(paste("lhs_data~", paste(rhs_model_in))) # getting the formulat properly evaluated as custom string is tricky
+       output<-adonis2(form,
+              data = as(sample_data(x),"data.frame"), # changing with as.data.frame is insufficient
+              permutations = how(within = Within (type = "free"),blocks = as(sample_data(x),"data.frame")$Block, nperm=9999)) # how defines the permutations, it is important to adjust it to the experimental design such as a time series
+       return(output)
+  })
+}
+
 
 
 
@@ -849,7 +946,6 @@ For tomorrow, plot the standardized mean difference (cohen's D) with confidence 
 ### Plots  
 ```{r}
 #try with lsr package
-
 Ctrl.Bo <- Bole %>% 
            dplyr::filter(treatment == "control") %>% .$ldry_weight
           
