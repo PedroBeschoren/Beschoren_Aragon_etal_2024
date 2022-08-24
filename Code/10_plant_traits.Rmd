@@ -840,13 +840,19 @@ For tomorrow, plot the standardized mean difference (cohen's D) with confidence 
 
 ```{r}
 
+ldry_weight <- Bole$ldry_weight
+
+colnames(Bole)
+
+trait_name <-names(ldry_weight)
+ x <- Bole
 
 
-
-
-Ctrl<- Bole %>% 
+try <- x %>%
        dplyr::filter(treatment == "control") %>% .$ldry_weight
-          
+
+Ctrl<- x %>% 
+       dplyr::filter(treatment == "control") %>% .$ldry_weight
   
 MeJA_0.1 <- Bole %>% 
            dplyr::filter(treatment == "MeJA_0.1") %>% .$ldry_weight
@@ -861,10 +867,24 @@ d_MeJA0.1 <- cohen.d(Ctrl, MeJA_0.1)
 d_MeJA1.0 <- cohen.d(Ctrl, MeJA_1) 
 d_OS <- cohen.d(Ctrl, OS) 
 
-
 a <- as.data.frame(t(unlist(d_MeJA0.1))) %>% 
-      mutate(treatment="MeJA0.1")             
+      mutate(treatment="MeJA_0.1")             
 
+b <- as.data.frame(t(unlist(d_MeJA1.0))) %>% 
+      mutate(treatment="MeJA_1.0")  
+
+c <- as.data.frame(t(unlist(d_OS))) %>% 
+      mutate(treatment="oral_secretion") 
+
+df.cohensD <- rbind(a,b,c)%>% 
+              mutate(trait="ldry_weight")%>%
+              mutate(eff_size=
+                       case_when(
+                         magnitude == 1 ~ "negligible",
+                         magnitude == 2 ~ "small",
+                         magnitude == 3 ~ "medium",
+                         magnitude == 4 ~ "large"))%>%
+             relocate(trait, treatment, eff_size)
 
 
 ```
@@ -880,35 +900,71 @@ a <- as.data.frame(t(unlist(d_MeJA0.1))) %>%
 trait <- "ldry_weight"
 variable<- noquote("ldry_weight")
 
-cohensD_per_trait <- function(df, variable){
+cohensD_per_trait <- function(df, trait){
   
-  #variable <- noquote(trait)
-  print(df$variable)
+  #df= data frame
+  #trait = name of trait 
   
-}  
-  
+  name_trait <- quote(trait)
 
-try <- cohensD_per_trait(Bole, variable)
+Ctrl<- df %>% 
+       dplyr::filter(treatment == "control") %>%  pull(trait)
 
-
-
-
-
-  Ctrl<- df %>% 
-       dplyr::filter(treatment == "control") %>%
-    .$[[trait]] 
-  
 return(Ctrl)
   
+  
+}  
+
+
+cohensD_per_trait <- function(x, column){
+        trait_name <- deparse(substitute(column))
+        Ctrl<- x %>% 
+       dplyr::filter(treatment == "control") %>%  pull(trait_name)
+        
+        return(Ctrl)
 }
 
 
 
+Ctrl<- df %>% 
+       dplyr::filter(treatment == "control") %>%  pull(trait)
+
+return(Ctrl)
+  
+}  
+
+Bole[ldry_weight]
+Bole$ldry_weight
+
+try <- cohensD_per_trait(Bole, ldry_weight)
+
+
+
+
+
+trait <- 
+
+y <- quote(trait)
+
+
+
+
+
+trait2 <- quote(ldry_weight)
+  
+
+try <- cohensD_per_trait(Bole, ldry_weight)
+
+y <- "ldry_weight"
+
+trait <- y
+
+trait <- as.character(y) 
+
 
 Ctrl<- Bole %>% 
-       dplyr::filter(treatment == "control") %>% .$trait
+       dplyr::filter(treatment == "control") %>%  pull(trait2)
           
-  
 MeJA_0.1.Bo <- Bole %>% 
            dplyr::filter(treatment == "MeJA_0.1") %>% .$ldry_weight
 
@@ -917,27 +973,6 @@ MeJA_1.Bo <- Bole %>%
   
 OS.Bo <- Bole %>% 
            dplyr::filter(treatment == "oral_secretion") %>% .$ldry_weight
-
-
-
-
-# let's check now if sample type differ per species. note that this function uses Blocks as strata
-permanova_with_blocks<-function(phyloseq_list, rhs_model){
-  # phyloseq_list = list of phyloseq objects
-  # RHS_model = right hand side model, such as MeJA_treatment*Sample_type + Block
-  lapply(phyloseq_list, function (x){
-    lhs_data<-phyloseq::distance(t(otu_table(x)), method="bray")
-    rhs_model_in<- paste(rhs_model)
-    form<- as.formula(paste("lhs_data~", paste(rhs_model_in))) # getting the formulat properly evaluated as custom string is tricky
-       output<-adonis2(form,
-              data = as(sample_data(x),"data.frame"), # changing with as.data.frame is insufficient
-              permutations = how(within = Within (type = "free"),blocks = as(sample_data(x),"data.frame")$Block, nperm=9999)) # how defines the permutations, it is important to adjust it to the experimental design such as a time series
-       return(output)
-  })
-}
-
-
-
 
 
 ```
