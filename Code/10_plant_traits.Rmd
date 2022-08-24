@@ -838,30 +838,30 @@ For tomorrow, plot the standardized mean difference (cohen's D) with confidence 
 * LOX2 expression for both AT and BO 
 * MYC2 expression for both AT and BO 
 
+### Cohen's D
 ```{r}
+#making costume function using lsr package to calculate Cohen's D
 
-ldry_weight <- Bole$ldry_weight
-
-colnames(Bole)
-
-trait_name <-names(ldry_weight)
- x <- Bole
-
-
-try <- x %>%
-       dplyr::filter(treatment == "control") %>% .$ldry_weight
-
-Ctrl<- x %>% 
-       dplyr::filter(treatment == "control") %>% .$ldry_weight
+cohensD_per_trait <- function(df, column, species){
   
-MeJA_0.1 <- Bole %>% 
-           dplyr::filter(treatment == "MeJA_0.1") %>% .$ldry_weight
-
-MeJA_1 <- Bole %>% 
-           dplyr::filter(treatment == "MeJA_1.0") %>% .$ldry_weight
+  #df= data frame
+  #column = column name with trait of interest, no quotes 
+  #species = species name to be put in df, no quotes 
   
-OS <- Bole %>% 
-           dplyr::filter(treatment == "oral_secretion") %>% .$ldry_weight
+  trait_name <- deparse(substitute(column))
+  species_name <- deparse(substitute(species))
+
+Ctrl<- df %>% 
+       dplyr::filter(treatment == "control") %>%  pull(trait_name)
+
+MeJA_0.1 <- df %>% 
+           dplyr::filter(treatment == "MeJA_0.1") %>% pull(trait_name)
+
+MeJA_1 <- df %>% 
+           dplyr::filter(treatment == "MeJA_1.0") %>% pull(trait_name)
+  
+OS <- df %>% 
+           dplyr::filter(treatment == "oral_secretion") %>% pull(trait_name)
 
 d_MeJA0.1 <- cohen.d(Ctrl, MeJA_0.1) 
 d_MeJA1.0 <- cohen.d(Ctrl, MeJA_1) 
@@ -877,103 +877,34 @@ c <- as.data.frame(t(unlist(d_OS))) %>%
       mutate(treatment="oral_secretion") 
 
 df.cohensD <- rbind(a,b,c)%>% 
-              mutate(trait="ldry_weight")%>%
+              mutate(trait=trait_name)%>%
+              mutate(species=species_name)%>%
               mutate(eff_size=
                        case_when(
                          magnitude == 1 ~ "negligible",
                          magnitude == 2 ~ "small",
                          magnitude == 3 ~ "medium",
                          magnitude == 4 ~ "large"))%>%
-             relocate(trait, treatment, eff_size)
+             relocate(trait, species, treatment, eff_size)
 
 
-```
-
-
-
-
-
-### Cohen's D
-```{r}
-#using lsr package
-
-trait <- "ldry_weight"
-variable<- noquote("ldry_weight")
-
-cohensD_per_trait <- function(df, trait){
-  
-  #df= data frame
-  #trait = name of trait 
-  
-  name_trait <- quote(trait)
-
-Ctrl<- df %>% 
-       dplyr::filter(treatment == "control") %>%  pull(trait)
-
-return(Ctrl)
-  
-  
+return(df.cohensD)
 }  
 
+#calculate cohen's D for each trait 
+d_drybiomass <- cohensD_per_trait(Bole, ldry_weight, Brassica_oleraceae)
+d_leaf_area <- cohensD_per_trait(Bole, leaf_area, Brassica_oleraceae)
+d_lox2.bo <- cohensD_per_trait(qpcr.Bole, lox2, Brassica_oleraceae)
+d_myc2.bo <- cohensD_per_trait(qpcr.Bole, myc2, Brassica_oleraceae)
+d_number_fruits <- cohensD_per_trait(Atha, number_fruits, Arabidopsis_thaliana)
+d_inflorescence <- cohensD_per_trait(Atha, inflorescence, Arabidopsis_thaliana)
+d_lox2.at <- cohensD_per_trait(qpcr.Atha, lox2, Arabidopsis_thaliana)
+d_myc2.at <- cohensD_per_trait(qpcr.Atha, myc2, Arabidopsis_thaliana)
 
-cohensD_per_trait <- function(x, column){
-        trait_name <- deparse(substitute(column))
-        Ctrl<- x %>% 
-       dplyr::filter(treatment == "control") %>%  pull(trait_name)
-        
-        return(Ctrl)
-}
+#merge df's
 
-
-
-Ctrl<- df %>% 
-       dplyr::filter(treatment == "control") %>%  pull(trait)
-
-return(Ctrl)
-  
-}  
-
-Bole[ldry_weight]
-Bole$ldry_weight
-
-try <- cohensD_per_trait(Bole, ldry_weight)
-
-
-
-
-
-trait <- 
-
-y <- quote(trait)
-
-
-
-
-
-trait2 <- quote(ldry_weight)
-  
-
-try <- cohensD_per_trait(Bole, ldry_weight)
-
-y <- "ldry_weight"
-
-trait <- y
-
-trait <- as.character(y) 
-
-
-Ctrl<- Bole %>% 
-       dplyr::filter(treatment == "control") %>%  pull(trait2)
-          
-MeJA_0.1.Bo <- Bole %>% 
-           dplyr::filter(treatment == "MeJA_0.1") %>% .$ldry_weight
-
-MeJA_1.Bo <- Bole %>% 
-           dplyr::filter(treatment == "MeJA_1.0") %>% .$ldry_weight
-  
-OS.Bo <- Bole %>% 
-           dplyr::filter(treatment == "oral_secretion") %>% .$ldry_weight
-
+d_traits <- rbind(d_drybiomass, d_leaf_area, d_lox2.bo, d_myc2.bo, d_number_fruits,
+                  d_inflorescence, d_lox2.at, d_myc2.at)
 
 ```
 
