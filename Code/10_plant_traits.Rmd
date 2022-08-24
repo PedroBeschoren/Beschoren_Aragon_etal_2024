@@ -55,7 +55,7 @@ theme_set(theme_bw())
 
 #colors & treatments 
 color_treatments <- c("#999999", "#E69F00", "#56B4E9", "#009E73")
-names(color_treatments) <- c("Control", "MeJA 0.1mM", "MeJA 1mM", "P. brassicae OS")
+#names(color_treatments) <- c("Control", "MeJA 0.1mM", "MeJA 1mM", "P. brassicae OS")
 
 #color_treatments <- hcl.colors(4,palette="Geyser")
 #color_treatments <- c("#E6C186", "#B8CDAE", "#008585", "#C7522B")
@@ -124,7 +124,19 @@ traits[c(16)] <- lapply(traits[c(16)], factor)
 #summary
 summary(traits)
 
+#df for Atha
+Atha <- traits %>% dplyr::filter(species == "Arabidopsis_thaliana") %>% 
+                   mutate(aboveground_dw = ldry_weight + inflorescence)
+#df for Bole
+Bole <- traits %>% dplyr::filter(species == "Brassica_oleraceae")
 
+#df list 
+l_sp <- list(Atha, Bole)
+names(l_sp) <- c("Arabidopsis_thaliana", "Brassica_oleraceae")
+
+```
+
+```{r}
 #pivot longer
 qpcr <- qpcr.w %>% 
         tidyr::pivot_longer(cols=5:6,
@@ -139,23 +151,8 @@ qpcr.summ <- dplyr::group_by(qpcr, species, treatment, gene) %>%
     sd = sd(rel_exp, na.rm=TRUE),
     se = sd/sqrt(n)) 
 
-
-
-
-
-
-#df for Atha
-Atha <- traits %>% dplyr::filter(species == "Arabidopsis_thaliana") %>% 
-                   mutate(aboveground_dw = ldry_weight + inflorescence)
-#df for Bole
-Bole <- traits %>% dplyr::filter(species == "Brassica_oleraceae")
-
-#df list 
-l_sp <- list(Atha, Bole)
-names(l_sp) <- c("Arabidopsis_thaliana", "Brassica_oleraceae")
-
 ```
-merge df with qpcr data for later 
+
 
 
 ## Load functions
@@ -576,41 +573,38 @@ cld.inf <- cld(emm.ab.Atha,
 Even when using full aboveground weight there's no effect of treatment on A. thaliana dry biomass (although now differences seem bigger)
 
 
-## 10.8 Gene expression
+## 10.8 LOX2 gene expression
 
 For now import metadata df in which gene expression measurements are available, after excel file is found, join the excel df with `traits` df by matchin the sample names (i.e. 1_Root) to the plant ID number 
 
 
 ```{r}
+#make traits df longer
 
-#open gene expression df 
-qpcr.w <- read.csv("./Data/qPCR_output.csv")
-qpcr.w[1:6] <- lapply(qpcr.w[1:6], as.factor)
-qpcr.w <- qpcr.w %>% 
-        dplyr::select(id,Block,species,treatment, MYC2_at_fold_DD, lox2_at_fold_DD)%>% 
-        dplyr::rename(myc2 = MYC2_at_fold_DD, lox2=lox2_at_fold_DD)
-
-qpcr <- qpcr.w %>% 
-        tidyr::pivot_longer(cols=5:6,
+qpcr.long <- traits %>% 
+               tidyr::pivot_longer(cols=14:15,
                      names_to="gene",
                      values_to="rel_exp")
 
 #make summary df
-qpcr.summ <- dplyr::group_by(qpcr, species, treatment, gene) %>%
+qpcr.summ <- dplyr::group_by(qpcr.long, species, treatment, gene) %>%
   dplyr::summarise(
     n = dplyr::n(),
     mean = mean(rel_exp, na.rm=TRUE),
     sd = sd(rel_exp, na.rm=TRUE),
     se = sd/sqrt(n)) 
 
+#obtain only those samples with gene expression data 
+qpcr.Atha <- dplyr::filter(Atha, gene_data == "yes")
+qpcr.Bole <- dplyr::filter(Bole, gene_data == "yes")
+
 ```
 
 
 ###Plots
 ```{r}
-#Arabidopsis 
 
-#Lox2
+#Arabidopsis 
 p.lox2.Atha <- ggplot(data = subset(qpcr.summ, species=="Arabidopsis_thaliana" & gene =="lox2"),
                     mapping = aes(x = treatment, y = mean), colour= treatment)+
   geom_bar(mapping = aes(fill = treatment), color="black", size=0.8, stat = "summary", position = position_dodge(width = 0.8))+
@@ -621,22 +615,7 @@ p.lox2.Atha <- ggplot(data = subset(qpcr.summ, species=="Arabidopsis_thaliana" &
   scale_x_discrete(labels=treatment_names)+
   axis_looks
 
-#Myc2
-p.myc2.Atha <- ggplot(data = subset(qpcr.summ, species=="Arabidopsis_thaliana" & gene =="myc2"),
-                    mapping = aes(x = treatment, y = mean), colour= treatment)+
-  geom_bar(mapping = aes(fill = treatment), color="black", size=0.8, stat = "summary", position = position_dodge(width = 0.8))+
-  geom_errorbar(aes(ymin=mean-se, ymax=mean+se), width=.4, size=0.8, position = position_dodge(width = 0.8))+
-  scale_fill_manual(values = color_treatments)+
-  labs(y="relative expression of MYC2", x=" ") +
-  labs(title = "Atha")+
-  scale_x_discrete(labels=treatment_names)+
-  axis_looks
-```
-
-
-```{r}
 #Brassica
-#Lox2
 p.lox2.Bole <- ggplot(data = subset(qpcr.summ, species=="Brassica_oleraceae" & gene =="lox2"),
                     mapping = aes(x = treatment, y = mean), colour= treatment)+
   geom_bar(mapping = aes(fill = treatment), color="black", size=0.8, stat = "summary", position = position_dodge(width = 0.8))+
@@ -647,29 +626,15 @@ p.lox2.Bole <- ggplot(data = subset(qpcr.summ, species=="Brassica_oleraceae" & g
   scale_x_discrete(labels=treatment_names)+
   axis_looks
 
-#Myc2
-p.myc2.Bole <- ggplot(data = subset(qpcr.summ, species=="Brassica_oleraceae" & gene =="myc2"),
-                    mapping = aes(x = treatment, y = mean), colour= treatment)+
-  geom_bar(mapping = aes(fill = treatment), color="black", size=0.8, stat = "summary", position = position_dodge(width = 0.8))+
-  geom_errorbar(aes(ymin=mean-se, ymax=mean+se), width=.4, size=0.8, position = position_dodge(width = 0.8))+
-  scale_fill_manual(values = color_treatments)+
-  labs(y="relative expression of MYC2", x=" ") +
-  labs(title = "Bole")+
-  scale_x_discrete(labels=treatment_names)+
-  axis_looks
-
-plots_genes <- list(p.lox2.Atha, p.lox2.Bole, p.myc2.Atha, p.myc2.Bole)
+#save in list
+lox2 <- list(p.lox2.Atha, p.lox2.Bole) 
+names(lox2) <- c("Atha", "Bole")
 
 ```
 
 
 ###Data analysis
-
-#### LOX2
 ```{r}
-
-#Arabidopsis
-qpcr.Atha <- dplyr::filter(qpcr.w, species=="Arabidopsis_thaliana")
 
 #check distribution
 continuous_distribution_plot_table(qpcr.Atha$lox2) #not normal, gamma 
@@ -707,8 +672,6 @@ cld.lox2.Atha <- cld(emm.lox2.Atha,
            adjust = "tukey")
 
 #Brassica
-
-qpcr.Bole <- dplyr::filter(qpcr.w, species=="Brassica_oleraceae")
 
 #check distribution
 continuous_distribution_plot_table(qpcr.Bole$lox2) #not normal, gamma 
@@ -749,7 +712,41 @@ cld.lox2.Bole <- multcomp::cld(emm.lox2.Bole,
 
 In both Brassica oleracea and Arabidopsis thaliana there's a significant effect of the treatment in the relative expression levels of LOX2, specifically plants treated with the higuest concentration of MeJA had higuer expression of LOX2 compared to controls. 
 
-#### MYC2
+## 10.9 MYC2 gene expression 
+
+### Plots
+```{r}
+
+#Arabidopsis
+p.myc2.Atha <- ggplot(data = subset(qpcr.summ, species=="Arabidopsis_thaliana" & gene =="myc2"),
+                    mapping = aes(x = treatment, y = mean), colour= treatment)+
+  geom_bar(mapping = aes(fill = treatment), color="black", size=0.8, stat = "summary", position = position_dodge(width = 0.8))+
+  geom_errorbar(aes(ymin=mean-se, ymax=mean+se), width=.4, size=0.8, position = position_dodge(width = 0.8))+
+  scale_fill_manual(values = color_treatments)+
+  labs(y="relative expression of MYC2", x=" ") +
+  labs(title = "Atha")+
+  scale_x_discrete(labels=treatment_names)+
+  axis_looks
+
+#Brassica 
+p.myc2.Bole <- ggplot(data = subset(qpcr.summ, species=="Brassica_oleraceae" & gene =="myc2"),
+                    mapping = aes(x = treatment, y = mean), colour= treatment)+
+  geom_bar(mapping = aes(fill = treatment), color="black", size=0.8, stat = "summary", position = position_dodge(width = 0.8))+
+  geom_errorbar(aes(ymin=mean-se, ymax=mean+se), width=.4, size=0.8, position = position_dodge(width = 0.8))+
+  scale_fill_manual(values = color_treatments)+
+  labs(y="relative expression of MYC2", x=" ") +
+  labs(title = "Bole")+
+  scale_x_discrete(labels=treatment_names)+
+  axis_looks
+
+#save in list
+myc2 <- list(p.myc2.Atha, p.myc2.Bole) 
+names(myc2) <- c("Atha", "Bole")
+```
+
+
+### Data analysis 
+
 ```{r}
 
 #check distribution
@@ -827,12 +824,10 @@ cld.myc2.Bole <- multcomp::cld(emm.myc2.Bole,
 
 ```
 
-only for Arabidopsis thaliana there's a significant effect of the treatment in the relative expression levels of MYC2, specifically, plants treated with the higuest concentration of MeJA had higuer expression of MYC2 compared to controls. 
+Only for Arabidopsis thaliana there's a significant effect of the treatment in the relative expression levels of MYC2, specifically, plants treated with the higuest concentration of MeJA had higuer expression of MYC2 compared to controls. 
 
 
-## 10.7 Cohen's D comparison 
-
-START with joining df of qpcr with traits 
+## 10.10 Cohen's D comparison 
 
 For tomorrow, plot the standardized mean difference (cohen's D) with confidence intervals for:  
 
