@@ -902,60 +902,43 @@ d_lox2.at <- cohensD_per_trait(qpcr.Atha, lox2, Arabidopsis_thaliana)
 d_myc2.at <- cohensD_per_trait(qpcr.Atha, myc2, Arabidopsis_thaliana)
 
 #merge df's
-
 d_traits <- rbind(d_drybiomass, d_leaf_area, d_lox2.bo, d_myc2.bo, d_number_fruits,
                   d_inflorescence, d_lox2.at, d_myc2.at)
+
+#changing to factor and numberic 
+d_traits[c(1:4)] <- lapply(d_traits[c(1:4)], as.factor)
+d_traits[c(7:13)] <- lapply(d_traits[c(7:13)], as.numeric)
 
 ```
 
 
+
+
+
 ### Plots  
 ```{r}
-#try with lsr package
-Ctrl.Bo <- Bole %>% 
-           dplyr::filter(treatment == "control") %>% .$ldry_weight
-          
+
+
+p.cohensD <- ggplot(data = d_traits,
+                    mapping = aes(x = trait, y = estimate), colour= treatment)+
+  geom_bar(mapping = aes(fill = treatment), color="black", size=0.8, stat = "summary", position = position_dodge(width = 0.8))+
+  geom_errorbar(aes(ymin=conf.int.lower, ymax=conf.int.upper), width=.4, size=0.8, position = position_dodge(width = 0.8))+
+  scale_fill_manual(values = c("#E69F00", "#56B4E9", "#009E73"))+
+  labs(y="plant traits measured", x=" ") +
+  labs(title = "Cohen's D")+
+  scale_x_discrete(labels=treatment_names)+
+  axis_looks+
+  facet_wrap(~species)
+
+p.cohensD <- ggplot(data = d_traits,
+                    mapping = aes(x = trait, y = estimate), colour= treatment)+
+  geom_point(shape = 18, size=5)+
+  geom_errorbarh(aes(xmin = conf.int.lower, xmax = conf.int.upper), height = 0.25) +
+  geom_vline(xintercept = 0, color = "red", linetype = "dashed", cex = 1, alpha = 0.5) +
   
-MeJA_0.1.Bo <- Bole %>% 
-           dplyr::filter(treatment == "MeJA_0.1") %>% .$ldry_weight
-
-MeJA_1.Bo <- Bole %>% 
-           dplyr::filter(treatment == "MeJA_1.0") %>% .$ldry_weight
-  
-OS.Bo <- Bole %>% 
-           dplyr::filter(treatment == "oral_secretion") %>% .$ldry_weight
 
 
-cohensD(Ctrl.Bo, MeJA_0.1.Bo) #small 
-cohensD(Ctrl.Bo, MeJA_1.Bo) #very high
-cohensD(Ctrl.Bo, OS.Bo) #very low
 
-#with effsize
-
-cohen.d(Ctrl.Bo, MeJA_0.1.Bo) #small
-cohen.d(Ctrl.Bo, MeJA_1.Bo) #high
-cohen.d(Ctrl.Bo, OS.Bo) #nothing 
-
-#Arabidopsis
-
-Ctrl.At <- Atha %>% 
-           dplyr::filter(treatment == "control") %>% .$inflorescence
-          
-  
-MeJA_0.1.At <- Atha %>% 
-           dplyr::filter(treatment == "MeJA_0.1") %>% .$inflorescence
-
-MeJA_1.At <- Atha %>% 
-           dplyr::filter(treatment == "MeJA_1.0") %>% .$inflorescence
-  
-OS.At <- Atha %>% 
-           dplyr::filter(treatment == "oral_secretion") %>% .$inflorescence
-
-#with effsize
-
-cohen.d(Ctrl.At, MeJA_0.1.At) #nothing
-cohen.d(Ctrl.At, MeJA_1.At) #medium
-cohen.d(Ctrl.At, OS.At) #nothing  
 
 
 ```
