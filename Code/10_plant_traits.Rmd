@@ -838,6 +838,8 @@ For tomorrow, plot the standardized mean difference (cohen's D) with confidence 
 * LOX2 expression for both AT and BO 
 * MYC2 expression for both AT and BO 
 
+Reference suggested by Pedro: https://nph.onlinelibrary.wiley.com/doi/full/10.1111/nph.15504 
+
 ### Cohen's D
 ```{r}
 #making costume function using lsr package to calculate Cohen's D
@@ -915,11 +917,10 @@ d_traits$trait = factor(d_traits$trait,
 
 ```
 
-
-
-
-
 ### Plots  
+
+Followed this: https://stackoverflow.com/questions/58657802/forest-plot-with-subgroups-in-ggplot2 
+
 ```{r}
 #settings for plots 
 color_treatments_noControl <- c("#E69F00", "#56B4E9", "#009E73")
@@ -939,7 +940,8 @@ p.cohensD.Atha <- ggplot(data = subset(d_traits, species == "Arabidopsis_thalian
              position=position_dodge(width = 0.5)) +
   scale_fill_manual(values=color_treatments_noControl)+
   scale_color_manual(values=color_treatments_noControl)+
-  scale_x_discrete(name="plant traits measured", labels=trait_names) +
+  scale_x_discrete(name="", labels=trait_names) +
+  labs(title = "Arabidopsis thaliana")+
   scale_y_continuous(name="Cohen's D estimate with 95% confidence interval", limits = c(-10.15,5)) +
   coord_flip() +
   theme_minimal()+
@@ -949,8 +951,7 @@ p.cohensD.Atha <- ggplot(data = subset(d_traits, species == "Arabidopsis_thalian
   theme(legend.position="top")
 
 #Brassica
-p.cohensD.Bole <- ggplot(data = subset(d_traits, species == "Brassica_oleraceae"), mapping = aes(x = trait, y = estimate,
-                    ymin=conf.int.lower, ymax=conf.int.upper,colour= treatment, fill=treatment))+
+p.cohensD.Bole <- ggplot(data = subset(d_traits, species == "Brassica_oleraceae"), mapping = aes(x = trait, y = estimate, ymin=conf.int.lower, ymax=conf.int.upper,colour= treatment, fill=treatment))+
   geom_linerange(size=5, position=position_dodge(width = 0.5)) +
   geom_hline(aes(yintercept=0), lty=2) +
     geom_hline(aes(yintercept=0.8), lty=2, colour="red") +
@@ -959,7 +960,8 @@ p.cohensD.Bole <- ggplot(data = subset(d_traits, species == "Brassica_oleraceae"
              position=position_dodge(width = 0.5)) +
   scale_fill_manual(values=color_treatments_noControl)+
   scale_color_manual(values=color_treatments_noControl)+
-  scale_x_discrete(name="plant traits measured", labels=trait_names) +
+  scale_x_discrete(name="", labels=trait_names) +
+  labs(title = "Brassica oleracea")+
   scale_y_continuous(name="Cohen's D estimate with 95% confidence interval", limits = c(-5,5)) +
   coord_flip() +
   theme_minimal()+
@@ -969,6 +971,51 @@ p.cohensD.Bole <- ggplot(data = subset(d_traits, species == "Brassica_oleraceae"
   theme(legend.position="top")
 
 
+```
+
+Now, make a table to be placed next to the plot.
+From: https://rpubs.com/mbounthavong/forest_plots_r
+
+```{r}
+
+## Create the table-base pallete
+table_base <- ggplot(data = subset(d_traits, species == "Arabidopsis_thaliana"), aes(y=trait, fill=treatment)) +
+  ylab(NULL) + xlab("  ") + 
+  theme(plot.title = element_text(hjust = 0.5, size=12), 
+        axis.text.x = element_text(color="white", hjust = -3, size = 25), ## This is used to help with alignment
+        axis.line = element_blank(),
+        axis.text.y = element_blank(), 
+        axis.ticks = element_blank(),
+        axis.title.y = element_blank(), 
+        legend.position = "none",
+        panel.background = element_blank(), 
+        panel.border = element_blank(), 
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(), 
+        plot.background = element_blank())
+
+## OR point estimate table
+tab1 <- table_base + 
+  labs(title = "space") +
+  geom_text(aes(y = rev(trait), x = 1, label = sprintf("%0.1f", round(estimate, digits = 2))), size = 4) + ## decimal places
+  ggtitle("Cohen's D")
+
+## 95% CI table
+tab2 <- table_base +
+  geom_text(aes(y = rev(trait), x = 1, label = eff_size), size = 4) + 
+  ggtitle("Effect size")
+
+
+## Merge tables with plot
+lay <-  matrix(c(1,1,1,1,1,1,1,1,1,1,2,3,3), nrow = 1)
+grid.arrange(p.cohensD.Atha, tab1, tab2, layout_matrix = lay)
+
+
+```
+
+It's difficult to align with groups per treatment, I will stop and add it on inkscape, perhaps it's better to add an '**' when effects are large. 
+
+```{r}
 #Arranging and exporting plots
 aspect_ratio <- 1.5
 height <- 7
@@ -980,58 +1027,6 @@ d_plots <- marrangeGrob(d_plots_l, nrow=1, ncol=2, top = "Cohen's D")
 ggsave(d_plots,
        height = 7, width = 7 * aspect_ratio,
        file="./R output/cohensD_plots.svg")
-
-```
-
-
-```{r}
-
-#using Giauque et al., XXXX reference
-
-df_dw <- group_by(Atha, treatment) %>%
-  dplyr::summarise(
-    n = dplyr::n(),
-    mean = mean(inflorescence, na.rm = TRUE),
-    sd = sd(inflorescence, na.rm = TRUE)) %>%
-    mutate(trait="inflorescence")%>%
-    mutate(species="Atha")%>%
-    mutate("N-1" = n-1)%>%
-    mutate(S2 = sd^2)
-
-
-a <- (df_dw$`N-1`[1]*df_dw$S2[1])+(df_dw$`N-1`[2]*df_dw$S2[2])
-b <- df_dw$n[1]+df_dw$n[2]-2
-S <- sqrt(a/b)
-c <- (df_dw$mean[2]-df_dw$mean[1])
-d <- c/S
-
-#it's the same 
-
-
-```
-
-It's the same as if using function `cohen.d` from `effsize` package 
-
-
-Reference suggested by Pedro: https://nph.onlinelibrary.wiley.com/doi/full/10.1111/nph.15504 
-
-
-
-#Final Figures
-
-```{r}
-
-aspect_ratio <- 1.5
-height <- 7
-
-
-plots<- list(p.dw.Bole, p.la.Bole, p.inf.Atha, p.nf.Atha) 
-
-Plots_spp <- marrangeGrob(plots, nrow=2, ncol=2, top = "Plant traits")
-
-ggsave(Plots_spp,
-       height = 7, width = 7 * aspect_ratio,
-       file="./R output/plant_traits.pdf")
 
 ```
 
