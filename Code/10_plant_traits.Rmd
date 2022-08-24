@@ -20,6 +20,7 @@ Finally, as both plants are phenotypically different *per se* we compared the ef
 
 # this will load all key libraries for the whole project
 library(tidyr)
+library(dplyr)
 library(vegan)
 library(Hmisc)
 library(tibble)
@@ -91,20 +92,57 @@ treatment_names <- c("control" = "Control", "MeJA_0.1" = "0.1 mM \n MeJA",
 
 ```{r}
 # load data 
-traits <- read.csv("./Data/MeJA_Plant_traits_raw.csv")
+raw <- read.csv("./Data/MeJA_Plant_traits_raw.csv")
+str(raw )
+
+#removing non-necessary column 
+raw  <- raw [-c(7:8,16:19)]
+raw[c(1:6)] <- lapply(raw[c(1:6)], factor)
+
+#open gene expression df 
+qpcr<- read.csv("./Data/qPCR_output.csv")
+qpcr[1:6] <- lapply(qpcr[1:6], as.factor)
+qpcr <- qpcr %>% 
+        dplyr::select(id,Block,species,treatment, MYC2_at_fold_DD, lox2_at_fold_DD)%>% 
+        dplyr::rename(myc2 = MYC2_at_fold_DD, lox2=lox2_at_fold_DD)
+
+#merge
+traits <- left_join(raw, qpcr, by="id") %>%
+          select(-c(14:16))%>%
+          mutate(gene_data =
+                 case_when(
+                   is.na(myc2) ~ "no",
+                   TRUE ~ "yes"))
+
+#remove the .x from column names 
+colnames(traits) <- gsub(".x\\b", '', colnames(traits))
 str(traits)
 
-traits[c(1:6)] <- lapply(traits[c(1:6)], factor)
-
-#removing X column 
-traits <- traits[-c(19)]
-
-#ordering levels
-levels(traits$species)
-levels(traits$treatment)
+#make gene_data column factor
+traits[c(16)] <- lapply(traits[c(16)], factor)
 
 #summary
 summary(traits)
+
+
+#pivot longer
+qpcr <- qpcr.w %>% 
+        tidyr::pivot_longer(cols=5:6,
+                     names_to="gene",
+                     values_to="rel_exp")
+
+#make summary df
+qpcr.summ <- dplyr::group_by(qpcr, species, treatment, gene) %>%
+  dplyr::summarise(
+    n = dplyr::n(),
+    mean = mean(rel_exp, na.rm=TRUE),
+    sd = sd(rel_exp, na.rm=TRUE),
+    se = sd/sqrt(n)) 
+
+
+
+
+
 
 #df for Atha
 Atha <- traits %>% dplyr::filter(species == "Arabidopsis_thaliana") %>% 
