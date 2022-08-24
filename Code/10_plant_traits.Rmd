@@ -909,6 +909,10 @@ d_traits <- rbind(d_drybiomass, d_leaf_area, d_lox2.bo, d_myc2.bo, d_number_frui
 d_traits[c(1:4)] <- lapply(d_traits[c(1:4)], as.factor)
 d_traits[c(7:13)] <- lapply(d_traits[c(7:13)], as.numeric)
 
+#order traits
+d_traits$trait = factor(d_traits$trait,
+                         level=c("myc2", "lox2", "number_fruits", "inflorescence", "leaf_area", "ldry_weight"))
+
 ```
 
 
@@ -917,26 +921,65 @@ d_traits[c(7:13)] <- lapply(d_traits[c(7:13)], as.numeric)
 
 ### Plots  
 ```{r}
-
+#settings for plots 
 color_treatments_noControl <- c("#E69F00", "#56B4E9", "#009E73")
+names_treatments_noControl <- c(c("MeJA_0.1" = "0.1 mM \n MeJA", "MeJA_1.0" = "1 mM \n MeJA", "oral_secretion"="P. brassicae \n OS"))
+trait_names <- c("myc2" = "relative expression \n of MYC2", "lox2" = "relative expression \n of LOX2",
+                      "number_fruits" = "Number of siliques \n per plant", "inflorescence"="Dry weight \n inflorescence", "ldry_weight"="Dry weight \n leaves", "leaf_area"="Leaf area")
 
 
-p.cohensD <- ggplot(data = d_traits, mapping = aes(x = trait, y = estimate,
+#Arabidopsis
+p.cohensD.Atha <- ggplot(data = subset(d_traits, species == "Arabidopsis_thaliana"), mapping = aes(x = trait, y = estimate,
                     ymin=conf.int.lower, ymax=conf.int.upper,colour= treatment, fill=treatment))+
   geom_linerange(size=5, position=position_dodge(width = 0.5)) +
   geom_hline(aes(yintercept=0), lty=2) +
+    geom_hline(aes(yintercept=0.8), lty=2, colour="red") +
+  geom_hline(aes(yintercept=-0.8), lty=2, colour="red") +
   geom_point(size=3, shape=20, colour="black", stroke = 0.5,
              position=position_dodge(width = 0.5)) +
   scale_fill_manual(values=color_treatments_noControl)+
   scale_color_manual(values=color_treatments_noControl)+
-  scale_x_discrete(name="plant traits measured") +
-  scale_y_continuous(name="Cohen's D", limits = c(-10,5)) +
+  scale_x_discrete(name="plant traits measured", labels=trait_names) +
+  scale_y_continuous(name="Cohen's D estimate with 95% confidence interval", limits = c(-10.15,5)) +
   coord_flip() +
-  theme_minimal()
+  theme_minimal()+
+  axis_looks+
+  theme(axis.text.y = element_text(colour = "black", size = 12,
+                                               face = "bold", angle=0, hjust=0.5))+
+  theme(legend.position="top")
 
-p.cohensD
-  
+#Brassica
+p.cohensD.Bole <- ggplot(data = subset(d_traits, species == "Brassica_oleraceae"), mapping = aes(x = trait, y = estimate,
+                    ymin=conf.int.lower, ymax=conf.int.upper,colour= treatment, fill=treatment))+
+  geom_linerange(size=5, position=position_dodge(width = 0.5)) +
+  geom_hline(aes(yintercept=0), lty=2) +
+    geom_hline(aes(yintercept=0.8), lty=2, colour="red") +
+  geom_hline(aes(yintercept=-0.8), lty=2, colour="red") +
+  geom_point(size=3, shape=20, colour="black", stroke = 0.5,
+             position=position_dodge(width = 0.5)) +
+  scale_fill_manual(values=color_treatments_noControl)+
+  scale_color_manual(values=color_treatments_noControl)+
+  scale_x_discrete(name="plant traits measured", labels=trait_names) +
+  scale_y_continuous(name="Cohen's D estimate with 95% confidence interval", limits = c(-5,5)) +
+  coord_flip() +
+  theme_minimal()+
+  axis_looks+
+  theme(axis.text.y = element_text(colour = "black", size = 12,
+                                               face = "bold", angle=0, hjust=0.5))+
+  theme(legend.position="top")
 
+
+#Arranging and exporting plots
+aspect_ratio <- 1.5
+height <- 7
+
+d_plots_l<- list(p.cohensD.Atha, p.cohensD.Bole) 
+
+d_plots <- marrangeGrob(d_plots_l, nrow=1, ncol=2, top = "Cohen's D")
+
+ggsave(d_plots,
+       height = 7, width = 7 * aspect_ratio,
+       file="./R output/cohensD_plots.svg")
 
 ```
 
@@ -944,35 +987,6 @@ p.cohensD
 ```{r}
 
 #using Giauque et al., XXXX reference
-
-z <- yuju(Bole, ldry_weight)
-
-
-
-
-yuju <- function(x, y){
-
-  
-Ctrl<- x%>% 
-           dplyr::filter(treatment == "control") %>% .$y
-          
-  
-MeJA_0.1<- x %>% 
-           dplyr::filter(treatment == "MeJA_0.1") %>% .$y
-
-MeJA_1 <- x %>% 
-           dplyr::filter(treatment == "MeJA_1.0") %>% .$y
-  
-OS <- x %>% 
-           dplyr::filter(treatment == "oral_secretion") %>% .$y
-
-list <- list(Ctrl, MeJA_0.1, MeJA_1, OS)
-
-return(list)
-
-}
-
-
 
 df_dw <- group_by(Atha, treatment) %>%
   dplyr::summarise(
@@ -992,20 +1006,6 @@ c <- (df_dw$mean[2]-df_dw$mean[1])
 d <- c/S
 
 #it's the same 
-
-
-cohensD.MeJA0.1 <- function(x){
-  
-  #x is a df
-  
-  A <- 
-  
-  
-}
-]
-
-
-
 
 
 ```
