@@ -68,7 +68,7 @@ color_treatments <- c("#999999", "#E69F00", "#56B4E9", "#009E73")
 axis_looks <- theme(axis.text.x = element_text(colour = "black", size = 12,
                                                face = "bold", angle=0, hjust=0.5))+
   theme(axis.text.y = element_text(colour = "black", size = 10, face = "bold"))+
-  theme(axis.title=element_text(size=15, face = "bold"))+
+  theme(axis.title=element_text(size=12, face = "bold"))+
   theme(axis.title.y = element_text(margin = margin(t = 0, r = 10, b = 0, l = 0)))+
   theme(panel.grid.major = element_blank(),
         panel.grid.minor = element_blank())+
@@ -91,7 +91,7 @@ treatment_names <- c("control" = "Control", "MeJA_0.1" = "0.1 mM \n MeJA",
 ## Load data 
 
 ```{r}
-# load data 
+# load raw data for traits df 
 raw <- read.csv("./Data/MeJA_Plant_traits_raw.csv")
 str(raw )
 
@@ -103,30 +103,28 @@ raw[c(1:6)] <- lapply(raw[c(1:6)], factor)
 qpcr<- read.csv("./Data/qPCR_output.csv")
 qpcr[1:6] <- lapply(qpcr[1:6], as.factor)
 qpcr <- qpcr %>% 
-        dplyr::select(id,Block,species,treatment, MYC2_at_fold_DD, lox2_at_fold_DD)%>% 
-        dplyr::rename(myc2 = MYC2_at_fold_DD, lox2=lox2_at_fold_DD)
+        dplyr::select(id,Block,species,treatment, MYC2_at_fold_DD, lox2_at_fold_DD)%>% #keep only these columns
+        dplyr::rename(myc2 = MYC2_at_fold_DD, lox2=lox2_at_fold_DD) #change names 
 
 #merge
 traits <- left_join(raw, qpcr, by="id") %>%
-          select(-c(14:16))%>%
           mutate(gene_data =
                  case_when(
-                   is.na(myc2) ~ "no",
-                   TRUE ~ "yes"))
+                   is.na(myc2) ~ "no", #makes new column to select later for those samples with available gene exp data
+                   TRUE ~ "yes"))      #as some samples were lost by exploiding Eppendorfs 
 
-#remove the .x from column names 
-colnames(traits) <- gsub(".x\\b", '', colnames(traits))
+#clean df
+traits <- traits[-c(14:16)]
+colnames(traits) <- gsub(".x\\b", '', colnames(traits)) #after left_join similar columns are renamed column.x and column.y
+traits[c(16)] <- lapply(traits[c(16)], factor) #make gene_data column factor
 str(traits)
-
-#make gene_data column factor
-traits[c(16)] <- lapply(traits[c(16)], factor)
 
 #summary
 summary(traits)
 
 #df for Atha
 Atha <- traits %>% dplyr::filter(species == "Arabidopsis_thaliana") %>% 
-                   mutate(aboveground_dw = ldry_weight + inflorescence)
+                   mutate(aboveground_dw = ldry_weight + inflorescence) #make new column with overall aboveground biomass
 #df for Bole
 Bole <- traits %>% dplyr::filter(species == "Brassica_oleraceae")
 
@@ -136,9 +134,10 @@ names(l_sp) <- c("Arabidopsis_thaliana", "Brassica_oleraceae")
 
 ```
 
+Now make new df's for qpcr data, has to be long format
 ```{r}
 #pivot longer
-qpcr <- qpcr.w %>% 
+qpcr <- qpcr %>% 
         tidyr::pivot_longer(cols=5:6,
                      names_to="gene",
                      values_to="rel_exp")
@@ -152,7 +151,6 @@ qpcr.summ <- dplyr::group_by(qpcr, species, treatment, gene) %>%
     se = sd/sqrt(n)) 
 
 ```
-
 
 
 ## Load functions
@@ -171,7 +169,7 @@ source("./Code/Functions/data_distribution_and_GLM_functions.R")
 
 ```{r}
 
-#Boxplot both
+#Boxplot both faced-wrapped
 p.dw.spp <- ggplot(data = traits,
                     mapping = aes(x = treatment, y = ldry_weight), colour= treatment)+
   geom_boxplot(mapping = aes(fill= treatment), position = position_dodge(width = 0.8), lwd=0.8)+
@@ -180,28 +178,42 @@ p.dw.spp <- ggplot(data = traits,
   scale_fill_manual(values = color_treatments)+
   labs(y="Shoot biomass(g dry weight)", x=" ") +
   facet_wrap(~species, scales = "free_y")+
+  labs(title = "Both")+
+  scale_y_continuous(expand = c(0, 0), #start graph at y = min and x = min
+                     limits = c(0, max(traits$ldry_weight*1.1))) + #y limits
+  scale_x_discrete(labels=treatment_names)+
   axis_looks
 
 #Boxplot Atha
-p.dw.Atha <- ggplot(data = l_sp$Arabidopsis_thaliana,
+p.dw.Atha <- ggplot(data = Atha,
                     mapping = aes(x = treatment, y = ldry_weight), colour= treatment)+
   geom_boxplot(mapping = aes(fill= treatment), position = position_dodge(width = 0.8), lwd=0.8)+
   geom_jitter(mapping = aes(fill = treatment),
                          shape = 21, size = 1.8, color = "black", position = position_dodge(width = 0.8))+
   scale_fill_manual(values = color_treatments)+
   labs(y="Shoot biomass(g dry weight)", x=" ") +
+  labs(title = "Atha")+
+  scale_y_continuous(expand = c(0, 0), #start graph at y = min and x = min
+                     limits = c(0, max(Atha$ldry_weight*1.1))) +
+  scale_x_discrete(labels=treatment_names)+
   axis_looks
   
 #Boxplot Bole
-p.dw.Bole <- ggplot(data = l_sp$Brassica_oleraceae,
+p.dw.Bole <- ggplot(data = Bole,
                     mapping = aes(x = treatment, y = ldry_weight), colour= treatment)+
   geom_boxplot(mapping = aes(fill= treatment), position = position_dodge(width = 0.8), lwd=0.8)+
   geom_jitter(mapping = aes(fill = treatment),
                          shape = 21, size = 1.8, color = "black", position = position_dodge(width = 0.8))+
   scale_fill_manual(values = color_treatments)+
   labs(y="Shoot biomass(g dry weight)", x=" ") +
+  labs(title = "Bole")+
+  scale_y_continuous(expand = c(0, 0), #start graph at y = min and x = min
+                     limits = c(0, max(Bole$ldry_weight*1.1))) +
+  scale_x_discrete(labels=treatment_names)+
   axis_looks
 
+#save them in list
+p_dw_l <- list(p.dw.Atha, p.dw.Bole)
 
 ```
 
@@ -219,6 +231,14 @@ glm.Atha <- glm_gaussian_Withdf(l_sp$Arabidopsis_thaliana) #Full, but not signif
 Anova(glm.Atha$Full)
 summ(glm.Atha$Full)
 
+df_dw_At <- summary_model(glm.Atha$Full, glm.Atha$Null)
+
+df_dw_At <- df_dw_At %>% 
+            mutate(trait = "dry_weight",
+                   species = "Arabidopsis_thaliana",
+                   model="GLM",
+                   distribution="Gaussian")
+
 #no effect of treatment (p=0.8855) nor block (p=0.1391)in A.thaliana biomass (p=0.34)
 
 #Brassica 
@@ -230,10 +250,10 @@ glm.Bole <- glm_gaussian_Withdf(l_sp$Brassica_oleraceae) #Optimal
 Anova(glm.Bole$Full)
 summ(glm.Bole$Full, digits = 4) #significant difference 
 
-#no effect of treatment (p=0.8855) nor block (p=0.1391)in A.thaliana biomass (p=0.34)
+simulateResiduals(glm.Bole$Full, plot = T) #ok, choosing this one
 
-####-Anova
-#LM
+#### Anova 
+#LM, trying with just LM
 glm.Bole2 <- lm(
   ldry_weight ~ treatment + Block, 
   data = l_sp$Brassica_oleraceae)
@@ -247,6 +267,15 @@ summ(glm.Bole$Optimal)
 summary_model(glm.Bole$Optimal, glm.Bole$Null)
 
 #### Anova 
+
+#Keeping GLM
+df_dw_Bo <- summary_model(glm.Bole$Full, glm.Bole$Null)
+
+df_dw_Bo <- df_dw_Bo %>% 
+            mutate(trait = "dry_weight",
+                   species = "Brassica_oleraceae",
+                   model="GLM",
+                   distribution="Gaussian")
 
 #Post-hoc
 emm.Bole <- emmeans(ref_grid(glm.Bole$Full), pairwise ~ treatment)
