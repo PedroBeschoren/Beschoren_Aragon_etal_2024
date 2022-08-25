@@ -1079,18 +1079,54 @@ ggplot(x,
   geom_boxplot()+
   geom_point(position = "jitter", alpha = 0.5, aes( color = Phylum)))
 
-# check which is the most highly connected module
+# check which is the most highly connected family
 lapply(complete_node_metrics_withFitClass, function(x)
 ggplot(x,
-       aes(x = Genus, y = Degree))+
+       aes(x = Family, y = Degree))+
   geom_boxplot()+
   theme(axis.text.x = element_text(angle = 90))+
   geom_point(position = "jitter", alpha = 0.5, aes( color = Phylum)))
  
 
 
+# check which is the most highly connected module
+lapply(complete_node_metrics_withFitClass, function(x)
+ggplot(x,
+       aes(x = Family, y = Degree))+
+  geom_boxplot()+
+  theme(axis.text.x = element_text(angle = 90))+
+  geom_point(position = "jitter", alpha = 0.5, aes( color = Phylum)))
+ 
+
+filter(.data = x,
+       Zi > 2.5 |
+         Pi >0.62 |
+         keystone_taxa == "Keystone")
+
+# check ASVs that were relevant in entwork
+net_asvs<-lapply(complete_node_metrics_withFitClass, function(x)
+as.character(filter(.data = x,
+       Zi > 2.5 |
+         Pi >0.62 |
+         keystone_taxa == "Keystone")[,1]))
 
 
+# plot abundances of teh ASVs selected aove
+mapply(function(z,y){
+  
+  ps<-prune_taxa(taxa = z, x = y)
+  
+  ps<-subset_taxa(physeq = ps, Family =="f__Comamonadaceae" | Family =="f__Streptomycetaceae")
+  
+  plot_bar(ps, x = "MeJA_treatment", facet_grid = "Family")
+  },
+  z = net_asvs,
+  y = ps_list_rarefied,
+  SIMPLIFY = FALSE
+  
+)
+
+ 
 
 ```
 
