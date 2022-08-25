@@ -161,7 +161,7 @@ summary_model <- function(GLM, Null){
   
 }
 
-pairwise_contrasts_backTransformed <- function(x,GLM){
+#pairwise_contrasts_backTransformed <- function(x,GLM){
   
   #x is the df 
   phytohormone_name <-levels(x$phytohormone)
@@ -258,4 +258,4 @@ pairwise_contrasts_backTransformed <- function(x,GLM){
   #output
   return(list)
   
-}
+} #continue with this one later 
