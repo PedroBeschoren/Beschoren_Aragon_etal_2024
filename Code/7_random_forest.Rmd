@@ -70,7 +70,7 @@ boruta_objt_list<-lapply(list_boruta_input, function(x)
 
 ```
 
-## 7.1.1 visualize boruta results over a list (list as input, list as output)
+## 7.2 visualize boruta results over a list (list as input, list as output)
 
 ```{r boruta}
 
@@ -100,7 +100,7 @@ boruta_history<-lapply(fixed_boruta_objt_list, function(x)
 
 
 
-##7.3c Cheking Boruta precision with 100-repeated 5-fold cross-validation, over the list of 4 borutized random forested
+##7.3 Cheking Boruta precision with 100-repeated 5-fold cross-validation, over the list of 4 borutized random forested
 ```{r boruta}
 
 ############################3
