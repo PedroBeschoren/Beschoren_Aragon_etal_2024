@@ -40,11 +40,11 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.7"
-     inkscape:cx="1411.3024"
-     inkscape:cy="907.32815"
+     inkscape:zoom="1.4"
+     inkscape:cx="1091.628"
+     inkscape:cy="427.47927"
      inkscape:document-units="mm"
-     inkscape:current-layer="layer1"
+     inkscape:current-layer="g4737-04-9-7-3-2"
      showgrid="false"
      inkscape:window-width="1920"
      inkscape:window-height="998"
@@ -73,17 +73,17 @@
      id="layer1"
      transform="translate(199.09302,26.106092)">
     <rect
-       style="opacity:0.144;fill:#ff6600;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.28294167;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:18.29999924;stroke-opacity:1;paint-order:markers fill stroke"
+       style="opacity:0.144;fill:#ff6600;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.27223969;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:18.29999924;stroke-opacity:1;paint-order:markers fill stroke"
        id="rect6548"
        width="169.34619"
-       height="118.83871"
+       height="110.01881"
        x="47.612144"
-       y="248.05629" />
+       y="251.23125" />
     <rect
-       style="opacity:0.144;fill:#800080;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.19439313;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:18.29999924;stroke-opacity:1;paint-order:markers fill stroke"
+       style="opacity:0.144;fill:#800080;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.1857504;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:18.29999924;stroke-opacity:1;paint-order:markers fill stroke"
        id="rect5613-5-2"
        width="99.925011"
-       height="153.70319"
+       height="140.33971"
        x="-58.088017"
        y="185.34299" />
     <rect
@@ -101,12 +101,12 @@
        x="47.612144"
        y="173.03317" />
     <rect
-       style="opacity:0.144;fill:#b3b3b3;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.2353178;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:18.29999924;stroke-opacity:1;paint-order:markers fill stroke"
+       style="opacity:0.144;fill:#b3b3b3;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.2755858;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:18.29999924;stroke-opacity:1;paint-order:markers fill stroke"
        id="rect5290"
        width="276.48956"
-       height="52.538689"
-       x="-1.0394347"
-       y="23.912201" />
+       height="72.058189"
+       x="-29.714685"
+       y="2.7344356" />
     <rect
        style="opacity:0.144;fill:#44aa00;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.18106692;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:18.29999924;stroke-opacity:1;paint-order:markers fill stroke"
        id="rect5290-8"
@@ -122,62 +122,62 @@
        x="44.210358"
        y="125.97514" />
     <rect
-       style="opacity:0.144;fill:#ffdd55;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.28591207;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:18.29999924;stroke-opacity:1;paint-order:markers fill stroke"
+       style="opacity:0.144;fill:#ffdd55;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.27138296;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:18.29999924;stroke-opacity:1;paint-order:markers fill stroke"
        id="rect5613"
        width="263.84024"
-       height="125.92712"
+       height="113.4539"
        x="242.01115"
        y="118.99602" />
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:2.9765625px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="9.2876158"
-       y="36.278576"
+       x="-25.213842"
+       y="19.274456"
        id="text12"><tspan
          sodipodi:role="line"
          id="tspan10"
-         x="9.2876158"
-         y="36.278576"
+         x="-25.213842"
+         y="19.274456"
          style="stroke-width:0.26458332px">DNA extraction</tspan><tspan
          sodipodi:role="line"
-         x="9.2876158"
-         y="39.999279"
+         x="-25.213842"
+         y="22.995159"
          style="stroke-width:0.26458332px"
          id="tspan365">- Qiagen PowerSoil</tspan><tspan
          sodipodi:role="line"
-         x="9.2876158"
-         y="43.719982"
+         x="-25.213842"
+         y="26.715862"
          style="stroke-width:0.26458332px"
          id="tspan367">- Qiagen Dneazy</tspan><tspan
          sodipodi:role="line"
-         x="9.2876158"
-         y="47.440685"
+         x="-25.213842"
+         y="30.436565"
          style="stroke-width:0.26458332px"
          id="tspan16" /></text>
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:2.9765625px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="48.242149"
-       y="36.278576"
+       x="16.915691"
+       y="19.274456"
        id="text22"><tspan
          sodipodi:role="line"
          id="tspan20"
-         x="48.242149"
-         y="36.278576"
+         x="16.915691"
+         y="19.274456"
          style="stroke-width:0.26458332px">16S metabarcoding </tspan><tspan
          sodipodi:role="line"
-         x="48.242149"
-         y="39.999279"
+         x="16.915691"
+         y="22.995159"
          style="stroke-width:0.26458332px"
          id="tspan24">library preparation</tspan><tspan
          sodipodi:role="line"
-         x="48.242149"
-         y="43.719982"
+         x="16.915691"
+         y="26.715862"
          style="stroke-width:0.26458332px"
-         id="tspan435"> - V3-V4 region</tspan><tspan
+         id="tspan435">- V3-V4 region</tspan><tspan
          sodipodi:role="line"
-         x="48.242149"
-         y="47.440685"
+         x="16.915691"
+         y="30.436565"
          style="stroke-width:0.26458332px"
          id="tspan437">- 341f/806r primers</tspan></text>
     <text
@@ -205,148 +205,168 @@
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:2.9765625px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="93.500778"
-       y="36.223225"
+       x="62.174316"
+       y="19.219105"
        id="text40"><tspan
          sodipodi:role="line"
          id="tspan38"
-         x="93.500778"
-         y="36.223225"
+         x="62.174316"
+         y="19.219105"
          style="stroke-width:0.26458332px">Illumina MiSeq sequencing </tspan><tspan
          sodipodi:role="line"
-         x="93.500778"
-         y="39.943928"
+         x="62.174316"
+         y="22.939808"
          style="stroke-width:0.26458332px"
          id="tspan42">- 2x300bp</tspan><tspan
          sodipodi:role="line"
-         x="93.500778"
-         y="43.664631"
+         x="62.174316"
+         y="26.660511"
          style="stroke-width:0.26458332px"
          id="tspan44">- 100k PE reads/sample</tspan></text>
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:2.9765625px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="142.8002"
-       y="36.339828"
+       x="111.47373"
+       y="18.390768"
        id="text48"><tspan
          sodipodi:role="line"
          id="tspan46"
-         x="142.8002"
-         y="36.339828"
+         x="111.47373"
+         y="18.390768"
          style="stroke-width:0.26458332px">Raw sequencing pre-processing </tspan><tspan
          sodipodi:role="line"
-         x="142.8002"
-         y="40.060532"
+         x="111.47373"
+         y="22.111471"
          style="stroke-width:0.26458332px"
          id="tspan50">- Trimmomatic (trims low quality ends)</tspan><tspan
          sodipodi:role="line"
-         x="142.8002"
-         y="43.781235"
+         x="111.47373"
+         y="25.832174"
          style="stroke-width:0.26458332px"
          id="tspan52">- Cutadapt in QIIME2 (removes primers)</tspan><tspan
          sodipodi:role="line"
-         x="142.8002"
-         y="47.501938"
+         x="111.47373"
+         y="29.552877"
          style="stroke-width:0.26458332px"
-         id="tspan56">- Dada2 in QIIME2 (merge reads, assign ASVs, remove chimeras)</tspan><tspan
+         id="tspan56">- Dada2 in QIIME2 (merge reads, </tspan><tspan
          sodipodi:role="line"
-         x="142.8002"
-         y="51.222641"
+         x="111.47373"
+         y="33.273582"
          style="stroke-width:0.26458332px"
-         id="tspan58">- sklearn in QIIME2 (assings taxonomies)</tspan></text>
+         id="tspan438">   assign ASVs, remove chimeras)</tspan><tspan
+         sodipodi:role="line"
+         x="111.47373"
+         y="36.994286"
+         style="stroke-width:0.26458332px"
+         id="tspan440" /><tspan
+         sodipodi:role="line"
+         x="111.47373"
+         y="40.714989"
+         style="stroke-width:0.26458332px"
+         id="tspan442" /><tspan
+         sodipodi:role="line"
+         x="111.47373"
+         y="44.435692"
+         style="stroke-width:0.26458332px"
+         id="tspan486">Taxonomy assingment</tspan><tspan
+         sodipodi:role="line"
+         x="111.47373"
+         y="48.156395"
+         style="stroke-width:0.26458332px"
+         id="tspan58">- sklearn in QIIME2 (with re-trained SILVA)</tspan></text>
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:2.9765625px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="215.11626"
-       y="65.86277"
+       x="188.07983"
+       y="18.771759"
        id="text62"><tspan
          sodipodi:role="line"
          id="tspan60"
-         x="215.11626"
-         y="65.86277"
-         style="stroke-width:0.26458332px">adjust SILVA 138 reference according </tspan><tspan
+         x="188.07983"
+         y="18.771759"
+         style="stroke-width:0.26458332px">Adjust SILVA 138 reference according </tspan><tspan
          sodipodi:role="line"
-         x="215.11626"
-         y="69.583473"
+         x="188.07983"
+         y="22.492462"
          style="stroke-width:0.26458332px"
          id="tspan439">to primers and amplicon size</tspan><tspan
          sodipodi:role="line"
-         x="215.11626"
-         y="73.304176"
+         x="188.07983"
+         y="26.213165"
          style="stroke-width:0.26458332px"
          id="tspan443">- rescript in QIIME2</tspan></text>
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:2.9765625px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="157.92938"
-       y="65.945488"
+       x="128.71959"
+       y="62.699715"
        id="text66"><tspan
          sodipodi:role="line"
-         x="157.92938"
-         y="65.945488"
+         x="128.71959"
+         y="62.699715"
          style="stroke-width:0.26458332px"
          id="tspan68">Export from QIIME2 as a BIOM file</tspan><tspan
          sodipodi:role="line"
-         x="157.92938"
-         y="69.666191"
+         x="128.71959"
+         y="66.420418"
          style="stroke-width:0.26458332px"
          id="tspan507">Import in R as phyloseq object</tspan></text>
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:2.9765625px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="100.06919"
-       y="65.773071"
+       x="70.859398"
+       y="62.527298"
        id="text142"><tspan
          sodipodi:role="line"
          id="tspan140"
-         x="100.06919"
-         y="65.773071"
+         x="70.859398"
+         y="62.527298"
          style="stroke-width:0.26458332px">decontaminate sequences #1.1</tspan><tspan
          sodipodi:role="line"
-         x="100.06919"
-         y="69.493774"
+         x="70.859398"
+         y="66.248001"
          style="stroke-width:0.26458332px"
          id="tspan144">- decontam::isContaminant()</tspan></text>
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:2.9765625px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="57.074406"
-       y="65.962059"
+       x="27.864616"
+       y="62.716286"
        id="text148"><tspan
          sodipodi:role="line"
          id="tspan146"
-         x="57.074406"
-         y="65.962059"
+         x="27.864616"
+         y="62.716286"
          style="stroke-width:0.26458332px">remove chloroplast</tspan><tspan
          sodipodi:role="line"
-         x="57.074406"
-         y="69.682762"
+         x="27.864616"
+         y="66.436989"
          style="stroke-width:0.26458332px"
          id="tspan150">and mitocondrial </tspan><tspan
          sodipodi:role="line"
-         x="57.074406"
-         y="73.403465"
+         x="27.864616"
+         y="70.157692"
          style="stroke-width:0.26458332px"
          id="tspan761">DNA #1.2</tspan></text>
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:2.9765625px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="0.94493794"
-       y="66.056541"
+       x="-27.136486"
+       y="63.589645"
        id="text154"><tspan
          sodipodi:role="line"
-         x="0.94493794"
-         y="66.056541"
+         x="-27.136486"
+         y="63.589645"
          style="stroke-width:0.26458332px"
-         id="tspan156">Remove rare ASVs (above 8 </tspan><tspan
+         id="tspan156">Remove rare ASVs (below </tspan><tspan
          sodipodi:role="line"
-         x="0.94493794"
-         y="69.777245"
+         x="-27.136486"
+         y="67.310349"
          style="stroke-width:0.26458332px"
-         id="tspan765">occurences) #1.3</tspan></text>
+         id="tspan765">8 occurences) #1.3</tspan></text>
     <g
        id="g4737"
-       transform="matrix(0.23570676,0,0,0.2812037,33.536332,36.321441)">
+       transform="matrix(0.23570676,0,0,0.2812037,2.2098754,19.317328)">
       <rect
          y="4.4464283"
          x="16.252975"
@@ -375,7 +395,7 @@
     </g>
     <g
        id="g4737-7"
-       transform="matrix(0.23570676,0,0,0.28120369,80.124322,36.815507)">
+       transform="matrix(0.23570676,0,0,0.28120369,48.797864,19.811394)">
       <rect
          y="4.4464283"
          x="16.252975"
@@ -404,7 +424,7 @@
     </g>
     <g
        id="g4737-3"
-       transform="matrix(0.23570676,0,0,0.28120369,127.6983,37.75095)">
+       transform="matrix(0.23570676,0,0,0.28120369,96.371842,20.746837)">
       <rect
          y="4.4464283"
          x="16.252975"
@@ -433,7 +453,7 @@
     </g>
     <g
        id="g4737-0"
-       transform="matrix(-0.23570676,0,0,0.28120369,217.58593,48.6548)">
+       transform="matrix(-0.23570676,0,0,0.28120369,194.23477,45.598017)">
       <rect
          y="4.4464283"
          x="16.252975"
@@ -462,16 +482,16 @@
     </g>
     <g
        id="g4737-04"
-       transform="matrix(0,0.23570676,-0.28120369,0,174.52461,51.055498)">
+       transform="matrix(0,0.23570676,-0.28120369,0,143.19814,47.809727)">
       <rect
-         y="4.4464283"
-         x="16.252975"
+         y="4.2088161"
+         x="17.953836"
          height="4.9136906"
-         width="25.513393"
+         width="17.576044"
          id="rect215-0"
-         style="opacity:1;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.25999999;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:18.29999924;stroke-opacity:1;paint-order:markers fill stroke" />
+         style="opacity:1;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.21579918;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:18.29999924;stroke-opacity:1;paint-order:markers fill stroke" />
       <path
-         transform="rotate(-1.7714248,-44.302887,479.17691)"
+         transform="rotate(-1.7714248,-55.105952,680.75788)"
          inkscape:transform-center-y="0.002147052"
          inkscape:transform-center-x="-1.9033871"
          d="M 50.647577,16.433813 51.048183,3.2399512 62.2741,10.183817 Z"
@@ -491,7 +511,7 @@
     </g>
     <g
        id="g4737-0-3"
-       transform="matrix(-0.23570676,0,0,0.28120369,159.23868,64.394059)">
+       transform="matrix(-0.23570676,0,0,0.28120369,130.02889,61.148288)">
       <rect
          y="4.4464283"
          x="16.252975"
@@ -520,7 +540,7 @@
     </g>
     <g
        id="g4737-0-0"
-       transform="matrix(-0.23570676,0,0,0.28120369,101.31927,64.34542)">
+       transform="matrix(-0.23570676,0,0,0.28120369,72.10948,61.099649)">
       <rect
          y="4.4464283"
          x="16.252975"
@@ -549,7 +569,7 @@
     </g>
     <g
        id="g4737-0-2"
-       transform="matrix(-0.23570676,0,0,0.28120369,56.623182,64.341487)">
+       transform="matrix(-0.23570676,0,0,0.28120369,27.413392,61.095716)">
       <rect
          y="4.4464283"
          x="16.252975"
@@ -579,76 +599,81 @@
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:2.9765625px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="-20.540136"
+       x="-22.713499"
        y="166.59694"
        id="text4865"><tspan
          sodipodi:role="line"
          id="tspan4863"
-         x="-20.540136"
+         x="-22.713499"
          y="166.59694"
          style="stroke-width:0.26458332px">Unormalized data with</tspan><tspan
          sodipodi:role="line"
-         x="-20.540136"
+         x="-22.713499"
          y="170.31764"
          style="stroke-width:0.26458332px"
          id="tspan527">uneven library sizes #1.3</tspan></text>
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:2.9765625px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="-24.854248"
-       y="135.71948"
+       x="-22.586391"
+       y="131.65623"
        id="text4869"><tspan
          sodipodi:role="line"
-         id="tspan4867"
-         x="-24.854248"
-         y="135.71948"
-         style="stroke-width:0.26458332px">Rarefaction at minimum library size #1.4a</tspan><tspan
+         x="-22.586391"
+         y="131.65623"
+         style="stroke-width:0.26458332px"
+         id="tspan581">Rarefaction #1.4a</tspan><tspan
          sodipodi:role="line"
-         x="-24.854248"
-         y="139.44019"
+         x="-22.586391"
+         y="135.37694"
          style="stroke-width:0.26458332px"
          id="tspan525">- phyloseq::rarefy_even_depth()</tspan><tspan
          sodipodi:role="line"
-         x="-24.854248"
-         y="143.16089"
+         x="-22.586391"
+         y="139.09764"
          style="stroke-width:0.26458332px"
-         id="tspan523">- output: Rarefied data (8678 seq/sample)</tspan></text>
+         id="tspan523">- output: Rarefied data </tspan><tspan
+         sodipodi:role="line"
+         x="-22.586391"
+         y="142.81834"
+         style="stroke-width:0.26458332px"
+         id="tspan587">  (8678 seq/sample)</tspan></text>
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:2.9765625px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="-22.849915"
-       y="101.50964"
+       x="-21.999468"
+       y="100.28123"
        id="text4873"><tspan
          sodipodi:role="line"
          id="tspan4871"
-         x="-22.849915"
-         y="101.50964"
+         x="-21.999468"
+         y="100.28123"
          style="stroke-width:0.26458332px">Cumulative Sum Scaling </tspan><tspan
          sodipodi:role="line"
-         x="-22.849915"
-         y="105.23035"
+         x="-21.999468"
+         y="104.00193"
          style="stroke-width:0.26458332px"
          id="tspan521">normalization #1.4b</tspan><tspan
          sodipodi:role="line"
-         x="-22.849915"
-         y="108.95105"
+         x="-21.999468"
+         y="107.72263"
          style="stroke-width:0.26458332px"
          id="tspan511">- metagenomeSeq::MRcounts()</tspan><tspan
          sodipodi:role="line"
-         x="-22.849915"
-         y="112.67175"
+         x="-21.999468"
+         y="111.44334"
          style="stroke-width:0.26458332px"
          id="tspan513">- output: CSS-normalized data</tspan></text>
     <g
        id="g4737-0-2-3"
-       transform="matrix(0.23570676,0,0,0.28120369,36.574055,98.671657)">
+       transform="matrix(0.23570676,0,0,0.28120369,40.448311,98.293681)">
       <rect
          y="4.4464283"
-         x="16.252975"
+         x="-41.877037"
          height="4.9136906"
-         width="25.513393"
+         width="83.643402"
          id="rect215-5-8-3"
-         style="opacity:1;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.25999999;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:18.29999924;stroke-opacity:1;paint-order:markers fill stroke" />
+         style="opacity:1;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.47076598;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:18.29999924;stroke-opacity:1;paint-order:markers fill stroke" />
       <path
          transform="rotate(-1.7714248,-44.302887,479.17691)"
          inkscape:transform-center-y="0.002147052"
@@ -759,12 +784,12 @@
          x="161.3338"
          y="95.862946"
          style="stroke-width:0.26458332px"
-         id="tspan5044">CSS data partition into list </tspan><tspan
+         id="tspan5044">CSS data partition into list #1.4b </tspan><tspan
          sodipodi:role="line"
          x="161.3338"
          y="99.583649"
          style="stroke-width:0.26458332px"
-         id="tspan4968">- metagMisc::phyloseq_sep_variable() #1.4b </tspan><tspan
+         id="tspan4968">- metagMisc::phyloseq_sep_variable()  </tspan><tspan
          sodipodi:role="line"
          x="161.3338"
          y="103.30435"
@@ -834,37 +859,37 @@
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:2.9765625px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="58.264759"
-       y="131.56017"
+       x="58.453747"
+       y="131.27669"
        id="text5038"><tspan
          sodipodi:role="line"
          id="tspan5036"
-         x="58.264759"
-         y="131.56017"
+         x="58.453747"
+         y="131.27669"
          style="stroke-width:0.26458332px">Alpha diversity Analysis #3.1</tspan><tspan
          sodipodi:role="line"
-         x="58.264759"
-         y="135.28087"
+         x="58.453747"
+         y="134.99739"
          style="stroke-width:0.26458332px"
-         id="tspan5040">phyloseq::estimate_richness() to obtain diversity metrics</tspan><tspan
+         id="tspan5040">- phyloseq::estimate_richness() to obtain diversity metrics</tspan><tspan
          sodipodi:role="line"
-         x="58.264759"
-         y="139.00157"
+         x="58.453747"
+         y="138.71809"
          style="stroke-width:0.26458332px"
-         id="tspan5054">car::leveneTest() to check homogeniety of variances</tspan><tspan
+         id="tspan5054">- car::leveneTest() to check homogeniety of variances</tspan><tspan
          sodipodi:role="line"
-         x="58.264759"
-         y="142.72227"
+         x="58.453747"
+         y="142.4388"
          style="stroke-width:0.26458332px"
-         id="tspan5056">car:: anova() to test differences in alpha diversity</tspan><tspan
+         id="tspan5056">- car::anova() to test differences in alpha diversity</tspan><tspan
          sodipodi:role="line"
-         x="58.264759"
-         y="146.44298"
+         x="58.453747"
+         y="146.1595"
          style="stroke-width:0.26458332px"
-         id="tspan5058">agricolae::HSD.test() for post-hoc comparisons</tspan><tspan
+         id="tspan5058">- agricolae::HSD.test() for post-hoc comparisons</tspan><tspan
          sodipodi:role="line"
-         x="58.264759"
-         y="150.16368"
+         x="58.453747"
+         y="149.8802"
          style="stroke-width:0.26458332px"
          id="tspan5052" /></text>
     <text
@@ -888,11 +913,11 @@
        transform="matrix(0.23570676,0,0,0.28120369,40.568432,133.83435)">
       <rect
          y="4.4464283"
-         x="16.252975"
+         x="-44.282417"
          height="4.9136906"
-         width="25.513393"
+         width="86.048782"
          id="rect215-5-8-3-6"
-         style="opacity:1;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.25999999;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:18.29999924;stroke-opacity:1;paint-order:markers fill stroke" />
+         style="opacity:1;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.47748706;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:18.29999924;stroke-opacity:1;paint-order:markers fill stroke" />
       <path
          transform="rotate(-1.7714248,-44.302887,479.17691)"
          inkscape:transform-center-y="0.002147052"
@@ -922,12 +947,12 @@
          x="157.20209"
          y="130.58057"
          style="stroke-width:0.26458332px"
-         id="tspan5044-9">Rarefied data partition into list  </tspan><tspan
+         id="tspan5044-9">Rarefied data partition into list #1.4a  </tspan><tspan
          sodipodi:role="line"
          x="157.20209"
          y="134.30127"
          style="stroke-width:0.26458332px"
-         id="tspan5050-8">- metagMisc::phyloseq_sep_variable() #1.4a </tspan><tspan
+         id="tspan5050-8">- metagMisc::phyloseq_sep_variable()  </tspan><tspan
          sodipodi:role="line"
          x="157.20209"
          y="138.02197"
@@ -1022,36 +1047,56 @@
     <text
        id="text5209"
        y="139.48653"
-       x="252.698"
+       x="251.09438"
        style="font-style:normal;font-weight:normal;font-size:2.9765625px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458335px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        xml:space="preserve"><tspan
          style="stroke-width:0.26458335px"
          y="139.48653"
-         x="252.698"
+         x="251.09438"
          id="tspan5207"
          sodipodi:role="line">Neutral models (rhizosphere samples only) #4.6</tspan><tspan
          id="tspan5217"
          style="stroke-width:0.26458335px"
          y="143.20723"
-         x="252.698"
+         x="251.09438"
          sodipodi:role="line">- metagMisc::phyloseq_sep_variable() to further partiton data according stress </tspan><tspan
          id="tspan5211"
          style="stroke-width:0.26458335px"
          y="146.92793"
-         x="252.698"
-         sodipodi:role="line">- tyRa::fit_sncm() to fit neutral models for each stress (4 models per plant sp)</tspan></text>
+         x="251.09438"
+         sodipodi:role="line">- tyRa::fit_sncm() to fit neutral models for each stress (4 models per plant sp)</tspan><tspan
+         style="stroke-width:0.26458335px"
+         y="150.64864"
+         x="251.09438"
+         sodipodi:role="line"
+         id="tspan598">- phyloseq::subset_taxa() to retain only ASVs occuring above expected the 4 neutral models</tspan><tspan
+         style="stroke-width:0.26458335px"
+         y="154.36934"
+         x="251.09438"
+         sodipodi:role="line"
+         id="tspan600">- phyloseq::merge_phyloseq() to regroup the 4 stresses into one 24-sample object per plant species </tspan><tspan
+         style="stroke-width:0.26458335px"
+         y="158.09004"
+         x="251.09438"
+         sodipodi:role="line"
+         id="tspan602"></tspan><tspan
+         style="stroke-width:0.26458335px"
+         y="161.81075"
+         x="251.09438"
+         sodipodi:role="line"
+         id="tspan604" /></text>
     <g
        id="g4737-7-9"
-       transform="matrix(0.23570676,0,0,0.28120369,239.67174,139.41458)">
+       transform="matrix(0.23570676,0,0,0.28120369,242.27946,131.3276)">
       <rect
-         y="4.4464283"
-         x="-96.398979"
+         y="38.049847"
+         x="-111.63305"
          height="4.9136906"
-         width="138.16536"
+         width="129.66106"
          id="rect215-4-8"
-         style="opacity:1;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.60504651;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:18.29999924;stroke-opacity:1;paint-order:markers fill stroke" />
+         style="opacity:1;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.58613002;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:18.29999924;stroke-opacity:1;paint-order:markers fill stroke" />
       <path
-         transform="rotate(-1.7714248,-44.302887,479.17691)"
+         transform="rotate(-1.7714248,1035.3433,1219.6172)"
          inkscape:transform-center-y="0.002147052"
          inkscape:transform-center-x="-1.9033871"
          d="M 50.647577,16.433813 51.048183,3.2399512 62.2741,10.183817 Z"
@@ -1076,59 +1121,30 @@
          id="rect215-4-8-4"
          style="opacity:1;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.70561939;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:18.29999924;stroke-opacity:1;paint-order:markers fill stroke" />
     </g>
-    <g
-       id="g4737-04-0"
-       transform="matrix(0,0.23570676,-0.28120369,0,314.53479,145.08851)">
-      <rect
-         y="4.4464283"
-         x="16.252975"
-         height="4.9136906"
-         width="25.513393"
-         id="rect215-0-7"
-         style="opacity:1;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.25999999;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:18.29999924;stroke-opacity:1;paint-order:markers fill stroke" />
-      <path
-         transform="rotate(-1.7714248,-44.302887,479.17691)"
-         inkscape:transform-center-y="0.002147052"
-         inkscape:transform-center-x="-1.9033871"
-         d="M 50.647577,16.433813 51.048183,3.2399512 62.2741,10.183817 Z"
-         inkscape:randomized="0"
-         inkscape:rounded="0"
-         inkscape:flatsided="true"
-         sodipodi:arg2="3.1719464"
-         sodipodi:arg1="2.1247488"
-         sodipodi:r2="3.8104951"
-         sodipodi:r1="7.6209903"
-         sodipodi:cy="9.952527"
-         sodipodi:cx="54.65662"
-         sodipodi:sides="3"
-         id="path4733-1-8"
-         style="opacity:1;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.25999999;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:18.29999924;stroke-opacity:1;paint-order:markers fill stroke"
-         sodipodi:type="star" />
-    </g>
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:8.86487103px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.89834756px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="6.4409924"
-       y="31.895683"
+       x="-24.880917"
+       y="11.404651"
        id="text5294"
        transform="scale(1.02881,0.97199678)"><tspan
          sodipodi:role="line"
          id="tspan5292"
-         x="6.4409924"
-         y="31.895683"
+         x="-24.880917"
+         y="11.404651"
          style="font-size:8.86487103px;stroke-width:0.89834756px">Pre-processing</tspan></text>
     <text
        xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:9.82797813px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.87359792px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="45.317005"
-       y="88.786827"
+       style="font-style:normal;font-weight:normal;font-size:8.45064259px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.75116813px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="45.334492"
+       y="87.740372"
        id="text5294-7"
        transform="scale(1.0004661,0.99953412)"><tspan
          sodipodi:role="line"
          id="tspan5292-3"
-         x="45.317005"
-         y="88.786827"
-         style="stroke-width:0.87359792px">Alpha and beta diversity</tspan></text>
+         x="45.334492"
+         y="87.740372"
+         style="stroke-width:0.75116813px">Alpha and beta diversity</tspan></text>
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:2.9765625px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
@@ -1136,28 +1152,13 @@
        y="160.158"
        id="text5346"><tspan
          sodipodi:role="line"
-         id="tspan5344"
          x="250.91887"
-         y="160.158"
-         style="stroke-width:0.26458332px">phyloseq::subset_taxa() to retain only ASVs occuring above expected the 4 neutral models</tspan><tspan
-         sodipodi:role="line"
-         x="250.91887"
-         y="163.87871"
-         style="stroke-width:0.26458332px"
-         id="tspan5348">phyloseq::merge_phyloseq() to regroup the 4 stresses into one 24-sample object per plant species </tspan><tspan
-         sodipodi:role="line"
-         x="250.91887"
-         y="167.59941"
-         style="stroke-width:0.26458332px"
-         id="tspan5350" /><tspan
-         sodipodi:role="line"
-         x="250.91887"
-         y="171.32011"
+         y="162.87361"
          style="stroke-width:0.26458332px"
          id="tspan5352" /></text>
     <g
        id="g4737-04-0-3"
-       transform="matrix(0,0.23570676,-0.28120369,0,282.35349,162.47446)">
+       transform="matrix(0,0.23570676,-0.28120369,0,282.35349,154.00774)">
       <rect
          y="4.4464283"
          x="16.252975"
@@ -1186,7 +1187,7 @@
     </g>
     <g
        id="g4737-04-0-3-5"
-       transform="matrix(0,0.23570676,-0.28120369,0,282.52897,199.856)">
+       transform="matrix(0,0.23570676,-0.28120369,0,282.52897,191.38928)">
       <rect
          y="4.4464283"
          x="16.252975"
@@ -1217,31 +1218,31 @@
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:2.9765625px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        x="249.8091"
-       y="214.9469"
+       y="206.48035"
        id="text5402"><tspan
          sodipodi:role="line"
          id="tspan5400"
          x="249.8091"
-         y="214.9469"
+         y="206.48035"
          style="stroke-width:0.26458332px">Check for artefacts with permutations #4.9</tspan><tspan
          sodipodi:role="line"
          x="249.8091"
-         y="218.6676"
+         y="210.20105"
          style="stroke-width:0.26458332px"
          id="tspan5404">- base::replicate() to draw ASVs at random</tspan><tspan
          sodipodi:role="line"
          x="249.8091"
-         y="222.38831"
+         y="213.92175"
          style="stroke-width:0.26458332px"
          id="tspan632">- base::lapply() to execute permanovas </tspan><tspan
          sodipodi:role="line"
          x="249.8091"
-         y="226.10901"
+         y="217.64246"
          style="stroke-width:0.26458332px"
          id="tspan674">   on 100 phyloseq objects </tspan></text>
     <g
        id="g4737-04-0-3-7"
-       transform="matrix(0,0.23570676,-0.28120369,0,362.66122,200.35985)">
+       transform="matrix(0,0.23570676,-0.28120369,0,362.66122,191.89313)">
       <rect
          y="4.4464283"
          x="16.252975"
@@ -1272,86 +1273,86 @@
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:2.9765625px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        x="331.81458"
-       y="177.82466"
+       y="169.35811"
        id="text5431"><tspan
          sodipodi:role="line"
          x="331.81458"
-         y="177.82466"
+         y="169.35811"
          style="stroke-width:0.26458332px"
          id="tspan5445">Turn phyloseq object into metacoder object #4.10</tspan><tspan
          sodipodi:role="line"
          x="331.81458"
-         y="181.54536"
+         y="173.07881"
          style="stroke-width:0.26458332px"
          id="tspan658">- metacoder:: parse_phyloseq</tspan><tspan
          sodipodi:role="line"
          x="331.81458"
-         y="185.26607"
+         y="176.79951"
          style="stroke-width:0.26458332px"
          id="tspan666" /><tspan
          sodipodi:role="line"
          x="331.81458"
-         y="188.98677"
+         y="180.52022"
          style="stroke-width:0.26458332px"
          id="tspan668" /><tspan
          sodipodi:role="line"
          x="331.81458"
-         y="192.70747"
+         y="184.24092"
          style="stroke-width:0.26458332px"
          id="tspan660" /><tspan
          sodipodi:role="line"
          x="331.81458"
-         y="196.42818"
+         y="187.96162"
          style="stroke-width:0.26458332px"
          id="tspan662">Pairwise comparison for differential abudance #4.10</tspan><tspan
          sodipodi:role="line"
          x="331.81458"
-         y="200.14888"
+         y="191.68233"
          style="stroke-width:0.26458332px"
          id="tspan5451">- metacoder::compare_groups() </tspan><tspan
          sodipodi:role="line"
          x="331.81458"
-         y="203.86958"
+         y="195.40303"
          style="stroke-width:0.26458332px"
          id="tspan5461" /><tspan
          sodipodi:role="line"
          x="331.81458"
-         y="207.59029"
+         y="199.12373"
          style="stroke-width:0.26458332px"
          id="tspan670" /><tspan
          sodipodi:role="line"
          x="331.81458"
-         y="211.31099"
+         y="202.84444"
          style="stroke-width:0.26458332px"
          id="tspan5463" /><tspan
          sodipodi:role="line"
          x="331.81458"
-         y="215.03169"
+         y="206.56514"
          style="stroke-width:0.26458332px"
          id="tspan5465">Visualization of all phylogenetic levels #4.10</tspan><tspan
          sodipodi:role="line"
          x="331.81458"
-         y="218.7524"
+         y="210.28584"
          style="stroke-width:0.26458332px"
-         id="tspan5443"> - metacoder::heat_tree_matrix() for constructing</tspan><tspan
+         id="tspan5443">- metacoder::heat_tree_matrix() for constructing</tspan><tspan
          sodipodi:role="line"
          x="331.81458"
-         y="222.4731"
+         y="214.00655"
          style="stroke-width:0.26458332px"
          id="tspan5453">matrix of phylogenetic trees highlighintg </tspan><tspan
          sodipodi:role="line"
          x="331.81458"
-         y="226.1938"
+         y="217.72725"
          style="stroke-width:0.26458332px"
          id="tspan5455">differential ASV abundance </tspan><tspan
          sodipodi:role="line"
          x="331.81458"
-         y="229.91451"
+         y="221.44795"
          style="stroke-width:0.26458332px"
          id="tspan5441" /></text>
     <g
        id="g4737-04-0-3-6"
-       transform="matrix(0,0.23570676,-0.28120369,0,362.93782,162.3179)">
+       transform="matrix(0,0.23570676,-0.28120369,0,362.93782,153.85118)">
       <rect
          y="4.4464283"
          x="16.252975"
@@ -1380,7 +1381,7 @@
     </g>
     <g
        id="g4737-04-0-3-5-4"
-       transform="matrix(0,0.23570676,-0.28120369,0,362.71776,181.66646)">
+       transform="matrix(0,0.23570676,-0.28120369,0,362.71776,173.19974)">
       <rect
          y="4.4464283"
          x="16.252975"
@@ -1410,46 +1411,46 @@
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:2.9765625px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="412.53961"
-       y="214.2794"
+       x="416.88635"
+       y="208.23178"
        id="text5564"><tspan
          sodipodi:role="line"
-         x="412.53961"
-         y="214.2794"
+         x="416.88635"
+         y="208.23178"
          style="stroke-width:0.26458332px"
          id="tspan5611">Plot diversity indexes of both ASV sets #4.12</tspan><tspan
          sodipodi:role="line"
-         x="412.53961"
-         y="218.00011"
+         x="416.88635"
+         y="211.95248"
          style="stroke-width:0.26458332px"
          id="tspan5599">- ggplot::geom_smooth() to plot loess regrssion</tspan><tspan
          sodipodi:role="line"
-         x="412.53961"
-         y="221.72081"
+         x="416.88635"
+         y="215.67319"
          style="stroke-width:0.26458332px"
          id="tspan734">- base::lapply() to execute custom function for both </tspan><tspan
          sodipodi:role="line"
-         x="412.53961"
-         y="225.44151"
+         x="416.88635"
+         y="219.39389"
          style="stroke-width:0.26458332px"
          id="tspan736">   plant species</tspan><tspan
          sodipodi:role="line"
-         x="412.53961"
-         y="229.16222"
+         x="416.88635"
+         y="223.11459"
          style="stroke-width:0.26458332px"
          id="tspan738">- repeat for Class, Order and Family  </tspan></text>
     <text
        xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:9.77441216px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.86883652px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="243.75665"
-       y="127.69149"
+       style="font-style:normal;font-weight:normal;font-size:9.28907204px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.82569516px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="243.80405"
+       y="127.32275"
        id="text5294-7-8"
        transform="scale(0.9950132,1.0050118)"><tspan
          sodipodi:role="line"
          id="tspan5292-3-1"
-         x="243.75665"
-         y="127.69149"
-         style="stroke-width:0.86883652px">Neutral models</tspan></text>
+         x="243.80405"
+         y="127.32275"
+         style="stroke-width:0.82569516px">Neutral models</tspan></text>
     <g
        id="g4737-0-2-3-3-3"
        transform="matrix(0.20307477,0,0,0.28120369,43.335659,181.83191)">
@@ -1509,7 +1510,7 @@
          x="51.294662"
          y="219.68816"
          style="stroke-width:0.26458332px"
-         id="tspan5786"> - deseq2::DESeq() in treatment-control comparisons</tspan><tspan
+         id="tspan5786">- deseq2::DESeq() in treatment-control comparisons</tspan><tspan
          sodipodi:role="line"
          x="51.294662"
          y="223.40886"
@@ -1601,23 +1602,23 @@
     </g>
     <text
        xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:7.42393827px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.65990555px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="50.187035"
-       y="172.10608"
+       style="font-style:normal;font-weight:normal;font-size:7.1740222px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.63769078px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="48.497562"
+       y="178.1093"
        id="text5294-7-8-5"
-       transform="scale(0.95584144,1.0461986)"><tspan
+       transform="scale(0.98913936,1.0109799)"><tspan
          sodipodi:role="line"
          id="tspan5292-3-1-7"
-         x="50.187035"
-         y="172.10608"
-         style="stroke-width:0.65990555px">Differential abudance</tspan></text>
+         x="48.497562"
+         y="178.1093"
+         style="stroke-width:0.63769078px">Differential abudance</tspan></text>
     <rect
-       style="opacity:1;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.17969596;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:18.29999924;stroke-opacity:1;paint-order:markers fill stroke"
+       style="opacity:1;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.1589029;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:18.29999924;stroke-opacity:1;paint-order:markers fill stroke"
        id="rect215-0-7-6"
-       width="43.338825"
+       width="33.88942"
        height="1.381748"
-       x="151.4166"
-       y="-206.37473"
+       x="150.28267"
+       y="-206.9417"
        transform="rotate(90)" />
     <path
        sodipodi:type="star"
@@ -1636,27 +1637,27 @@
        d="M 50.647577,16.433813 51.048183,3.2399512 62.2741,10.183817 Z"
        inkscape:transform-center-x="-1.9033871"
        inkscape:transform-center-y="0.002147052"
-       transform="matrix(0.00869264,0.23559412,-0.2810693,0.00728623,207.94578,181.33882)" />
+       transform="matrix(0.00869264,0.23559412,-0.2810693,0.00728623,208.56943,171.25145)" />
     <text
        id="text5961"
-       y="198.15929"
-       x="140.60713"
+       y="191.82982"
+       x="140.75697"
        style="font-style:normal;font-weight:normal;font-size:2.9765625px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458335px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        xml:space="preserve"><tspan
          style="stroke-width:0.26458335px"
-         y="198.15929"
-         x="140.60713"
+         y="191.82982"
+         x="140.75697"
          id="tspan5959"
          sodipodi:role="line">Perform feature selection #7.1 </tspan><tspan
          style="stroke-width:0.26458335px"
-         y="201.87999"
-         x="140.60713"
+         y="195.55052"
+         x="140.75697"
          sodipodi:role="line"
          id="tspan1038">- boruta::Boruta() to define ASVs important </tspan><tspan
          id="tspan5963"
          style="stroke-width:0.26458335px"
-         y="205.60069"
-         x="140.60713"
+         y="199.27122"
+         x="140.75697"
          sodipodi:role="line">for random forest predictions of stress treatment</tspan></text>
     <text
        id="text6085"
@@ -1668,7 +1669,7 @@
          y="204.48184"
          x="-50.759533"
          id="tspan6083"
-         sodipodi:role="line">further filter data, keeping only ASVs composing </tspan><tspan
+         sodipodi:role="line">Further filter data, keeping only ASVs composing </tspan><tspan
          id="tspan6087"
          style="stroke-width:0.26458335px"
          y="208.20255"
@@ -2052,11 +2053,11 @@
        transform="matrix(0,0.23570676,-0.28120369,0,155.27147,205.73819)">
       <rect
          y="4.4464283"
-         x="16.252975"
+         x="-18.614662"
          height="4.9136906"
-         width="25.513393"
+         width="60.381031"
          id="rect215-0-7-7-8-9"
-         style="opacity:1;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.25999999;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:18.29999924;stroke-opacity:1;paint-order:markers fill stroke" />
+         style="opacity:1;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.39998111;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:18.29999924;stroke-opacity:1;paint-order:markers fill stroke" />
       <path
          transform="rotate(-1.7714248,-44.302887,479.17691)"
          inkscape:transform-center-y="0.002147052"
@@ -2086,7 +2087,7 @@
          id="tspan5986"
          x="148.66553"
          y="222.73325"
-         style="stroke-width:0.26458332px">Evaluate Random Forest performance # 7.3</tspan><tspan
+         style="stroke-width:0.26458332px">Evaluate Random Forest performance #7.3</tspan><tspan
          sodipodi:role="line"
          x="148.66553"
          y="226.45395"
@@ -2125,16 +2126,16 @@
          id="tspan1057" /></text>
     <text
        xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:8.68890285px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.77234679px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="144.93929"
-       y="175.73787"
+       style="font-style:normal;font-weight:normal;font-size:7.94416428px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.70614785px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="139.85927"
+       y="183.10889"
        id="text5294-7-8-5-4"
-       transform="scale(0.95569185,1.0463624)"><tspan
+       transform="scale(1.0091276,0.99095497)"><tspan
          sodipodi:role="line"
          id="tspan5292-3-1-7-8"
-         x="144.93929"
-         y="175.73787"
-         style="stroke-width:0.77234679px">Random Forest</tspan></text>
+         x="139.85927"
+         y="183.10889"
+         style="stroke-width:0.70614785px">Random Forest</tspan></text>
     <g
        id="g4737-0-2-3-3-3-5"
        transform="matrix(-0.23570676,0,0,0.28120369,44.190342,199.52877)">
@@ -2233,17 +2234,17 @@
          id="tspan5292-3-1-7-3"
          x="-51.450333"
          y="194.25945"
-         style="stroke-width:0.86883652px">network analsyis</tspan></text>
+         style="stroke-width:0.86883652px">Network analsyis</tspan></text>
     <g
        id="g4737-04-9-7-3-2"
        transform="matrix(0.23570676,0,0,0.28120369,56.135868,266.41901)">
       <rect
          y="4.4464283"
-         x="-155.3308"
+         x="-50.095428"
          height="4.9136906"
-         width="197.09715"
+         width="91.861786"
          id="rect215-0-9-1-4-5"
-         style="opacity:1;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.72265232;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:18.29999924;stroke-opacity:1;paint-order:markers fill stroke" />
+         style="opacity:1;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.49335173;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:18.29999924;stroke-opacity:1;paint-order:markers fill stroke" />
       <path
          transform="rotate(-1.7714248,-44.302887,479.17691)"
          inkscape:transform-center-y="0.002147052"
@@ -2262,6 +2263,21 @@
          id="path4733-1-2-4-8-1"
          style="opacity:1;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.25999999;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:18.29999924;stroke-opacity:1;paint-order:markers fill stroke"
          sodipodi:type="star" />
+      <rect
+         y="90.618233"
+         x="-83.316483"
+         height="4.9136906"
+         width="38.742985"
+         id="rect215-0-9-1-4-5-1"
+         style="opacity:1;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.32039502;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:18.29999924;stroke-opacity:1;paint-order:markers fill stroke" />
+      <rect
+         y="44.573498"
+         x="4.4193401"
+         height="5.8621478"
+         width="91.112579"
+         id="rect215-0-9-1-4-5-8"
+         style="opacity:1;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.53666455;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:18.29999924;stroke-opacity:1;paint-order:markers fill stroke"
+         transform="rotate(90)" />
     </g>
     <g
        id="g4737-04-9-7-3-1"
@@ -2297,11 +2313,11 @@
        transform="matrix(0,0.23570676,-0.28120369,0,143.82497,250.63474)">
       <rect
          y="4.4464283"
-         x="-175.40376"
+         x="-209.1375"
          height="4.9136906"
-         width="217.17012"
+         width="250.90385"
          id="rect215-0-9-1-4-3-9"
-         style="opacity:1;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.75855887;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:18.29999924;stroke-opacity:1;paint-order:markers fill stroke" />
+         style="opacity:1;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.81534785;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:18.29999924;stroke-opacity:1;paint-order:markers fill stroke" />
       <path
          transform="rotate(-1.7714248,-44.302887,479.17691)"
          inkscape:transform-center-y="0.002147052"
@@ -2403,7 +2419,7 @@
          x="54.533329"
          y="321.97067"
          style="stroke-width:0.26458332px"
-         id="tspan6499">reshape p values and odds ratio values #9.3</tspan><tspan
+         id="tspan6499">Reshape p values and odds ratio values #9.3</tspan><tspan
          sodipodi:role="line"
          x="54.533329"
          y="325.69138"
@@ -2439,7 +2455,7 @@
          x="55.212154"
          y="354.54474"
          style="stroke-width:0.26458332px"
-         id="tspan6505">- metacoder::heat_tree () to visualize relevant ASVs in each data partition</tspan></text>
+         id="tspan6505">- metacoder::heat_tree () to visualize relevant ASVs in each data partition, ploting p values and odds ratio </tspan></text>
     <g
        id="g4737-04-0-3-7-4-4-6"
        transform="matrix(0,0.23570676,-0.28120369,0,117.52103,279.77916)">
@@ -2530,113 +2546,66 @@
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:9.77441216px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.86883652px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="46.678543"
-       y="260.73175"
+       x="52.050724"
+       y="259.80096"
        id="text5294-7-8-5-9"
        transform="scale(0.99501319,1.0050118)"><tspan
          sodipodi:role="line"
          id="tspan5292-3-1-7-31"
-         x="46.678543"
-         y="260.73175"
+         x="52.050724"
+         y="259.80096"
          style="stroke-width:0.86883652px">Fisher tests</tspan></text>
     <rect
        style="opacity:0.144;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.35106102;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:18.29999924;stroke-opacity:1;paint-order:markers fill stroke"
        id="rect7618"
        width="69.81443"
        height="97.737244"
-       x="-29.714685"
-       y="79.025955" />
+       x="-33.541561"
+       y="79.505943" />
     <g
        id="g4737-04-6"
-       transform="matrix(0,0.23570676,-0.28120369,0,26.323656,90.611389)">
+       transform="matrix(0,0.2409521,-0.28120369,0,-23.191225,76.906531)">
       <rect
-         y="4.4464283"
-         x="-69.92395"
+         y="18.284655"
+         x="-17.400866"
          height="4.9136906"
-         width="111.69032"
+         width="396.32693"
          id="rect215-0-2"
-         style="opacity:1;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.54399759;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:18.29999924;stroke-opacity:1;paint-order:markers fill stroke" />
-      <path
-         transform="rotate(-1.7714248,-44.302887,479.17691)"
-         inkscape:transform-center-y="0.002147052"
-         inkscape:transform-center-x="-1.9033871"
-         d="M 50.647577,16.433813 51.048183,3.2399512 62.2741,10.183817 Z"
-         inkscape:randomized="0"
-         inkscape:rounded="0"
-         inkscape:flatsided="true"
-         sodipodi:arg2="3.1719464"
-         sodipodi:arg1="2.1247488"
-         sodipodi:r2="3.8104951"
-         sodipodi:r1="7.6209903"
-         sodipodi:cy="9.952527"
-         sodipodi:cx="54.65662"
-         sodipodi:sides="3"
-         id="path4733-1-6"
-         style="opacity:1;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.25999999;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:18.29999924;stroke-opacity:1;paint-order:markers fill stroke"
-         sodipodi:type="star" />
+         style="opacity:1;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1.02474546;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:18.29999924;stroke-opacity:1;paint-order:markers fill stroke" />
     </g>
     <text
        xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:6.91916323px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.61503661px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="-29.550055"
-       y="83.868988"
+       style="font-style:normal;font-weight:normal;font-size:6.5935297px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.5860914px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="-25.658213"
+       y="83.729744"
        id="text5294-7-8-5-0"
        transform="scale(0.97223321,1.0285598)"><tspan
          sodipodi:role="line"
          id="tspan5292-3-1-7-0"
-         x="-29.550055"
-         y="83.868988"
-         style="stroke-width:0.61503661px">Analysis-ready </tspan><tspan
+         x="-25.658213"
+         y="83.729744"
+         style="stroke-width:0.5860914px">Analysis-ready </tspan><tspan
          sodipodi:role="line"
-         x="-29.550055"
-         y="92.517944"
-         style="stroke-width:0.61503661px"
+         x="-25.658213"
+         y="91.971657"
+         style="stroke-width:0.5860914px"
          id="tspan529">dataset</tspan></text>
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:2.9765625px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="216.8562"
-       y="52.969101"
+       x="193.31606"
+       y="46.510529"
        id="text62-2"><tspan
          sodipodi:role="line"
-         x="216.8562"
-         y="52.969101"
+         x="193.31606"
+         y="46.510529"
          style="stroke-width:0.26458332px"
-         id="tspan439-5">retrain naive bayes classifier</tspan><tspan
+         id="tspan439-5">Retrain naive bayes classifier</tspan><tspan
          sodipodi:role="line"
-         x="216.8562"
-         y="56.689804"
+         x="193.31606"
+         y="50.231232"
          style="stroke-width:0.26458332px"
          id="tspan443-5">- feature-classifier in QIIME2</tspan></text>
-    <g
-       id="g4737-04-1"
-       transform="matrix(0,-0.12895141,-0.28120369,0,242.59266,64.497093)">
-      <rect
-         y="4.4464283"
-         x="16.252975"
-         height="4.9136906"
-         width="25.513393"
-         id="rect215-0-4"
-         style="opacity:1;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.25999999;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:18.29999924;stroke-opacity:1;paint-order:markers fill stroke" />
-      <path
-         transform="rotate(-1.7714248,-44.302887,479.17691)"
-         inkscape:transform-center-y="0.002147052"
-         inkscape:transform-center-x="-1.9033871"
-         d="M 50.647577,16.433813 51.048183,3.2399512 62.2741,10.183817 Z"
-         inkscape:randomized="0"
-         inkscape:rounded="0"
-         inkscape:flatsided="true"
-         sodipodi:arg2="3.1719464"
-         sodipodi:arg1="2.1247488"
-         sodipodi:r2="3.8104951"
-         sodipodi:r1="7.6209903"
-         sodipodi:cy="9.952527"
-         sodipodi:cx="54.65662"
-         sodipodi:sides="3"
-         id="path4733-1-9"
-         style="opacity:1;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.25999999;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:18.29999924;stroke-opacity:1;paint-order:markers fill stroke"
-         sodipodi:type="star" />
-    </g>
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:2.9765625px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
@@ -2657,46 +2626,46 @@
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:2.9765625px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        x="250.69429"
-       y="178.53969"
+       y="170.07314"
        id="text4898-9"><tspan
          sodipodi:role="line"
          id="tspan4896-5"
          x="250.69429"
-         y="178.53969"
+         y="170.07314"
          style="stroke-width:0.26458332px">Re-analyise Beta Diversity #4.6.7</tspan><tspan
          sodipodi:role="line"
          x="250.69429"
-         y="182.26039"
+         y="173.79384"
          style="stroke-width:0.26458332px"
          id="tspan4900-9">- phyloseq::distance() to calculate bray-curtis</tspan><tspan
          sodipodi:role="line"
          x="250.69429"
-         y="185.98109"
+         y="177.51454"
          style="stroke-width:0.26458332px"
          id="tspan5076-5">- phyloseq::ordinate() for NMDS ordination </tspan><tspan
          sodipodi:role="line"
          x="250.69429"
-         y="189.7018"
+         y="181.23524"
          style="stroke-width:0.26458332px"
          id="tspan4914-6">- vegan::adonis2() for PERMANOVA</tspan><tspan
          sodipodi:role="line"
          x="250.69429"
-         y="193.4225"
+         y="184.95595"
          style="stroke-width:0.26458332px"
          id="tspan538-5">- vegan::betadisper() for multivariate </tspan><tspan
          sodipodi:role="line"
          x="250.69429"
-         y="197.1432"
+         y="188.67665"
          style="stroke-width:0.26458332px"
          id="tspan672">   homogeniety of variances</tspan><tspan
          sodipodi:role="line"
          x="250.69429"
-         y="200.86391"
+         y="192.39735"
          style="stroke-width:0.26458332px"
          id="tspan536-7">- EcolUtils::adonis.pair() for post-hoc comparisons </tspan><tspan
          sodipodi:role="line"
          x="250.69429"
-         y="204.58461"
+         y="196.11806"
          style="stroke-width:0.26458332px"
          id="tspan5064-7" /></text>
     <text
@@ -2724,52 +2693,52 @@
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:2.9765625px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="414.17334"
-       y="175.13597"
+       x="418.52008"
+       y="169.08835"
        id="text678"><tspan
          sodipodi:role="line"
          id="tspan676"
-         x="414.17334"
-         y="175.13597"
+         x="418.52008"
+         y="169.08835"
          style="stroke-width:0.26458332px">Compare alpha diversity of ASV subsets #4.11</tspan><tspan
          sodipodi:role="line"
-         x="414.17334"
-         y="178.85667"
+         x="418.52008"
+         y="172.80905"
          style="stroke-width:0.26458332px"
          id="tspan680">- Base R to turn taxonomy table in a list of unique taxa</tspan><tspan
          sodipodi:role="line"
-         x="414.17334"
-         y="182.57738"
+         x="418.52008"
+         y="176.52975"
          style="stroke-width:0.26458332px"
          id="tspan687">- phyloseq::estimate_richness() with base:: for() loop </tspan><tspan
          sodipodi:role="line"
-         x="414.17334"
-         y="186.29808"
+         x="418.52008"
+         y="180.25046"
          style="stroke-width:0.26458332px"
          id="tspan689">   to generate diversity metrics at every taxa in </tspan><tspan
          sodipodi:role="line"
-         x="414.17334"
-         y="190.01878"
+         x="418.52008"
+         y="183.97116"
          style="stroke-width:0.26458332px"
          id="tspan691">   both above-neutral subsets and the full dataset</tspan><tspan
          sodipodi:role="line"
-         x="414.17334"
-         y="193.73949"
+         x="418.52008"
+         y="187.69186"
          style="stroke-width:0.26458332px"
          id="tspan701">- base::lapply() to execute custom function for both </tspan><tspan
          sodipodi:role="line"
-         x="414.17334"
-         y="197.46019"
+         x="418.52008"
+         y="191.41257"
          style="stroke-width:0.26458332px"
          id="tspan709">   plant species</tspan><tspan
          sodipodi:role="line"
-         x="414.17334"
-         y="201.18089"
+         x="418.52008"
+         y="195.13327"
          style="stroke-width:0.26458332px"
          id="tspan703">- repeat for Class, Order and Family </tspan></text>
     <g
        id="g4737-04-0-3-7-3"
-       transform="matrix(0,0.23570676,-0.28120369,0,448.30345,199.72386)">
+       transform="matrix(0,0.23570676,-0.28120369,0,452.65018,193.67624)">
       <rect
          y="4.4464283"
          x="16.252975"
@@ -2806,7 +2775,7 @@
          x="57.372894"
          y="184.5471"
          style="stroke-width:0.26458332px"
-         id="tspan5044-9-7">Unnormalized data partition into list # 5.1 </tspan><tspan
+         id="tspan5044-9-7">Unnormalized data partition into list #5.1 </tspan><tspan
          sodipodi:role="line"
          x="57.372894"
          y="188.26781"
@@ -2867,7 +2836,7 @@
          id="tspan467" /></text>
     <g
        id="g4737-04-0-3-8"
-       transform="matrix(0,0.23570676,-0.28120369,0,448.36146,160.09105)">
+       transform="matrix(0,0.23570676,-0.28120369,0,450.96918,152.00407)">
       <rect
          y="4.4464283"
          x="-3.8738725"
@@ -2893,6 +2862,161 @@
          id="path4733-1-8-8-7"
          style="opacity:1;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.25999999;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:18.29999924;stroke-opacity:1;paint-order:markers fill stroke"
          sodipodi:type="star" />
+    </g>
+    <g
+       id="g4737-04-8"
+       transform="matrix(0,0.23570676,-0.28120369,0,213.09666,29.677195)">
+      <rect
+         y="4.4464283"
+         x="-1.3864766"
+         height="4.9136906"
+         width="43.152847"
+         id="rect215-0-9"
+         style="opacity:1;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.33813795;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:18.29999924;stroke-opacity:1;paint-order:markers fill stroke" />
+      <path
+         transform="rotate(-1.7714248,-44.302887,479.17691)"
+         inkscape:transform-center-y="0.002147052"
+         inkscape:transform-center-x="-1.9033871"
+         d="M 50.647577,16.433813 51.048183,3.2399512 62.2741,10.183817 Z"
+         inkscape:randomized="0"
+         inkscape:rounded="0"
+         inkscape:flatsided="true"
+         sodipodi:arg2="3.1719464"
+         sodipodi:arg1="2.1247488"
+         sodipodi:r2="3.8104951"
+         sodipodi:r1="7.6209903"
+         sodipodi:cy="9.952527"
+         sodipodi:cx="54.65662"
+         sodipodi:sides="3"
+         id="path4733-1-2"
+         style="opacity:1;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.25999999;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:18.29999924;stroke-opacity:1;paint-order:markers fill stroke"
+         sodipodi:type="star" />
+    </g>
+    <g
+       id="g4737-04-8-1"
+       transform="matrix(0,0.23570676,-0.28120369,0,143.4349,31.544148)">
+      <rect
+         y="5.6344886"
+         x="16.147358"
+         height="4.9136906"
+         width="19.099047"
+         id="rect215-0-9-1"
+         style="opacity:1;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.22495469;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:18.29999924;stroke-opacity:1;paint-order:markers fill stroke" />
+      <path
+         transform="rotate(-1.7714248,-9.1387645,690.63889)"
+         inkscape:transform-center-y="0.002147052"
+         inkscape:transform-center-x="-1.9033871"
+         d="M 50.647577,16.433813 51.048183,3.2399512 62.2741,10.183817 Z"
+         inkscape:randomized="0"
+         inkscape:rounded="0"
+         inkscape:flatsided="true"
+         sodipodi:arg2="3.1719464"
+         sodipodi:arg1="2.1247488"
+         sodipodi:r2="3.8104951"
+         sodipodi:r1="7.6209903"
+         sodipodi:cy="9.952527"
+         sodipodi:cx="54.65662"
+         sodipodi:sides="3"
+         id="path4733-1-2-3"
+         style="opacity:1;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.25999999;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:18.29999924;stroke-opacity:1;paint-order:markers fill stroke"
+         sodipodi:type="star" />
+    </g>
+    <g
+       id="g4737-0-2-3-3-7"
+       transform="matrix(0.23570676,0,0,0.28120369,-33.545621,165.57746)">
+      <rect
+         y="4.4464283"
+         x="16.252975"
+         height="4.9136906"
+         width="17.009092"
+         id="rect215-5-8-3-6-2"
+         style="opacity:1;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.21229012;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:18.29999924;stroke-opacity:1;paint-order:markers fill stroke" />
+      <path
+         transform="rotate(-1.7714248,-46.570701,625.86766)"
+         inkscape:transform-center-y="0.002147052"
+         inkscape:transform-center-x="-1.9033871"
+         d="M 50.647577,16.433813 51.048183,3.2399512 62.2741,10.183817 Z"
+         inkscape:randomized="0"
+         inkscape:rounded="0"
+         inkscape:flatsided="true"
+         sodipodi:arg2="3.1719464"
+         sodipodi:arg1="2.1247488"
+         sodipodi:r2="3.8104951"
+         sodipodi:r1="7.6209903"
+         sodipodi:cy="9.952527"
+         sodipodi:cx="54.65662"
+         sodipodi:sides="3"
+         id="path4733-39-5-6-9-8"
+         style="opacity:1;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.25999999;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:18.29999924;stroke-opacity:1;paint-order:markers fill stroke"
+         sodipodi:type="star" />
+      <rect
+         y="-114.01733"
+         x="17.426733"
+         height="4.9136906"
+         width="17.009092"
+         id="rect215-5-8-3-6-2-1"
+         style="opacity:1;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.21229012;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:18.29999924;stroke-opacity:1;paint-order:markers fill stroke" />
+      <path
+         transform="rotate(-1.7714249,-3877.3079,528.67221)"
+         inkscape:transform-center-y="0.002147052"
+         inkscape:transform-center-x="-1.9033871"
+         d="M 50.647577,16.433813 51.048183,3.2399512 62.2741,10.183817 Z"
+         inkscape:randomized="0"
+         inkscape:rounded="0"
+         inkscape:flatsided="true"
+         sodipodi:arg2="3.1719464"
+         sodipodi:arg1="2.1247488"
+         sodipodi:r2="3.8104951"
+         sodipodi:r1="7.6209903"
+         sodipodi:cy="9.952527"
+         sodipodi:cx="54.65662"
+         sodipodi:sides="3"
+         id="path4733-39-5-6-9-8-2"
+         style="opacity:1;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.25999999;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:18.29999924;stroke-opacity:1;paint-order:markers fill stroke"
+         sodipodi:type="star" />
+      <rect
+         y="-221.14308"
+         x="17.541084"
+         height="4.9136906"
+         width="17.009092"
+         id="rect215-5-8-3-6-2-4"
+         style="opacity:1;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.21229012;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:18.29999924;stroke-opacity:1;paint-order:markers fill stroke" />
+      <path
+         transform="rotate(-1.7714249,-7341.8992,471.41095)"
+         inkscape:transform-center-y="0.002147052"
+         inkscape:transform-center-x="-1.9033871"
+         d="M 50.647577,16.433813 51.048183,3.2399512 62.2741,10.183817 Z"
+         inkscape:randomized="0"
+         inkscape:rounded="0"
+         inkscape:flatsided="true"
+         sodipodi:arg2="3.1719464"
+         sodipodi:arg1="2.1247488"
+         sodipodi:r2="3.8104951"
+         sodipodi:r1="7.6209903"
+         sodipodi:cy="9.952527"
+         sodipodi:cx="54.65662"
+         sodipodi:sides="3"
+         id="path4733-39-5-6-9-8-23"
+         style="opacity:1;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.25999999;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:18.29999924;stroke-opacity:1;paint-order:markers fill stroke"
+         sodipodi:type="star" />
+      <rect
+         y="-330.23645"
+         x="16.252974"
+         height="4.9136906"
+         width="88.586967"
+         id="rect215-5-8-3-6-2-4-6"
+         style="opacity:1;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.48447809;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:18.29999924;stroke-opacity:1;paint-order:markers fill stroke" />
+    </g>
+    <g
+       id="g4737-04-6-9"
+       transform="matrix(0,0.01427032,-0.28120369,0,-3.6924254,68.688105)">
+      <rect
+         y="18.284655"
+         x="-17.400866"
+         height="4.9136906"
+         width="396.32693"
+         id="rect215-0-2-3"
+         style="opacity:1;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1.02474546;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:18.29999924;stroke-opacity:1;paint-order:markers fill stroke" />
     </g>
   </g>
 </svg>
