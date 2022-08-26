@@ -71,7 +71,6 @@ plot_ordination(filtered_soil, nmds_soil,
 ```
 
 
-
 ##2.1.1 - custom NMDS function for automation of split datasets
 
 ```{r}
@@ -304,114 +303,7 @@ lapply(pslist_sp_CSS, function (x)
 
 # conclusion: the only significant pairwise comparison in for MeJA 0.1 to MeJA 1.0 on the roots of AT (p=0.06 for roots of BO)
 ```
-### 2.3.2b pairwiseAdonis::pairwise.adonis2 - no lists, includes blocks; external p adjustment wiht FDR
-```{r}
-# pairwiseAdonis::pairwise.adonis2 pairwise comparisons with strata/blocks but without p adjustment. Pedro unsuccessfully tried making this function work on list for several hours, so now we only copy-paste the function several times, like barbarians. 
 
-parwise_AT_root<-pairwise.adonis2(phyloseq::distance(otu_table(ps_list_CSS[[1]]), method="bray") ~ MeJA_treatment+Block, data = as(phyloseq::sample_data(ps_list_CSS[[1]]),"data.frame"), strata="Block")
-
-parwise_AT_soil<-pairwise.adonis2(phyloseq::distance(otu_table(ps_list_CSS[[2]]), method="bray") ~ MeJA_treatment+Block, data = as(phyloseq::sample_data(ps_list_CSS[[2]]),"data.frame"), strata="Block")
-
-parwise_BO_root<-pairwise.adonis2(phyloseq::distance(otu_table(ps_list_CSS[[3]]), method="bray") ~ MeJA_treatment+Block, data = as(phyloseq::sample_data(ps_list_CSS[[3]]),"data.frame"), strata="Block")
-
-parwise_BO_soil<-pairwise.adonis2(phyloseq::distance(otu_table(ps_list_CSS[[4]]), method="bray") ~ MeJA_treatment+Block, data = as(phyloseq::sample_data(ps_list_CSS[[4]]),"data.frame"), strata="Block")
-
-#put all those pairwise comparison objects into a list
-Pairwise_list<-list(parwise_AT_root,
-              parwise_AT_soil,
-              parwise_BO_root,
-              parwise_BO_soil)
-
-#create names for the list created above
-names(Pairwise_list)<-c("parwise_AT_root",
-              "parwise_AT_soil",
-              "parwise_BO_root",
-              "parwise_BO_soil")
-
-
-# this function will extract the r2 and p values from the output of a pairwise.adonis2() result
-extract_p_R2_from_pairwiseAdonis2_list<-function(pairwise.adonis2_output){
-# lets starte with a smaller list, later we can use lapply on this function
-
-#extract R2 value from the first model factor
-R2_fact1<-pairwise.adonis2_output[-1]%>%
-  map("R2")%>%
-  map(1)
-
-#extract R2 value from the second model factor
-R2_fact2<-pairwise.adonis2_output[-1]%>%
-  map("R2")%>%
-  map(2)
-
-#extract p value from the first model factor
-p_fact1<-pairwise.adonis2_output[-1]%>%
-map("Pr(>F)")%>%
-  map(1)
-
-#extract p value from the first second factor
-p_fact2<-pairwise.adonis2_output[-1]%>%
-map("Pr(>F)")%>%
-  map(2)
-
-# put all R2 and p values in a df  
-df_summary<-cbind(R2_fact1,R2_fact2,p_fact1,p_fact2)
-
-#extract names of extracted statistics above
-stat_names<-map(pairwise.adonis2_output[-1],names)
-
-#extract names of extracted factors above
-factor_result<-map(pairwise.adonis2_output[-1], row.names)
-
-#set new column names for the output df
-colnames(df_summary)<-c(paste(stat_names[[1]][5],factor_result[[1]][1], sep="_"),
-                        paste(stat_names[[1]][5],factor_result[[1]][2], sep="_"),
-                        paste(stat_names[[1]][6],factor_result[[1]][1], sep="_"),
-                        paste(stat_names[[1]][6],factor_result[[1]][2], sep="_"))
-                    
-
-#return df with summarized R2 and p values according fators and stat variables
-return(as.data.frame(df_summary))
-
-}
-
-#now apply the custom function on the list of pairwiseadonis2 results
-pairwise_output<-map(Pairwise_list,extract_p_R2_from_pairwiseAdonis2_list)
-
-# put into a single df so we can adjust the p values with FDR
-pairwise_output<-do.call(rbind.data.frame, pairwise_output)
-
-#adjust the p values with FDR
-pairwise_output$FDR_Adjusted_p_MeJA_treatment<-p.adjust(pairwise_output$`Pr(>F)_MeJA_treatment`, method = "fdr")
-
-#check result
-pairwise_output
-
-# we will see that none of the pairwise comparisons hold against FDR control
-
-
-# larger lists wiht less splitting
-# full data
-pairwise.adonis2(phyloseq::distance(otu_table(normalization_listed[[1]]), method="bray") ~ MeJA_treatment+Block, data = as(phyloseq::sample_data(normalization_listed[[1]]),"data.frame"), strata="Block")
-
-
-#root and soil
-pairwise.adonis2(phyloseq::distance(otu_table(pslist_root_soil_CSS[[1]]), method="bray") ~ MeJA_treatment+Block, data = as(phyloseq::sample_data(pslist_root_soil_CSS[[1]]),"data.frame"), strata="Block")
-
-pairwise.adonis2(phyloseq::distance(otu_table(pslist_root_soil_CSS[[2]]), method="bray") ~ MeJA_treatment+Block, data = as(phyloseq::sample_data(pslist_root_soil_CSS[[2]]),"data.frame"), strata="Block")
-
-#rplant SP
-pairwise.adonis2(phyloseq::distance(otu_table(pslist_sp_CSS[[1]]), method="bray") ~ MeJA_treatment+Block, data = as(phyloseq::sample_data(pslist_sp_CSS[[1]]),"data.frame"), strata="Block")
-
-pairwise.adonis2(phyloseq::distance(otu_table(pslist_sp_CSS[[2]]), method="bray") ~ MeJA_treatment+Block, data = as(phyloseq::sample_data(pslist_sp_CSS[[2]]),"data.frame"), strata="Block")
-
-
-
-
-
-# I will reccomend EcolUtils::adonis.pair for simplicity. This is because for pairwiseAdonis::pairwise.adonis2 there will be a lot of copy-pasting and the function is under (inactive) development
-
-
-```
 # Beta Diversity analyised! proceed to scrip 3_Alpha_Diversity!
 
 There are dozens of different models and methods you can use to check if your communities are "similar" or not. This script will hopefully help get started on this topic. 

@@ -1,0 +1,16 @@
+#!/bin/bash -login
+ 
+#SBATCH --time=1:00:00				  	### limit of wall clock time - how long the job will run (same as -t)
+#SBATCH --ntasks=1					      ### number of tasks - how many tasks (nodes) that you require (same as -n)
+#SBATCH --cpus-per-task=10			  ### number of CPUs (or cores) per task (same as -c)
+#SBATCH --mem=32G					        ### memory required per node - amount of memory (in bytes)
+#SBATCH --job-name CheckRepSeq			### you can give your job a name for easier identification (same as -J)
+
+
+conda activate qiime2-2021.2 
+
+qiime feature-table tabulate-seqs \
+  --i-data silva-138-99-seqs-515-806.qza \
+  --o-visualization silva-138-99-seqs-515-806.qzv \
+
+conda deactivate

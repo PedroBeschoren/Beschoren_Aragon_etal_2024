@@ -1,0 +1,40 @@
+#!/bin/bash -login
+ 
+#SBATCH --time=01:00:00					### limit of wall clock time - how long the job will run (same as -t)
+#SBATCH --ntasks=1					### number of tasks - how many tasks (nodes) that you require (same as -n)
+#SBATCH --cpus-per-task=10				### number of CPUs (or cores) per task (same as -c)
+#SBATCH --mem=32G					### memory required per node - amount of memory (in bytes)
+#SBATCH --job-name stats				### you can give your job a name for easier identification (same as -J)
+
+#load the software ; note you may need to run $export MODULEPATH=$MODULEPATH:/cm/shared/apps/WUR/ABGC/modulefiles or add it to your .bashrc
+module load trimmomatic/0.39
+
+#run trimmomatic on 1 pair of files, to check test
+#trimmomatic PE -threads 4 10_Soil_68847-A10_GTAGAGGATCGACTAG_L001_R1_001_JJ9KN-JL7D8.filt.fastq.gz 10_Soil_68847-A10_GTAGAGGATCGACTAG_L001_R2_001_JJ9KN-JL7D8.filt.fastq.gz \
+#10_Soil_trimmed_68847-A10_GTAGAGGATCGACTAG_L001_R1_001_JJ9KN-JL7D8.filt.fastq.gz 10_Soil_un.trimmed_68847-A10_GTAGAGGATCGACTAG_L001_R1_001_JJ9KN-JL7D8.filt.fastq.gz \
+#10_Soil_trimmed_68847-A10_GTAGAGGATCGACTAG_L001_R2_001_JJ9KN-JL7D8.filt.fastq.gz 10_Soil_un.trimmed_68847-A10_GTAGAGGATCGACTAG_L001_R2_001_JJ9KN-JL7D8.filt.fastq.gz \
+#              SLIDINGWINDOW:5:30
+
+
+cd raw_sequences
+
+# Run trimmomatic with a forward loop, on all root sample files in a folder
+for infile in *R1_001_JJ9KN.filt.fastq.gz
+do
+base=$(basename ${infile} R1_001_JJ9KN.filt.fastq.gz)
+trimmomatic PE ${infile} ${base}R2_001_JJ9KN.filt.fastq.gz \
+             ${base}R1_001_JJ9KN.trim.filt.fastq.gz ${base}R1_001_JJ9KN.untrim.filt.fastq.gz \
+             ${base}R2_001_JJ9KN.trim.filt.fastq.gz ${base}R2_001_JJ9KN.untrim.filt.fastq.gz \
+             SLIDINGWINDOW:5:30 MINLEN:25
+done
+ 
+ 
+# Run trimmomatic with a forward loop, on all soil sample files in a folder
+for infile in *R1_001_JJ9KN-JL7D8.filt.fastq.gz
+do
+base=$(basename ${infile} R1_001_JJ9KN-JL7D8.filt.fastq.gz)
+trimmomatic PE ${infile} ${base}R2_001_JJ9KN-JL7D8.filt.fastq.gz \
+             ${base}R1_001_JJ9KN-JL7D8.trim.filt.fastq.gz ${base}R1_001_JJ9KN-JL7D8.untrim.filt.fastq.gz \
+             ${base}R2_001_JJ9KN-JL7D8.trim.filt.fastq.gz ${base}R2_001_JJ9KN-JL7D8.untrim.filt.fastq.gz \
+             SLIDINGWINDOW:5:30 MINLEN:25
+ done

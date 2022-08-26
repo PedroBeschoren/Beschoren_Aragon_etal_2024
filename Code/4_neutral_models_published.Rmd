@@ -947,21 +947,22 @@ we should then draw X random OTUS (instead of those X selected by the neutral mo
 
 hundred_permanovas_on_random_otu<-  function (CSS_fraction,uni_4model) {
   # the input is one of the 4-split fraction of the CSS-normalized phyloseq object as the first argument
-  # thes econd argument is the phyloseq object contaning only the OTUs classified as above expected
+  # the second argument is the phyloseq object containing only the OTUs classified as above expected
   # The output is a list of 100 permanovas
   
-# collect a list of random OTUS, 100 times
+# Set seed for consistency
 set.seed(92342347)
 
-# uni_4model$MeJA_0.1) won't work aocrss the function
-rand_otu_control<-replicate(100, sample(taxa_names(subset_samples(CSS_fraction, MeJA_treatment = "Control")), nrow(tax_table(uni_4model[[1]])), replace=FALSE)) #performs randomization oepration 100 times
+# collect a list of random OTUS, 100 times
+rand_otu_control<-replicate(100, sample(taxa_names(subset_samples(CSS_fraction, MeJA_treatment = "Control")), nrow(tax_table(uni_4model[[1]])), replace=FALSE)) #performs randomization operation 100 times
 
-rand_otu_MeJA_0.1<-replicate(100, sample(taxa_names(subset_samples(CSS_fraction, MeJA_treatment = "MeJA_0.1")), nrow(tax_table(uni_4model[[2]])), replace=FALSE)) #performs randomization oepration 100 times
+rand_otu_MeJA_0.1<-replicate(100, sample(taxa_names(subset_samples(CSS_fraction, MeJA_treatment = "MeJA_0.1")), nrow(tax_table(uni_4model[[2]])), replace=FALSE)) #performs randomization operation 100 times
 
 rand_otu_MeJA_1.0<-replicate(100, sample(taxa_names(subset_samples(CSS_fraction, MeJA_treatment = "MeJA_1.0")), nrow(tax_table(uni_4model[[3]])), replace=FALSE)) 
 
 rand_otu_oral_scretion<-replicate(100, sample(taxa_names(subset_samples(CSS_fraction, MeJA_treatment = "oral_secretion")), nrow(tax_table(uni_4model[[4]])), replace=FALSE)) 
 
+# bind rows in list
 repeted_list<-rbind(rand_otu_control,rand_otu_MeJA_0.1, rand_otu_MeJA_1.0, rand_otu_oral_scretion)
 
 

@@ -1,0 +1,42 @@
+#!/bin/bash -login
+ 
+#SBATCH --time=24:00:00				  	### limit of wall clock time - how long the job will run (same as -t)
+#SBATCH --ntasks=2					      ### number of tasks - how many tasks (nodes) that you require (same as -n)
+#SBATCH --cpus-per-task=20			  ### number of CPUs (or cores) per task (same as -c)
+#SBATCH --mem=96G					        ### memory required per node - amount of memory (in bytes)
+#SBATCH --job-name Dada2			### you can give your job a name for easier identification (same as -J)
+
+#Activate qiime2
+conda activate qiime2-2021.2 
+
+#use dada2 to trim low-quality ends, remove chimeric sequences, remove singletons, join denoised paired-end reads, and then dereplicate into ASVs. trim size based on fastqc plot. migrate to a slliding window aproach when possible
+qiime dada2 denoise-paired \
+--i-demultiplexed-seqs pilot_preDada2_TrimmedPrimers.qza \
+--p-trunc-len-f 280 \
+--p-trunc-len-r 220 \
+--p-max-ee-f 1 \
+--p-max-ee-r 1 \
+--p-n-threads 0 \
+--o-table feature-table_pilot_TrimmaticnoTrunc_rPrimerFix.qza \
+--o-representative-sequences rep-seqs_pilot_TrimmaticnoTrunc_rPrimerFix.qza \
+--o-denoising-stats denoising-stats_pilot_TrimmaticnoTrunc_rPrimerFix.qza
+   
+# visualize artefact, feature table  
+qiime feature-table summarize \
+--i-table feature-table_pilot_TrimmaticnoTrunc_rPrimerFix.qza \
+--o-visualization feature-table_pilot_TrimmaticnoTrunc_rPrimerFix.qzv \
+--m-sample-metadata-file Mapping_file_MeJA_pilot.txt
+  
+# visualize artefact, representative sequences table  
+qiime feature-table tabulate-seqs \
+--i-data rep-seqs_pilot_TrimmaticnoTrunc_rPrimerFix.qza \
+--o-visualization rep-seqs_pilot_TrimmaticnoTrunc_rPrimerFix.qzv
+  
+# visualize artefact, denoising stats 
+qiime metadata tabulate \
+--m-input-file denoising-stats_pilot_TrimmaticnoTrunc_rPrimerFix.qza \
+--o-visualization denoising-stats_pilot_TrimmaticnoTrunc_rPrimerFix.qzv
+  
+conda deactivate  
+# the _rPrimerFix.qza file have a min lenght of 220bp on the reverse, and are absed on the full r primer sequence (1 extra g) ; the other_TrimmaticnoTrunc.qza files have minlenght 235 for reverse
+#--p-trunc-q 10 \ ### cuts the sequence once it hits a phred 10 base, need over 8h to run on this dataset (no trimmomatic, run could not complete)

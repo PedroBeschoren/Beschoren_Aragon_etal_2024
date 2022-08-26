@@ -1,0 +1,26 @@
+#!/bin/bash -login
+ 
+#SBATCH --time=1:00:00				  	### limit of wall clock time - how long the job will run (same as -t)
+#SBATCH --ntasks=1					      ### number of tasks - how many tasks (nodes) that you require (same as -n)
+#SBATCH --cpus-per-task=10			  ### number of CPUs (or cores) per task (same as -c)
+#SBATCH --mem=32G					        ### memory required per node - amount of memory (in bytes)
+#SBATCH --job-name PrepSILVA1			### you can give your job a name for easier identification (same as -J)
+
+# consider this tutorial: https://docs.qiime2.org/2021.2/data-resources/
+
+
+#activates qiime2 environment
+conda activate qiime2-2021.2 
+
+
+# perform steps as in https://forum.qiime2.org/t/processing-filtering-and-evaluating-the-silva-database-and-other-reference-sequence-data-with-rescript/15494
+qiime rescript get-silva-data \
+    --p-version '138' \
+    --p-target 'SSURef_NR99' \
+    --p-no-include-species-labels \
+    --o-silva-sequences silva-138-ssu-nr99-seqs.qza \
+    --o-silva-taxonomy silva-138-ssu-nr99-tax.qza
+
+
+
+conda deactivate

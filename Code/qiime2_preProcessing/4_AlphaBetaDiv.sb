@@ -1,0 +1,53 @@
+#!/bin/bash -login
+ 
+#SBATCH --time=1:00:00				  	### limit of wall clock time - how long the job will run (same as -t)
+#SBATCH --ntasks=1					      ### number of tasks - how many tasks (nodes) that you require (same as -n)
+#SBATCH --cpus-per-task=10			  ### number of CPUs (or cores) per task (same as -c)
+#SBATCH --mem=32G					        ### memory required per node - amount of memory (in bytes)
+#SBATCH --job-name AplhaBetaDiv			### you can give your job a name for easier identification (same as -J)
+
+
+#activates qiime2 environment
+conda activate qiime2-2021.2 
+
+
+
+
+
+# Makes a phylogeny tree to be used in phylogeny-based methods
+qiime phylogeny align-to-tree-mafft-fasttree \
+  --i-sequences rep-seqs_pilot_TrimmaticnoTrunc.qza \
+  --o-alignment aligned-rep-seqs_pilot_TrimmaticnoTrunc.qza \
+  --o-masked-alignment masked-aligned-rep-seqs_pilot_TrimmaticnoTrunc.qza \
+  --o-tree unrooted-tree_pilot_TrimmaticnoTrunc.qza \
+  --o-rooted-tree rooted-tree_pilot_TrimmaticnoTrunc.qza
+  
+  
+#with this you will create a lot of final output artefacts in a new folder.
+  qiime diversity core-metrics-phylogenetic \
+  --i-phylogeny rooted-tree_pilot_TrimmaticnoTrunc.qza \
+  --i-table feature-table_pilot_TrimmaticnoTrunc.qza \
+  --p-sampling-depth 9000 \
+  --m-metadata-file Mapping_file_MeJA_pilot.txt \
+  --output-dir core-metrics-results_TrimmaticnoTrunc
+  
+# check a few more diversity metrics 
+  qiime diversity alpha-group-significance \
+  --i-alpha-diversity core-metrics-results_TrimmaticnoTrunc/faith_pd_vector.qza \
+  --m-metadata-file Mapping_file_MeJA_pilot.txt \
+  --o-visualization core-metrics-result_TrimmaticnoTruncs/faith-pd-group-significance.qzv
+
+#checking eveness
+qiime diversity alpha-group-significance \
+  --i-alpha-diversity core-metrics-results/evenness_vector.qza \
+  --m-metadata-file sMapping_file_MeJA_pilot.txt \
+  --o-visualization core-metrics-results/evenness-group-significance.qzv
+
+qiime diversity beta-group-significance \
+  --i-distance-matrix core-metrics-results_TrimmaticnoTrunc/unweighted_unifrac_distance_matrix.qza \
+  --m-metadata-file Mapping_file_MeJA_pilot.txt \
+  --m-metadata-column MeJA_treatment \
+  --o-visualization core-metrics-results_TrimmaticnoTrunc/unweighted-unifrac-MeJA_treatment-significance.qzv \
+  --p-pairwise
+  
+conda deactivate
