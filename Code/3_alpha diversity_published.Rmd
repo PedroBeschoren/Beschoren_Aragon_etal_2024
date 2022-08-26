@@ -64,12 +64,15 @@ HSD.test(aovTukey, "tx", group=TRUE, console=TRUE)#post-hoc
 ggplot(total_diversity, aes(x =MeJA_treatment, y = Observed, fill=Plant_species))+
   geom_boxplot()+
   theme_bw()+
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.5, hjust=1))+
   facet_wrap(~Sample_type)
 
 #Lets see this on a simple boxplot for Shannon diversity index
 ggplot(total_diversity, aes(x =MeJA_treatment, y = Shannon, fill=Plant_species))+
   geom_boxplot()+
   theme_bw()+
+  theme(axis.text.x = element_text(angle = 45, hjust=1))+
+  labs(y = "Shannon diversity index")+
   facet_wrap(~Sample_type)
 
 ggplot(total_diversity, aes(x =MeJA_treatment, y = Shannon))+
