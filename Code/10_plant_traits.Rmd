@@ -19,10 +19,10 @@ Finally, as both plants are phenotypically different *per se* we compared the ef
 # set working directory to project directory 
 
 # this will load all key libraries for the whole project
+library(tidyr)
+library(dplyr)
 library(vegan)
 library(Hmisc)
-#library(tyRa)
-#library(MicEco)
 library(tibble)
 library(ggpubr)
 library(DHARMa)
@@ -36,12 +36,11 @@ library(multcompView)
 library(multcomp)
 library(lsr)
 library(effsize)
+library(gridExtra)
 source("./renv/0_load_libraries.R")
 
 # increases memory limit used by R
 memory.limit(size = 350000)
-
-
 
 ```
 
@@ -53,19 +52,37 @@ memory.limit(size = 350000)
 theme_set(theme_bw())
 
 # Set colors 
-color_treatments <- hcl.colors(4,palette="Geyser")
-color_treatments <- c("#E6C186", "#B8CDAE", "#008585", "#C7522B")
 
-color_species <- c("#009E73", "#D55E00")
+#colors & treatments 
+color_treatments <- c("#999999", "#E69F00", "#56B4E9", "#009E73")
+#names(color_treatments) <- c("Control", "MeJA 0.1mM", "MeJA 1mM", "P. brassicae OS")
+
+#color_treatments <- hcl.colors(4,palette="Geyser")
+#color_treatments <- c("#E6C186", "#B8CDAE", "#008585", "#C7522B")
+
+#color_species <- c("#009E73", "#D55E00")
+
+#color_compartment <- c()
 
 # Set axis looks
-axis_looks <- theme(axis.text.x = element_text(colour = "black", size = 10,
-                                               face = "bold", angle=45, hjust=1))+
-  theme(axis.text.y = element_text(colour = "black", size = 12, face = "bold"))+
-  theme(axis.title=element_text(size=15, face = "bold"))+
-  theme(axis.title.y = element_text(margin = margin(t = 0, r = 20, b = 0, l = 0)))+
+axis_looks <- theme(axis.text.x = element_text(colour = "black", size = 9,
+                                               face = "bold", angle=0, hjust=0.5))+
+  theme(axis.text.y = element_text(colour = "black", size = 9, face = "bold"))+
+  theme(axis.title=element_text(size=11, face = "bold"))+
+  theme(axis.title.y = element_text(margin = margin(t = 0, r = 10, b = 0, l = 0)))+
   theme(panel.grid.major = element_blank(),
         panel.grid.minor = element_blank())+
+  theme(legend.position="none")+
+  theme(plot.background = element_blank(),
+    panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank(),
+    panel.border = element_blank())+
+  theme(axis.line = element_line(colour = "black", 
+                      size = 0.8, linetype = "solid"))
+
+
+treatment_names <- c("control" = "Control", "MeJA_0.1" = "0.1 mM \n MeJA",
+                      "MeJA_1.0" = "1 mM \n MeJA", "oral_secretion"="P. brassicae \n OS")
 
 ```
 
@@ -74,25 +91,40 @@ axis_looks <- theme(axis.text.x = element_text(colour = "black", size = 10,
 ## Load data 
 
 ```{r}
-# load data 
-traits <- read.csv("./Data/MeJA_Plant_traits_raw.csv")
+# load raw data for traits df 
+raw <- read.csv("./Data/MeJA_Plant_traits_raw.csv")
+str(raw )
+
+#removing non-necessary column 
+raw  <- raw [-c(7:8,16:19)]
+raw[c(1:6)] <- lapply(raw[c(1:6)], factor)
+
+#open gene expression df 
+qpcr<- read.csv("./Data/qPCR_output.csv")
+qpcr[1:6] <- lapply(qpcr[1:6], as.factor)
+qpcr <- qpcr %>% 
+        dplyr::select(id,Block,species,treatment, MYC2_at_fold_DD, lox2_at_fold_DD)%>% #keep only these columns
+        dplyr::rename(myc2 = MYC2_at_fold_DD, lox2=lox2_at_fold_DD) #change names 
+
+#merge
+traits <- left_join(raw, qpcr, by="id") %>%
+          mutate(gene_data =
+                 case_when(
+                   is.na(myc2) ~ "no", #makes new column to select later for those samples with available gene exp data
+                   TRUE ~ "yes"))      #as some samples were lost by exploiding Eppendorfs 
+
+#clean df
+traits <- traits[-c(14:16)]
+colnames(traits) <- gsub(".x\\b", '', colnames(traits)) #after left_join similar columns are renamed column.x and column.y
+traits[c(16)] <- lapply(traits[c(16)], factor) #make gene_data column factor
 str(traits)
-
-traits[c(1:6)] <- lapply(traits[c(1:6)], factor)
-
-#removing X column 
-traits <- traits[-c(19)]
-
-#ordering levels
-levels(traits$species)
-levels(traits$treatment)
 
 #summary
 summary(traits)
 
 #df for Atha
 Atha <- traits %>% dplyr::filter(species == "Arabidopsis_thaliana") %>% 
-                   mutate(aboveground_dw = ldry_weight + inflorescence)
+                   mutate(aboveground_dw = ldry_weight + inflorescence) #make new column with overall aboveground biomass
 #df for Bole
 Bole <- traits %>% dplyr::filter(species == "Brassica_oleraceae")
 
@@ -101,6 +133,7 @@ l_sp <- list(Atha, Bole)
 names(l_sp) <- c("Arabidopsis_thaliana", "Brassica_oleraceae")
 
 ```
+
 
 ## Load functions
 ```{r}
@@ -112,48 +145,44 @@ source("./Code/Functions/data_distribution_and_GLM_functions.R")
 ```
 
 
-**Look for ways of saving plots with par and making a single figure with plots**
-
 ## 10.1 Dry weight
 
 ### Plots
 
 ```{r}
 
-#Boxplot both
-p.dw.spp <- ggplot(data = traits,
-                    mapping = aes(x = treatment, y = ldry_weight), colour= treatment)+
-  geom_boxplot(mapping = aes(fill= treatment), position = position_dodge(width = 0.8), lwd=0.8)+
-  geom_jitter(mapping = aes(fill = treatment),
-                         shape = 21, size = 1.8, color = "black", position = position_dodge(width = 0.8))+
-  scale_fill_manual(values = color_treatments)+
-  labs(y="Shoot biomass(g dry weight)", x=" ") +
-  facet_wrap(~species, scales = "free_y")+
-  axis_looks
-
 #Boxplot Atha
-p.dw.Atha <- ggplot(data = l_sp$Arabidopsis_thaliana,
+p.dw.Atha <- ggplot(data = Atha,
                     mapping = aes(x = treatment, y = ldry_weight), colour= treatment)+
   geom_boxplot(mapping = aes(fill= treatment), position = position_dodge(width = 0.8), lwd=0.8)+
   geom_jitter(mapping = aes(fill = treatment),
                          shape = 21, size = 1.8, color = "black", position = position_dodge(width = 0.8))+
   scale_fill_manual(values = color_treatments)+
   labs(y="Shoot biomass(g dry weight)", x=" ") +
+  labs(title = "Atha")+
+  scale_y_continuous(expand = c(0, 0), #start graph at y = min and x = min
+                     limits = c(0, max(Atha$ldry_weight*1.1))) +
+  scale_x_discrete(labels=treatment_names)+
   axis_looks
   
 #Boxplot Bole
-p.dw.Bole <- ggplot(data = l_sp$Brassica_oleraceae,
+p.dw.Bole <- ggplot(data = Bole,
                     mapping = aes(x = treatment, y = ldry_weight), colour= treatment)+
   geom_boxplot(mapping = aes(fill= treatment), position = position_dodge(width = 0.8), lwd=0.8)+
   geom_jitter(mapping = aes(fill = treatment),
                          shape = 21, size = 1.8, color = "black", position = position_dodge(width = 0.8))+
   scale_fill_manual(values = color_treatments)+
   labs(y="Shoot biomass(g dry weight)", x=" ") +
+  labs(title = "Bole")+
+  #scale_y_continuous(expand = c(0, 0), #start graph at y = min and x = min
+  #                   limits = c(0, max(Bole$ldry_weight*1.1))) +
+  scale_x_discrete(labels=treatment_names)+
   axis_looks
 
-#save plots
-
-
+#save plot
+ggsave(p.dw.Bole,
+       height = 3.52, width = 3.55,
+       file="./R output/Figures_for_publication/traits_BO_dry_weight.svg")
 
 ```
 
@@ -171,6 +200,14 @@ glm.Atha <- glm_gaussian_Withdf(l_sp$Arabidopsis_thaliana) #Full, but not signif
 Anova(glm.Atha$Full)
 summ(glm.Atha$Full)
 
+df_dw_At <- summary_model(glm.Atha$Full, glm.Atha$Null)
+
+df_dw_At <- df_dw_At %>% 
+            mutate(trait = "dry_weight",
+                   species = "Arabidopsis_thaliana",
+                   model="GLM",
+                   distribution="Gaussian")
+
 #no effect of treatment (p=0.8855) nor block (p=0.1391)in A.thaliana biomass (p=0.34)
 
 #Brassica 
@@ -182,10 +219,10 @@ glm.Bole <- glm_gaussian_Withdf(l_sp$Brassica_oleraceae) #Optimal
 Anova(glm.Bole$Full)
 summ(glm.Bole$Full, digits = 4) #significant difference 
 
-#no effect of treatment (p=0.8855) nor block (p=0.1391)in A.thaliana biomass (p=0.34)
+simulateResiduals(glm.Bole$Full, plot = T) #ok, choosing this one
 
-####-Anova
-#LM
+#### Anova 
+#LM, trying with just LM
 glm.Bole2 <- lm(
   ldry_weight ~ treatment + Block, 
   data = l_sp$Brassica_oleraceae)
@@ -200,6 +237,15 @@ summary_model(glm.Bole$Optimal, glm.Bole$Null)
 
 #### Anova 
 
+#Keeping GLM
+df_dw_Bo <- summary_model(glm.Bole$Full, glm.Bole$Null)
+
+df_dw_Bo <- df_dw_Bo %>% 
+            mutate(trait = "dry_weight",
+                   species = "Brassica_oleraceae",
+                   model="GLM",
+                   distribution="Gaussian")
+
 #Post-hoc
 emm.Bole <- emmeans(ref_grid(glm.Bole$Full), pairwise ~ treatment)
 plot(emm.Bole$emmeans, comparisons = TRUE)
@@ -208,7 +254,6 @@ cld <- cld(emm.Bole,
            alpha = 0.05,
            Letters = letters,
            adjust = "tukey")
-
 ```
 
 * No effect of treatment (p=0.8855) nor block (p=0.1391)in A.thaliana biomass (LM, p=0.34)
@@ -223,16 +268,23 @@ cld <- cld(emm.Bole,
 ```{r}
 
 #Boxplot Bole
-p.la.Bole <- ggplot(data = l_sp$Brassica_oleraceae,
+p.la.Bole <- ggplot(data = Bole,
                     mapping = aes(x = treatment, y = leaf_area), colour= treatment)+
   geom_boxplot(mapping = aes(fill= treatment), position = position_dodge(width = 0.8), lwd=0.8)+
   geom_jitter(mapping = aes(fill = treatment),
                          shape = 21, size = 1.8, color = "black", position = position_dodge(width = 0.8))+
   scale_fill_manual(values = color_treatments)+
   labs(y="Leaf area(cm2)", x=" ") +
+  labs(title = "Bole")+
+  #scale_y_continuous(expand = c(0, 0), #start graph at y = min and x = min
+                     #limits = c(0, max(Bole$leaf_area*1.1))) +
+  scale_x_discrete(labels=treatment_names)+
   axis_looks
 
-#save plots
+#save plot
+ggsave(p.la.Bole,
+       height = 3.52, width = 3.55,
+       file="./R output/Figures_for_publication/traits_BO_leaf_area.svg")
 
 ```
 
@@ -310,8 +362,6 @@ lm.l.Bole <- lm(
 simulateResiduals(lm.l.Bole, plot = T) #ok
 
 Anova(lm.l.Bole)
-summary(lm.la.Bole)
-
 
 ```
 
@@ -373,9 +423,17 @@ p.nf.Atha <- ggplot(data = l_sp$Arabidopsis_thaliana,
                          shape = 21, size = 1.8, color = "black", position = position_dodge(width = 0.8))+
   scale_fill_manual(values = color_treatments)+
   labs(y="number of siliques/plant", x=" ") +
+  labs(title = "Atha")+
+  #scale_y_continuous(expand = c(0, 0), #start graph at y = min and x = min
+                     #limits = c(0, max(Bole$leaf_area*1.1))) +
+  scale_x_discrete(labels=treatment_names)+
   axis_looks
 
-#save plots
+#save plot
+ggsave(p.nf.Atha,
+       height = 3.52, width = 3.55,
+       file="./R output/Figures_for_publication/traits_AT_number_siliques.svg")
+
 
 ```
 
@@ -435,9 +493,17 @@ p.inf.Atha <- ggplot(data = l_sp$Arabidopsis_thaliana,
                          shape = 21, size = 1.8, color = "black", position = position_dodge(width = 0.8))+
   scale_fill_manual(values = color_treatments)+
   labs(y="inflorescence dry weight", x=" ") +
+  labs(title = "Atha")+
+  #scale_y_continuous(expand = c(0, 0), #start graph at y = min and x = min
+                     #limits = c(0, max(Bole$leaf_area*1.1))) +
+  scale_x_discrete(labels=treatment_names)+
   axis_looks
 
-#save plots
+#save plot
+ggsave(p.inf.Atha,
+       height = 3.52, width = 3.55,
+       file="./R output/Figures_for_publication/traits_AT_weight_inflorescence.svg")
+
 
 ```
 
@@ -456,7 +522,7 @@ lm.inf.Atha <- lm(
   inflorescence ~ treatment + Block, 
   data = l_sp$Arabidopsis_thaliana)
 
-simulateResiduals(lm.inf.Atha, plot = T) #not ok
+simulateResiduals(lm.inf.Atha, plot = T) #ok
 
 Anova(lm.inf.Atha)
 summary(lm.inf.Atha)
@@ -473,6 +539,8 @@ cld.inf <- cld(emm.inf.Atha,
 
 ```
 
+Significantly less with MeJA 1% compared to control and MeJA 0.1%
+
 ## 10.8 Aboveground dry weight (Arabidopsis)
 
 ### Plots
@@ -486,6 +554,10 @@ p.ab.Atha <- ggplot(data = l_sp$Arabidopsis_thaliana,
                          shape = 21, size = 1.8, color = "black", position = position_dodge(width = 0.8))+
   scale_fill_manual(values = color_treatments)+
   labs(y="aboveground dry weight", x=" ") +
+  labs(title = "Atha")+
+  #scale_y_continuous(expand = c(0, 0), #start graph at y = min and x = min
+                     #limits = c(0, max(Bole$leaf_area*1.1))) +
+  scale_x_discrete(labels=treatment_names)+
   axis_looks
 
 #save plots
@@ -507,9 +579,9 @@ lm.ab.Atha <- lm(
   aboveground_dw ~ treatment + Block, 
   data = l_sp$Arabidopsis_thaliana)
 
-simulateResiduals(lm.ab.Atha, plot = T) #not ok
+simulateResiduals(lm.ab.Atha, plot = T) #ok
 
-Anova(lm.ab.Atha)
+Anova(lm.ab.Atha) #no effect 
 summary(lm.ab.Atha)
 
 #Post-hoc
@@ -524,144 +596,487 @@ cld.inf <- cld(emm.ab.Atha,
 
 ```
 
-Even when using full aboveground weight there's no effect of treatment on A. thaliana dry biomass (although now differences seem bigger)
+Even when using full aboveground weight (leaves+flowers) there's no effect of treatment on A. thaliana dry biomass (although now differences seem bigger)
 
 
-## 10.7 Cohen's D comparison 
+## 10.8 LOX2 gene expression
+
+```{r}
+#make traits df longer
+qpcr.long <- traits %>% 
+               tidyr::pivot_longer(cols=14:15,
+                     names_to="gene",
+                     values_to="rel_exp")
+
+#make summary df
+qpcr.summ <- dplyr::group_by(qpcr.long, species, treatment, gene) %>%
+  dplyr::summarise(
+    n = dplyr::n(),
+    mean = mean(rel_exp, na.rm=TRUE),
+    sd = sd(rel_exp, na.rm=TRUE),
+    se = sd/sqrt(n)) 
+
+#obtain only those samples with gene expression data 
+qpcr.Atha <- dplyr::filter(Atha, gene_data == "yes")
+qpcr.Bole <- dplyr::filter(Bole, gene_data == "yes")
+
+```
+
+
+###Plots
+```{r}
+
+#Arabidopsis 
+p.lox2.Atha <- ggplot(data = subset(qpcr.summ, species=="Arabidopsis_thaliana" & gene =="lox2"),
+                    mapping = aes(x = treatment, y = mean), colour= treatment)+
+  geom_bar(mapping = aes(fill = treatment), color="black", size=0.8, stat = "summary", position = position_dodge(width = 0.8))+
+  geom_errorbar(aes(ymin=mean-se, ymax=mean+se), width=.4, size=0.8, position = position_dodge(width = 0.8))+
+  scale_fill_manual(values = color_treatments)+
+  labs(y="relative expression of LOX2", x=" ") +
+  labs(title = "Atha")+
+  scale_y_continuous(expand = c(0, 0), #start graph at y = min and x = min
+                     limits = c(0,7)) + #y limits
+  scale_x_discrete(labels=treatment_names)+
+  axis_looks
+
+#save plot
+ggsave(p.lox2.Atha,
+       height = 3.52, width = 3.55,
+       file="./R output/Figures_for_publication/traits_AT_LOX2.svg")
+
+#Brassica
+p.lox2.Bole <- ggplot(data = subset(qpcr.summ, species=="Brassica_oleraceae" & gene =="lox2"),
+                    mapping = aes(x = treatment, y = mean), colour= treatment)+
+  geom_bar(mapping = aes(fill = treatment), color="black", size=0.8, stat = "summary", position = position_dodge(width = 0.8))+
+  geom_errorbar(aes(ymin=mean-se, ymax=mean+se), width=.4, size=0.8, position = position_dodge(width = 0.8))+
+  scale_fill_manual(values = color_treatments)+
+  labs(y="relative expression of LOX2", x=" ") +
+  labs(title = "Bole")+
+  scale_y_continuous(expand = c(0, 0), #start graph at y = min and x = min
+                     limits = c(0, 6)) + #y limits
+  scale_x_discrete(labels=treatment_names)+
+  axis_looks
+
+#save plot
+ggsave(p.lox2.Bole,
+       height = 3.52, width = 3.55,
+       file="./R output/Figures_for_publication/traits_BO_LOX2.svg")
+
+```
+
+
+###Data analysis
+```{r}
+
+#check distribution
+continuous_distribution_plot_table(qpcr.Atha$lox2) #not normal, gamma 
+hist(qpcr.Atha$lox2)
+
+#LM
+lm.lox2.Atha <- lm(
+  lox2 ~ treatment, 
+  data = qpcr.Atha)
+
+simulateResiduals(lm.lox2.Atha, plot = T) #okay, but residuals look strange
+plot(lm.lox2.Atha)
+
+aov_residuals<-residuals(lm.lox2.Atha) 
+shapiro.test(aov_residuals) #not normal 
+
+#GLM with Gamma distribution
+glm.lox2.Atha <- glm (lox2 ~ treatment,
+               family = Gamma (link = "log"),
+               data = qpcr.Atha)
+
+simulateResiduals(glm.lox2.Atha, plot = T) #ok
+
+Anova(glm.lox2.Atha)
+summary(glm.lox2.Atha)
+summ(glm.lox2.Atha, digits = 4)
+
+#Post-hoc
+emm.lox2.Atha <- emmeans(ref_grid(glm.lox2.Atha), pairwise ~ treatment, type="response")
+
+plot(emm.lox2.Atha$emmeans, comparisons = TRUE)
+
+cld.lox2.Atha <- cld(emm.lox2.Atha,
+           alpha = 0.05,
+           Letters = letters,
+           adjust = "tukey")
+
+#Brassica
+
+#check distribution
+continuous_distribution_plot_table(qpcr.Bole$lox2) #not normal, gamma or log-normal
+hist(qpcr.Bole$lox2)
+
+#LM
+lm.lox2.Bole <- lm(
+  lox2 ~ treatment, 
+  data = qpcr.Atha)
+
+simulateResiduals(lm.lox2.Bole, plot = T) 
+plot(lm.lox2.Bole)
+
+aov_residuals<-residuals(lm.lox2.Bole) 
+shapiro.test(aov_residuals) #not normal 
+
+#GLM with Gamma distribution
+glm.lox2.Bole <- glm (lox2 ~ treatment,
+               family = Gamma (link = "log"),
+               data = qpcr.Bole)
+
+simulateResiduals(glm.lox2.Bole, plot = T) #ok
+plot(glm.lox2.Bole) #much better
+
+Anova(glm.lox2.Bole)
+summary(glm.lox2.Bole)
+summ(glm.lox2.Bole, digits = 4)
+
+#Post-hoc
+emm.lox2.Bole <- emmeans(ref_grid(glm.lox2.Bole), pairwise ~ treatment, type="response")
+
+plot(emm.lox2.Bole$emmeans, comparisons = TRUE)
+pairs(emm.lox2.Bole)
+
+cld.lox2.Bole <- cld(emm.lox2.Bole,
+           alpha = 0.05,
+           Letters = letters,
+           adjust = "tukey")
+
+```
+
+In both Brassica oleracea and Arabidopsis thaliana there's a significant effect of the treatment in the relative expression levels of LOX2, specifically plants treated with the highest concentration of MeJA had higher expression of LOX2 compared to controls. 
+
+This, however is not found back once the emmeans approach is taken. Pair contrast between Control and MeJA 1% is not significant (but barely!) p=0.0520
+
+## 10.9 MYC2 gene expression 
 
 ### Plots
 ```{r}
 
+#Arabidopsis
+p.myc2.Atha <- ggplot(data = subset(qpcr.summ, species=="Arabidopsis_thaliana" & gene =="myc2"),
+                    mapping = aes(x = treatment, y = mean), colour= treatment)+
+  geom_bar(mapping = aes(fill = treatment), color="black", size=0.8, stat = "summary", position = position_dodge(width = 0.8))+
+  geom_errorbar(aes(ymin=mean-se, ymax=mean+se), width=.4, size=0.8, position = position_dodge(width = 0.8))+
+  scale_fill_manual(values = color_treatments)+
+  labs(y="relative expression of MYC2", x=" ") +
+  labs(title = "Atha")+
+  scale_y_continuous(expand = c(0, 0), #start graph at y = min and x = min
+                     limits = c(0, 12)) + 
+  scale_x_discrete(labels=treatment_names)+
+  axis_looks
+
+#save plot
+ggsave(p.myc2.Atha,
+       height = 3.52, width = 3.55,
+       file="./R output/Figures_for_publication/traits_AT_MYC2.svg")
+
+#Brassica 
+p.myc2.Bole <- ggplot(data = subset(qpcr.summ, species=="Brassica_oleraceae" & gene =="myc2"),
+                    mapping = aes(x = treatment, y = mean), colour= treatment)+
+  geom_bar(mapping = aes(fill = treatment), color="black", size=0.8, stat = "summary", position = position_dodge(width = 0.8))+
+  geom_errorbar(aes(ymin=mean-se, ymax=mean+se), width=.4, size=0.8, position = position_dodge(width = 0.8))+
+  scale_fill_manual(values = color_treatments)+
+  labs(y="relative expression of MYC2", x=" ") +
+  labs(title = "Bole")+
+  scale_y_continuous(expand = c(0, 0), #start graph at y = min and x = min
+                     limits = c(0, 3)) + 
+  scale_x_discrete(labels=treatment_names)+
+  axis_looks
+
+#save plot
+ggsave(p.myc2.Bole,
+       height = 3.52, width = 3.55,
+       file="./R output/Figures_for_publication/traits_BO_MYC2.svg")
 ```
 
 
 ### Data analysis 
-```{r}
-#try with lsr package
-
-Ctrl.Bo <- Bole %>% 
-           dplyr::filter(treatment == "control") %>% .$ldry_weight
-          
-  
-MeJA_0.1.Bo <- Bole %>% 
-           dplyr::filter(treatment == "MeJA_0.1") %>% .$ldry_weight
-
-MeJA_1.Bo <- Bole %>% 
-           dplyr::filter(treatment == "MeJA_1.0") %>% .$ldry_weight
-  
-OS.Bo <- Bole %>% 
-           dplyr::filter(treatment == "oral_secretion") %>% .$ldry_weight
-
-
-cohensD(Ctrl.Bo, MeJA_0.1.Bo) #small 
-cohensD(Ctrl.Bo, MeJA_1.Bo) #very high
-cohensD(Ctrl.Bo, OS.Bo) #very low
-
-#with effsize
-
-cohen.d(Ctrl.Bo, MeJA_0.1.Bo) #small
-cohen.d(Ctrl.Bo, MeJA_1.Bo) #high
-cohen.d(Ctrl.Bo, OS.Bo) #nothing 
-
-#Arabidopsis
-
-Ctrl.At <- Atha %>% 
-           dplyr::filter(treatment == "control") %>% .$aboveground_dw
-          
-  
-MeJA_0.1.At <- Atha %>% 
-           dplyr::filter(treatment == "MeJA_0.1") %>% .$aboveground_dw
-
-MeJA_1.At <- Atha %>% 
-           dplyr::filter(treatment == "MeJA_1.0") %>% .$aboveground_dw
-  
-OS.At <- Atha %>% 
-           dplyr::filter(treatment == "oral_secretion") %>% .$aboveground_dw
-
-#with effsize
-
-cohen.d(Ctrl.At, MeJA_0.1.At) #nothing
-cohen.d(Ctrl.At, MeJA_1.At) #medium
-cohen.d(Ctrl.At, OS.At) #nothing  
-
-
-```
-
 
 ```{r}
 
-#using Giauque et al., XXXX reference
+#check distribution
+continuous_distribution_plot_table(qpcr.Atha$myc2) #not normal, gamma 
+hist(qpcr.Atha$myc2)
 
-z <- yuju(Bole, ldry_weight)
+#LM
+lm.myc2.Atha <- lm(
+  myc2 ~ treatment, 
+  data = qpcr.Atha)
 
+Anova(lm.myc2.Atha)
 
+simulateResiduals(lm.myc2.Atha, plot = T) #okay 
+plot(lm.myc2.Atha)
 
+aov_residuals<-residuals(lm.myc2.Atha) 
+shapiro.test(aov_residuals) #okay 
 
-yuju <- function(x, y){
+#GLM with Gamma distribution
+glm.myc2.Atha <- glm (myc2 ~ treatment,
+               family = Gamma (link = "log"),
+               data = qpcr.Atha)
 
-  
-Ctrl<- x%>% 
-           dplyr::filter(treatment == "control") %>% .$y
-          
-  
-MeJA_0.1<- x %>% 
-           dplyr::filter(treatment == "MeJA_0.1") %>% .$y
+simulateResiduals(glm.myc2.Atha, plot = T) #ok
+plot(glm.myc2.Atha)
 
-MeJA_1 <- x %>% 
-           dplyr::filter(treatment == "MeJA_1.0") %>% .$y
-  
-OS <- x %>% 
-           dplyr::filter(treatment == "oral_secretion") %>% .$y
+Anova(glm.myc2.Atha)
+summary(glm.myc2.Atha)
+summ(glm.myc2.Atha, digits = 4)
 
-list <- list(Ctrl, MeJA_0.1, MeJA_1, OS)
+#Post-hoc
+emm.myc2.Atha <- emmeans(ref_grid(lm.myc2.Atha), pairwise ~ treatment, type="response")
 
-return(list)
+plot(emm.myc2.Atha$emmeans, comparisons = TRUE)
+pairs(emm.myc2.Atha)
+eff_size(emm.myc2.Atha, sigma = sigma(glm.myc2.Atha), edf = 23)
 
-}
+cld.myc2.Atha <- cld(emm.myc2.Atha,
+           alpha = 0.05,
+           Letters = letters,
+           adjust = "tukey")
 
+#Brassica
 
+#check distribution
+continuous_distribution_plot_table(qpcr.Bole$myc2) #not normal, gamma or lognormal
+hist(qpcr.Bole$myc2)
 
-df_dw <- group_by(Bole, treatment) %>%
-  dplyr::summarise(
-    n = dplyr::n(),
-    mean = mean(ldry_weight, na.rm = TRUE),
-    sd = sd(ldry_weight, na.rm = TRUE)) %>%
-    mutate(trait="ldry_weight")%>%
-    mutate(species="Bole")%>%
-    mutate("N-1" = n-1)%>%
-    mutate(S2 = sd^2)
+#LM
+lm.myc2.Bole <- lm(
+  myc2 ~ treatment, 
+  data = qpcr.Bole)
 
+simulateResiduals(lm.myc2.Bole, plot = T) #ok
+plot(lm.myc2.Bole)
 
-a <- (df_dw$`N-1`[1]*df_dw$S2[1])+(df_dw$`N-1`[2]*df_dw$S2[2])
-b <- df_dw$n[1]+df_dw$n[2]-2
-S <- sqrt(a/b)
-c <- (df_dw$mean[2]-df_dw$mean[1])
-d <- c/S
+aov_residuals<-residuals(lm.myc2.Bole) 
+shapiro.test(aov_residuals) #not normal 
 
-#it's the same 
+#GLM with Gamma distribution
+glm.myc2.Bole <- glm (myc2 ~ treatment,
+               family = Gamma (link = "log"),
+               data = qpcr.Bole)
 
+simulateResiduals(glm.myc2.Bole, plot = T) #ok
+plot(glm.myc2.Bole)
 
-cohensD.MeJA0.1 <- function(x){
-  
-  #x is a df
-  
-  A <- 
-  
-  
-}
-]
+Anova(glm.myc2.Bole)
+summary(glm.myc2.Bole)
+summ(glm.myc2.Bole, digits = 4)
 
+#Post-hoc
+emm.myc2.Bole <- emmeans(ref_grid(glm.myc2.Bole), pairwise ~ treatment, type="response")
 
+plot(emm.myc2.Bole$emmeans, comparisons = TRUE)
+pairs(emm.myc2.Bole)
 
-
+cld.myc2.Bole <- multcomp::cld(emm.myc2.Bole,
+           alpha = 0.05,
+           Letters = letters,
+           adjust = "tukey")
 
 ```
 
+Only for Arabidopsis thaliana there's a significant effect of the treatment in the relative expression levels of MYC2, specifically, plants treated with the highest concentration of MeJA had higher expression of MYC2 compared to controls. 
 
 
+## 10.10 Cohen's D comparison 
+
+The standardized mean difference (cohen's D) with confidence intervals were calculated for:  
+
+* dry biomass BO
+* leaf area BO
+* inflorescence weight AT
+* Number of siliques AT
+* LOX2 expression for both AT and BO 
+* MYC2 expression for both AT and BO 
 
 Reference suggested by Pedro: https://nph.onlinelibrary.wiley.com/doi/full/10.1111/nph.15504 
 
+### Cohen's D
+```{r}
+#making costume function using lsr package to calculate Cohen's D
+
+cohensD_per_trait <- function(df, column, species){
+  
+  #df= data frame
+  #column = column name with trait of interest, no quotes 
+  #species = species name to be put in df, no quotes 
+  
+  trait_name <- deparse(substitute(column))
+  species_name <- deparse(substitute(species))
+
+Ctrl<- df %>% 
+       dplyr::filter(treatment == "control") %>%  pull(trait_name)
+
+MeJA_0.1 <- df %>% 
+           dplyr::filter(treatment == "MeJA_0.1") %>% pull(trait_name)
+
+MeJA_1 <- df %>% 
+           dplyr::filter(treatment == "MeJA_1.0") %>% pull(trait_name)
+  
+OS <- df %>% 
+           dplyr::filter(treatment == "oral_secretion") %>% pull(trait_name)
+
+d_MeJA0.1 <- cohen.d(Ctrl, MeJA_0.1) 
+d_MeJA1.0 <- cohen.d(Ctrl, MeJA_1) 
+d_OS <- cohen.d(Ctrl, OS) 
+
+a <- as.data.frame(t(unlist(d_MeJA0.1))) %>% 
+      mutate(treatment="MeJA_0.1")             
+
+b <- as.data.frame(t(unlist(d_MeJA1.0))) %>% 
+      mutate(treatment="MeJA_1.0")  
+
+c <- as.data.frame(t(unlist(d_OS))) %>% 
+      mutate(treatment="oral_secretion") 
+
+df.cohensD <- rbind(a,b,c)%>% 
+              mutate(trait=trait_name)%>%
+              mutate(species=species_name)%>%
+              mutate(eff_size=
+                       case_when(
+                         magnitude == 1 ~ "negligible",
+                         magnitude == 2 ~ "small",
+                         magnitude == 3 ~ "medium",
+                         magnitude == 4 ~ "large"))%>%
+             relocate(trait, species, treatment, eff_size)
 
 
+return(df.cohensD)
+}  
 
+#calculate cohen's D for each trait 
+d_drybiomass <- cohensD_per_trait(Bole, ldry_weight, Brassica_oleraceae)
+d_leaf_area <- cohensD_per_trait(Bole, leaf_area, Brassica_oleraceae)
+d_lox2.bo <- cohensD_per_trait(qpcr.Bole, lox2, Brassica_oleraceae)
+d_myc2.bo <- cohensD_per_trait(qpcr.Bole, myc2, Brassica_oleraceae)
+d_number_fruits <- cohensD_per_trait(Atha, number_fruits, Arabidopsis_thaliana)
+d_inflorescence <- cohensD_per_trait(Atha, inflorescence, Arabidopsis_thaliana)
+d_lox2.at <- cohensD_per_trait(qpcr.Atha, lox2, Arabidopsis_thaliana)
+d_myc2.at <- cohensD_per_trait(qpcr.Atha, myc2, Arabidopsis_thaliana)
+
+#merge df's
+d_traits <- rbind(d_drybiomass, d_leaf_area, d_lox2.bo, d_myc2.bo, d_number_fruits,
+                  d_inflorescence, d_lox2.at, d_myc2.at)
+
+#changing to factor and numberic 
+d_traits[c(1:4)] <- lapply(d_traits[c(1:4)], as.factor)
+d_traits[c(7:13)] <- lapply(d_traits[c(7:13)], as.numeric)
+
+#order traits
+d_traits$trait = factor(d_traits$trait,
+                         level=c("myc2", "lox2", "number_fruits", "inflorescence", "leaf_area", "ldry_weight"))
+
+```
+
+### Plots  
+
+Followed this: https://stackoverflow.com/questions/58657802/forest-plot-with-subgroups-in-ggplot2 
+
+```{r}
+#settings for plots 
+color_treatments_noControl <- c("#E69F00", "#56B4E9", "#009E73")
+names_treatments_noControl <- c(c("MeJA_0.1" = "0.1 mM \n MeJA", "MeJA_1.0" = "1 mM \n MeJA", "oral_secretion"="P. brassicae \n OS"))
+trait_names <- c("myc2" = "relative expression \n of MYC2", "lox2" = "relative expression \n of LOX2",
+                      "number_fruits" = "Number of siliques \n per plant", "inflorescence"="Dry weight \n inflorescence", "ldry_weight"="Dry weight \n leaves", "leaf_area"="Leaf area")
+
+
+#Arabidopsis
+p.cohensD.Atha <- ggplot(data = subset(d_traits, species == "Arabidopsis_thaliana"), mapping = aes(x = trait, y = estimate,
+                    ymin=conf.int.lower, ymax=conf.int.upper,colour= treatment, fill=treatment))+
+  geom_linerange(size=5, position=position_dodge(width = 0.5)) +
+  geom_hline(aes(yintercept=0), lty=2) +
+    geom_hline(aes(yintercept=0.8), lty=2, colour="red") +
+  geom_hline(aes(yintercept=-0.8), lty=2, colour="red") +
+  geom_point(size=3, shape=20, colour="black", stroke = 0.5,
+             position=position_dodge(width = 0.5)) +
+  scale_fill_manual(values=color_treatments_noControl)+
+  scale_color_manual(values=color_treatments_noControl)+
+  scale_x_discrete(name="", labels=trait_names) +
+  labs(title = "Arabidopsis thaliana")+
+  scale_y_continuous(name="Cohen's D estimate with 95% confidence interval", limits = c(-10.15,5)) +
+  coord_flip() +
+  theme_minimal()+
+  axis_looks+
+  theme(axis.text.y = element_text(colour = "black", size = 12,
+                                               face = "bold", angle=0, hjust=0.5))+
+  theme(legend.position="top")
+
+#Brassica
+p.cohensD.Bole <- ggplot(data = subset(d_traits, species == "Brassica_oleraceae"), mapping = aes(x = trait, y = estimate, ymin=conf.int.lower, ymax=conf.int.upper,colour= treatment, fill=treatment))+
+  geom_linerange(size=5, position=position_dodge(width = 0.5)) +
+  geom_hline(aes(yintercept=0), lty=2) +
+    geom_hline(aes(yintercept=0.8), lty=2, colour="red") +
+  geom_hline(aes(yintercept=-0.8), lty=2, colour="red") +
+  geom_point(size=3, shape=20, colour="black", stroke = 0.5,
+             position=position_dodge(width = 0.5)) +
+  scale_fill_manual(values=color_treatments_noControl)+
+  scale_color_manual(values=color_treatments_noControl)+
+  scale_x_discrete(name="", labels=trait_names) +
+  labs(title = "Brassica oleracea")+
+  scale_y_continuous(name="Cohen's D estimate with 95% confidence interval", limits = c(-5,5)) +
+  coord_flip() +
+  theme_minimal()+
+  axis_looks+
+  theme(axis.text.y = element_text(colour = "black", size = 12,
+                                               face = "bold", angle=0, hjust=0.5))+
+  theme(legend.position="top")
+
+#save plots
+ggsave(p.cohensD.Atha,
+       height = 4.81, width = 7.04,
+       file="./R output/Figures_for_publication/traits_AT_cohensD.svg")
+
+ggsave(p.cohensD.Bole,
+       height = 4.81, width = 7.04,
+       file="./R output/Figures_for_publication/traits_BO_cohensD.svg")
+
+```
+
+---Cancelled
+Now, make a table to be placed next to the plot. 
+From: https://rpubs.com/mbounthavong/forest_plots_r
+
+```{r}
+
+## Create the table-base pallete
+table_base <- ggplot(data = subset(d_traits, species == "Arabidopsis_thaliana"), aes(y=trait, fill=treatment)) +
+  ylab(NULL) + xlab("  ") + 
+  theme(plot.title = element_text(hjust = 0.5, size=12), 
+        axis.text.x = element_text(color="white", hjust = -3, size = 25), ## This is used to help with alignment
+        axis.line = element_blank(),
+        axis.text.y = element_blank(), 
+        axis.ticks = element_blank(),
+        axis.title.y = element_blank(), 
+        legend.position = "none",
+        panel.background = element_blank(), 
+        panel.border = element_blank(), 
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(), 
+        plot.background = element_blank())
+
+## OR point estimate table
+tab1 <- table_base + 
+  labs(title = "space") +
+  geom_text(aes(y = rev(trait), x = 1, label = sprintf("%0.1f", round(estimate, digits = 2))), size = 4) + ## decimal places
+  ggtitle("Cohen's D")
+
+## 95% CI table
+tab2 <- table_base +
+  geom_text(aes(y = rev(trait), x = 1, label = eff_size), size = 4) + 
+  ggtitle("Effect size")
+
+
+## Merge tables with plot
+lay <-  matrix(c(1,1,1,1,1,1,1,1,1,1,2,3,3), nrow = 1)
+grid.arrange(p.cohensD.Atha, tab1, tab2, layout_matrix = lay)
+
+
+```
+
+It's difficult to align with groups per treatment, I will stop and add it on inkscape, perhaps it's better to add an '**' when effects are large. 
+---Cancelled

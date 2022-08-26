@@ -21,6 +21,10 @@ continuous_distribution_plot_table <- function(x){
   ln <- fitdist(x, "lnorm")
   #summary(ln)
   
+  #plotting distribution
+  plot2 <- cdfcomp(list(n,g,ln), legendtext = c("normal", "gamma", "lnorm"))
+  plot3 <- denscomp(list(n,g,ln), legendtext = c("normal", "gamma", "lnorm"))
+  
   # Making summary table 
   distribution_names <- c(n$distname, g$distname, ln$distname)
   AIC <- c(n$aic, g$aic, ln$aic)
@@ -50,6 +54,9 @@ continuous_distribution_plot_table <- function(x){
   print(summary_table)
   print(normality_test)
   print(plot)
+  #print(plot2)
+  #print(plot3)
+  
 }
 
 glm_gaussian_Withdf <- function(x){
@@ -130,26 +137,125 @@ summary_model <- function(GLM, Null){
   
   print(aov <- Anova(GLM, test.statistic = "Wald", type = "II"))
   
-  print("###### D2 #######")
+  #print("###### D2 #######")
   
-  D2 <-(1-(GLM$deviance/GLM$null.deviance))
-  print("D2 value (explanation of model) is:") #d2
-  print(D2)
+  #D2 <-(1-(GLM$deviance/GLM$null.deviance))
+  #print("D2 value (explanation of model) is:") #d2
+  #print(D2)
   
-  print("###### pseudo-R2 #######")
-  R2 <- PseudoR2(GLM, which = "McFadden")
-  print("Pseudo-R2 McFadden is:") #pseudo-r2 
-  print(R2)
+  #print("###### pseudo-R2 #######")
+  #R2 <- PseudoR2(GLM, which = "McFadden")
+  #print("Pseudo-R2 McFadden is:") #pseudo-r2 
+  #print(R2)
   
   
   #Making df 
   
   df_aov <- aov %>% 
-    tibble::rownames_to_column("GLM_factors") %>% 
-    mutate(D2 = D2)%>%
-    mutate(pseudo_R2 = R2)
+            tibble::rownames_to_column("GLM_factors")  
+    #mutate(D2 = D2)%>%
+    #mutate(pseudo_R2 = R2)
   
   
   return(df_aov) 
   
 }
+
+#pairwise_contrasts_backTransformed <- function(x,GLM){
+  
+  #x is the df 
+  phytohormone_name <-levels(x$phytohormone)
+  print("Calculation of estimated means and pairwise contrasts for:")
+  print(phytohormone_name)
+  
+  
+  #calculate pairwise comparisons 
+  means.int <- emmeans(ref_grid(GLM), pairwise ~ soil_inocula | herbivory, type="response")
+  means.herb <- emmeans(ref_grid(GLM), pairwise ~ herbivory, type="response")
+  means.soil <- emmeans(ref_grid(GLM), pairwise ~ soil_inocula, type="response") 
+  
+  #making df's for estimated means
+  estimated_means.int_df <- means.int$contrasts %>%
+    as.data.frame() %>%
+    mutate(glm_output = "contrasts") %>% 
+    mutate(phytohormone = phytohormone_name) %>%
+    mutate(contrast_By = "interaction") %>%
+    rename(pairs = contrast)
+  
+  estimated_means.soil_df <- means.soil$contrasts %>%
+    as.data.frame() %>%
+    mutate(glm_output = "contrasts") %>% 
+    mutate(phytohormone = phytohormone_name) %>%
+    mutate(contrast_By = "soil_inocula") %>%
+    rename(pairs = contrast)
+  
+  estimated_means.herb_df <- means.herb$contrasts %>%
+    as.data.frame() %>%
+    mutate(glm_output = "contrasts") %>% 
+    mutate(phytohormone = phytohormone_name) %>%
+    mutate(contrast_By = "herbivory") %>%
+    rename(pairs = contrast)
+  
+  #joining df's
+  contrasts_df <-  bind_rows(estimated_means.int_df, estimated_means.soil_df,
+                             estimated_means.herb_df)
+  
+  
+  #differences by letter: interaction
+  letters.int <- multcomp::cld(means.int[[1]],
+                               adjust = "Sidak",
+                               Letters = letters,
+                               alpha = 0.05)
+  
+  letters.int <- letters.int %>% 
+    mutate(phytohormone=phytohormone_name)%>%
+    mutate(glm_output="letters")%>%
+    mutate(contrast_By="interaction")%>%
+    rename(estimated_mean = response)%>%
+    relocate(herbivory, soil_inocula, .group)
+  
+  #differences by letter: soil_inocula
+  letters.soil <- multcomp::cld(means.soil[[1]],
+                                adjust = "Sidak",
+                                Letters = letters,
+                                alpha = 0.05)
+  
+  letters.soil <- letters.soil %>% 
+    mutate(phytohormone=phytohormone_name)%>%
+    mutate(glm_output="letters")%>%
+    mutate(contrast_By="soil_inocula")%>%
+    rename(estimated_mean = response)%>%
+    relocate(.group, .after = soil_inocula)
+  
+  
+  #differences by letter: herbivory
+  letters.herb <- multcomp::cld(means.herb[[1]],
+                                adjust = "Sidak",
+                                Letters = letters,
+                                alpha = 0.05)
+  
+  letters.herb <- letters.herb %>% 
+    mutate(phytohormone=phytohormone_name)%>%
+    mutate(glm_output="letters")%>%
+    mutate(contrast_By="herbivory")%>%
+    rename(estimated_mean = response)%>%
+    relocate(.group, .after = herbivory) 
+  
+  #merging df
+  emmeans_df <-  bind_rows(letters.soil, letters.int,
+                           letters.herb)
+  
+  #making list 
+  list <- list(means.int, means.herb, means.soil,
+               letters.int, letters.herb, letters.soil, 
+               contrasts_df, emmeans_df)
+  
+  names(list) <- c("contrasts.interaction", "contrasts.herbivory", "contrasts.soil",
+                   "letters.interaction", "letters.herbivory", "letters.soil", 
+                   "df_contrasts", "df_emmeans")
+  
+  
+  #output
+  return(list)
+  
+} #continue with this one later 
