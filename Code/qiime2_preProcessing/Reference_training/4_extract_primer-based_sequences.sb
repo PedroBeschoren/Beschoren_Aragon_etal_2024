@@ -1,0 +1,40 @@
+#!/bin/bash -login
+ 
+#SBATCH --time=4:00:00				  	### limit of wall clock time - how long the job will run (same as -t)
+#SBATCH --ntasks=2					      ### number of tasks - how many tasks (nodes) that you require (same as -n)
+#SBATCH --cpus-per-task=20			  ### number of CPUs (or cores) per task (same as -c)
+#SBATCH --mem=64G					        ### memory required per node - amount of memory (in bytes)
+#SBATCH --job-name TrainClassifier			### you can give your job a name for easier identification (same as -J)
+
+# consider this tutorial: https://docs.qiime2.org/2021.2/data-resources/
+# this filtering is based on the tutorial: https://forum.qiime2.org/t/processing-filtering-and-evaluating-the-silva-database-and-other-reference-sequence-data-with-rescript/15494#heading--second-header
+
+
+conda activate qiime2-2021.2
+# Let's extract sequences from the reference dataset, using the priemrs and amplicon lenghts of our study
+qiime feature-classifier extract-reads \
+    --i-sequences silva-138-ssu-nr99-seqs-derep-uniq.qza \
+    --p-f-primer CCTACGGGNGGCWGCAG \
+    --p-r-primer GGACTACHVGGGTATCTAATCC \
+    --p-n-jobs 2 \
+    --p-read-orientation 'forward' \
+    --o-reads silva-138-ssu-nr99-seqs-341f-806r.qza
+
+
+#dereplicate the dereplicated sequences again, since the primer cutting might have affected unique sequences
+qiime rescript dereplicate \
+    --i-sequences silva-138-ssu-nr99-seqs-341f-806r.qza \
+    --i-taxa silva-138-ssu-nr99-tax-derep-uniq.qza \
+    --p-rank-handles 'silva' \
+    --p-mode 'uniq' \
+    --o-dereplicated-sequences silva-138-ssu-nr99-seqs-341f-806r-uniq.qza \
+    --o-dereplicated-taxa silva-138-ssu-nr99-tax-341f-806r-derep-uniq.qza
+
+# Now that the reference dataset accounts for priemrs used in our sequencing run, let's train it
+qiime feature-classifier fit-classifier-naive-bayes \
+    --i-reference-reads silva-138-ssu-nr99-seqs-341f-806r-uniq.qza \
+    --i-reference-taxonomy silva-138-ssu-nr99-tax-341f-806r-derep-uniq.qza \
+    --o-classifier silva-138-ssu-nr99-341f-806r-classifier.qza
+
+conda deactivate
+

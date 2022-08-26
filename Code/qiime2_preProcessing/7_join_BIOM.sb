@@ -1,0 +1,29 @@
+#!/bin/bash -login
+ 
+#SBATCH --time=01:00:00					### limit of wall clock time - how long the job will run (same as -t)
+#SBATCH --ntasks=1					### number of tasks - how many tasks (nodes) that you require (same as -n)
+#SBATCH --cpus-per-task=10				### number of CPUs (or cores) per task (same as -c)
+#SBATCH --mem=32G					### memory required per node - amount of memory (in bytes)
+#SBATCH --job-name stats				### you can give your job a name for easier identification (same as -J)
+
+#activates qiime2 environment
+conda activate qiime2-2021.2 
+
+### ATTENTION: there is a bit of editing with nano that is required before proceeding. the header of" taxonomy.tsv" is:
+### Feature ID	Taxon	Confidence
+### you should then manually change the header to:
+### #OTUID	taxonomy	confidence
+### note the space in tabs and that the header starts with a hashtag
+### there is a way to do this automatically, but this solution works for now
+
+#now, add the metadata and the toxonomy to the biom file
+biom add-metadata \
+-i Pilot_phyloseq_input_FeatureTable/feature-table.biom \
+-o Pilot_phyloseq_input_FeatureTable_metadata_taxonomy.biom \
+-m Mapping_file_MeJA_pilot.txt \
+--observation-metadata-fp Pilot_phyloseq_input_taxonomy/taxonomy.tsv 
+#--observation-metadata-fp exported-tree_unrooted_pilot_TrimmaticnoTrunc/tree.nwk #Pedro could not import the phylogenetic tree inside the biom fle yet
+
+conda deactivate
+
+

@@ -1,0 +1,51 @@
+#!/bin/bash -login
+ 
+#SBATCH --time=4:00:00				  	### limit of wall clock time - how long the job will run (same as -t)
+#SBATCH --ntasks=1					      ### number of tasks - how many tasks (nodes) that you require (same as -n)
+#SBATCH --cpus-per-task=10			  ### number of CPUs (or cores) per task (same as -c)
+#SBATCH --mem=64G					        ### memory required per node - amount of memory (in bytes)
+#SBATCH --job-name TrainClassifier			### you can give your job a name for easier identification (same as -J)
+
+# consider this tutorial: https://docs.qiime2.org/2021.2/data-resources/
+# this filtering is based on the tutorial: https://forum.qiime2.org/t/processing-filtering-and-evaluating-the-silva-database-and-other-reference-sequence-data-with-rescript/15494#heading--second-header
+
+# Now we will filter and cut the reference data, so we have high-quality sequneces close to our target
+
+#activates qiime2 environment
+conda activate qiime2-2021.2 
+
+
+
+# Remove sequences that contain 5 or more ambiguous bases (IUPAC compliant ambiguity bases) and any homopolymers that are 8 or more bases in length
+qiime rescript cull-seqs \
+    --i-sequences silva-138-ssu-nr99-seqs.qza \
+    --o-clean-sequences silva-138-ssu-nr99-seqs-cleaned.qza
+
+
+# We will remove rRNA gene sequences that do not meet the following criteria: Archaea (16S) >= 900 bp, Bacteria (16S) >= 1200 bp, and any Eukaryota (18S) >= 1400 bp. See help text for more info.
+qiime rescript filter-seqs-length-by-taxon \
+    --i-sequences silva-138-ssu-nr99-seqs-cleaned.qza \
+    --i-taxonomy silva-138-ssu-nr99-tax.qza \
+    --p-labels Archaea Bacteria Eukaryota \
+    --p-min-lens 900 1200 1400 \
+    --o-filtered-seqs silva-138-ssu-nr99-seqs-filt.qza \
+    --o-discarded-seqs silva-138-ssu-nr99-seqs-discard.qza 
+
+
+# derreplicate the sequences, so we don't have several identical pieces of data
+qiime rescript dereplicate \
+    --i-sequences silva-138-ssu-nr99-seqs-filt.qza  \
+    --i-taxa silva-138-ssu-nr99-tax.qza \
+    --p-rank-handles 'silva' \
+    --p-mode 'uniq' \
+    --o-dereplicated-sequences silva-138-ssu-nr99-seqs-derep-uniq.qza \
+    --o-dereplicated-taxa silva-138-ssu-nr99-tax-derep-uniq.qza
+
+# now you can run the classifier against the full-lenght database. note that this classifier will NOT account for the library preparation priemrs used in the study
+qiime feature-classifier fit-classifier-naive-bayes \
+  --i-reference-reads  silva-138-ssu-nr99-seqs-derep-uniq.qza \
+  --i-reference-taxonomy silva-138-ssu-nr99-tax-derep-uniq.qza \
+  --o-classifier silva-138-ssu-nr99-classifier.qza
+
+
+conda deactivate
