@@ -303,7 +303,7 @@ lapply(rf_heat_tree, function (x) make_list_of_heat_trees(x))
   #get boruta stats of ASVs confirmed to be important
 rf_importance_byOTU<-lapply(fixed_boruta_objt_list, function (x)
    filter(attStats(x), decision=="Confirmed")%>%
-    rownames_to_column(var = "OTU"))
+    tibble::rownames_to_column(var = "OTU"))
 
 #turn ps object into a dataframe
 melted_ps<-lapply(rf_important_ps_l, psmelt)
@@ -325,6 +325,9 @@ plot_rf_asvs<-lapply(rf_ASVs_df, function(x)
   geom_boxplot(aes())+
   scale_fill_manual(values = color_treatments)+
   theme_bw()+
+  theme(axis.title=element_text(size=11, face = "bold"))+
+  theme(panel.border = element_blank(), panel.grid.major = element_blank(),
+  panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"))+
   theme(axis.title.x = element_blank())+
   geom_line(data = x, aes(x=OTU, y = meanImp), size = 2)+
   theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1)) )
@@ -334,6 +337,21 @@ diff(rf_ASVs_df$Arabidopsis_thaliana.Root$Abundance)/diff(rf_ASVs_df$Arabidopsis
 diff(ylim.prim)/diff(ylim.sec)
 
 filter(attStats(fixed_boruta_objt_list$Arabidopsis_thaliana.Root)$meanImp, decision=="Confirmed")
+
+
+```
+
+#Figures
+```{r}
+
+plot_rf <- grid.arrange(plot_rf_asvs$Arabidopsis_thaliana.Root, plot_rf_asvs$Arabidopsis_thaliana.Soil, plot_rf_asvs$Brassica_oleraceae.Root, plot_rf_asvs$Brassica_oleraceae.Soil, nrow=2, ncol=2)
+  
+  
+#save plot
+ggsave(plot_rf,
+       height = 15, width = 18,
+       file="./R output/Figures_for_publication/RF_ASVs_AT_BO.svg")
+
 
 
 ```
