@@ -886,6 +886,19 @@ pairwise_output
 ### 4.8.1 re-join BO_soil and AT_soil
 
 ```{r}
+#settings for NMDS plots 
+
+axis_looks <- theme(axis.text = element_text(colour = "black", size = 14))+
+  theme(axis.title=element_text(size=14, face = "bold"))+
+  theme(panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank())+
+  theme(panel.border = element_rect(colour = "black", fill=NA, size=1))
+
+```
+
+
+
+```{r}
 # original objects: 
 ps_list_rarefied$Brassica_oleraceae.Soil
 ps_list_rarefied$Arabidopsis_thaliana.Soil
@@ -903,10 +916,15 @@ nmds_check_BO_soil <- phyloseq::ordinate(check_BO_soil,
                              autotransform=TRUE) 
 
 
-plot_ordination(physeq = check_BO_soil, 
+plot_nmds_check_BO_soil <- plot_ordination(physeq = check_BO_soil, 
                 ordination = nmds_check_BO_soil, 
                 type = "sample",
                 color= "MeJA_treatment")
+
+
+plot_nmds_check_BO_soil_ed <- plot_nmds_check_BO_soil + 
+  geom_point(size=5, alpha=0.8)+
+  axis_looks
 
 
 #re-merged AT
@@ -920,12 +938,23 @@ nmds_check_AT_soil <- phyloseq::ordinate(check_AT_soil,
                              autotransform=TRUE) 
 
 
-plot_ordination(physeq = check_AT_soil, 
+plot_nmds_check_AT_soil <- plot_ordination(physeq = check_AT_soil, 
                 ordination = nmds_check_AT_soil, 
                 type = "sample",
                 color= "MeJA_treatment")
 
+plot_nmds_check_AT_soil_ed <- plot_nmds_check_AT_soil + 
+  geom_point(size=5, alpha=0.8)+
+  axis_looks
 
+#Arrange plots 
+plot_nmds_check_AT_BO_soil_ed <- ggarrange(plot_nmds_check_AT_soil_ed, 
+                                           plot_nmds_check_BO_soil_ed,
+                                           ncol = 2)
+#save plots
+ggsave(plot_nmds_check_AT_BO_soil_ed,
+       height = 5, width = 15,
+       file="./R output/Figures_for_publication/NeutralModels_NMDS_soil_AT_BO.svg")
 
 ```
 
