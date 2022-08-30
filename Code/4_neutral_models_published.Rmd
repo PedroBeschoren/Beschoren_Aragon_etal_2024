@@ -608,24 +608,26 @@ plot_titles<-names(neutral_list_AT_soil)
 
 # one plot for each list element
 Neutral_plots_list_AT_soil<-mapply(function(x,y) 
-  plot_sncm_fit(x, title=y)+
-    theme_bw(),
+  plot_sncm_fit2(x, title=y)+
+    theme(axis.title=element_text(face = "bold"))+
+    theme(axis.text=element_text(face = "bold", colour="black"))+
+    theme(legend.position="none"),
   neutral_list_AT_soil,plot_titles, SIMPLIFY = FALSE)
 ########################
 
 
-
 # arrange 4 plots in 1 figure
-ggarrange(Neutral_plots_list_AT_soil$control,
+Neutral_plots_list_AT_soil_g <- ggarrange(Neutral_plots_list_AT_soil$control,
           Neutral_plots_list_AT_soil$MeJA_0.1,
           Neutral_plots_list_AT_soil$MeJA_1.0,
-          Neutral_plots_list_AT_soil$oral_secretion + rremove("x.text"), 
-          labels = c("A", "B", "C", "D"),
+          Neutral_plots_list_AT_soil$oral_secretion,# + rremove("x.text"), 
+          #labels = c("A", "B", "C", "D"),
           ncol = 2, nrow = 2)
 
-
-
-
+#save plots
+ggsave(Neutral_plots_list_AT_soil_g,
+       height = 9, width = 12,
+       file="./R output/Figures_for_publication/NeutralModels_AT.svg")
 
 ```
 
