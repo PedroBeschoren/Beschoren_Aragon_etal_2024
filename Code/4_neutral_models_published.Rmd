@@ -1664,6 +1664,7 @@ untitled_plot_list<-lapply(full_VS_selected_TaxaLevel, function(z)
 ggplot(data=z,aes(x=Observed_full_dataset,y=Observed_above_expected ))+
   geom_point() +
   theme_bw()+
+  theme(axis.title=element_text(size=11, face = "bold"))+
   xlab(label = "Number of taxa in full dataset")+
   ylab(label = "Number of taxa in above-expected subset")+
   geom_smooth(method="loess")+ #values of y are based on the values of x
@@ -1680,9 +1681,9 @@ return(Plot_list)
 
 }
 
-plot_observed_correlation(full_VS_selected_Class)
-plot_observed_correlation(full_VS_selected_Order)
-plot_observed_correlation(full_VS_selected_Family)
+plot_l_obs_Class <- plot_observed_correlation(full_VS_selected_Class)
+plot_l_obs_Order <-plot_observed_correlation(full_VS_selected_Order)
+plot_l_obs_Family <-plot_observed_correlation(full_VS_selected_Family)
 
 
 
@@ -1694,6 +1695,7 @@ ggplot(data=z[z$Shannon_above_expected>0,], #only includes shannon >0
        aes(x=Shannon_full_dataset,y=Shannon_above_expected ))+
   geom_point() +
    theme_bw()+
+  theme(axis.title=element_text(size=11, face = "bold"))+
     xlab(label = "Shannon diversity in full dataset")+
   ylab(label = "Shannon diversity in above-expected subset")+
   geom_smooth(method="loess")+ #values of y are based on the values of x
@@ -1709,9 +1711,9 @@ Plot_list<-mapply(function (x,z) # use mapply again to put those listed names in
 return(Plot_list)
 }
 
-plot_shannon_correlation(full_VS_selected_Class)
-plot_shannon_correlation(full_VS_selected_Order)
-plot_shannon_correlation(full_VS_selected_Family)
+plot_l_Shan_Class <- plot_shannon_correlation(full_VS_selected_Class)
+plot_l_Shan_Order <- plot_shannon_correlation(full_VS_selected_Order)
+plot_l_Shan_Family <- plot_shannon_correlation(full_VS_selected_Family)
 
 
 
@@ -1722,6 +1724,7 @@ ggplot(data=z[z$Simpson_above_expected>0,], #only includes shannon >0
        aes(x=Simpson_full_dataset,y=Simpson_above_expected ))+
   geom_point() +
    theme_bw()+
+  theme(axis.title=element_text(size=11, face = "bold"))+
   xlab(label = "Simpson diversity in full dataset")+
   ylab(label = "Simpson diversity in above-expected subset")+
   geom_smooth(method="loess")+ #values of y are based on the values of x
@@ -1737,9 +1740,9 @@ Plot_list<-mapply(function (x,z) # use mapply again to put those listed names in
 return(Plot_list)
 }
 
-plot_simpson_correlation(full_VS_selected_Class)
-plot_simpson_correlation(full_VS_selected_Order)
-plot_simpson_correlation(full_VS_selected_Family)
+plot_l_Simp_Class <- plot_simpson_correlation(full_VS_selected_Class)
+plot_l_Simp_Order <- plot_simpson_correlation(full_VS_selected_Order)
+plot_l_Simp_Family <- plot_simpson_correlation(full_VS_selected_Family)
 
 
 
@@ -1758,3 +1761,38 @@ full_VS_selected_Order$uni_4model_BO_above$Observed_above_expected / full_VS_sel
 
 ```
 # Neutral model analysis finished. Proceed to script 5_differential_abundance!
+
+#Figures
+```{r}
+
+library(gridExtra)
+
+#Family
+plot_AlphaCorr_Family <- grid.arrange(plot_l_obs_Family$uni_4model_AT_above, plot_l_Shan_Family$uni_4model_AT_above, plot_l_Simp_Family$uni_4model_AT_above, plot_l_obs_Family$uni_4model_BO_above, plot_l_Shan_Family$uni_4model_BO_above, plot_l_Simp_Family$uni_4model_BO_above, nrow=3,  ncol=3)
+
+#save plot
+ggsave(plot_AlphaCorr_Family,
+       height = 12, width = 18,
+       file="./R output/Figures_for_publication/NeutralModel_AlphaCorr_Family_AT_BO.svg")
+
+
+#Order
+plot_AlphaCorr_Order <- grid.arrange(plot_l_obs_Order$uni_4model_AT_above, plot_l_Shan_Order$uni_4model_AT_above, plot_l_Simp_Order$uni_4model_AT_above, plot_l_obs_Order$uni_4model_BO_above, plot_l_Shan_Order$uni_4model_BO_above, plot_l_Simp_Order$uni_4model_BO_above, nrow=3,  ncol=3)
+
+#save plot
+ggsave(plot_AlphaCorr_Order,
+       height = 12, width = 18,
+       file="./R output/Figures_for_publication/NeutralModel_AlphaCorr_Order_AT_BO.svg")
+
+
+#Class 
+plot_AlphaCorr_Class <- grid.arrange(plot_l_obs_Class$uni_4model_AT_above, plot_l_Shan_Class$uni_4model_AT_above, plot_l_Simp_Class$uni_4model_AT_above, plot_l_obs_Class$uni_4model_BO_above, plot_l_Shan_Class$uni_4model_BO_above, plot_l_Simp_Class$uni_4model_BO_above, nrow=3,  ncol=3)
+
+#save plot
+ggsave(plot_AlphaCorr_Class,
+       height = 12, width = 18,
+       file="./R output/Figures_for_publication/NeutralModel_AlphaCorr_Class_AT_BO.svg")
+
+
+```
+

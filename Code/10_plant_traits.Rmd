@@ -60,7 +60,7 @@ color_treatments <- c("#999999", "#E69F00", "#56B4E9", "#009E73")
 #color_treatments <- hcl.colors(4,palette="Geyser")
 #color_treatments <- c("#E6C186", "#B8CDAE", "#008585", "#C7522B")
 
-#color_species <- c("#009E73", "#D55E00")
+#color_species <- c("#146627ff", "#1fb695ff") #at & bo, respectively
 
 #color_compartment <- c()
 

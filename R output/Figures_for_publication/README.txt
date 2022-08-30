@@ -17,7 +17,7 @@ put all 4 Ranfom forest svg files( RF_ASVs_BO_soil, RF_ASVs_BO_root...) into  a 
 Put the following in a 6-pannel:
 A) AT_soil_fullCommunity_NMDS + BO_soil_fullCommunity_NMDS
 B) AT_neutral_models_plot + BO_neutral_models_plot
-C) AT_above_NMDS + AT_above_NMDS
+C) AT_above_NMDS + BO_above_NMDS
 
 
 
