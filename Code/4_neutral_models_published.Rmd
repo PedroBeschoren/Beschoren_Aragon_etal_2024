@@ -29,7 +29,7 @@ ps_list_rarefied
 
 ```
 
-Settings for plotting 
+#Settings for plotting 
 
 ```{r}
 # settings for plotting
@@ -229,6 +229,67 @@ These are the key considerations you should make: 1)The Sloan neutral model fits
 
 ### 4.6.1 make new physeq object and neutral models
 
+
+```{r}
+#Changing `plot_scnm_fit` function of TyRA package to pimp the plot 
+
+plot_sncm_fit2 <- function (spp_out = spp_out, fill = NULL, title = NULL) 
+{
+  tax_levels <- colnames(spp_out$predictions)[7:length(colnames(spp_out$predictions)) - 
+    1]
+  if (is.null(fill)) {
+    fill <- "fit_class"
+  }
+  r2_val <- paste("r^2 ==", round(spp_out$fitstats$Rsqr, 2))
+  m_val <- paste("m ==", round(spp_out$fitstats$m, 2))
+  df <- data.frame(t(table(spp_out$predictions$fit_class)))
+  df <- df[, c(2, 3)]
+  colnames(df) <- c("Prediction", "AVS Abundance")
+  p <- ggplot(data = spp_out$predictions)
+  if (fill == "fit_class") {
+    p <- p + geom_point(aes(x = log(p), y = freq, fill = eval(parse(text = fill))), 
+      shape = 21, color = "black", size = 3, alpha = 0.75) + theme_classic()
+    
+    p <- p + scale_fill_manual(name = "Prediction", values = c(`Above prediction` = "#009e73ff", 
+      `As predicted` = "gray", `Below prediction` = "#e3a117ff", 
+      `NA` = "white"), breaks = c("Above prediction", 
+      "As predicted", "Below prediction", "NA"), labels = c(paste0("Above prediction (", 
+      round((df[1, 2]/spp_out$fitstats$Richness) * 100, 
+        1), "%)"), paste0("As predicted (", round((df[2, 
+      2]/spp_out$fitstats$Richness) * 100, 1), "%)"), 
+      paste0("Below Prediction (", round((df[3, 2]/spp_out$fitstats$Richness) * 
+        100, 1), "%)"), paste0("NA (", df[4, 2], ")")))
+  }
+  else if (fill %in% tax_levels) {
+    p <- p + geom_point(aes(x = log(p), y = freq, fill = eval(parse(text = fill))), 
+      shape = 21, color = "black", size = 2.5, alpha = 0.75)
+    p <- p + scale_fill_discrete(name = "Taxon")
+  }
+  else {
+    print(paste0("fill variable: ", fill, " is not a valid taxonomic level or fit_class"))
+  }
+  p <- p + geom_line(aes(x = log(p), y = freq.pred), color = "black", size = 0.8)
+  p <- p + geom_line(aes(x = log(p), y = pred.lwr), color = "black", size = 0.8, 
+    linetype = "dashed")
+  p <- p + geom_line(aes(x = log(p), y = pred.upr), color = "black", size = 0.8,
+    linetype = "dashed")
+  p <- p + geom_ribbon(aes(x = log(p), ymin = pred.lwr, ymax = pred.upr), fill = "grey", alpha=0.3)
+  p <- p + theme(axis.line=element_line(size=0.8))
+  p <- p + theme(axis.text = element_text(size = 10)) 
+  p <- p + theme(axis.title = element_text(size = 13))   
+  p <- p + xlab("log(Mean Relative Abundance)")
+  p <- p + ylab("Ocurrence Frequency")
+  p <- p + ggtitle(title)
+  p <- p + annotate("text", x = mean(log(spp_out$predictions$p), 
+    na.rm = TRUE), y = 0.95, size = 8, face="bold", label = r2_val, parse = TRUE)
+  p <- p + annotate("text", x = mean(log(spp_out$predictions$p), 
+    na.rm = TRUE), y = 0.85, size = 8, face="bold", label = m_val, parse = TRUE)
+  return(p)
+}
+
+```
+
+
 ```{r}
   
 # first, we get out list of 4 phyloseq objects and split it further according to treatment
@@ -248,20 +309,24 @@ plot_titles<-names(neutral_list_BO_soil)
 
 # one plot for each list element
 Neutral_plots_list_BO_soil<-mapply(function(x,y) 
-  plot_sncm_fit(x, title=y)+
-    theme_bw(),
+  plot_sncm_fit2(x, title=y)+
+    theme(axis.title=element_text(face = "bold"))+
+    theme(axis.text=element_text(face = "bold", colour="black"))+
+    theme(legend.position="none"),
   neutral_list_BO_soil,plot_titles, SIMPLIFY = FALSE)
 
 # arrange 4 plots in 1 figure
-ggarrange(Neutral_plots_list_BO_soil$control,
+Neutral_plots_list_BO_soil_g <- ggarrange(Neutral_plots_list_BO_soil$control,
           Neutral_plots_list_BO_soil$MeJA_0.1,
           Neutral_plots_list_BO_soil$MeJA_1.0,
-          Neutral_plots_list_BO_soil$oral_secretion + rremove("x.text"), 
-          labels = c("A", "B", "C", "D"),
+          Neutral_plots_list_BO_soil$oral_secretion, #+ rremove("x.text"), 
+          #labels = c("A", "B", "C", "D"),
           ncol = 2, nrow = 2)
 
-
-
+#save plots
+ggsave(Neutral_plots_list_BO_soil_g,
+       height = 9, width = 12,
+       file="./R output/Figures_for_publication/NeutralModels_BO.svg")
 
 ```
 
