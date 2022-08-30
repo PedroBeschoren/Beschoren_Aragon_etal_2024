@@ -29,6 +29,51 @@ ps_list_rarefied
 
 ```
 
+Settings for plotting 
+
+```{r}
+# settings for plotting
+
+#colors & treatments 
+MeJA_treatment_pal <- c("#FBF2C4", "#DEA868", "#C7522B", "#9BBAA0")
+names(MeJA_treatment_pal) <- c("Control", "0.1 mM MeJA", "1 mM MeJA", "P. brassicae OS")
+
+Sample_Type_pal <- c("Endosphere" = "#e7b083ff",  "Rhizosphere" = "#905423ff")
+
+Prediction_pal <- c("#FFC857",  "#073B4C", "#05B083", "#FFC857",  "#073B4C", "#05B083")
+
+names(Prediction_pal) <- c("Above_Prediction", "As_Predicted","Below_Prediction", "Above prediction", "As predicted","Below prediction")
+
+Species_shape_pal <- c(
+  "A. thaliana" = 3,
+  "B. oleracea" =  21)
+
+#theme
+# Set axis looks
+theme_set(theme_bw())
+axis_looks <- theme(axis.text.x = element_text(colour = "black", size = 9,
+                                               face = "bold", angle=0, hjust=0.5))+
+  theme(axis.text.y = element_text(colour = "black", size = 9, face = "bold"))+
+  theme(axis.title=element_text(size=11, face = "bold"))+
+  theme(axis.title.y = element_text(margin = margin(t = 0, r = 10, b = 0, l = 0)))+
+  theme(panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank())+
+  theme(legend.position="none")+
+  theme(plot.background = element_blank(),
+    panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank(),
+    panel.border = element_blank())+
+  theme(axis.line = element_line(colour = "black", 
+                      size = 0.8, linetype = "solid"))
+
+treatment_names <- c("control" = "Control", "MeJA_0.1" = "0.1 mM \n MeJA",
+                      "MeJA_1.0" = "1 mM \n MeJA", "oral_secretion"="P. brassicae \n OS")
+
+```
+
+
+
+
 ### 4.2 calculate and plot neutral model distibution
 
 Here me make the bulk of the calculations. it can take a moment, so we save the results right away. note that the steps after this are just for facilitating summaries and comparisons of neutral models.
@@ -187,7 +232,7 @@ These are the key considerations you should make: 1)The Sloan neutral model fits
 ```{r}
   
 # first, we get out list of 4 phyloseq objects and split it further according to treatment
-  ps_list_treat<-lapply( ps_list_rarefied, function (x)
+ps_list_treat<-lapply( ps_list_rarefied, function (x)
                       phyloseq_sep_variable(x,variable = "MeJA_treatment"))
 
 
