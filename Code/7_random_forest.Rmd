@@ -325,9 +325,10 @@ plot_rf_asvs<-lapply(rf_ASVs_df, function(x)
   geom_boxplot(aes())+
   scale_fill_manual(values = color_treatments)+
   theme_bw()+
-  theme(axis.title=element_text(size=11, face = "bold"))+
+  theme(axis.title=element_text(size=13, face = "bold"))+
   theme(panel.border = element_blank(), panel.grid.major = element_blank(),
   panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"))+
+  theme(axis.text=element_text(size=10, face = "bold", colour="black"))+
   theme(axis.title.x = element_blank())+
   geom_line(data = x, aes(x=OTU, y = meanImp), size = 2)+
   theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1)) )
@@ -349,9 +350,8 @@ plot_rf <- grid.arrange(plot_rf_asvs$Arabidopsis_thaliana.Root, plot_rf_asvs$Ara
   
 #save plot
 ggsave(plot_rf,
-       height = 15, width = 18,
+       height = 9, width = 18,
        file="./R output/Figures_for_publication/RF_ASVs_AT_BO.svg")
-
 
 
 ```
