@@ -960,6 +960,66 @@ ggsave(plot_nmds_check_AT_BO_soil_ed,
 
 ### 4.8.2 plot BO with AT, above expected only
 
+First, one plot per species 
+
+```{r}
+
+############## above expected only
+uni_4model_BO_above
+uni_4model_AT_above
+
+#CSS normalization
+BO_above_CSS <- make_CSS_physeq(uni_4model_BO_above)
+AT_above_CSS <- make_CSS_physeq(uni_4model_AT_above)
+
+### plot above BO
+set.seed(123)
+nmds_BO_above_CSS <- phyloseq::ordinate(BO_above_CSS, 
+                             method ="NMDS", 
+                             distance="bray", 
+                             try=200,
+                             autotransform=TRUE) 
+
+plot_nmds_BO_above_CSS <- plot_ordination(physeq = BO_above_CSS, 
+                ordination = nmds_BO_above_CSS, 
+                type = "sample",
+                color= "MeJA_treatment")
+
+plot_nmds_BO_above_CSS_ed <- plot_nmds_BO_above_CSS + 
+  geom_point(size=5, alpha=0.8)+
+  axis_looks
+
+### plot above AT
+set.seed(123)
+nmds_AT_above_CSS <- phyloseq::ordinate(AT_above_CSS, 
+                             method ="NMDS", 
+                             distance="bray", 
+                             try=200,
+                             autotransform=TRUE) 
+
+plot_nmds_AT_above_CSS <- plot_ordination(physeq = AT_above_CSS, 
+                ordination = nmds_AT_above_CSS, 
+                type = "sample",
+                color= "MeJA_treatment")
+
+plot_nmds_AT_above_CSS_ed <- plot_nmds_AT_above_CSS + 
+  geom_point(size=5, alpha=0.8)+
+  axis_looks
+
+#Arrange plots 
+plot_nmds_above_AT_BO_soil_ed <- ggarrange(plot_nmds_AT_above_CSS_ed, 
+                                           plot_nmds_BO_above_CSS_ed,
+                                           ncol = 2)
+#save plots
+ggsave(plot_nmds_above_AT_BO_soil_ed,
+       height = 5, width = 15,
+       file="./R output/Figures_for_publication/NeutralModels_NMDS_above_AT_BO.svg")
+
+
+```
+
+
+Then, both species in a single plot
 ```{r}
 ############## above expected onlu
 BO_AT_above<-merge_phyloseq(uni_4model_BO_above, uni_4model_AT_above)
