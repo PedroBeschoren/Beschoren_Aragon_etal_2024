@@ -783,7 +783,7 @@ ps_list_network_rarefied <- lapply(ps_list_network, function (x)
                                              trimOTUs = TRUE, 
                                              verbose = TRUE)) 
 
-
+ps_list_network_CSS$Arabidopsis_thaliana.Root@sam_data
 
 ``` 
 
@@ -792,8 +792,6 @@ ps_list_network_rarefied <- lapply(ps_list_network, function (x)
 now that we normalized the input data for eigengene calculations, we can use it as an input
 ```{r}
 
-# this is a new piece of code
-sum (1+100)
 
 # run the custom function adjustInput_run_eigen_correlation_adjustOutput() to adjust input adn output of eigen_correlation() , besides runing eigen_correlation(). Here we run it in lists
 module_and_metadata_correlations<-mapply(function (x,y)
@@ -820,18 +818,19 @@ ggplot(data=filter(list_objc[[x]], nodes_in_module>2),aes(x=as.factor(module_num
   scale_fill_gradient2("Correlation to \n metadata",guide = "colourbar",high = "#7DEB5F",mid="#F0EE54",low="#F3633F",na.value="white",limits=c(-1,1))+   ylab("")+
   xlab("Cluster/Module")+
   labs(fill="Cluster to Deconstruction")+
-  scale_y_discrete(labels=c("leaf_dry_weight", "MYC2_at_fold_DD", "LOX2_at_fold_DD"))
+  scale_y_discrete(labels=c("leaf dry weight (g)", "MYC2 (fold DD)", "LOX2 (fold DD)"))
 })
 }
 
 # run the plot defined above to visualize results
-plot_module_and_metadata_correlations_output(module_and_metadata_correlations)
+plots_eigengenes<-plot_module_and_metadata_correlations_output(module_and_metadata_correlations)
+
+ggarrange(plotlist = plots_eigengenes,
+          common.legend = TRUE,
+          labels = c("A", "B", "C", "D"))
 
 #if it works, proceed to laugh maniacally
 
-# PROBLEM: INCLUDES MODULES THAT ARE NOT PART OF THE MAIN COMPONENT
-
-# for 102 netowkrs, we removel modules without any metadata correlations  and check if sub-community strucuture of the module is similar across netowrks that also have modules with positive/negative correlations ("are the sub-communities correlated to metadata similar across treatments?")
   
 
 ```
