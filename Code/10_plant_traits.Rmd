@@ -1091,11 +1091,33 @@ d_traits.s <- rbind(d_drybiomass, d_leaf_area, d_number_fruits, d_inflorescence)
 d_traits.s[c(1:4)] <- lapply(d_traits.s[c(1:4)], as.factor)
 d_traits.s[c(7:13)] <- lapply(d_traits.s[c(7:13)], as.numeric)
 
+#order
+d_traits.s$trait = factor(d_traits.s$trait,
+                         level=c("leaf_area","ldry_weight","number_fruits","inflorescence"))
 
 #settings for plots 
 color_treatments_noControl <- c("#DEA868", "#C7522B", "#9BBAA0")
 names_treatments_noControl <- c(c("MeJA_0.1" = "0.1 mM \n MeJA", "MeJA_1.0" = "1 mM \n MeJA", "oral_secretion"="P. brassicae \n OS"))
 trait_names <- c("number_fruits" = "Number of siliques \n per plant", "inflorescence"="Dry weight \n inflorescence", "ldry_weight"="Dry weight \n leaves", "leaf_area"="Leaf area")
+
+#Both species
+p.cohensD.2 <- ggplot(data = d_traits.s, mapping = aes(x = trait, y = estimate, colour= treatment, fill=treatment))+
+  #geom_linerange(size=5, position=position_dodge(width = 0.5)) +
+  geom_hline(aes(yintercept=0), lty=1, size=0.8) +
+    geom_hline(aes(yintercept=0.8), lty=2, size=0.8, colour="gray") +
+  geom_hline(aes(yintercept=-0.8), lty=2, size=0.8, colour="gray") +
+  geom_bar(stat='identity', position = "dodge2")+
+  scale_fill_manual(values=color_treatments_noControl)+
+  scale_color_manual(values=color_treatments_noControl)+
+  scale_x_discrete(name="", labels=trait_names) +
+  labs(title = "Arabidopsis thaliana")+
+  scale_y_continuous(name="Cohen's D estimate", limits = c(-2.5,1.5)) +
+  coord_flip() +
+  theme_minimal()+
+  axis_looks+
+  theme(axis.text.y = element_text(colour = "black", size = 12,
+                     face = "bold", angle=0, hjust=0.5))+
+  theme(legend.position="top")
 
 
 #Arabidopsis
@@ -1137,27 +1159,25 @@ p.cohensD.Bole2 <- ggplot(data = subset(d_traits.s, species == "Brassica_olerace
   theme(legend.position="top")
 
 
-
-#save plots
-ggsave(p.cohensD.Atha,
+#save plot
+ggsave(p.cohensD.2,
        height = 4.81, width = 7.04,
-       file="./R output/Figures_for_publication/traits_AT_cohensD.svg")
-
-ggsave(p.cohensD.Bole,
-       height = 4.81, width = 7.04,
-       file="./R output/Figures_for_publication/traits_BO_cohensD.svg")
-
-
-
+       file="./R output/Figures_for_publication/traits_AT_BO_cohensD.svg")
 
 
 ```
+Missing:
 
+*Move bars from x axis so they don't overlapp
 
-```{r}
+*Put space in between traits (put barplots together?)
 
-```
-
+*Make DF with 
+ 1. Confidence intervals 
+ 2. Type of test 
+ 3. P values 
+ 
+*Add pairwise contrasts (--> How?) 
 
 
 
