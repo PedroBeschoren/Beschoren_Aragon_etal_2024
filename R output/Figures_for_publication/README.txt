@@ -19,8 +19,6 @@ A) AT_soil_fullCommunity_NMDS + BO_soil_fullCommunity_NMDS
 B) AT_neutral_models_plot + BO_neutral_models_plot
 C) AT_above_NMDS + BO_above_NMDS
 
-
-
 ###from MeJA-Pilot\R output\Neutral_models:
 make pannel for Family diversity (Observed, Shannon and Simpson for AT and BO) [ACTION: COLOR COMAMONADACEAE IN RED]
 make pannel for Class diversity (Observed, Shannon and Simpson for AT and BO)

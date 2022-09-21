@@ -23,15 +23,15 @@
      inkscape:deskcolor="#d1d1d1"
      inkscape:document-units="pt"
      showgrid="true"
-     inkscape:zoom="0.37905093"
-     inkscape:cx="577.75878"
-     inkscape:cy="627.88397"
-     inkscape:window-width="1450"
-     inkscape:window-height="1030"
-     inkscape:window-x="288"
-     inkscape:window-y="16"
-     inkscape:window-maximized="0"
-     inkscape:current-layer="g11365-6">
+     inkscape:zoom="0.53605897"
+     inkscape:cx="691.15531"
+     inkscape:cy="471.03027"
+     inkscape:window-width="1920"
+     inkscape:window-height="1001"
+     inkscape:window-x="-9"
+     inkscape:window-y="-9"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="g2856">
     <inkscape:grid
        type="xygrid"
        id="grid11359"
@@ -126,7 +126,7 @@
        id="line2384" />
     <polygon
        points="46.59,89.85 46.59,196.27 54.23,196.27 54.23,89.85 "
-       style="fill:#e6c186;stroke:#333333;stroke-width:1.07"
+       style="fill:#fbf2c4;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon2386" />
     <line
        x1="46.59"
@@ -151,7 +151,7 @@
        id="line2392" />
     <polygon
        points="55.07,113.92 55.07,162.06 62.71,162.06 62.71,113.92 "
-       style="fill:#b8cdae;stroke:#333333;stroke-width:1.07"
+       style="fill:#dea868;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon2394" />
     <line
        x1="55.07"
@@ -176,7 +176,7 @@
        id="line2400" />
     <polygon
        points="63.56,202.6 63.56,233.01 71.19,233.01 71.19,202.6 "
-       style="fill:#008585;stroke:#333333;stroke-width:1.07"
+       style="fill:#c7522b;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon2402" />
     <line
        x1="63.560001"
@@ -201,7 +201,7 @@
        id="line2408" />
     <polygon
        points="72.04,187.4 72.04,210.2 79.67,210.2 79.67,187.4 "
-       style="fill:#c7522b;stroke:#333333;stroke-width:1.07"
+       style="fill:#9bbaa0;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon2410" />
     <line
        x1="72.040001"
@@ -226,7 +226,7 @@
        id="line2416" />
     <polygon
        points="91.83,260.88 99.46,260.88 "
-       style="fill:#e6c186;stroke:#333333;stroke-width:1.07"
+       style="fill:#fbf2c4;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon2418" />
     <line
        x1="91.830002"
@@ -251,7 +251,7 @@
        id="line2424" />
     <polygon
        points="100.31,240.61 100.31,257.08 107.94,257.08 107.94,240.61 "
-       style="fill:#b8cdae;stroke:#333333;stroke-width:1.07"
+       style="fill:#dea868;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon2426" />
     <line
        x1="100.31"
@@ -276,7 +276,7 @@
        id="line2432" />
     <polygon
        points="108.79,260.88 116.42,260.88 "
-       style="fill:#008585;stroke:#333333;stroke-width:1.07"
+       style="fill:#c7522b;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon2434" />
     <line
        x1="108.79"
@@ -301,7 +301,7 @@
        id="line2440" />
     <polygon
        points="117.27,260.88 124.9,260.88 "
-       style="fill:#c7522b;stroke:#333333;stroke-width:1.07"
+       style="fill:#9bbaa0;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon2442" />
     <line
        x1="117.27"
@@ -332,7 +332,7 @@
        id="line2450" />
     <polygon
        points="137.06,191.2 137.06,203.87 144.69,203.87 144.69,191.2 "
-       style="fill:#e6c186;stroke:#333333;stroke-width:1.07"
+       style="fill:#fbf2c4;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon2452" />
     <line
        x1="137.06"
@@ -363,7 +363,7 @@
        id="line2460" />
     <polygon
        points="145.54,187.4 145.54,210.2 153.17,210.2 153.17,187.4 "
-       style="fill:#b8cdae;stroke:#333333;stroke-width:1.07"
+       style="fill:#dea868;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon2462" />
     <line
        x1="145.53999"
@@ -394,7 +394,7 @@
        id="line2470" />
     <polygon
        points="154.02,230.47 154.02,254.54 161.65,254.54 161.65,230.47 "
-       style="fill:#008585;stroke:#333333;stroke-width:1.07"
+       style="fill:#c7522b;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon2472" />
     <line
        x1="154.02"
@@ -419,7 +419,7 @@
        id="line2478" />
     <polygon
        points="162.5,178.53 162.5,205.13 170.14,205.13 170.14,178.53 "
-       style="fill:#c7522b;stroke:#333333;stroke-width:1.07"
+       style="fill:#9bbaa0;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon2480" />
     <line
        x1="162.5"
@@ -450,7 +450,7 @@
        id="line2488" />
     <polygon
        points="182.29,211.47 182.29,227.94 189.93,227.94 189.93,211.47 "
-       style="fill:#e6c186;stroke:#333333;stroke-width:1.07"
+       style="fill:#fbf2c4;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon2490" />
     <line
        x1="182.28999"
@@ -475,7 +475,7 @@
        id="line2496" />
     <polygon
        points="190.77,200.07 190.77,244.41 198.41,244.41 198.41,200.07 "
-       style="fill:#b8cdae;stroke:#333333;stroke-width:1.07"
+       style="fill:#dea868;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon2498" />
     <line
        x1="190.77"
@@ -506,7 +506,7 @@
        id="line2506" />
     <polygon
        points="199.25,260.88 206.89,260.88 "
-       style="fill:#008585;stroke:#333333;stroke-width:1.07"
+       style="fill:#c7522b;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon2508" />
     <line
        x1="199.25"
@@ -531,7 +531,7 @@
        id="line2514" />
     <polygon
        points="207.74,215.27 207.74,231.74 215.37,231.74 215.37,215.27 "
-       style="fill:#c7522b;stroke:#333333;stroke-width:1.07"
+       style="fill:#9bbaa0;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon2516" />
     <line
        x1="207.74001"
@@ -556,7 +556,7 @@
        id="line2522" />
     <polygon
        points="227.53,216.54 227.53,250.74 235.16,250.74 235.16,216.54 "
-       style="fill:#e6c186;stroke:#333333;stroke-width:1.07"
+       style="fill:#fbf2c4;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon2524" />
     <line
        x1="227.53"
@@ -581,7 +581,7 @@
        id="line2530" />
     <polygon
        points="236.01,214 236.01,244.41 243.64,244.41 243.64,214 "
-       style="fill:#b8cdae;stroke:#333333;stroke-width:1.07"
+       style="fill:#dea868;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon2532" />
     <line
        x1="236.00999"
@@ -612,7 +612,7 @@
        id="line2540" />
     <polygon
        points="244.49,260.88 252.12,260.88 "
-       style="fill:#008585;stroke:#333333;stroke-width:1.07"
+       style="fill:#c7522b;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon2542" />
     <line
        x1="244.49001"
@@ -637,7 +637,7 @@
        id="line2548" />
     <polygon
        points="252.97,198.8 252.97,220.34 260.6,220.34 260.6,198.8 "
-       style="fill:#c7522b;stroke:#333333;stroke-width:1.07"
+       style="fill:#9bbaa0;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon2550" />
     <line
        x1="252.97"
@@ -662,7 +662,7 @@
        id="line2556" />
     <polygon
        points="272.76,238.07 272.76,249.47 280.39,249.47 280.39,238.07 "
-       style="fill:#e6c186;stroke:#333333;stroke-width:1.07"
+       style="fill:#fbf2c4;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon2558" />
     <line
        x1="272.76001"
@@ -687,7 +687,7 @@
        id="line2564" />
     <polygon
        points="281.24,236.81 281.24,259.61 288.87,259.61 288.87,236.81 "
-       style="fill:#b8cdae;stroke:#333333;stroke-width:1.07"
+       style="fill:#dea868;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon2566" />
     <line
        x1="281.23999"
@@ -718,7 +718,7 @@
        id="line2574" />
     <polygon
        points="289.72,260.88 297.35,260.88 "
-       style="fill:#008585;stroke:#333333;stroke-width:1.07"
+       style="fill:#c7522b;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon2576" />
     <line
        x1="289.72"
@@ -743,7 +743,7 @@
        id="line2582" />
     <polygon
        points="298.2,239.34 298.2,250.74 305.84,250.74 305.84,239.34 "
-       style="fill:#c7522b;stroke:#333333;stroke-width:1.07"
+       style="fill:#9bbaa0;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon2584" />
     <line
        x1="298.20001"
@@ -768,7 +768,7 @@
        id="line2590" />
     <polygon
        points="317.99,217.8 317.99,248.21 325.62,248.21 325.62,217.8 "
-       style="fill:#e6c186;stroke:#333333;stroke-width:1.07"
+       style="fill:#fbf2c4;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon2592" />
     <line
        x1="317.98999"
@@ -799,7 +799,7 @@
        id="line2600" />
     <polygon
        points="326.47,236.81 326.47,240.61 334.11,240.61 334.11,236.81 "
-       style="fill:#b8cdae;stroke:#333333;stroke-width:1.07"
+       style="fill:#dea868;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon2602" />
     <line
        x1="326.47"
@@ -824,7 +824,7 @@
        id="line2608" />
     <polygon
        points="334.95,238.07 334.95,260.88 342.59,260.88 342.59,238.07 "
-       style="fill:#008585;stroke:#333333;stroke-width:1.07"
+       style="fill:#c7522b;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon2610" />
     <line
        x1="334.95001"
@@ -849,7 +849,7 @@
        id="line2616" />
     <polygon
        points="343.44,249.47 343.44,252.01 351.07,252.01 351.07,249.47 "
-       style="fill:#c7522b;stroke:#333333;stroke-width:1.07"
+       style="fill:#9bbaa0;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon2618" />
     <line
        x1="343.44"
@@ -886,7 +886,7 @@
        id="line2628" />
     <polygon
        points="363.23,231.74 363.23,235.54 370.86,235.54 370.86,231.74 "
-       style="fill:#e6c186;stroke:#333333;stroke-width:1.07"
+       style="fill:#fbf2c4;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon2630" />
     <line
        x1="363.23001"
@@ -917,7 +917,7 @@
        id="line2638" />
     <polygon
        points="371.71,250.74 371.71,255.81 379.34,255.81 379.34,250.74 "
-       style="fill:#b8cdae;stroke:#333333;stroke-width:1.07"
+       style="fill:#dea868;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon2640" />
     <line
        x1="371.70999"
@@ -948,7 +948,7 @@
        id="line2648" />
     <polygon
        points="380.19,260.88 387.82,260.88 "
-       style="fill:#008585;stroke:#333333;stroke-width:1.07"
+       style="fill:#c7522b;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon2650" />
     <line
        x1="380.19"
@@ -973,7 +973,7 @@
        id="line2656" />
     <polygon
        points="388.67,246.94 388.67,255.81 396.3,255.81 396.3,246.94 "
-       style="fill:#c7522b;stroke:#333333;stroke-width:1.07"
+       style="fill:#9bbaa0;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon2658" />
     <line
        x1="388.67001"
@@ -998,7 +998,7 @@
        id="line2664" />
     <polygon
        points="408.46,226.67 408.46,260.88 416.09,260.88 416.09,226.67 "
-       style="fill:#e6c186;stroke:#333333;stroke-width:1.07"
+       style="fill:#fbf2c4;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon2666" />
     <line
        x1="408.45999"
@@ -1023,7 +1023,7 @@
        id="line2672" />
     <polygon
        points="416.94,224.14 416.94,240.61 424.57,240.61 424.57,224.14 "
-       style="fill:#b8cdae;stroke:#333333;stroke-width:1.07"
+       style="fill:#dea868;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon2674" />
     <line
        x1="416.94"
@@ -1048,7 +1048,7 @@
        id="line2680" />
     <polygon
        points="425.42,260.88 433.05,260.88 "
-       style="fill:#008585;stroke:#333333;stroke-width:1.07"
+       style="fill:#c7522b;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon2682" />
     <line
        x1="425.42001"
@@ -1073,7 +1073,7 @@
        id="line2688" />
     <polygon
        points="433.9,206.4 433.9,257.08 441.53,257.08 441.53,206.4 "
-       style="fill:#c7522b;stroke:#333333;stroke-width:1.07"
+       style="fill:#9bbaa0;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon2690" />
     <line
        x1="433.89999"
@@ -1104,7 +1104,7 @@
        id="line2698" />
     <polygon
        points="453.69,253.28 453.69,260.88 461.32,260.88 461.32,253.28 "
-       style="fill:#e6c186;stroke:#333333;stroke-width:1.07"
+       style="fill:#fbf2c4;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon2700" />
     <line
        x1="453.69"
@@ -1129,7 +1129,7 @@
        id="line2706" />
     <polygon
        points="462.17,219.07 462.17,246.94 469.81,246.94 469.81,219.07 "
-       style="fill:#b8cdae;stroke:#333333;stroke-width:1.07"
+       style="fill:#dea868;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon2708" />
     <line
        x1="462.17001"
@@ -1160,7 +1160,7 @@
        id="line2716" />
     <polygon
        points="470.65,260.88 478.29,260.88 "
-       style="fill:#008585;stroke:#333333;stroke-width:1.07"
+       style="fill:#c7522b;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon2718" />
     <line
        x1="470.64999"
@@ -1185,7 +1185,7 @@
        id="line2724" />
     <polygon
        points="479.13,260.88 486.77,260.88 "
-       style="fill:#c7522b;stroke:#333333;stroke-width:1.07"
+       style="fill:#9bbaa0;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon2726" />
     <line
        x1="479.13"
@@ -1216,7 +1216,7 @@
        id="line2734" />
     <polygon
        points="498.92,156.99 498.92,173.46 506.56,173.46 506.56,156.99 "
-       style="fill:#e6c186;stroke:#333333;stroke-width:1.07"
+       style="fill:#fbf2c4;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon2736" />
     <line
        x1="498.92001"
@@ -1247,7 +1247,7 @@
        id="line2744" />
     <polygon
        points="507.41,83.52 507.41,124.06 515.04,124.06 515.04,83.52 "
-       style="fill:#b8cdae;stroke:#333333;stroke-width:1.07"
+       style="fill:#dea868;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon2746" />
     <line
        x1="507.41"
@@ -1272,7 +1272,7 @@
        id="line2752" />
     <polygon
        points="515.89,129.12 515.89,224.14 523.52,224.14 523.52,129.12 "
-       style="fill:#008585;stroke:#333333;stroke-width:1.07"
+       style="fill:#c7522b;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon2754" />
     <line
        x1="515.89001"
@@ -1303,7 +1303,7 @@
        id="line2762" />
     <polygon
        points="524.37,112.65 524.37,131.66 532,131.66 532,112.65 "
-       style="fill:#c7522b;stroke:#333333;stroke-width:1.07"
+       style="fill:#9bbaa0;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon2764" />
     <line
        x1="524.37"
@@ -1703,15 +1703,15 @@
        id="text2930">Abundance</text>
     <text
        xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:14px;font-family:Arial;-inkscape-font-specification:'Arial, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;text-anchor:middle;white-space:pre;fill:#000000;fill-opacity:0.94902;stroke-width:0.5;stroke-opacity:0.898039"
-       x="212.86507"
-       y="321.42807"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:16.949px;font-family:Arial;-inkscape-font-specification:'Arial, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;text-anchor:middle;white-space:pre;fill:#000000;fill-opacity:0.94902;stroke-width:0.60532;stroke-opacity:0.898039"
+       x="211.64969"
+       y="324.62433"
        id="text2621"><tspan
          sodipodi:role="line"
          id="tspan2619"
-         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:14px;font-family:Arial;-inkscape-font-specification:'Arial, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.5"
-         x="212.86507"
-         y="321.42807">*</tspan></text>
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:16.949px;font-family:Arial;-inkscape-font-specification:'Arial, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.60532"
+         x="211.64969"
+         y="324.62433">*</tspan></text>
   </g>
   <defs
      id="defs2989">
@@ -1774,7 +1774,7 @@
        id="line3008" />
     <polygon
        points="717.61,262.44 705.87,262.44 705.87,264.63 717.61,264.63 "
-       style="fill:#e6c186;stroke:#333333;stroke-width:1.07"
+       style="fill:#fbf2c4;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon3010" />
     <line
        x1="705.87"
@@ -1805,7 +1805,7 @@
        id="line3018" />
     <polygon
        points="730.66,248.78 718.92,248.78 718.92,263.17 730.66,263.17 "
-       style="fill:#b8cdae;stroke:#333333;stroke-width:1.07"
+       style="fill:#dea868;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon3020" />
     <line
        x1="718.91998"
@@ -1830,7 +1830,7 @@
        id="line3026" />
     <polygon
        points="743.71,245.37 731.96,245.37 731.96,253.9 743.71,253.9 "
-       style="fill:#008585;stroke:#333333;stroke-width:1.07"
+       style="fill:#c7522b;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon3028" />
     <line
        x1="731.96002"
@@ -1855,7 +1855,7 @@
        id="line3034" />
     <polygon
        points="756.75,261.22 745.01,261.22 745.01,264.63 756.75,264.63 "
-       style="fill:#c7522b;stroke:#333333;stroke-width:1.07"
+       style="fill:#9bbaa0;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon3036" />
     <line
        x1="745.01001"
@@ -1886,7 +1886,7 @@
        id="line3044" />
     <polygon
        points="787.2,255.85 775.46,255.85 775.46,257.8 787.2,257.8 "
-       style="fill:#e6c186;stroke:#333333;stroke-width:1.07"
+       style="fill:#fbf2c4;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon3046" />
     <line
        x1="775.46002"
@@ -1911,7 +1911,7 @@
        id="line3052" />
     <polygon
        points="800.25,248.54 788.5,248.54 788.5,261.71 800.25,261.71 "
-       style="fill:#b8cdae;stroke:#333333;stroke-width:1.07"
+       style="fill:#dea868;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon3054" />
     <line
        x1="788.5"
@@ -1936,7 +1936,7 @@
        id="line3060" />
     <polygon
        points="813.3,254.88 801.55,254.88 801.55,264.63 813.3,264.63 "
-       style="fill:#008585;stroke:#333333;stroke-width:1.07"
+       style="fill:#c7522b;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon3062" />
     <line
        x1="801.54999"
@@ -1967,7 +1967,7 @@
        id="line3070" />
     <polygon
        points="826.34,242.44 814.6,242.44 814.6,248.05 826.34,248.05 "
-       style="fill:#c7522b;stroke:#333333;stroke-width:1.07"
+       style="fill:#9bbaa0;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon3072" />
     <line
        x1="814.59998"
@@ -1992,7 +1992,7 @@
        id="line3078" />
     <polygon
        points="856.79,204.15 845.05,204.15 845.05,212.44 856.79,212.44 "
-       style="fill:#e6c186;stroke:#333333;stroke-width:1.07"
+       style="fill:#fbf2c4;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon3080" />
     <line
        x1="845.04999"
@@ -2023,7 +2023,7 @@
        id="line3088" />
     <polygon
        points="869.84,224.64 858.09,224.64 858.09,234.63 869.84,234.63 "
-       style="fill:#b8cdae;stroke:#333333;stroke-width:1.07"
+       style="fill:#dea868;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon3090" />
     <line
        x1="858.09003"
@@ -2048,7 +2048,7 @@
        id="line3096" />
     <polygon
        points="882.89,226.1 871.14,226.1 871.14,234.63 882.89,234.63 "
-       style="fill:#008585;stroke:#333333;stroke-width:1.07"
+       style="fill:#c7522b;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon3098" />
     <line
        x1="871.14001"
@@ -2073,7 +2073,7 @@
        id="line3104" />
     <polygon
        points="895.93,232.93 884.19,232.93 884.19,241.22 895.93,241.22 "
-       style="fill:#c7522b;stroke:#333333;stroke-width:1.07"
+       style="fill:#9bbaa0;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon3106" />
     <line
        x1="884.19"
@@ -2098,7 +2098,7 @@
        id="line3112" />
     <polygon
        points="926.38,258.05 914.64,258.05 914.64,259.76 926.38,259.76 "
-       style="fill:#e6c186;stroke:#333333;stroke-width:1.07"
+       style="fill:#fbf2c4;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon3114" />
     <line
        x1="914.64001"
@@ -2123,7 +2123,7 @@
        id="line3120" />
     <polygon
        points="939.43,251.46 927.68,251.46 927.68,260.24 939.43,260.24 "
-       style="fill:#b8cdae;stroke:#333333;stroke-width:1.07"
+       style="fill:#dea868;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon3122" />
     <line
        x1="927.67999"
@@ -2148,7 +2148,7 @@
        id="line3128" />
     <polygon
        points="952.48,254.15 940.73,254.15 940.73,264.63 952.48,264.63 "
-       style="fill:#008585;stroke:#333333;stroke-width:1.07"
+       style="fill:#c7522b;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon3130" />
     <line
        x1="940.72998"
@@ -2173,7 +2173,7 @@
        id="line3136" />
     <polygon
        points="965.52,243.41 953.78,243.41 953.78,254.39 965.52,254.39 "
-       style="fill:#c7522b;stroke:#333333;stroke-width:1.07"
+       style="fill:#9bbaa0;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon3138" />
     <line
        x1="953.78003"
@@ -2198,7 +2198,7 @@
        id="line3144" />
     <polygon
        points="995.97,258.78 984.23,258.78 984.23,264.63 995.97,264.63 "
-       style="fill:#e6c186;stroke:#333333;stroke-width:1.07"
+       style="fill:#fbf2c4;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon3146" />
     <line
        x1="984.22998"
@@ -2223,7 +2223,7 @@
        id="line3152" />
     <polygon
        points="1009.02,240 997.27,240 997.27,255.37 1009.02,255.37 "
-       style="fill:#b8cdae;stroke:#333333;stroke-width:1.07"
+       style="fill:#dea868;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon3154" />
     <line
        x1="997.27002"
@@ -2254,7 +2254,7 @@
        id="line3162" />
     <polygon
        points="1022.07,264.63 1010.32,264.63 "
-       style="fill:#008585;stroke:#333333;stroke-width:1.07"
+       style="fill:#c7522b;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon3164" />
     <line
        x1="1010.32"
@@ -2279,7 +2279,7 @@
        id="line3170" />
     <polygon
        points="1035.11,264.63 1023.37,264.63 "
-       style="fill:#c7522b;stroke:#333333;stroke-width:1.07"
+       style="fill:#9bbaa0;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon3172" />
     <line
        x1="1023.37"
@@ -2310,7 +2310,7 @@
        id="line3180" />
     <polygon
        points="1065.56,149.76 1053.82,149.76 1053.82,163.66 1065.56,163.66 "
-       style="fill:#e6c186;stroke:#333333;stroke-width:1.07"
+       style="fill:#fbf2c4;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon3182" />
     <line
        x1="1053.8199"
@@ -2335,7 +2335,7 @@
        id="line3188" />
     <polygon
        points="1078.61,191.47 1066.86,191.47 1066.86,211.47 1078.61,211.47 "
-       style="fill:#b8cdae;stroke:#333333;stroke-width:1.07"
+       style="fill:#dea868;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon3190" />
     <line
        x1="1066.86"
@@ -2360,7 +2360,7 @@
        id="line3196" />
     <polygon
        points="1091.65,177.57 1079.91,177.57 1079.91,200.25 1091.65,200.25 "
-       style="fill:#008585;stroke:#333333;stroke-width:1.07"
+       style="fill:#c7522b;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon3198" />
     <line
        x1="1079.91"
@@ -2385,7 +2385,7 @@
        id="line3204" />
     <polygon
        points="1104.7,167.32 1092.96,167.32 1092.96,207.56 1104.7,207.56 "
-       style="fill:#c7522b;stroke:#333333;stroke-width:1.07"
+       style="fill:#9bbaa0;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon3206" />
     <line
        x1="1092.96"
@@ -2416,7 +2416,7 @@
        id="line3214" />
     <polygon
        points="1135.15,264.63 1123.41,264.63 "
-       style="fill:#e6c186;stroke:#333333;stroke-width:1.07"
+       style="fill:#fbf2c4;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon3216" />
     <line
        x1="1123.41"
@@ -2447,7 +2447,7 @@
        id="line3224" />
     <polygon
        points="1148.2,264.63 1136.45,264.63 "
-       style="fill:#b8cdae;stroke:#333333;stroke-width:1.07"
+       style="fill:#dea868;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon3226" />
     <line
        x1="1136.45"
@@ -2478,7 +2478,7 @@
        id="line3234" />
     <polygon
        points="1161.24,259.76 1149.5,259.76 1149.5,261.46 1161.24,261.46 "
-       style="fill:#008585;stroke:#333333;stroke-width:1.07"
+       style="fill:#c7522b;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon3236" />
     <line
        x1="1149.5"
@@ -2503,7 +2503,7 @@
        id="line3242" />
     <polygon
        points="1174.29,264.63 1162.55,264.63 "
-       style="fill:#c7522b;stroke:#333333;stroke-width:1.07"
+       style="fill:#9bbaa0;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon3244" />
     <line
        x1="1162.55"
@@ -2849,7 +2849,7 @@
        id="line3438" />
     <polygon
        points="53.3,547.57 48.38,547.57 48.38,578.66 53.3,578.66 "
-       style="fill:#e6c186;stroke:#333333;stroke-width:1.07"
+       style="fill:#fbf2c4;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon3440" />
     <line
        x1="48.380001"
@@ -2874,7 +2874,7 @@
        id="line3446" />
     <polygon
        points="58.76,492.01 53.85,492.01 53.85,535.72 58.76,535.72 "
-       style="fill:#b8cdae;stroke:#333333;stroke-width:1.07"
+       style="fill:#dea868;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon3448" />
     <line
        x1="53.849998"
@@ -2905,7 +2905,7 @@
        id="line3456" />
     <polygon
        points="64.22,446.94 59.31,446.94 59.31,484.82 64.22,484.82 "
-       style="fill:#008585;stroke:#333333;stroke-width:1.07"
+       style="fill:#c7522b;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon3458" />
     <line
        x1="59.310001"
@@ -2936,7 +2936,7 @@
        id="line3466" />
     <polygon
        points="69.69,512.8 64.77,512.8 64.77,538.83 69.69,538.83 "
-       style="fill:#c7522b;stroke:#333333;stroke-width:1.07"
+       style="fill:#9bbaa0;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon3468" />
     <line
        x1="64.769997"
@@ -2961,7 +2961,7 @@
        id="line3474" />
     <polygon
        points="82.43,565.45 77.52,565.45 77.52,584.88 82.43,584.88 "
-       style="fill:#e6c186;stroke:#333333;stroke-width:1.07"
+       style="fill:#fbf2c4;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon3476" />
     <line
        x1="77.519997"
@@ -2992,7 +2992,7 @@
        id="line3484" />
     <polygon
        points="87.89,576.33 82.98,576.33 82.98,581.18 87.89,581.18 "
-       style="fill:#b8cdae;stroke:#333333;stroke-width:1.07"
+       style="fill:#dea868;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon3486" />
     <line
        x1="82.980003"
@@ -3017,7 +3017,7 @@
        id="line3492" />
     <polygon
        points="93.35,559.23 88.44,559.23 88.44,565.84 93.35,565.84 "
-       style="fill:#008585;stroke:#333333;stroke-width:1.07"
+       style="fill:#c7522b;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon3494" />
     <line
        x1="88.440002"
@@ -3048,7 +3048,7 @@
        id="line3502" />
     <polygon
        points="98.82,571.47 93.9,571.47 93.9,576.72 98.82,576.72 "
-       style="fill:#c7522b;stroke:#333333;stroke-width:1.07"
+       style="fill:#9bbaa0;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon3504" />
     <line
        x1="93.900002"
@@ -3079,7 +3079,7 @@
        id="line3512" />
     <polygon
        points="111.56,567 106.65,567 106.65,570.89 111.56,570.89 "
-       style="fill:#e6c186;stroke:#333333;stroke-width:1.07"
+       style="fill:#fbf2c4;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon3514" />
     <line
        x1="106.65"
@@ -3104,7 +3104,7 @@
        id="line3520" />
     <polygon
        points="117.02,574 112.11,574 112.11,580.21 117.02,580.21 "
-       style="fill:#b8cdae;stroke:#333333;stroke-width:1.07"
+       style="fill:#dea868;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon3522" />
     <line
        x1="112.11"
@@ -3129,7 +3129,7 @@
        id="line3528" />
     <polygon
        points="122.49,574.97 117.57,574.97 117.57,579.24 122.49,579.24 "
-       style="fill:#008585;stroke:#333333;stroke-width:1.07"
+       style="fill:#c7522b;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon3530" />
     <line
        x1="117.57"
@@ -3154,7 +3154,7 @@
        id="line3536" />
     <polygon
        points="127.95,557.09 123.03,557.09 123.03,568.36 127.95,568.36 "
-       style="fill:#c7522b;stroke:#333333;stroke-width:1.07"
+       style="fill:#9bbaa0;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon3538" />
     <line
        x1="123.03"
@@ -3179,7 +3179,7 @@
        id="line3544" />
     <polygon
        points="140.69,581.77 135.78,581.77 135.78,583.32 140.69,583.32 "
-       style="fill:#e6c186;stroke:#333333;stroke-width:1.07"
+       style="fill:#fbf2c4;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon3546" />
     <line
        x1="135.78"
@@ -3204,7 +3204,7 @@
        id="line3552" />
     <polygon
        points="146.15,584.88 141.24,584.88 "
-       style="fill:#b8cdae;stroke:#333333;stroke-width:1.07"
+       style="fill:#dea868;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon3554" />
     <line
        x1="141.24001"
@@ -3229,7 +3229,7 @@
        id="line3560" />
     <polygon
        points="151.62,584.1 146.7,584.1 146.7,584.88 151.62,584.88 "
-       style="fill:#008585;stroke:#333333;stroke-width:1.07"
+       style="fill:#c7522b;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon3562" />
     <line
        x1="146.7"
@@ -3260,7 +3260,7 @@
        id="line3570" />
     <polygon
        points="157.08,584.88 152.16,584.88 "
-       style="fill:#c7522b;stroke:#333333;stroke-width:1.07"
+       style="fill:#9bbaa0;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon3572" />
     <line
        x1="152.16"
@@ -3291,7 +3291,7 @@
        id="line3580" />
     <polygon
        points="169.82,578.66 164.91,578.66 164.91,580.99 169.82,580.99 "
-       style="fill:#e6c186;stroke:#333333;stroke-width:1.07"
+       style="fill:#fbf2c4;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon3582" />
     <line
        x1="164.91"
@@ -3322,7 +3322,7 @@
        id="line3590" />
     <polygon
        points="175.28,583.71 170.37,583.71 170.37,584.88 175.28,584.88 "
-       style="fill:#b8cdae;stroke:#333333;stroke-width:1.07"
+       style="fill:#dea868;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon3592" />
     <line
        x1="170.37"
@@ -3347,7 +3347,7 @@
        id="line3598" />
     <polygon
        points="180.75,584.88 175.83,584.88 "
-       style="fill:#008585;stroke:#333333;stroke-width:1.07"
+       style="fill:#c7522b;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon3600" />
     <line
        x1="175.83"
@@ -3372,7 +3372,7 @@
        id="line3606" />
     <polygon
        points="186.21,579.63 181.29,579.63 181.29,583.13 186.21,583.13 "
-       style="fill:#c7522b;stroke:#333333;stroke-width:1.07"
+       style="fill:#9bbaa0;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon3608" />
     <line
        x1="181.28999"
@@ -3409,7 +3409,7 @@
        id="line3618" />
     <polygon
        points="198.95,581.77 194.04,581.77 194.04,582.54 198.95,582.54 "
-       style="fill:#e6c186;stroke:#333333;stroke-width:1.07"
+       style="fill:#fbf2c4;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon3620" />
     <line
        x1="194.03999"
@@ -3440,7 +3440,7 @@
        id="line3628" />
     <polygon
        points="204.42,584.88 199.5,584.88 "
-       style="fill:#b8cdae;stroke:#333333;stroke-width:1.07"
+       style="fill:#dea868;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon3630" />
     <line
        x1="199.5"
@@ -3465,7 +3465,7 @@
        id="line3636" />
     <polygon
        points="209.88,584.88 204.96,584.88 "
-       style="fill:#008585;stroke:#333333;stroke-width:1.07"
+       style="fill:#c7522b;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon3638" />
     <line
        x1="204.96001"
@@ -3496,7 +3496,7 @@
        id="line3646" />
     <polygon
        points="215.34,584.88 210.42,584.88 "
-       style="fill:#c7522b;stroke:#333333;stroke-width:1.07"
+       style="fill:#9bbaa0;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon3648" />
     <line
        x1="210.42"
@@ -3521,7 +3521,7 @@
        id="line3654" />
     <polygon
        points="228.08,577.11 223.17,577.11 223.17,584.88 228.08,584.88 "
-       style="fill:#e6c186;stroke:#333333;stroke-width:1.07"
+       style="fill:#fbf2c4;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon3656" />
     <line
        x1="223.17"
@@ -3552,7 +3552,7 @@
        id="line3664" />
     <polygon
        points="233.55,574 228.63,574 228.63,577.11 233.55,577.11 "
-       style="fill:#b8cdae;stroke:#333333;stroke-width:1.07"
+       style="fill:#dea868;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon3666" />
     <line
        x1="228.63"
@@ -3583,7 +3583,7 @@
        id="line3674" />
     <polygon
        points="239.01,584.88 234.09,584.88 "
-       style="fill:#008585;stroke:#333333;stroke-width:1.07"
+       style="fill:#c7522b;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon3676" />
     <line
        x1="234.09"
@@ -3608,7 +3608,7 @@
        id="line3682" />
     <polygon
        points="244.47,579.24 239.55,579.24 239.55,581.57 244.47,581.57 "
-       style="fill:#c7522b;stroke:#333333;stroke-width:1.07"
+       style="fill:#9bbaa0;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon3684" />
     <line
        x1="239.55"
@@ -3633,7 +3633,7 @@
        id="line3690" />
     <polygon
        points="257.21,579.44 252.3,579.44 252.3,581.77 257.21,581.77 "
-       style="fill:#e6c186;stroke:#333333;stroke-width:1.07"
+       style="fill:#fbf2c4;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon3692" />
     <line
        x1="252.3"
@@ -3664,7 +3664,7 @@
        id="line3700" />
     <polygon
        points="262.68,574.39 257.76,574.39 257.76,576.91 262.68,576.91 "
-       style="fill:#b8cdae;stroke:#333333;stroke-width:1.07"
+       style="fill:#dea868;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon3702" />
     <line
        x1="257.76001"
@@ -3689,7 +3689,7 @@
        id="line3708" />
     <polygon
        points="268.14,582.16 263.22,582.16 263.22,583.9 268.14,583.9 "
-       style="fill:#008585;stroke:#333333;stroke-width:1.07"
+       style="fill:#c7522b;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon3710" />
     <line
        x1="263.22"
@@ -3714,7 +3714,7 @@
        id="line3716" />
     <polygon
        points="273.6,578.46 268.68,578.46 268.68,581.77 273.6,581.77 "
-       style="fill:#c7522b;stroke:#333333;stroke-width:1.07"
+       style="fill:#9bbaa0;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon3718" />
     <line
        x1="268.67999"
@@ -3745,7 +3745,7 @@
        id="line3726" />
     <polygon
        points="286.34,564.67 281.43,564.67 281.43,583.32 286.34,583.32 "
-       style="fill:#e6c186;stroke:#333333;stroke-width:1.07"
+       style="fill:#fbf2c4;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon3728" />
     <line
        x1="281.42999"
@@ -3776,7 +3776,7 @@
        id="line3736" />
     <polygon
        points="291.81,584.88 286.89,584.88 "
-       style="fill:#b8cdae;stroke:#333333;stroke-width:1.07"
+       style="fill:#dea868;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon3738" />
     <line
        x1="286.89001"
@@ -3807,7 +3807,7 @@
        id="line3746" />
     <polygon
        points="297.27,584.88 292.35,584.88 "
-       style="fill:#008585;stroke:#333333;stroke-width:1.07"
+       style="fill:#c7522b;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon3748" />
     <line
        x1="292.35001"
@@ -3832,7 +3832,7 @@
        id="line3754" />
     <polygon
        points="302.73,571.86 297.81,571.86 297.81,579.44 302.73,579.44 "
-       style="fill:#c7522b;stroke:#333333;stroke-width:1.07"
+       style="fill:#9bbaa0;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon3756" />
     <line
        x1="297.81"
@@ -3857,7 +3857,7 @@
        id="line3762" />
     <polygon
        points="315.48,577.11 310.56,577.11 310.56,582.54 315.48,582.54 "
-       style="fill:#e6c186;stroke:#333333;stroke-width:1.07"
+       style="fill:#fbf2c4;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon3764" />
     <line
        x1="310.56"
@@ -3882,7 +3882,7 @@
        id="line3770" />
     <polygon
        points="320.94,573.61 316.02,573.61 316.02,580.02 320.94,580.02 "
-       style="fill:#b8cdae;stroke:#333333;stroke-width:1.07"
+       style="fill:#dea868;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon3772" />
     <line
        x1="316.01999"
@@ -3913,7 +3913,7 @@
        id="line3780" />
     <polygon
        points="326.4,584.88 321.48,584.88 "
-       style="fill:#008585;stroke:#333333;stroke-width:1.07"
+       style="fill:#c7522b;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon3782" />
     <line
        x1="321.48001"
@@ -3938,7 +3938,7 @@
        id="line3788" />
     <polygon
        points="331.86,579.05 326.95,579.05 326.95,583.13 331.86,583.13 "
-       style="fill:#c7522b;stroke:#333333;stroke-width:1.07"
+       style="fill:#9bbaa0;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon3790" />
     <line
        x1="326.95001"
@@ -3963,7 +3963,7 @@
        id="line3796" />
     <polygon
        points="344.61,581.77 339.69,581.77 339.69,584.88 344.61,584.88 "
-       style="fill:#e6c186;stroke:#333333;stroke-width:1.07"
+       style="fill:#fbf2c4;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon3798" />
     <line
        x1="339.69"
@@ -3988,7 +3988,7 @@
        id="line3804" />
     <polygon
        points="350.07,582.93 345.15,582.93 345.15,584.88 350.07,584.88 "
-       style="fill:#b8cdae;stroke:#333333;stroke-width:1.07"
+       style="fill:#dea868;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon3806" />
     <line
        x1="345.14999"
@@ -4013,7 +4013,7 @@
        id="line3812" />
     <polygon
        points="355.53,580.02 350.61,580.02 350.61,584.1 355.53,584.1 "
-       style="fill:#008585;stroke:#333333;stroke-width:1.07"
+       style="fill:#c7522b;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon3814" />
     <line
        x1="350.60999"
@@ -4038,7 +4038,7 @@
        id="line3820" />
     <polygon
        points="360.99,579.44 356.08,579.44 356.08,580.99 360.99,580.99 "
-       style="fill:#c7522b;stroke:#333333;stroke-width:1.07"
+       style="fill:#9bbaa0;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon3822" />
     <line
        x1="356.07999"
@@ -4063,7 +4063,7 @@
        id="line3828" />
     <polygon
        points="373.74,552.24 368.82,552.24 368.82,567.78 373.74,567.78 "
-       style="fill:#e6c186;stroke:#333333;stroke-width:1.07"
+       style="fill:#fbf2c4;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon3830" />
     <line
        x1="368.82001"
@@ -4088,7 +4088,7 @@
        id="line3836" />
     <polygon
        points="379.2,556.32 374.28,556.32 374.28,565.64 379.2,565.64 "
-       style="fill:#b8cdae;stroke:#333333;stroke-width:1.07"
+       style="fill:#dea868;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon3838" />
     <line
        x1="374.28"
@@ -4113,7 +4113,7 @@
        id="line3844" />
     <polygon
        points="384.66,574.77 379.74,574.77 379.74,579.24 384.66,579.24 "
-       style="fill:#008585;stroke:#333333;stroke-width:1.07"
+       style="fill:#c7522b;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon3846" />
     <line
        x1="379.73999"
@@ -4144,7 +4144,7 @@
        id="line3854" />
     <polygon
        points="390.12,560.4 385.21,560.4 385.21,568.56 390.12,568.56 "
-       style="fill:#c7522b;stroke:#333333;stroke-width:1.07"
+       style="fill:#9bbaa0;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon3856" />
     <line
        x1="385.20999"
@@ -4169,7 +4169,7 @@
        id="line3862" />
     <polygon
        points="402.87,584.88 397.95,584.88 "
-       style="fill:#e6c186;stroke:#333333;stroke-width:1.07"
+       style="fill:#fbf2c4;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon3864" />
     <line
        x1="397.95001"
@@ -4194,7 +4194,7 @@
        id="line3870" />
     <polygon
        points="408.33,581.38 403.41,581.38 403.41,584.88 408.33,584.88 "
-       style="fill:#b8cdae;stroke:#333333;stroke-width:1.07"
+       style="fill:#dea868;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon3872" />
     <line
        x1="403.41"
@@ -4219,7 +4219,7 @@
        id="line3878" />
     <polygon
        points="413.79,582.74 408.88,582.74 408.88,584.49 413.79,584.49 "
-       style="fill:#008585;stroke:#333333;stroke-width:1.07"
+       style="fill:#c7522b;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon3880" />
     <line
        x1="408.88"
@@ -4244,7 +4244,7 @@
        id="line3886" />
     <polygon
        points="419.25,576.91 414.34,576.91 414.34,580.99 419.25,580.99 "
-       style="fill:#c7522b;stroke:#333333;stroke-width:1.07"
+       style="fill:#9bbaa0;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon3888" />
     <line
        x1="414.34"
@@ -4275,7 +4275,7 @@
        id="line3896" />
     <polygon
        points="432,584.88 427.08,584.88 "
-       style="fill:#e6c186;stroke:#333333;stroke-width:1.07"
+       style="fill:#fbf2c4;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon3898" />
     <line
        x1="427.07999"
@@ -4300,7 +4300,7 @@
        id="line3904" />
     <polygon
        points="437.46,584.88 432.54,584.88 "
-       style="fill:#b8cdae;stroke:#333333;stroke-width:1.07"
+       style="fill:#dea868;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon3906" />
     <line
        x1="432.54001"
@@ -4331,7 +4331,7 @@
        id="line3914" />
     <polygon
        points="442.92,582.74 438.01,582.74 438.01,583.9 442.92,583.9 "
-       style="fill:#008585;stroke:#333333;stroke-width:1.07"
+       style="fill:#c7522b;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon3916" />
     <line
        x1="438.01001"
@@ -4362,7 +4362,7 @@
        id="line3924" />
     <polygon
        points="448.38,583.52 443.47,583.52 443.47,584.1 448.38,584.1 "
-       style="fill:#c7522b;stroke:#333333;stroke-width:1.07"
+       style="fill:#9bbaa0;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon3926" />
     <line
        x1="443.47"
@@ -4387,7 +4387,7 @@
        id="line3932" />
     <polygon
        points="461.13,580.21 456.21,580.21 456.21,584.1 461.13,584.1 "
-       style="fill:#e6c186;stroke:#333333;stroke-width:1.07"
+       style="fill:#fbf2c4;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon3934" />
     <line
        x1="456.20999"
@@ -4412,7 +4412,7 @@
        id="line3940" />
     <polygon
        points="466.59,548.55 461.67,548.55 461.67,567.97 466.59,567.97 "
-       style="fill:#b8cdae;stroke:#333333;stroke-width:1.07"
+       style="fill:#dea868;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon3942" />
     <line
        x1="461.67001"
@@ -4443,7 +4443,7 @@
        id="line3950" />
     <polygon
        points="472.05,569.92 467.14,569.92 467.14,572.25 472.05,572.25 "
-       style="fill:#008585;stroke:#333333;stroke-width:1.07"
+       style="fill:#c7522b;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon3952" />
     <line
        x1="467.14001"
@@ -4468,7 +4468,7 @@
        id="line3958" />
     <polygon
        points="477.51,561.95 472.6,561.95 472.6,573.61 477.51,573.61 "
-       style="fill:#c7522b;stroke:#333333;stroke-width:1.07"
+       style="fill:#9bbaa0;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon3960" />
     <line
        x1="472.60001"
@@ -4493,7 +4493,7 @@
        id="line3966" />
     <polygon
        points="490.26,584.88 485.34,584.88 "
-       style="fill:#e6c186;stroke:#333333;stroke-width:1.07"
+       style="fill:#fbf2c4;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon3968" />
     <line
        x1="485.34"
@@ -4518,7 +4518,7 @@
        id="line3974" />
     <polygon
        points="495.72,584.88 490.8,584.88 "
-       style="fill:#b8cdae;stroke:#333333;stroke-width:1.07"
+       style="fill:#dea868;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon3976" />
     <line
        x1="490.79999"
@@ -4543,7 +4543,7 @@
        id="line3982" />
     <polygon
        points="501.18,584.88 496.27,584.88 "
-       style="fill:#008585;stroke:#333333;stroke-width:1.07"
+       style="fill:#c7522b;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon3984" />
     <line
        x1="496.26999"
@@ -4574,7 +4574,7 @@
        id="line3992" />
     <polygon
        points="506.64,581.96 501.73,581.96 501.73,584.49 506.64,584.49 "
-       style="fill:#c7522b;stroke:#333333;stroke-width:1.07"
+       style="fill:#9bbaa0;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon3994" />
     <line
        x1="501.73001"
@@ -4605,7 +4605,7 @@
        id="line4002" />
     <polygon
        points="519.39,584.88 514.47,584.88 "
-       style="fill:#e6c186;stroke:#333333;stroke-width:1.07"
+       style="fill:#fbf2c4;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon4004" />
     <line
        x1="514.46997"
@@ -4636,7 +4636,7 @@
        id="line4012" />
     <polygon
        points="524.85,584.88 519.94,584.88 "
-       style="fill:#b8cdae;stroke:#333333;stroke-width:1.07"
+       style="fill:#dea868;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon4014" />
     <line
        x1="519.94"
@@ -4667,7 +4667,7 @@
        id="line4022" />
     <polygon
        points="530.31,584.88 525.4,584.88 "
-       style="fill:#008585;stroke:#333333;stroke-width:1.07"
+       style="fill:#c7522b;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon4024" />
     <line
        x1="525.40002"
@@ -4692,7 +4692,7 @@
        id="line4030" />
     <polygon
        points="535.78,581.57 530.86,581.57 530.86,584.49 535.78,584.49 "
-       style="fill:#c7522b;stroke:#333333;stroke-width:1.07"
+       style="fill:#9bbaa0;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon4032" />
     <line
        x1="530.85999"
@@ -5284,7 +5284,7 @@
        id="line4338" />
     <polygon
        points="722.14,588.63 722.14,584.97 708.5,584.97 708.5,588.63 "
-       style="fill:#e6c186;stroke:#333333;stroke-width:1.07"
+       style="fill:#fbf2c4;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon4340" />
     <line
        x1="708.5"
@@ -5315,7 +5315,7 @@
        id="line4348" />
     <polygon
        points="737.29,583.01 737.29,577.78 723.65,577.78 723.65,583.01 "
-       style="fill:#b8cdae;stroke:#333333;stroke-width:1.07"
+       style="fill:#dea868;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon4350" />
     <line
        x1="723.65002"
@@ -5340,7 +5340,7 @@
        id="line4356" />
     <polygon
        points="752.44,575.3 752.44,564.06 738.8,564.06 738.8,575.3 "
-       style="fill:#008585;stroke:#333333;stroke-width:1.07"
+       style="fill:#c7522b;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon4358" />
     <line
        x1="738.79999"
@@ -5377,7 +5377,7 @@
        id="line4368" />
     <polygon
        points="767.59,579.22 767.59,574.25 753.96,574.25 753.96,579.22 "
-       style="fill:#c7522b;stroke:#333333;stroke-width:1.07"
+       style="fill:#9bbaa0;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon4370" />
     <line
        x1="753.96002"
@@ -5402,7 +5402,7 @@
        id="line4376" />
     <polygon
        points="802.95,540.53 802.95,515.03 789.31,515.03 789.31,540.53 "
-       style="fill:#e6c186;stroke:#333333;stroke-width:1.07"
+       style="fill:#fbf2c4;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon4378" />
     <line
        x1="789.31"
@@ -5433,7 +5433,7 @@
        id="line4386" />
     <polygon
        points="818.1,462.87 818.1,427.71 804.46,427.71 804.46,462.87 "
-       style="fill:#b8cdae;stroke:#333333;stroke-width:1.07"
+       style="fill:#dea868;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon4388" />
     <line
        x1="804.46002"
@@ -5458,7 +5458,7 @@
        id="line4394" />
     <polygon
        points="833.25,512.29 833.25,474.64 819.62,474.64 819.62,512.29 "
-       style="fill:#008585;stroke:#333333;stroke-width:1.07"
+       style="fill:#c7522b;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon4396" />
     <line
        x1="819.62"
@@ -5483,7 +5483,7 @@
        id="line4402" />
     <polygon
        points="848.41,540.66 848.41,502.88 834.77,502.88 834.77,540.66 "
-       style="fill:#c7522b;stroke:#333333;stroke-width:1.07"
+       style="fill:#9bbaa0;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon4404" />
     <line
        x1="834.77002"
@@ -5508,7 +5508,7 @@
        id="line4410" />
     <polygon
        points="883.76,583.4 883.76,580.92 870.13,580.92 870.13,583.4 "
-       style="fill:#e6c186;stroke:#333333;stroke-width:1.07"
+       style="fill:#fbf2c4;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon4412" />
     <line
        x1="870.13"
@@ -5539,7 +5539,7 @@
        id="line4420" />
     <polygon
        points="898.92,584.45 898.92,581.44 885.28,581.44 885.28,584.45 "
-       style="fill:#b8cdae;stroke:#333333;stroke-width:1.07"
+       style="fill:#dea868;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon4422" />
     <line
        x1="885.28003"
@@ -5564,7 +5564,7 @@
        id="line4428" />
     <polygon
        points="914.07,586.93 914.07,585.1 900.43,585.1 900.43,586.93 "
-       style="fill:#008585;stroke:#333333;stroke-width:1.07"
+       style="fill:#c7522b;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon4430" />
     <line
        x1="900.42999"
@@ -5589,7 +5589,7 @@
        id="line4436" />
     <polygon
        points="929.22,584.45 929.22,582.49 915.58,582.49 915.58,584.45 "
-       style="fill:#c7522b;stroke:#333333;stroke-width:1.07"
+       style="fill:#9bbaa0;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon4438" />
     <line
        x1="915.58002"
@@ -5614,7 +5614,7 @@
        id="line4444" />
     <polygon
        points="964.58,588.63 964.58,586.67 950.94,586.67 950.94,588.63 "
-       style="fill:#e6c186;stroke:#333333;stroke-width:1.07"
+       style="fill:#fbf2c4;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon4446" />
     <line
        x1="950.94"
@@ -5645,7 +5645,7 @@
        id="line4454" />
     <polygon
        points="979.73,586.02 979.73,585.1 966.09,585.1 966.09,586.02 "
-       style="fill:#b8cdae;stroke:#333333;stroke-width:1.07"
+       style="fill:#dea868;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon4456" />
     <line
        x1="966.09003"
@@ -5670,7 +5670,7 @@
        id="line4462" />
     <polygon
        points="994.88,588.11 994.88,585.36 981.24,585.36 981.24,588.11 "
-       style="fill:#008585;stroke:#333333;stroke-width:1.07"
+       style="fill:#c7522b;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon4464" />
     <line
        x1="981.23999"
@@ -5695,7 +5695,7 @@
        id="line4470" />
     <polygon
        points="1010.03,588.63 1010.03,587.85 996.4,587.85 996.4,588.63 "
-       style="fill:#c7522b;stroke:#333333;stroke-width:1.07"
+       style="fill:#9bbaa0;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon4472" />
     <line
        x1="996.40002"
@@ -5720,7 +5720,7 @@
        id="line4478" />
     <polygon
        points="1045.39,588.11 1045.39,581.97 1031.75,581.97 1031.75,588.11 "
-       style="fill:#e6c186;stroke:#333333;stroke-width:1.07"
+       style="fill:#fbf2c4;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon4480" />
     <line
        x1="1031.75"
@@ -5745,7 +5745,7 @@
        id="line4486" />
     <polygon
        points="1060.54,581.83 1060.54,572.68 1046.91,572.68 1046.91,581.83 "
-       style="fill:#b8cdae;stroke:#333333;stroke-width:1.07"
+       style="fill:#dea868;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon4488" />
     <line
        x1="1046.91"
@@ -5770,7 +5770,7 @@
        id="line4494" />
     <polygon
        points="1075.7,574.38 1075.7,567.85 1062.06,567.85 1062.06,574.38 "
-       style="fill:#008585;stroke:#333333;stroke-width:1.07"
+       style="fill:#c7522b;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon4496" />
     <line
        x1="1062.0601"
@@ -5795,7 +5795,7 @@
        id="line4502" />
     <polygon
        points="1090.85,579.74 1090.85,576.21 1077.21,576.21 1077.21,579.74 "
-       style="fill:#c7522b;stroke:#333333;stroke-width:1.07"
+       style="fill:#9bbaa0;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon4504" />
     <line
        x1="1077.21"
@@ -5820,7 +5820,7 @@
        id="line4510" />
     <polygon
        points="1126.2,576.21 1126.2,573.08 1112.57,573.08 1112.57,576.21 "
-       style="fill:#e6c186;stroke:#333333;stroke-width:1.07"
+       style="fill:#fbf2c4;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon4512" />
     <line
        x1="1112.5699"
@@ -5851,7 +5851,7 @@
        id="line4520" />
     <polygon
        points="1141.36,566.8 1141.36,562.36 1127.72,562.36 1127.72,566.8 "
-       style="fill:#b8cdae;stroke:#333333;stroke-width:1.07"
+       style="fill:#dea868;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon4522" />
     <line
        x1="1127.72"
@@ -5876,7 +5876,7 @@
        id="line4528" />
     <polygon
        points="1156.51,578.31 1156.51,572.95 1142.87,572.95 1142.87,578.31 "
-       style="fill:#008585;stroke:#333333;stroke-width:1.07"
+       style="fill:#c7522b;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon4530" />
     <line
        x1="1142.87"
@@ -5901,7 +5901,7 @@
        id="line4536" />
     <polygon
        points="1171.66,581.31 1171.66,575.69 1158.02,575.69 1158.02,581.31 "
-       style="fill:#c7522b;stroke:#333333;stroke-width:1.07"
+       style="fill:#9bbaa0;stroke:#333333;stroke-width:1.07;fill-opacity:1"
        id="polygon4538" />
     <line
        x1="1158.02"
@@ -6184,7 +6184,7 @@
          y="-13.989054"
          width="17.372892"
          height="11.581928"
-         style="fill:#e6c186;stroke:#333333;stroke-width:1.43434;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10"
+         style="fill:#fbf2c4;stroke:#333333;stroke-width:1.43434;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;fill-opacity:1"
          id="rect5950" />
       <polyline
          points="1209.20,123.45 1222.16,123.45 "
@@ -6213,7 +6213,7 @@
          y="-14.1945"
          width="17.372892"
          height="11.581928"
-         style="fill:#b8cdae;stroke:#333333;stroke-width:1.43434;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10"
+         style="fill:#dea868;stroke:#333333;stroke-width:1.43434;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;fill-opacity:1"
          id="rect5960" />
       <polyline
          points="1209.20,140.73 1222.16,140.73 "
@@ -6242,7 +6242,7 @@
          y="-13.294895"
          width="17.372892"
          height="11.581928"
-         style="fill:#008585;stroke:#333333;stroke-width:1.43434;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10"
+         style="fill:#c7522b;stroke:#333333;stroke-width:1.43434;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;fill-opacity:1"
          id="rect5970" />
       <polyline
          points="1209.20,158.01 1222.16,158.01 "
@@ -6271,7 +6271,7 @@
          y="-13.295473"
          width="17.372892"
          height="11.581928"
-         style="fill:#c7522b;stroke:#333333;stroke-width:1.43434;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10"
+         style="fill:#9bbaa0;stroke:#333333;stroke-width:1.43434;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;fill-opacity:1"
          id="rect5980" />
       <polyline
          points="1209.20,175.29 1222.16,175.29 "
@@ -6426,90 +6426,90 @@
   </g>
   <text
      xml:space="preserve"
-     style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:14px;font-family:Arial;-inkscape-font-specification:'Arial, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;text-anchor:middle;white-space:pre;fill:#000000;fill-opacity:0.94902;stroke-width:0.5;stroke-opacity:0.898039"
-     x="1013.3145"
-     y="401.60483"
+     style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:16.949px;font-family:Arial;-inkscape-font-specification:'Arial, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;text-anchor:middle;white-space:pre;fill:#000000;fill-opacity:0.94902;stroke-width:0.60532;stroke-opacity:0.898039"
+     x="1012.0991"
+     y="404.80109"
      id="text2621-5"><tspan
        sodipodi:role="line"
        id="tspan2619-5"
-       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:14px;font-family:Arial;-inkscape-font-specification:'Arial, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.5"
-       x="1013.3145"
-       y="401.60483">*</tspan></text>
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:16.949px;font-family:Arial;-inkscape-font-specification:'Arial, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.60532"
+       x="1012.0991"
+       y="404.80109">*</tspan></text>
   <text
      xml:space="preserve"
-     style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:14px;font-family:Arial;-inkscape-font-specification:'Arial, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;text-anchor:middle;white-space:pre;fill:#000000;fill-opacity:0.94902;stroke-width:0.5;stroke-opacity:0.898039"
-     x="76.231819"
-     y="760.58411"
+     style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:16.949px;font-family:Arial;-inkscape-font-specification:'Arial, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;text-anchor:middle;white-space:pre;fill:#000000;fill-opacity:0.94902;stroke-width:0.60532;stroke-opacity:0.898039"
+     x="75.715988"
+     y="764.82965"
      id="text2621-5-9"><tspan
        sodipodi:role="line"
        id="tspan2619-5-3"
-       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:14px;font-family:Arial;-inkscape-font-specification:'Arial, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.5"
-       x="76.231819"
-       y="760.58411">*</tspan></text>
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:16.949px;font-family:Arial;-inkscape-font-specification:'Arial, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.60532"
+       x="75.715988"
+       y="764.82965">*</tspan></text>
   <text
      xml:space="preserve"
-     style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:14px;font-family:Arial;-inkscape-font-specification:'Arial, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;text-anchor:middle;white-space:pre;fill:#000000;fill-opacity:0.94902;stroke-width:0.5;stroke-opacity:0.898039"
-     x="483.82874"
-     y="762.56268"
+     style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:16.949px;font-family:Arial;-inkscape-font-specification:'Arial, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;text-anchor:middle;white-space:pre;fill:#000000;fill-opacity:0.94902;stroke-width:0.60532;stroke-opacity:0.898039"
+     x="483.3129"
+     y="765.05939"
      id="text2621-5-9-0"><tspan
        sodipodi:role="line"
        id="tspan2619-5-3-7"
-       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:14px;font-family:Arial;-inkscape-font-specification:'Arial, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.5"
-       x="483.82874"
-       y="762.56268">*</tspan></text>
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:16.949px;font-family:Arial;-inkscape-font-specification:'Arial, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.60532"
+       x="483.3129"
+       y="765.05939">*</tspan></text>
   <text
      xml:space="preserve"
-     style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:14px;font-family:Arial;-inkscape-font-specification:'Arial, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;text-anchor:middle;white-space:pre;fill:#000000;fill-opacity:0.94902;stroke-width:0.5;stroke-opacity:0.898039"
-     x="748.66699"
-     y="763.54645"
+     style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:16.949px;font-family:Arial;-inkscape-font-specification:'Arial, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;text-anchor:middle;white-space:pre;fill:#000000;fill-opacity:0.94902;stroke-width:0.60532;stroke-opacity:0.898039"
+     x="748.15118"
+     y="767.09247"
      id="text2621-5-9-0-8"><tspan
        sodipodi:role="line"
        id="tspan2619-5-3-7-7"
-       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:14px;font-family:Arial;-inkscape-font-specification:'Arial, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.5"
-       x="748.66699"
-       y="763.54645">*</tspan></text>
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:16.949px;font-family:Arial;-inkscape-font-specification:'Arial, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.60532"
+       x="748.15118"
+       y="767.09247">*</tspan></text>
   <text
      xml:space="preserve"
-     style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:14px;font-family:Arial;-inkscape-font-specification:'Arial, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;text-anchor:middle;white-space:pre;fill:#000000;fill-opacity:0.94902;stroke-width:0.5;stroke-opacity:0.898039"
-     x="247.38292"
-     y="765.5307"
+     style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:16.949px;font-family:Arial;-inkscape-font-specification:'Arial, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;text-anchor:middle;white-space:pre;fill:#000000;fill-opacity:0.94902;stroke-width:0.60532;stroke-opacity:0.898039"
+     x="245.46799"
+     y="769.77625"
      id="text2621-5-9-0-7"><tspan
        sodipodi:role="line"
        id="tspan2619-5-3-7-5"
-       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:14px;font-family:Arial;-inkscape-font-specification:'Arial, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.5"
-       x="247.38292"
-       y="765.5307">*</tspan></text>
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:16.949px;font-family:Arial;-inkscape-font-specification:'Arial, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.60532"
+       x="245.46799"
+       y="769.77625">*</tspan></text>
   <text
      xml:space="preserve"
-     style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:14px;font-family:Arial;-inkscape-font-specification:'Arial, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;text-anchor:middle;white-space:pre;fill:#000000;fill-opacity:0.94902;stroke-width:0.5;stroke-opacity:0.898039"
-     x="277.06232"
-     y="766.02533"
+     style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:16.949px;font-family:Arial;-inkscape-font-specification:'Arial, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;text-anchor:middle;white-space:pre;fill:#000000;fill-opacity:0.94902;stroke-width:0.60532;stroke-opacity:0.898039"
+     x="275.84692"
+     y="770.27087"
      id="text2621-5-9-0-7-8"><tspan
        sodipodi:role="line"
        id="tspan2619-5-3-7-5-4"
-       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:14px;font-family:Arial;-inkscape-font-specification:'Arial, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.5"
-       x="277.06232"
-       y="766.02533">*</tspan></text>
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:16.949px;font-family:Arial;-inkscape-font-specification:'Arial, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.60532"
+       x="275.84692"
+       y="770.27087">*</tspan></text>
   <text
      xml:space="preserve"
-     style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:14px;font-family:Arial;-inkscape-font-specification:'Arial, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;text-anchor:middle;white-space:pre;fill:#000000;fill-opacity:0.94902;stroke-width:0.5;stroke-opacity:0.898039"
-     x="190.00276"
-     y="766.02533"
+     style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:16.949px;font-family:Arial;-inkscape-font-specification:'Arial, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;text-anchor:middle;white-space:pre;fill:#000000;fill-opacity:0.94902;stroke-width:0.60532;stroke-opacity:0.898039"
+     x="188.78738"
+     y="769.22156"
      id="text2621-5-9-0-7-5"><tspan
        sodipodi:role="line"
        id="tspan2619-5-3-7-5-5"
-       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:14px;font-family:Arial;-inkscape-font-specification:'Arial, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.5"
-       x="190.00276"
-       y="766.02533">*</tspan></text>
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:16.949px;font-family:Arial;-inkscape-font-specification:'Arial, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.60532"
+       x="188.78738"
+       y="769.22156">*</tspan></text>
   <text
      xml:space="preserve"
-     style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:14px;font-family:Arial;-inkscape-font-specification:'Arial, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;text-anchor:middle;white-space:pre;fill:#000000;fill-opacity:0.94902;stroke-width:0.5;stroke-opacity:0.898039"
-     x="397.26385"
-     y="762.06805"
+     style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:16.949px;font-family:Arial;-inkscape-font-specification:'Arial, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;text-anchor:middle;white-space:pre;fill:#000000;fill-opacity:0.94902;stroke-width:0.60532;stroke-opacity:0.898039"
+     x="396.04846"
+     y="764.91449"
      id="text2621-5-9-0-7-5-7"><tspan
        sodipodi:role="line"
        id="tspan2619-5-3-7-5-5-0"
-       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:14px;font-family:Arial;-inkscape-font-specification:'Arial, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.5"
-       x="397.26385"
-       y="762.06805">*</tspan></text>
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:16.949px;font-family:Arial;-inkscape-font-specification:'Arial, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.60532"
+       x="396.04846"
+       y="764.91449">*</tspan></text>
 </svg>

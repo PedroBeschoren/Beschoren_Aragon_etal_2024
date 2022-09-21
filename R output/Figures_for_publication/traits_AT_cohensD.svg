@@ -28,18 +28,18 @@
   </clipPath>
 </defs>
 <g clip-path='url(#cpMTQyLjY0fDUwMS40MHw2Mi4zOHwzMTQuNjQ=)'>
-<line x1='347.84' y1='168.49' x2='403.26' y2='168.49' style='stroke-width: 10.67; stroke: #E69F00; stroke-linecap: butt;' />
-<line x1='386.02' y1='158.48' x2='453.45' y2='158.48' style='stroke-width: 10.67; stroke: #56B4E9; stroke-linecap: butt;' />
-<line x1='351.47' y1='148.47' x2='406.88' y2='148.47' style='stroke-width: 10.67; stroke: #009E73; stroke-linecap: butt;' />
-<line x1='347.23' y1='108.42' x2='402.67' y2='108.42' style='stroke-width: 10.67; stroke: #E69F00; stroke-linecap: butt;' />
-<line x1='368.16' y1='98.41' x2='426.42' y2='98.41' style='stroke-width: 10.67; stroke: #56B4E9; stroke-linecap: butt;' />
-<line x1='353.33' y1='88.40' x2='408.81' y2='88.40' style='stroke-width: 10.67; stroke: #009E73; stroke-linecap: butt;' />
-<line x1='327.34' y1='228.55' x2='389.16' y2='228.55' style='stroke-width: 10.67; stroke: #E69F00; stroke-linecap: butt;' />
-<line x1='204.43' y1='218.54' x2='333.41' y2='218.54' style='stroke-width: 10.67; stroke: #56B4E9; stroke-linecap: butt;' />
-<line x1='341.81' y1='208.53' x2='397.64' y2='208.53' style='stroke-width: 10.67; stroke: #009E73; stroke-linecap: butt;' />
-<line x1='326.94' y1='288.62' x2='388.86' y2='288.62' style='stroke-width: 10.67; stroke: #E69F00; stroke-linecap: butt;' />
-<line x1='159.45' y1='278.61' x2='316.79' y2='278.61' style='stroke-width: 10.67; stroke: #56B4E9; stroke-linecap: butt;' />
-<line x1='326.73' y1='268.59' x2='385.43' y2='268.59' style='stroke-width: 10.67; stroke: #009E73; stroke-linecap: butt;' />
+<line x1='347.84' y1='168.49' x2='403.26' y2='168.49' style='stroke-width: 10.67; stroke: #DEA868; stroke-linecap: butt;' />
+<line x1='386.02' y1='158.48' x2='453.45' y2='158.48' style='stroke-width: 10.67; stroke: #C7522B; stroke-linecap: butt;' />
+<line x1='351.47' y1='148.47' x2='406.88' y2='148.47' style='stroke-width: 10.67; stroke: #9BBAA0; stroke-linecap: butt;' />
+<line x1='347.23' y1='108.42' x2='402.67' y2='108.42' style='stroke-width: 10.67; stroke: #DEA868; stroke-linecap: butt;' />
+<line x1='368.16' y1='98.41' x2='426.42' y2='98.41' style='stroke-width: 10.67; stroke: #C7522B; stroke-linecap: butt;' />
+<line x1='353.33' y1='88.40' x2='408.81' y2='88.40' style='stroke-width: 10.67; stroke: #9BBAA0; stroke-linecap: butt;' />
+<line x1='327.34' y1='228.55' x2='389.16' y2='228.55' style='stroke-width: 10.67; stroke: #DEA868; stroke-linecap: butt;' />
+<line x1='204.43' y1='218.54' x2='333.41' y2='218.54' style='stroke-width: 10.67; stroke: #C7522B; stroke-linecap: butt;' />
+<line x1='341.81' y1='208.53' x2='397.64' y2='208.53' style='stroke-width: 10.67; stroke: #9BBAA0; stroke-linecap: butt;' />
+<line x1='326.94' y1='288.62' x2='388.86' y2='288.62' style='stroke-width: 10.67; stroke: #DEA868; stroke-linecap: butt;' />
+<line x1='159.45' y1='278.61' x2='316.79' y2='278.61' style='stroke-width: 10.67; stroke: #C7522B; stroke-linecap: butt;' />
+<line x1='326.73' y1='268.59' x2='385.43' y2='268.59' style='stroke-width: 10.67; stroke: #9BBAA0; stroke-linecap: butt;' />
 <line x1='377.45' y1='314.64' x2='377.45' y2='62.38' style='stroke-width: 1.07; stroke-dasharray: 5.69,5.69; stroke-linecap: butt;' />
 <line x1='394.68' y1='314.64' x2='394.68' y2='62.38' style='stroke-width: 1.07; stroke: #FF0000; stroke-dasharray: 5.69,5.69; stroke-linecap: butt;' />
 <line x1='360.23' y1='314.64' x2='360.23' y2='62.38' style='stroke-width: 1.07; stroke: #FF0000; stroke-dasharray: 5.69,5.69; stroke-linecap: butt;' />
@@ -73,11 +73,11 @@
 <text x='485.09' y='326.02' text-anchor='middle' style='font-size: 9.00px; font-weight: bold; font-family: "Arial";' textLength='5.00px' lengthAdjust='spacingAndGlyphs'>5</text>
 <text x='322.02' y='338.52' text-anchor='middle' style='font-size: 11.00px; font-weight: bold; font-family: "Arial";' textLength='255.15px' lengthAdjust='spacingAndGlyphs'>Cohen's D estimate with 95% confidence interval</text>
 <text x='189.15' y='41.24' style='font-size: 11.00px; font-family: "Arial";' textLength='46.49px' lengthAdjust='spacingAndGlyphs'>treatment</text>
-<line x1='249.76' y1='44.21' x2='249.76' y2='30.38' style='stroke-width: 10.67; stroke: #E69F00; stroke-linecap: butt;' />
+<line x1='249.76' y1='44.21' x2='249.76' y2='30.38' style='stroke-width: 10.67; stroke: #DEA868; stroke-linecap: butt;' />
 <circle cx='249.76' cy='37.30' r='2.37' style='stroke-width: 0.71; fill: #000000;' />
-<line x1='317.62' y1='44.21' x2='317.62' y2='30.38' style='stroke-width: 10.67; stroke: #56B4E9; stroke-linecap: butt;' />
+<line x1='317.62' y1='44.21' x2='317.62' y2='30.38' style='stroke-width: 10.67; stroke: #C7522B; stroke-linecap: butt;' />
 <circle cx='317.62' cy='37.30' r='2.37' style='stroke-width: 0.71; fill: #000000;' />
-<line x1='385.49' y1='44.21' x2='385.49' y2='30.38' style='stroke-width: 10.67; stroke: #009E73; stroke-linecap: butt;' />
+<line x1='385.49' y1='44.21' x2='385.49' y2='30.38' style='stroke-width: 10.67; stroke: #9BBAA0; stroke-linecap: butt;' />
 <circle cx='385.49' cy='37.30' r='2.37' style='stroke-width: 0.71; fill: #000000;' />
 <text x='263.87' y='40.45' style='font-size: 8.80px; font-family: "Arial";' textLength='39.63px' lengthAdjust='spacingAndGlyphs'>MeJA_0.1</text>
 <text x='331.74' y='40.45' style='font-size: 8.80px; font-family: "Arial";' textLength='39.63px' lengthAdjust='spacingAndGlyphs'>MeJA_1.0</text>
