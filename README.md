@@ -4,6 +4,8 @@
 
 This repository holds the **full** data and code for the WUR-ENTO MeJA pilot experiment where we test different methyl jasmonate concentration to stress *Arabidopsis thaliana* and *Brassica oleraceae*. We then evaluate rhizosphere and endosphere microbial communities with various methods. this project is in manuscript draft stage, so no new analysis will be performed.
 
+Are you looking for the raw sequences? they are available after publication on https://dataview.ncbi.nlm.nih.gov/object/PRJNA873942
+
 #### These are the main analysis methods employed
     * Permanovas, beta dispersion and NMDS ordinations oc CSS normalized microbiome data
     * basic alpha diversity analysis
@@ -18,11 +20,11 @@ This repository holds the **full** data and code for the WUR-ENTO MeJA pilot exp
 
 ### How to make use of this repository & run the analysis
 
-0 - After you clone/download all content, you can use renv::restore() to install all packages with the right versions. 
+1 - After you clone/download all content, you can use renv::restore() to install all packages with the right versions. 
 
-1 - The first chunk of script 1_Loading_and_pre_processing_published will load all the libraries necessary for the analysis.
+2 - The first chunk of script 1_Loading_and_pre_processing_published will load all the libraries necessary for the analysis.
 
-2 - you could then continue running scripts from 1 to 9, executing all analysis serially. Otherwise, just load "./R output/all_output_saved.RData" to get all processed objects.
+3 - you could then continue running scripts from 1 to 9, executing all analysis serially. Otherwise, just load "./R output/all_output_saved.RData" to get all processed objects.
 
 
     *Script 1 loads the data and performs all normalization, rarefaction, etc. it provides the phyloseq objects accessed in other scripts.
