@@ -23,59 +23,61 @@
 <g clip-path='url(#cpMC4wMHw1MDYuODh8MC4wMHwzNDYuMzI=)'>
 </g>
 <defs>
-  <clipPath id='cpMTQxLjkyfDUwMS40MHw2Mi4zOHwzMTQuNjQ='>
-    <rect x='141.92' y='62.38' width='359.48' height='252.27' />
+  <clipPath id='cpMTQyLjY0fDUwMS40MHw2Mi4zOHwzMTQuNjQ='>
+    <rect x='142.64' y='62.38' width='358.76' height='252.27' />
   </clipPath>
 </defs>
-<g clip-path='url(#cpMTQxLjkyfDUwMS40MHw2Mi4zOHwzMTQuNjQ=)'>
-<line x1='351.35' y1='168.49' x2='406.88' y2='168.49' style='stroke-width: 10.67; stroke: #DEA868; stroke-linecap: butt;' />
-<line x1='301.06' y1='158.48' x2='368.62' y2='158.48' style='stroke-width: 10.67; stroke: #C7522B; stroke-linecap: butt;' />
-<line x1='347.72' y1='148.47' x2='403.24' y2='148.47' style='stroke-width: 10.67; stroke: #9BBAA0; stroke-linecap: butt;' />
-<line x1='351.94' y1='108.42' x2='407.49' y2='108.42' style='stroke-width: 10.67; stroke: #DEA868; stroke-linecap: butt;' />
-<line x1='328.15' y1='98.41' x2='386.52' y2='98.41' style='stroke-width: 10.67; stroke: #C7522B; stroke-linecap: butt;' />
-<line x1='345.79' y1='88.40' x2='401.38' y2='88.40' style='stroke-width: 10.67; stroke: #9BBAA0; stroke-linecap: butt;' />
-<line x1='365.48' y1='228.55' x2='427.42' y2='228.55' style='stroke-width: 10.67; stroke: #DEA868; stroke-linecap: butt;' />
-<line x1='356.98' y1='208.53' x2='412.92' y2='208.53' style='stroke-width: 10.67; stroke: #9BBAA0; stroke-linecap: butt;' />
-<line x1='365.78' y1='288.62' x2='427.82' y2='288.62' style='stroke-width: 10.67; stroke: #DEA868; stroke-linecap: butt;' />
-<line x1='369.21' y1='268.59' x2='428.03' y2='268.59' style='stroke-width: 10.67; stroke: #9BBAA0; stroke-linecap: butt;' />
-<line x1='377.21' y1='314.64' x2='377.21' y2='62.38' style='stroke-width: 1.07; stroke-dasharray: 5.69,5.69; stroke-linecap: butt;' />
-<line x1='394.46' y1='314.64' x2='394.46' y2='62.38' style='stroke-width: 1.07; stroke: #FF0000; stroke-dasharray: 5.69,5.69; stroke-linecap: butt;' />
-<line x1='359.95' y1='314.64' x2='359.95' y2='62.38' style='stroke-width: 1.07; stroke: #FF0000; stroke-dasharray: 5.69,5.69; stroke-linecap: butt;' />
-<circle cx='379.11' cy='168.49' r='2.37' style='stroke-width: 0.71; fill: #000000;' />
-<circle cx='334.84' cy='158.48' r='2.37' style='stroke-width: 0.71; fill: #000000;' />
-<circle cx='375.48' cy='148.47' r='2.37' style='stroke-width: 0.71; fill: #000000;' />
-<circle cx='379.72' cy='108.42' r='2.37' style='stroke-width: 0.71; fill: #000000;' />
-<circle cx='357.33' cy='98.41' r='2.37' style='stroke-width: 0.71; fill: #000000;' />
-<circle cx='373.58' cy='88.40' r='2.37' style='stroke-width: 0.71; fill: #000000;' />
-<circle cx='396.45' cy='228.55' r='2.37' style='stroke-width: 0.71; fill: #000000;' />
-<circle cx='384.95' cy='208.53' r='2.37' style='stroke-width: 0.71; fill: #000000;' />
-<circle cx='396.80' cy='288.62' r='2.37' style='stroke-width: 0.71; fill: #000000;' />
-<circle cx='398.62' cy='268.59' r='2.37' style='stroke-width: 0.71; fill: #000000;' />
+<g clip-path='url(#cpMTQyLjY0fDUwMS40MHw2Mi4zOHwzMTQuNjQ=)'>
+<line x1='351.65' y1='168.49' x2='407.06' y2='168.49' style='stroke-width: 10.67; stroke: #DEA868; stroke-linecap: butt;' />
+<line x1='301.45' y1='158.48' x2='368.89' y2='158.48' style='stroke-width: 10.67; stroke: #C7522B; stroke-linecap: butt;' />
+<line x1='348.02' y1='148.47' x2='403.43' y2='148.47' style='stroke-width: 10.67; stroke: #9BBAA0; stroke-linecap: butt;' />
+<line x1='352.24' y1='108.42' x2='407.68' y2='108.42' style='stroke-width: 10.67; stroke: #DEA868; stroke-linecap: butt;' />
+<line x1='328.49' y1='98.41' x2='386.74' y2='98.41' style='stroke-width: 10.67; stroke: #C7522B; stroke-linecap: butt;' />
+<line x1='346.09' y1='88.40' x2='401.58' y2='88.40' style='stroke-width: 10.67; stroke: #9BBAA0; stroke-linecap: butt;' />
+<line x1='365.74' y1='228.55' x2='427.56' y2='228.55' style='stroke-width: 10.67; stroke: #DEA868; stroke-linecap: butt;' />
+<line x1='357.26' y1='208.53' x2='413.09' y2='208.53' style='stroke-width: 10.67; stroke: #9BBAA0; stroke-linecap: butt;' />
+<line x1='366.04' y1='288.62' x2='427.96' y2='288.62' style='stroke-width: 10.67; stroke: #DEA868; stroke-linecap: butt;' />
+<line x1='369.47' y1='268.59' x2='428.17' y2='268.59' style='stroke-width: 10.67; stroke: #9BBAA0; stroke-linecap: butt;' />
+<line x1='377.45' y1='314.64' x2='377.45' y2='62.38' style='stroke-width: 1.07; stroke-dasharray: 5.69,5.69; stroke-linecap: butt;' />
+<line x1='394.68' y1='314.64' x2='394.68' y2='62.38' style='stroke-width: 1.07; stroke: #FF0000; stroke-dasharray: 5.69,5.69; stroke-linecap: butt;' />
+<line x1='360.23' y1='314.64' x2='360.23' y2='62.38' style='stroke-width: 1.07; stroke: #FF0000; stroke-dasharray: 5.69,5.69; stroke-linecap: butt;' />
+<circle cx='379.36' cy='168.49' r='2.37' style='stroke-width: 0.71; fill: #000000;' />
+<circle cx='335.17' cy='158.48' r='2.37' style='stroke-width: 0.71; fill: #000000;' />
+<circle cx='375.73' cy='148.47' r='2.37' style='stroke-width: 0.71; fill: #000000;' />
+<circle cx='379.96' cy='108.42' r='2.37' style='stroke-width: 0.71; fill: #000000;' />
+<circle cx='357.62' cy='98.41' r='2.37' style='stroke-width: 0.71; fill: #000000;' />
+<circle cx='373.84' cy='88.40' r='2.37' style='stroke-width: 0.71; fill: #000000;' />
+<circle cx='396.65' cy='228.55' r='2.37' style='stroke-width: 0.71; fill: #000000;' />
+<circle cx='385.18' cy='208.53' r='2.37' style='stroke-width: 0.71; fill: #000000;' />
+<circle cx='397.00' cy='288.62' r='2.37' style='stroke-width: 0.71; fill: #000000;' />
+<circle cx='398.82' cy='268.59' r='2.37' style='stroke-width: 0.71; fill: #000000;' />
 </g>
 <g clip-path='url(#cpMC4wMHw1MDYuODh8MC4wMHwzNDYuMzI=)'>
-<polyline points='141.92,314.64 141.92,62.38 ' style='stroke-width: 1.71; stroke-linecap: butt;' />
-<text x='81.31' y='282.90' text-anchor='middle' style='font-size: 12.00px; font-weight: bold; font-family: "Arial";' textLength='30.69px' lengthAdjust='spacingAndGlyphs'>myc2</text>
-<text x='81.31' y='222.84' text-anchor='middle' style='font-size: 12.00px; font-weight: bold; font-family: "Arial";' textLength='24.01px' lengthAdjust='spacingAndGlyphs'>lox2</text>
-<text x='81.31' y='156.30' text-anchor='middle' style='font-size: 12.00px; font-weight: bold; font-family: "Arial";' textLength='111.36px' lengthAdjust='spacingAndGlyphs'>Number of siliques </text>
-<text x='81.31' y='169.26' text-anchor='middle' style='font-size: 12.00px; font-weight: bold; font-family: "Arial";' textLength='54.01px' lengthAdjust='spacingAndGlyphs'> per plant</text>
-<text x='81.31' y='96.23' text-anchor='middle' style='font-size: 12.00px; font-weight: bold; font-family: "Arial";' textLength='64.68px' lengthAdjust='spacingAndGlyphs'>Dry weight </text>
-<text x='81.31' y='109.19' text-anchor='middle' style='font-size: 12.00px; font-weight: bold; font-family: "Arial";' textLength='80.70px' lengthAdjust='spacingAndGlyphs'> inflorescence</text>
-<polyline points='141.92,314.64 501.40,314.64 ' style='stroke-width: 1.71; stroke-linecap: butt;' />
-<text x='161.50' y='326.02' text-anchor='middle' style='font-size: 9.00px; font-weight: bold; font-family: "Arial";' textLength='13.00px' lengthAdjust='spacingAndGlyphs'>-10</text>
-<text x='269.35' y='326.02' text-anchor='middle' style='font-size: 9.00px; font-weight: bold; font-family: "Arial";' textLength='8.00px' lengthAdjust='spacingAndGlyphs'>-5</text>
-<text x='377.21' y='326.02' text-anchor='middle' style='font-size: 9.00px; font-weight: bold; font-family: "Arial";' textLength='5.00px' lengthAdjust='spacingAndGlyphs'>0</text>
-<text x='485.06' y='326.02' text-anchor='middle' style='font-size: 9.00px; font-weight: bold; font-family: "Arial";' textLength='5.00px' lengthAdjust='spacingAndGlyphs'>5</text>
-<text x='321.66' y='338.52' text-anchor='middle' style='font-size: 11.00px; font-weight: bold; font-family: "Arial";' textLength='255.15px' lengthAdjust='spacingAndGlyphs'>Cohen's D estimate with 95% confidence interval</text>
-<text x='188.79' y='41.24' style='font-size: 11.00px; font-family: "Arial";' textLength='46.49px' lengthAdjust='spacingAndGlyphs'>treatment</text>
-<line x1='249.40' y1='44.21' x2='249.40' y2='30.38' style='stroke-width: 10.67; stroke: #DEA868; stroke-linecap: butt;' />
-<circle cx='249.40' cy='37.30' r='2.37' style='stroke-width: 0.71; fill: #000000;' />
-<line x1='317.27' y1='44.21' x2='317.27' y2='30.38' style='stroke-width: 10.67; stroke: #C7522B; stroke-linecap: butt;' />
-<circle cx='317.27' cy='37.30' r='2.37' style='stroke-width: 0.71; fill: #000000;' />
-<line x1='385.13' y1='44.21' x2='385.13' y2='30.38' style='stroke-width: 10.67; stroke: #9BBAA0; stroke-linecap: butt;' />
-<circle cx='385.13' cy='37.30' r='2.37' style='stroke-width: 0.71; fill: #000000;' />
-<text x='263.52' y='40.45' style='font-size: 8.80px; font-family: "Arial";' textLength='39.63px' lengthAdjust='spacingAndGlyphs'>MeJA_0.1</text>
-<text x='331.39' y='40.45' style='font-size: 8.80px; font-family: "Arial";' textLength='39.63px' lengthAdjust='spacingAndGlyphs'>MeJA_1.0</text>
-<text x='399.25' y='40.45' style='font-size: 8.80px; font-family: "Arial";' textLength='55.28px' lengthAdjust='spacingAndGlyphs'>oral_secretion</text>
-<text x='141.92' y='14.93' style='font-size: 13.20px; font-family: "Arial";' textLength='118.80px' lengthAdjust='spacingAndGlyphs'>Arabidopsis thaliana</text>
+<polyline points='142.64,314.64 142.64,62.38 ' style='stroke-width: 1.71; stroke-linecap: butt;' />
+<text x='81.67' y='276.42' text-anchor='middle' style='font-size: 12.00px; font-weight: bold; font-family: "Arial";' textLength='112.07px' lengthAdjust='spacingAndGlyphs'>relative expression </text>
+<text x='81.67' y='289.38' text-anchor='middle' style='font-size: 12.00px; font-weight: bold; font-family: "Arial";' textLength='51.34px' lengthAdjust='spacingAndGlyphs'> of MYC2</text>
+<text x='81.67' y='216.36' text-anchor='middle' style='font-size: 12.00px; font-weight: bold; font-family: "Arial";' textLength='112.07px' lengthAdjust='spacingAndGlyphs'>relative expression </text>
+<text x='81.67' y='229.32' text-anchor='middle' style='font-size: 12.00px; font-weight: bold; font-family: "Arial";' textLength='49.34px' lengthAdjust='spacingAndGlyphs'> of LOX2</text>
+<text x='81.67' y='156.30' text-anchor='middle' style='font-size: 12.00px; font-weight: bold; font-family: "Arial";' textLength='111.36px' lengthAdjust='spacingAndGlyphs'>Number of siliques </text>
+<text x='81.67' y='169.26' text-anchor='middle' style='font-size: 12.00px; font-weight: bold; font-family: "Arial";' textLength='54.01px' lengthAdjust='spacingAndGlyphs'> per plant</text>
+<text x='81.67' y='96.23' text-anchor='middle' style='font-size: 12.00px; font-weight: bold; font-family: "Arial";' textLength='64.68px' lengthAdjust='spacingAndGlyphs'>Dry weight </text>
+<text x='81.67' y='109.19' text-anchor='middle' style='font-size: 12.00px; font-weight: bold; font-family: "Arial";' textLength='80.70px' lengthAdjust='spacingAndGlyphs'> inflorescence</text>
+<polyline points='142.64,314.64 501.40,314.64 ' style='stroke-width: 1.71; stroke-linecap: butt;' />
+<text x='162.17' y='326.02' text-anchor='middle' style='font-size: 9.00px; font-weight: bold; font-family: "Arial";' textLength='13.00px' lengthAdjust='spacingAndGlyphs'>-10</text>
+<text x='269.81' y='326.02' text-anchor='middle' style='font-size: 9.00px; font-weight: bold; font-family: "Arial";' textLength='8.00px' lengthAdjust='spacingAndGlyphs'>-5</text>
+<text x='377.45' y='326.02' text-anchor='middle' style='font-size: 9.00px; font-weight: bold; font-family: "Arial";' textLength='5.00px' lengthAdjust='spacingAndGlyphs'>0</text>
+<text x='485.09' y='326.02' text-anchor='middle' style='font-size: 9.00px; font-weight: bold; font-family: "Arial";' textLength='5.00px' lengthAdjust='spacingAndGlyphs'>5</text>
+<text x='322.02' y='338.52' text-anchor='middle' style='font-size: 11.00px; font-weight: bold; font-family: "Arial";' textLength='255.15px' lengthAdjust='spacingAndGlyphs'>Cohen's D estimate with 95% confidence interval</text>
+<text x='189.15' y='41.24' style='font-size: 11.00px; font-family: "Arial";' textLength='46.49px' lengthAdjust='spacingAndGlyphs'>treatment</text>
+<line x1='249.76' y1='44.21' x2='249.76' y2='30.38' style='stroke-width: 10.67; stroke: #DEA868; stroke-linecap: butt;' />
+<circle cx='249.76' cy='37.30' r='2.37' style='stroke-width: 0.71; fill: #000000;' />
+<line x1='317.62' y1='44.21' x2='317.62' y2='30.38' style='stroke-width: 10.67; stroke: #C7522B; stroke-linecap: butt;' />
+<circle cx='317.62' cy='37.30' r='2.37' style='stroke-width: 0.71; fill: #000000;' />
+<line x1='385.49' y1='44.21' x2='385.49' y2='30.38' style='stroke-width: 10.67; stroke: #9BBAA0; stroke-linecap: butt;' />
+<circle cx='385.49' cy='37.30' r='2.37' style='stroke-width: 0.71; fill: #000000;' />
+<text x='263.87' y='40.45' style='font-size: 8.80px; font-family: "Arial";' textLength='39.63px' lengthAdjust='spacingAndGlyphs'>MeJA_0.1</text>
+<text x='331.74' y='40.45' style='font-size: 8.80px; font-family: "Arial";' textLength='39.63px' lengthAdjust='spacingAndGlyphs'>MeJA_1.0</text>
+<text x='399.61' y='40.45' style='font-size: 8.80px; font-family: "Arial";' textLength='55.28px' lengthAdjust='spacingAndGlyphs'>oral_secretion</text>
+<text x='142.64' y='14.93' style='font-size: 13.20px; font-family: "Arial";' textLength='118.80px' lengthAdjust='spacingAndGlyphs'>Arabidopsis thaliana</text>
 </g>
 </svg>

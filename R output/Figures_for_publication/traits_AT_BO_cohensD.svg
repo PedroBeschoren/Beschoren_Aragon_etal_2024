@@ -31,18 +31,18 @@
 <line x1='362.51' y1='314.64' x2='362.51' y2='62.38' style='stroke-width: 1.71; stroke-linecap: butt;' />
 <line x1='427.87' y1='314.64' x2='427.87' y2='62.38' style='stroke-width: 1.71; stroke: #BEBEBE; stroke-dasharray: 9.10,9.10; stroke-linecap: butt;' />
 <line x1='297.15' y1='314.64' x2='297.15' y2='62.38' style='stroke-width: 1.71; stroke: #BEBEBE; stroke-dasharray: 9.10,9.10; stroke-linecap: butt;' />
-<rect x='339.25' y='288.52' width='23.27' height='16.22' style='stroke-width: 1.07; stroke: #DEA868; stroke-linecap: square; stroke-linejoin: miter; fill: #DEA868;' />
-<rect x='179.02' y='270.50' width='183.49' height='16.22' style='stroke-width: 1.07; stroke: #C7522B; stroke-linecap: square; stroke-linejoin: miter; fill: #C7522B;' />
-<rect x='334.54' y='252.48' width='27.97' height='16.22' style='stroke-width: 1.07; stroke: #9BBAA0; stroke-linecap: square; stroke-linejoin: miter; fill: #9BBAA0;' />
-<rect x='362.51' y='228.45' width='20.36' height='16.22' style='stroke-width: 1.07; stroke: #DEA868; stroke-linecap: square; stroke-linejoin: miter; fill: #DEA868;' />
-<rect x='246.74' y='210.43' width='115.77' height='16.22' style='stroke-width: 1.07; stroke: #C7522B; stroke-linecap: square; stroke-linejoin: miter; fill: #C7522B;' />
-<rect x='343.19' y='192.41' width='19.32' height='16.22' style='stroke-width: 1.07; stroke: #9BBAA0; stroke-linecap: square; stroke-linejoin: miter; fill: #9BBAA0;' />
-<rect x='362.51' y='168.39' width='7.23' height='16.22' style='stroke-width: 1.07; stroke: #DEA868; stroke-linecap: square; stroke-linejoin: miter; fill: #DEA868;' />
-<rect x='202.04' y='150.37' width='160.47' height='16.22' style='stroke-width: 1.07; stroke: #C7522B; stroke-linecap: square; stroke-linejoin: miter; fill: #C7522B;' />
-<rect x='355.96' y='132.35' width='6.55' height='16.22' style='stroke-width: 1.07; stroke: #9BBAA0; stroke-linecap: square; stroke-linejoin: miter; fill: #9BBAA0;' />
-<rect x='362.51' y='108.32' width='9.51' height='16.22' style='stroke-width: 1.07; stroke: #DEA868; stroke-linecap: square; stroke-linejoin: miter; fill: #DEA868;' />
-<rect x='287.23' y='90.30' width='75.28' height='16.22' style='stroke-width: 1.07; stroke: #C7522B; stroke-linecap: square; stroke-linejoin: miter; fill: #C7522B;' />
-<rect x='348.79' y='72.29' width='13.73' height='16.22' style='stroke-width: 1.07; stroke: #9BBAA0; stroke-linecap: square; stroke-linejoin: miter; fill: #9BBAA0;' />
+<rect x='362.51' y='225.55' width='20.36' height='14.01' style='stroke-width: 1.07; stroke-linecap: square; stroke-linejoin: miter; fill: #DEA868;' />
+<rect x='246.74' y='211.53' width='115.77' height='14.01' style='stroke-width: 1.07; stroke-linecap: square; stroke-linejoin: miter; fill: #C7522B;' />
+<rect x='343.19' y='197.52' width='19.32' height='14.01' style='stroke-width: 1.07; stroke-linecap: square; stroke-linejoin: miter; fill: #9BBAA0;' />
+<rect x='339.25' y='285.61' width='23.27' height='14.01' style='stroke-width: 1.07; stroke-linecap: square; stroke-linejoin: miter; fill: #DEA868;' />
+<rect x='179.02' y='271.60' width='183.49' height='14.01' style='stroke-width: 1.07; stroke-linecap: square; stroke-linejoin: miter; fill: #C7522B;' />
+<rect x='334.54' y='257.58' width='27.97' height='14.01' style='stroke-width: 1.07; stroke-linecap: square; stroke-linejoin: miter; fill: #9BBAA0;' />
+<rect x='362.51' y='165.48' width='7.23' height='14.01' style='stroke-width: 1.07; stroke-linecap: square; stroke-linejoin: miter; fill: #DEA868;' />
+<rect x='202.04' y='151.47' width='160.47' height='14.01' style='stroke-width: 1.07; stroke-linecap: square; stroke-linejoin: miter; fill: #C7522B;' />
+<rect x='355.96' y='137.46' width='6.55' height='14.01' style='stroke-width: 1.07; stroke-linecap: square; stroke-linejoin: miter; fill: #9BBAA0;' />
+<rect x='362.51' y='105.42' width='9.51' height='14.01' style='stroke-width: 1.07; stroke-linecap: square; stroke-linejoin: miter; fill: #DEA868;' />
+<rect x='287.23' y='91.41' width='75.28' height='14.01' style='stroke-width: 1.07; stroke-linecap: square; stroke-linejoin: miter; fill: #C7522B;' />
+<rect x='348.79' y='77.39' width='13.73' height='14.01' style='stroke-width: 1.07; stroke-linecap: square; stroke-linejoin: miter; fill: #9BBAA0;' />
 </g>
 <g clip-path='url(#cpMC4wMHw1MDYuODh8MC4wMHwzNDYuMzI=)'>
 <polyline points='141.92,314.64 141.92,62.38 ' style='stroke-width: 1.71; stroke-linecap: butt;' />
@@ -60,12 +60,12 @@
 <text x='444.21' y='326.02' text-anchor='middle' style='font-size: 9.00px; font-weight: bold; font-family: "Arial";' textLength='5.00px' lengthAdjust='spacingAndGlyphs'>1</text>
 <text x='321.66' y='338.52' text-anchor='middle' style='font-size: 11.00px; font-weight: bold; font-family: "Arial";' textLength='101.66px' lengthAdjust='spacingAndGlyphs'>Cohen's D estimate</text>
 <text x='188.79' y='41.24' style='font-size: 11.00px; font-family: "Arial";' textLength='46.49px' lengthAdjust='spacingAndGlyphs'>treatment</text>
-<rect x='241.47' y='29.37' width='15.86' height='15.86' style='stroke-width: 1.07; stroke: #DEA868; stroke-linecap: square; stroke-linejoin: miter; fill: #DEA868;' />
-<rect x='309.34' y='29.37' width='15.86' height='15.86' style='stroke-width: 1.07; stroke: #C7522B; stroke-linecap: square; stroke-linejoin: miter; fill: #C7522B;' />
-<rect x='377.20' y='29.37' width='15.86' height='15.86' style='stroke-width: 1.07; stroke: #9BBAA0; stroke-linecap: square; stroke-linejoin: miter; fill: #9BBAA0;' />
+<rect x='241.47' y='29.37' width='15.86' height='15.86' style='stroke-width: 1.07; stroke-linecap: square; stroke-linejoin: miter; fill: #DEA868;' />
+<rect x='309.34' y='29.37' width='15.86' height='15.86' style='stroke-width: 1.07; stroke-linecap: square; stroke-linejoin: miter; fill: #C7522B;' />
+<rect x='377.20' y='29.37' width='15.86' height='15.86' style='stroke-width: 1.07; stroke-linecap: square; stroke-linejoin: miter; fill: #9BBAA0;' />
 <text x='263.52' y='40.45' style='font-size: 8.80px; font-family: "Arial";' textLength='39.63px' lengthAdjust='spacingAndGlyphs'>MeJA_0.1</text>
 <text x='331.39' y='40.45' style='font-size: 8.80px; font-family: "Arial";' textLength='39.63px' lengthAdjust='spacingAndGlyphs'>MeJA_1.0</text>
 <text x='399.25' y='40.45' style='font-size: 8.80px; font-family: "Arial";' textLength='55.28px' lengthAdjust='spacingAndGlyphs'>oral_secretion</text>
-<text x='141.92' y='14.93' style='font-size: 13.20px; font-family: "Arial";' textLength='118.80px' lengthAdjust='spacingAndGlyphs'>Arabidopsis thaliana</text>
+<text x='141.92' y='14.93' style='font-size: 13.20px; font-family: "Arial";' textLength='42.27px' lengthAdjust='spacingAndGlyphs'>AT_BO</text>
 </g>
 </svg>
