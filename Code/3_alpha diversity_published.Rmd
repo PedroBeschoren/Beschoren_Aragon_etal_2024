@@ -68,12 +68,16 @@ ggplot(total_diversity, aes(x =MeJA_treatment, y = Observed, fill=Plant_species)
   facet_wrap(~Sample_type)
 
 #Lets see this on a simple boxplot for Shannon diversity index
-ggplot(total_diversity, aes(x =MeJA_treatment, y = Shannon, fill=Plant_species))+
+plot_alpha_BySample <- ggplot(total_diversity, aes(x =MeJA_treatment, y = Shannon, fill=Plant_species))+
   geom_boxplot()+
+  #geom_jitter(color="black", size=0.7, alpha=0.5, width = 0.2)+
   theme_bw()+
   theme(axis.text.x = element_text(angle = 45, hjust=1))+
   labs(y = "Shannon diversity index")+
+  theme(panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank())+
   facet_wrap(~Sample_type)
+
 
 ggplot(total_diversity, aes(x =MeJA_treatment, y = Shannon))+
   geom_boxplot()+
