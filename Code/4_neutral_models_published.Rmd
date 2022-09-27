@@ -1151,42 +1151,71 @@ hundred_permanovas_on_random_otu<-  function (CSS_fraction,uni_4model) {
   # the second argument is the phyloseq object containing only the OTUs classified as above expected
   # The output is a list of 100 permanovas
   
+  
+  
 # Set seed for consistency
 set.seed(92342347)
 
 # collect a list of random OTUS, 100 times
-rand_otu_control<-replicate(100, sample(taxa_names(subset_samples(CSS_fraction, MeJA_treatment = "Control")), nrow(tax_table(uni_4model[[1]])), replace=FALSE)) #performs randomization operation 100 times
+rand_otu_control<-replicate(100, sample(taxa_names(subset_samples(CSS_fraction, MeJA_treatment == "control")), nrow(tax_table(uni_4model[[1]])), replace=FALSE)) #performs randomization operation 100 times
 
-rand_otu_MeJA_0.1<-replicate(100, sample(taxa_names(subset_samples(CSS_fraction, MeJA_treatment = "MeJA_0.1")), nrow(tax_table(uni_4model[[2]])), replace=FALSE)) #performs randomization operation 100 times
+rand_otu_MeJA_0.1<-replicate(100, sample(taxa_names(subset_samples(CSS_fraction, MeJA_treatment == "MeJA_0.1")), nrow(tax_table(uni_4model[[2]])), replace=FALSE)) #performs randomization operation 100 times
 
-rand_otu_MeJA_1.0<-replicate(100, sample(taxa_names(subset_samples(CSS_fraction, MeJA_treatment = "MeJA_1.0")), nrow(tax_table(uni_4model[[3]])), replace=FALSE)) 
+rand_otu_MeJA_1.0<-replicate(100, sample(taxa_names(subset_samples(CSS_fraction, MeJA_treatment == "MeJA_1.0")), nrow(tax_table(uni_4model[[3]])), replace=FALSE)) 
 
-rand_otu_oral_scretion<-replicate(100, sample(taxa_names(subset_samples(CSS_fraction, MeJA_treatment = "oral_secretion")), nrow(tax_table(uni_4model[[4]])), replace=FALSE)) 
+rand_otu_oral_scretion<-replicate(100, sample(taxa_names(subset_samples(CSS_fraction, MeJA_treatment == "oral_secretion")), nrow(tax_table(uni_4model[[4]])), replace=FALSE)) 
 
-# bind rows in list
-repeted_list<-rbind(rand_otu_control,rand_otu_MeJA_0.1, rand_otu_MeJA_1.0, rand_otu_oral_scretion)
+
 
 
 #turn the n_rows x 100df into a list of 100 vectors
-Rand_otus_100_lists<-list() #make empty list
-for(i in 1:ncol(repeted_list)) {             # Using for-loop to add columns to list
-  Rand_otus_100_lists[[i]] <- repeted_list[ , i]
+Rand_otus_control_lists<-list() #make empty list
+for(i in 1:ncol(rand_otu_control)) {             # Using for-loop to add columns to list
+  Rand_otus_control_lists[[i]] <- rand_otu_control[ , i]
 }
 
-#remove repeated ASVs
-Rand_otus_100_lists<-lapply(Rand_otus_100_lists,function(x) unique(x)) 
+Rand_otus_meja01_lists<-list() #make empty list
+for(i in 1:ncol(rand_otu_MeJA_0.1)) {             # Using for-loop to add columns to list
+  Rand_otus_meja01_lists[[i]] <- rand_otu_MeJA_0.1[ , i]
+}
+
+Rand_otus_meja10_lists<-list() #make empty list
+for(i in 1:ncol(rand_otu_MeJA_1.0)) {             # Using for-loop to add columns to list
+  Rand_otus_meja10_lists[[i]] <- rand_otu_MeJA_1.0[ , i]
+}
+
+Rand_otus_oral_lists<-list() #make empty list
+for(i in 1:ncol(rand_otu_oral_scretion)) {             # Using for-loop to add columns to list
+  Rand_otus_oral_lists[[i]] <- rand_otu_oral_scretion[ , i]
+}
 
 
 #make 100 phyloseq objects with the same number of OTUs as the above_selected models
-list_100_phyloseqs <- lapply(Rand_otus_100_lists, function (x)
-  prune_taxa(x, CSS_fraction)) # keep taxa only in the ranodm list
+list_100_phyloseqs_control <- lapply(Rand_otus_control_lists, function (x)
+  prune_taxa(x, subset_samples(CSS_fraction, MeJA_treatment == "control"))) 
+list_100_phyloseqs_meja01 <- lapply(Rand_otus_meja01_lists, function (x)
+  prune_taxa(x, subset_samples(CSS_fraction, MeJA_treatment == "MeJA_0.1"))) 
+list_100_phyloseqs_meja10 <- lapply(Rand_otus_meja10_lists, function (x)
+  prune_taxa(x, subset_samples(CSS_fraction, MeJA_treatment == "MeJA_1.0"))) 
+list_100_phyloseqs_os <- lapply(Rand_otus_oral_lists, function (x)
+  prune_taxa(x, subset_samples(CSS_fraction, MeJA_treatment == "oral_secretion"))) 
 
-#Permanova
-## the function permanova_with_blocks() is defined in  2.3.1 - Run PERMANOVA 
+#merge ps objects
+merged_100_ps<-mapply (function(z,x,y,w)
+  merge_phyloseq(z,x,y,w),
+x = list_100_phyloseqs_control,
+z = list_100_phyloseqs_meja01,
+y = list_100_phyloseqs_meja10,
+w = list_100_phyloseqs_os,
+SIMPLIFY = FALSE)
 
+#run 100 permanovas
 set.seed(9247)
-permanovas_100<-permanova_with_blocks(list_100_phyloseqs, "MeJA_treatment + Block")
+permanovas_100<-permanova_with_blocks(merged_100_ps, "MeJA_treatment + Block")
+
 return(permanovas_100)
+  
+  
 }
 
 
@@ -1195,9 +1224,6 @@ return(permanovas_100)
 permanovas_BO_100<-hundred_permanovas_on_random_otu(ps_list_CSS$Brassica_oleraceae.Soil, BO_4_model_above)
 permanovas_AT_100<-hundred_permanovas_on_random_otu(ps_list_CSS$Arabidopsis_thaliana.Soil, AT_4_model_above)
 
-# test on rarefied data as well because the input to neutral models is rarefied
-permanovas_BO_100<-hundred_permanovas_on_random_otu(ps_list_rarefied$Brassica_oleraceae.Soil, BO_4_model_above)
-permanovas_AT_100<-hundred_permanovas_on_random_otu(ps_list_rarefied$Arabidopsis_thaliana.Soil, AT_4_model_above)
 
 ```
 
@@ -1257,7 +1283,10 @@ full_feature_permanova<-permanova_with_blocks(ps_list_CSS, "MeJA_treatment + Blo
 
 ```
 
+
+
 #### 4.9.4 plot histograms of F, R2 and P values for the full dataset, neutrally selected OTUs, and random OTUs
+##### 4.9.4.1 prepare dataframe
 
 Ploting the histograms gives a more intuitive view. preparing the dataframe is slightly different from chunk 4.9.2 This code is really bad and ugly - repetitive, based on copy-pasting. Pedro won't change it for now
 
@@ -1315,62 +1344,46 @@ names(F_value_vector_BO)[1] <- "stat_value"
 
 #put it all into a single df
 hundrerd_permanovas_pr2<-bind_rows(p_values_MeJA_vector_AT,p_values_MeJA_vector_BO, R2_MeJA_vector_AT,R2_MeJA_vector_BO,F_value_vector_AT,F_value_vector_BO)
-
-
-ggplot(hundrerd_permanovas_pr2, aes(x=stat_value, color=Plant_species, fill=Plant_species)) +
-  geom_histogram(position="identity", alpha=0.5, bins= 50)+
- # geom_vline(data=hundrerd_permanovas_pr2, aes(xintercept=grp.mean, color=Plant_species),
-           #  linetype="dashed")+
-  labs(title="100 permanova of random OTUs",x="statistic value", y = "Count")+
-  theme_classic()+
-  facet_wrap(~stat)
+``` 
 
 
 
-ggplot(bind_rows(p_values_MeJA_vector_AT,
+##### 4.9.4.2 plot histograms
+
+```{r}
+# this plot shows the P values of 100 permanovas, with dashed lines for the p values in the above-expected model and solid lines with p values in the full-feature model (all ASVS in BO_soil or AT_soil)
+histogram_artefact_p<-ggplot(bind_rows(p_values_MeJA_vector_AT,
                  p_values_MeJA_vector_BO), 
-       aes(x=stat_value, 
+       aes(x=(log(stat_value)), 
            color=Plant_species, 
            fill=Plant_species)) +
   geom_histogram(position="identity", 
                  alpha=0.5, 
                  bins= 50)+
-  geom_vline(data=hundrerd_permanovas_pr2, 
-             aes(xintercept=grp.mean, 
-                 color=Plant_species),
-             linetype="dashed")+
-  labs(title="100 permanova of random OTUs",x="statistic value", y = "Count")+
-  theme_classic()+
-  facet_wrap(~stat)
-
-
-
-
-
-# this plot shows the P values of 100 permanovas, with dashed lines for the p values in the full-feature model
-ggplot(bind_rows(p_values_MeJA_vector_AT,
-                 p_values_MeJA_vector_BO), 
-       aes(x=stat_value, 
-           color=Plant_species, 
-           fill=Plant_species)) +
-  geom_histogram(position="identity", 
-                 alpha=0.5, 
-                 bins= 50)+
-  geom_vline(xintercept = full_feature_permanova[[2]][[5]][1], #p values of AT
+  geom_vline(xintercept = log(permanova_AT_above[[5]][1]), #p values of AT in the above-expected model
              linetype="dashed",
              size=1.5,
              colour = "#F8766D")+ #  color code for the standard second facotr of a ggplot (teal)
-    geom_vline(xintercept = full_feature_permanova[[4]][[5]][1], #p values of BO
+  geom_vline(xintercept = log(permanova_AT_above[[5]][1]), #p values of BO in the above-expected model
              linetype="dashed",
              size=1.5,
              colour = "#00BFC4")+ 
-  labs(title="100 permanova of random OTUs",
-       x="p values", 
+  geom_vline(xintercept = log(full_feature_permanova[[2]][[5]][1]), #p values of AT in the full feature permanova
+             linetype="solid",
+             size=1.5,
+             colour = "#F8766D")+ #  color code for the standard second facotr of a ggplot (teal)
+  geom_vline(xintercept = log(full_feature_permanova[[4]][[5]][1]), #p values of BO in the full feature permanova
+             linetype="solid",
+             size=1.5,
+             colour = "#00BFC4")+ #  color code for the standard second facotr of a ggplot (teal)
+  labs(title="100 PERMANOVAS, dashed neutral, solid full, p values",
+       x="Log(p values)", 
        y = "Count")+
-  theme_classic()
+  theme_classic()+
+  theme(legend.position = "top")
 
-# this plot shows the R2 values of 100 permanovas, with dashed lines for the R2 values in the full-feature model
-ggplot(bind_rows(R2_MeJA_vector_AT,
+# this plot shows the R2 values of 100 permanovas, with dashed lines for the R2 values in the above-expected model
+histogram_artefact_R2<-ggplot(bind_rows(R2_MeJA_vector_AT,
                  R2_MeJA_vector_BO), 
        aes(x=stat_value, 
            color=Plant_species, 
@@ -1378,22 +1391,32 @@ ggplot(bind_rows(R2_MeJA_vector_AT,
   geom_histogram(position="identity", 
                  alpha=0.5, 
                  bins= 50)+
-  geom_vline(xintercept = full_feature_permanova[[2]][[3]][1], #R2 values of AT, full features
+  geom_vline(xintercept = permanova_AT_above[[3]][1], #R2 values of AT, in the above-expected model
              linetype="dashed",
              size=1.5,
              colour = "#F8766D")+ #  color code for the standard first facotr of a ggplot (red)
-    geom_vline(xintercept = full_feature_permanova[[4]][[3]][1], #R2 values of BO, full features
+  geom_vline(xintercept = permanova_BO_above[[3]][1], #R2 values of BO, in the above-expected model
              linetype="dashed",
              size=1.5,
              colour = "#00BFC4")+ #  color code for the standard second facotr of a ggplot (teal)
-  labs(title="100 permanova of random OTUs",
+  geom_vline(xintercept = full_feature_permanova[[2]][[3]][1], #R2 values of AT in the full feature permanova
+             linetype="solid",
+             size=1.5,
+             colour = "#F8766D")+ #  color code for the standard second facotr of a ggplot (teal)
+  geom_vline(xintercept = full_feature_permanova[[4]][[3]][1], #R2 values of BO in the full feature permanova
+             linetype="solid",
+             size=1.5,
+             colour = "#00BFC4")+ #  color code for the standard second facotr of a ggplot (teal)
+  
+  labs(title="100 PERMANOVAS, dashed neutral, solid full, R2 values",
        x="R2 values", 
        y = "Count")+
-  theme_classic()
+    theme_classic()+
+  theme(legend.position = "top")
 
 
-# this plot shows the F2 values of 100 permanovas, with dashed lines for the F values in the full-feature model
-ggplot(bind_rows(F_value_vector_AT,
+# this plot shows the F2 values of 100 permanovas, with dashed lines for the F values in the above-expected model
+histogram_artefact_F<-ggplot(bind_rows(F_value_vector_AT,
                  F_value_vector_BO), 
        aes(x=stat_value, 
            color=Plant_species, 
@@ -1401,27 +1424,45 @@ ggplot(bind_rows(F_value_vector_AT,
   geom_histogram(position="identity", 
                  alpha=0.5, 
                  bins= 50)+
-  geom_vline(xintercept = full_feature_permanova[[2]][[4]][1], #F2 values of AT, full features
+  geom_vline(xintercept = permanova_AT_above[[4]][1], #F2 values of AT, in the above-expected model
              linetype="dashed",
              size=1.5,
              colour = "#F8766D")+ #  color code for the standard second facotr of a ggplot (teal)
-    geom_vline(xintercept = full_feature_permanova[[4]][[4]][1], #F2 values of BO, full features
+  geom_vline(xintercept = permanova_BO_above[[4]][1], #F2 values of BO, in the above-expected model
              linetype="dashed",
              size=1.5,
              colour = "#00BFC4")+
-    labs(title="100 permanova of random OTUs",
+  geom_vline(xintercept = full_feature_permanova[[2]][[4]][1], #F2 values of AT in the full feature permanova
+             linetype="solid",
+             size=1.5,
+             colour = "#F8766D")+ #  color code for the standard second facotr of a ggplot (teal)
+  geom_vline(xintercept = full_feature_permanova[[4]][[4]][1], #F2 values of BO in the full feature permanova
+             linetype="solid",
+             size=1.5,
+             colour = "#00BFC4")+ #  color code for the standard second facotr of a ggplot (teal)
+    labs(title="100 PERMANOVAS, dashed neutral, solid full, F values",
        x="F values", 
        y = "Count")+
-  theme_classic()
+  theme_classic()+
+  theme(legend.position = "top")
 
 
 
+histogram_100_permanovas<- ggarrange(histogram_artefact_p,
+                                     histogram_artefact_R2,
+                                     histogram_artefact_F, ncol = 3)
 
 
-#######################################
 
 
 ```
+
+
+
+
+
+
+
 
 # 4.10 plot a heat tree of above_expected asvs
 
@@ -1502,6 +1543,11 @@ neutral_metacoder_BO$data$diff_table <- compare_groups(obj = neutral_metacoder_B
 neutral_metacoder_BO$data$diff_table$log2_median_ratio[neutral_metacoder_BO$data$diff_table$wilcox_p_value > 0.05] <- 0
 
 
+sort(neutral_metacoder_BO$data$diff_table$log2_median_ratio)
+sort(-neutral_metacoder_BO$data$diff_table$log2_median_ratio)
+
+
+
 #check this object to find terminal leaves that are consistent across treatments, then...
 # highlight a taxonomic rank with lots of members being differentially selected
 neutral_metacoder_BO$data$diff_table$treatment_1
@@ -1523,7 +1569,7 @@ heat_tree_matrix(neutral_metacoder_BO,
                  node_size_axis_label = "Size: Number of OTUs",
                  node_color_axis_label = "Color: Log2 ratio median proportions",
                  layout = "davidson-harel", # The primary layout algorithm
-                 initial_layout = "reingold-tilford", # The layout algorithm that initializes node locations
+                 initial_layout = "reingold-tilford") # The layout algorithm that initializes node locations
                  output_file = "./R output/differential_heat_tree_BO_noKey.pdf") # Saves the plot as a pdf file
 
 
@@ -1598,7 +1644,7 @@ heat_tree_matrix(test,
                  node_size_axis_label = "Number of OTUs",
                  node_color_axis_label = "Log2 ratio median proportions",
                  layout = "davidson-harel", # The primary layout algorithm
-                 initial_layout = "reingold-tilford", # The layout algorithm that initializes node locations
+                 initial_layout = "reingold-tilford") # The layout algorithm that initializes node locations
                  output_file = "./R output/differential_heat_tree_AT.pdf") # Saves the plot as a pdf file
 
 
