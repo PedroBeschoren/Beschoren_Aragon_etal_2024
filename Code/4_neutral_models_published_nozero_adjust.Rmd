@@ -544,6 +544,29 @@ plot_ordination(physeq = x,
 geom_point(size=5, alpha=0.8)+
   axis_looks
 })
+```
+
+
+
+####  4.6.8 Make Venn diagram with ASV overlaps 
+This could be used in place of the ordinations
+
+```{r}
+#define a custom function to return a venn diagram
+venn_neutral<-function(ps_l_predictions_in_taxtable){
+
+  # First, amke a new phyloseq object containing only the OTUs occuring above prediction
+asv_names_above<-lapply(ps_l_predictions_in_taxtable, function (x) taxa_names(subset_taxa(x, fit_class == "Above prediction" )))
+
+output<-ggVennDiagram(asv_names_above,label ="both")+
+  scale_fill_continuous(type = "gradient")
+return(output)
+}
+
+#run the custom function
+venn_neutral(ps_l_predictions_in_taxtable = ps_list_neutral_BO_soil)+
+  ggtitle(label = "Above Neutral ASV overlap, B. oleraceae")
+
 
 
 
@@ -767,6 +790,34 @@ plot_ordination(physeq = x,
 geom_point(size=5, alpha=0.8)+
   axis_looks
 })
+
+
+
+
+```
+
+
+
+
+####  4.7.8 Make Venn diagram with ASV overlaps 
+This could be used in place of the ordinations
+
+```{r}
+#define a custom function to return a venn diagram
+venn_neutral<-function(ps_l_predictions_in_taxtable){
+
+  # First, amke a new phyloseq object containing only the OTUs occuring above prediction
+asv_names_above<-lapply(ps_l_predictions_in_taxtable, function (x) taxa_names(subset_taxa(x, fit_class == "Above prediction" )))
+
+output<-ggVennDiagram(asv_names_above,label ="both")+
+  scale_fill_continuous(type = "gradient")
+return(output)
+}
+
+#run the custom function
+venn_neutral(ps_l_predictions_in_taxtable = ps_list_neutral_AT_soil)+
+  ggtitle(label = "Above Neutral ASV overlap, A. thaliana")
+
 
 
 
@@ -1359,12 +1410,18 @@ ggsave(histogram_100_permanovas,
 # 4.10 plot a heat tree of above_expected asvs
 
 ```{r}
-#new ps object, based on rarefied data
-neutral_heat_tree_BO<-subset_ps_above_neutral_below(ps_l_predictions_in_taxtable = ps_list_neutral_BO_soil,
-                                                      ps_CSS_partition = ps_list_rarefied$Brassica_oleraceae.Soil)[[1]]
 
 neutral_heat_tree_AT<-subset_ps_above_neutral_below(ps_l_predictions_in_taxtable = ps_list_neutral_AT_soil,
                                                       ps_CSS_partition = ps_list_rarefied$Arabidopsis_thaliana.Soil)[[1]]
+
+
+#new ps object, based on rarefied data
+neutral_heat_tree_BO<-lapply(ps_list_neutral_BO_soil, function (x) subset_taxa(x, fit_class == "Above prediction" ))
+neutral_heat_tree_BO<-merge_phyloseq(neutral_heat_tree_BO$control,
+                                     neutral_heat_tree_BO$MeJA_0.1,
+                                     neutral_heat_tree_BO$MeJA_1.0,
+                                     neutral_heat_tree_BO$oral_secretion)
+
 
 # we need count data to define log fold changes of counts
 
@@ -1451,6 +1508,16 @@ heat_tree_matrix(neutral_metacoder_BO,
 
  
  ################### matrix of heat trees, AT 
+
+
+
+#new ps object, based on rarefied data
+neutral_heat_tree_AT<-lapply(ps_list_neutral_AT_soil, function (x) subset_taxa(x, fit_class == "Above prediction" ))
+neutral_heat_tree_AT<-merge_phyloseq(neutral_heat_tree_AT$control,
+                                     neutral_heat_tree_AT$MeJA_0.1,
+                                     neutral_heat_tree_AT$MeJA_1.0,
+                                     neutral_heat_tree_AT$oral_secretion)
+
 
 
 #remove unecessary taxonomic indo (dada2id, "S__" and" above_selected)

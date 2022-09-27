@@ -33,7 +33,7 @@ packages <- c("devtools",# needed to install some packages
              "ggrepel", # to avoid legends overlapping in your plot
              "ggpubr",
              "igraph", # calculates entowrk metrics and manipulates netowrk objects
-             "WGCNA", # needed for eigen_correlation (), allowing you to correlate metadata to network modules
+             #"WGCNA", # needed for eigen_correlation (), allowing you to correlate metadata to network modules
              "metagMisc", #  lets you create lists of split phyloseq objects
              "pheatmap", # heatmaps for deseq2
              "viridis", # nice colors
@@ -95,8 +95,8 @@ library("metagMisc")  #n lets you split a phyloseq object in a list
 if (!require(EcolUtils)) devtools::install_github("GuillemSalazar/EcolUtils")
 library("EcolUtils")  #pairwise adonis fucntion
 
-if (!require(MicEco)) remotes::install_github("Russel88/MicEco")
-library("MicEco")  #for venn diagrams on SPSS objects
+if (!require(ggVennDiagram)) remotes::install_github("gaospecial/ggVennDiagram")
+library("ggVennDiagram")  #for venn diagrams on SPSS objects
 
 if (!require(SpiecEasi)) install_github("zdk123/SpiecEasi")
 library("SpiecEasi") # builds the sparse networks
