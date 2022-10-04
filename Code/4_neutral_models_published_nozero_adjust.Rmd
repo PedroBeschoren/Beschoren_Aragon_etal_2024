@@ -558,14 +558,17 @@ venn_neutral<-function(ps_l_predictions_in_taxtable){
   # First, amke a new phyloseq object containing only the OTUs occuring above prediction
 asv_names_above<-lapply(ps_l_predictions_in_taxtable, function (x) taxa_names(subset_taxa(x, fit_class == "Above prediction" )))
 
-output<-ggVennDiagram(asv_names_above,label ="both")+
+output<-ggVennDiagram(asv_names_above,
+                      label ="both",
+                      category.names = names(MeJA_treatment_pal),)+
   scale_fill_continuous(type = "gradient")
 return(output)
 }
 
 #run the custom function
-venn_neutral(ps_l_predictions_in_taxtable = ps_list_neutral_BO_soil)+
+Venn_BO<-venn_neutral(ps_l_predictions_in_taxtable = ps_list_neutral_BO_soil)+
   ggtitle(label = "Above Neutral ASV overlap, B. oleraceae")
+
 
 
 
@@ -815,7 +818,7 @@ return(output)
 }
 
 #run the custom function
-venn_neutral(ps_l_predictions_in_taxtable = ps_list_neutral_AT_soil)+
+Venn_AT<-venn_neutral(ps_l_predictions_in_taxtable = ps_list_neutral_AT_soil)+
   ggtitle(label = "Above Neutral ASV overlap, A. thaliana")
 
 
@@ -824,7 +827,20 @@ venn_neutral(ps_l_predictions_in_taxtable = ps_list_neutral_AT_soil)+
 
 ```
 
+##### 4.7.9 - Export veen diagram with both plant species
+```{r}
 
+export_venn<-ggarrange(Venn_AT, Venn_BO, labels = c("A", "B"))
+
+#save plots
+
+
+
+ggsave(export_venn,
+       height = 5, width = 10,
+       file="./R output/Figures_for_publication/NeutralModel_Veen.svg")
+
+```
 
 
 
@@ -1401,7 +1417,7 @@ histogram_100_permanovas<- ggarrange(histogram_artefact_p,
 #save plots
 ggsave(histogram_100_permanovas,
        height = 5, width = 15,
-       file="./R output/Figures_for_publication/histogram_100_permanovas.svg")
+       file="./R output/Figures_for_publication/NeutralModel_100_permanovas_histogram.svg")
 
 
 
@@ -1635,6 +1651,9 @@ diversity_list<-lapply(pslit_neutraly_selected,add_diversity_to_physeq_object)
 
 #only o__Rhizobiales
 diversity_list<-lapply(pslit_neutraly_selected,function (x) add_diversity_to_physeq_object(subset_taxa(x, Order == "o__Rhizobiales" )))
+
+#only f__Comamonadaceae
+diversity_list<-lapply(pslit_neutraly_selected,function (x) add_diversity_to_physeq_object(subset_taxa(x, Family == "f__Comamonadaceae" )))
 
 # check levenes homogeniety over the list
 lapply(diversity_list, function (x)
