@@ -25,3 +25,15 @@ make pannel for Class diversity (Observed, Shannon and Simpson for AT and BO)
 make pannel for Order diversity (Observed, Shannon and Simpson for AT and BO)
 
 
+#######################################################
+### additions and changes after the artefact update ###
+### in the figures_for_publication folder #############
+#######################################################
+
+NeutralModels_Scheme.svg: scheme showing how the data was split, had ASVs classified by neutral models and how it was re-joined. 
+NeutralModel_Veen.svg: veen diagram showing above-selected ASVs that were shared across treatments in each species. svg exported in chunk 4.7.9  of 4_neutral_models_published_nozero_adjust.Rmd
+NeutralModel_100_permanovas_histogram: histogram of 100 permanovas based on randomly picked ASVs, compared to the complete dataset and the above-selected ASV dataset. svg exported in chunk 4.9.4.2 of 4_neutral_models_published_nozero_adjust.Rmd
+NeutralModel_AlphaCorr_Class_AT_BO.svg: version based on updated data, needs finishing touches
+NeutralModel_AlphaCorr_Order_AT_BO.svg: version based on updated data, needs finishing touches
+NeutralModel_AlphaCorr_Family_AT_BO.svg: version based on updated data, needs finishing touches
+NeutralModel_ordinations_provisory.svg: these are just copy-pasted jpeg images. i ahd some trouble saving them as individual objects in R. if we decided to show this kind of plot, we can put more work into them
