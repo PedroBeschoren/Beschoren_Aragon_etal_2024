@@ -386,7 +386,7 @@ list_tibble<-lapply(predictions_listed_BO_soil, function (x)
 tibble_names<-names(list_tibble)
 
 #puts name of the neutral model data slice as a variable
-named_tibble_list<-mapply(function (x,y)
+named_tibble_list_BO<-mapply(function (x,y)
   mutate(x, data_slice = y),
   list_tibble,tibble_names, SIMPLIFY = FALSE)#... the other functions from chunk 4.4 use special charathers to separate the column names - it's slightly messy and unnecessary for us to fix only to plot. the list produced here already has the above/below percentages and counts for each split, so record that in separate as necessary
 
@@ -665,7 +665,7 @@ list_tibble<-lapply(predictions_listed_AT_soil, function (x)
 tibble_names<-names(list_tibble)
 
 #puts name of the neutral model data slice as a variable
-named_tibble_list<-mapply(function (x,y)
+named_tibble_list_AT<-mapply(function (x,y)
   mutate(x, data_slice = y),
   list_tibble,tibble_names, SIMPLIFY = FALSE)#... the other functions from chunk 4.4 use special charathers to separate the column names - it's slightly messy and unnecessary for us to fix only to plot. the list produced here already has the above/below percentages and counts for each split, so record that in separate as necessary
 
@@ -761,6 +761,8 @@ AT_soil_predicted_list<-subset_ps_above_neutral_below(ps_l_predictions_in_taxtab
 ```{r}
 #beta dispersion
 dip_result_AT<-beta_disp_plotAndTest(AT_soil_predicted_list, "MeJA_treatment") 
+
+
 
 #Permanova
 set.seed(5235)
