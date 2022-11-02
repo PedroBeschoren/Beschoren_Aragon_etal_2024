@@ -184,6 +184,10 @@ imp_heat_ps<-ps_important_taxa_l
 #remove unecessary taxonomic indo (dada2id, "S__" and" above_selected)
 tax_table(imp_heat_ps)<-tax_table(imp_heat_ps)[,1:6]
 
+# let's remove the "r__"ranks from the taxonomy, they can be useful but will polute our plot
+tax_table(imp_heat_ps)[, colnames(tax_table(imp_heat_ps))] <- gsub(tax_table(imp_heat_ps)[, colnames(tax_table(imp_heat_ps))],     pattern = "[a-z]__", replacement = "")
+
+
 # transform from phyloseq to  taxmap object
 imp_heat<-parse_phyloseq(imp_heat_ps)
 
@@ -225,6 +229,13 @@ adjusted_p_input<-as.data.frame(t(as.data.frame(adjusted_p)))%>%
 
 #change column names
 colnames(adjusted_p_input)<-c("taxa_id", "fdr_p")
+
+
+# let's remove the "r__"ranks from the taxonomy, they can be useful but will polute our plot
+adjusted_p_input$taxa_id<- gsub(adjusted_p_input$taxa_id,     
+                                pattern = "[a-z]__", 
+                                replacement = "")
+
   
 # now join both df
 fdr_for_heatTree<-left_join(taxon_id_metacoder,
@@ -248,6 +259,12 @@ odd_list<-as.data.frame(t(as.data.frame(odd_list)))%>%
 
 #change column names
 colnames(odd_list)<-c("taxa_id", "odds_ratio")
+
+# let's remove the "r__"ranks from the taxonomy, they can be useful but will polute our plot
+odd_list$taxa_id<- gsub(odd_list$taxa_id,     
+                        pattern = "[a-z]__", 
+                        replacement = "")
+
 
 # now join both df
 fisher_for_heatTree<-left_join(fdr_for_heatTree,
@@ -298,12 +315,25 @@ set.seed(1)
 }
 
 
-
-mapply(function(x,y)
+# add the fisher values to the heat trees
+output_fisher_summary_trees<-mapply(function(x,y)
     fisher_to_heatTree(x,y),
     x = fisher_result_l,
     y = ps_imp_taxa_l,
     SIMPLIFY = FALSE)
+
+#make a single 4-pannel plot with A-D labels
+output_fisher_summary_trees<-ggarrange(output_fisher_summary_trees$fisher_result_AT_root,
+                                        output_fisher_summary_trees$fisher_result_AT_soil,
+                                        output_fisher_summary_trees$fisher_result_BO_root,
+                                        output_fisher_summary_trees$fisher_result_BO_soil,
+                                        common.legend = TRUE,
+                                        labels = c("A)", "B)", "C)", "D)"))
+
+#save plot
+ggsave(output_fisher_summary_trees,
+       height = 22, width = 22,
+       file="./R output/Figures_for_publication/fisher_fourpartiitons.svg")
 
 
 ```
