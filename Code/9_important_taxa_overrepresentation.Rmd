@@ -21,6 +21,33 @@ set a list of important taxa based on the list of important ASVs
 #list of ASVs tagged as important (chunk # 8.6.1b )
 simplified_ASV_importance_scores
 
+# generate a table to count occurences of tags across samples
+imp_asv_table<-simplified_ASV_importance_scores
+imp_asv_table<-lapply(imp_asv_table, function(x) x[,c(-2, -5)]) # remove info on neutral models and sum of tags
+imp_asv_table<-lapply(imp_asv_table, function(x) x[rowSums(x)>0,]) # remove remove unimportat ASVs
+imp_asv_table_colsum<-lapply(imp_asv_table, function(x) colSums(x)) # get sum of columns
+
+
+
+
+#make table
+imp_asv_table_colsum<-rbind(imp_asv_table_colsum[[1]],
+  imp_asv_table_colsum[[2]],
+  imp_asv_table_colsum[[3]],
+  imp_asv_table_colsum[[4]])%>%as.data.frame()
+
+#adjust rownmaes fo table
+rownames(imp_asv_table_colsum)<-names(simplified_ASV_importance_scores)
+
+#count number of ASVs with more than 1 tag, then add it to previous table
+two_tags<-lapply(imp_asv_table, function(x) count(rowSums(x)>1))%>%unlist()%>%as.vector()
+imp_asv_table_colsum$ASVs_with_two_tags<-two_tags
+
+
+#total ASVs
+n_taxa_imp<-lapply(imp_asv_table, function(x) dim(x)[1])%>%unlist()%>%as.vector()
+imp_asv_table_colsum$n_taxa_imp<-n_taxa_imp
+
 
 # get the ASV names of any ASV that had any tag (that is, remove uninportnat ASVS)
 important_ASV_list<-lapply(simplified_ASV_importance_scores, function(x)
@@ -32,8 +59,17 @@ important_ASV_list<-lapply(simplified_ASV_importance_scores, function(x){
   x$sum_of_tags<-rowSums(x)
   row.names(x[x$sum_of_tags>0,])
 })
-  
 
+# this is the total number of unique ASVs that had any tag  
+important_ASV_list%>%unlist()%>%unique%>%length()
+
+# total number of ASVs that had a network tag (derreplicated names
+lapply(simplified_ASV_importance_scores, function(x)
+  row.names(x[x$has_network_tag >0,]))%>%unlist()%>%unique()%>%length()
+
+
+# this is the total number of unique ASVs that had any tag  
+important_ASV_list%>%unlist()%>%unique%>%length()
 
 
 # make list by hand as mapply fails us
