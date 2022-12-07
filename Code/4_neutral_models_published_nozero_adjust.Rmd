@@ -71,153 +71,7 @@ treatment_names <- c("control" = "Control", "MeJA_0.1" = "0.1 mM \n MeJA",
 
 ```
 
-
-
-
-### 4.2 calculate and plot neutral model distibution
-
-Here me make the bulk of the calculations. it can take a moment, so we save the results right away. note that the steps after this are just for facilitating summaries and comparisons of neutral models.
-
-```{r}
-# makes a list of neutral models, according the data splits of your ps_list
-neutral_list<- lapply(ps_list_rarefied, function(x)
-  tyRa::fit_sncm(spp = t(otu_table(x)), 
-                 pool = NULL, # Pool acts as a source of microbes, such as full bulk soil diversity. if NULL, you use the input taxa talbe as the pool for every individual sample inside your phyloseq object
-                 taxon = data.frame(tax_table(x))))
-
-# names for the plots
-plot_titles<-names(neutral_list)
-
-# one plot for each list element
-Neutral_plots_list<-mapply(function(x,y) 
-  plot_sncm_fit(spp_out = x, 
-                title = y),
-  neutral_list,plot_titles, SIMPLIFY = FALSE)
-
-# get teh R2 fit of every neutral model you made
-lapply(neutral_list, function (x) 
-  x$fitstats[4]) # acess the fourth element of the fitstats layer from your list element x 
-
-
-```
-
-#### 4.3 check fit to the model and migration rate
-
-in our microbial context, more migration means more dispersion. from "Contribution of neutral processes to the assembly of gut microbial communities in the zebrafish over host development (Burns et al 2015; ISME)
-
-"The Sloan neutral model is fit to the observed frequency of occurrence of OTUs (that is, the proportion of local communities in which each OTU is detected) and their abundance in the metacommunity (estimated in this case by the mean relative abundance across all local communities) by a single free parameter describing the migration rate, m. This estimated migration rate is the probability that a random loss of an individual in a local community will be replaced by dispersal from the metacommunity, as opposed to reproduction within the local community, and can thus be interpreted as a measure of dispersal limitation."
-
-```{r}
-
-#### now, R², m and fit class percentage metrics can be extracted as a groupand plotted #### 
-
-## let's check the model fit first
-
-# fit stats of all neutral models, keeps only M and Rsqure of that list
-fitstats_listed<-lapply(neutral_list, function (x) 
-  x$fitstats[c(1,4)])
-
-# now let's put the M and Rsqure fitstats metrics in a dataframe so we can plot it on ggplot2
-fiststats_df<-as.data.frame(unlist(fitstats_listed))%>% # turns the short list into a dataframe 
-  rownames_to_column()%>% # get rownames ot work as data source
-  separate(col=rowname,
-           into = c("genera", "sp","sample_type", "metric"))%>% # break former rownames into several columns
-  pivot_wider(names_from = "metric", values_from = "unlist(fitstats_listed)") # separate R and m metrics
-  
-# now plot the fiststats_df on ggplot
-ggplot(fiststats_df, aes(genera, Rsqr, fill = sample_type )) + 
-  geom_col( position = "dodge")
-
-
-```
-
-#### 4.4 check distribution of the different classes across your listed phyloseq objects
-
-This facilitates comparison of multiple different models
-
-```{r}
-
-
-## now, to quickly visualize all the fit_class predictions
-
-# lists predictions of all neutral models, keeps only the fit class and the OTU ID
-predictions_listed<-lapply(neutral_list, function (x) 
-  x$predictions[14])
-
-#make a list of tibles, including percentage of each fit class
-list_tibble<-lapply(predictions_listed, function (x)
-  x%>%
-    group_by(fit_class)%>%
-    dplyr::summarize(count = n())%>%
-    mutate(total=sum(count))%>%
-    mutate(percentage = count/total*100))
-
-#collects names of the tibbles in the list
-tibble_names<-names(list_tibble)
-
-#puts name of the neutral model data slice as a variable
-named_tibble_list<-mapply(function (x,y)
-  mutate(x, data_slice = y),
-  list_tibble,tibble_names, SIMPLIFY = FALSE)
-
-# turns the name of the data slice into different metadata columns
-df_fit_class<-do.call(rbind.data.frame, named_tibble_list)%>%
-  separate(col=data_slice,
-           into = c("genera", "sp","sample_type"))
-
-# this plots a chart for the fit class, to be improved with full data
-ggplot(df_fit_class, aes(genera, percentage, fill = sample_type )) + 
-  geom_col( position = "dodge")+
-  facet_wrap(~fit_class)
-
-
-
-
-```
-
-#### 4.5 Add neutral fit classes of OTUs to your original phyloseq objects
-
-You might want to have this classification as an additional "taxa", making the output of neutral models easy to add to other analysis
-
-```{r}
-
-
-
-############# finally let's add the  fit class as a taxonomy value of the main phyloseq object ####
-# Note that the same OTU bay have different fit classes in different slices of the data. beware if trying to put all fit classes into a single phyloseq object!
-
-# transforms the fit_class definition into a listed phyloseq object
-fit_class_ps_list<-lapply(predictions_listed, function (x) tax_table(as.matrix(x)))
-
-# add fit_class definition to the main (listed) phyloseq object
-ps_list_neutral<-mapply(function (x,y)
-  tax_table(x)<-merge_phyloseq(x,y),
-  ps_list_rarefied, fit_class_ps_list, SIMPLIFY = FALSE)
-
-tax_table(ps_list_neutral$Arabidopsis_thaliana.Root)
-```
-
-Now you could classify your OTUs according fits to a neutral model. As this depends on the prevalence of taxa across a proportion of samples, final results will depend heavely on how you split or group your taxa. OTUs defined as above expected in Brassica roots will differ from those only in control treatments of Brassica roots!
-
-# Key references:
-
-Li, W., Yuan, Y., Xia, Y., Sun, Y., Miao, Y., Ma, S., Ma, S., 2018. A Cross-Scale Neutral Theory Approach to the Influence of Obesity on Community Assembly of Human Gut Microbiome 9, 1--8. <doi:10.3389/fmicb.2018.02320> Venkataraman, A., Bassis, C.M., Beck, J.M., Young, V.B., Curtis, J.L., Huffnagle, G.B., Schmidt, T.M., 2015. Application of a Neutral Community Model To Assess Structuring of the Human Lung Microbiome 6. <doi:10.1128/mBio.02284-14.Venkataraman>
-
-Herren, C.M., McMahon, K.D., 2017. Cohesion: A method for quantifying the connectivity of microbial communities. ISME Journal 11, 2426--2438. <doi:10.1038/ismej.2017.91>
-
-Weiland-bra, N., Dirksen, P., Wang, J., Id, M.S., Id, F., Schmitz, R.A., Baines, J.F., Id, B.M., Id, A.T., 2019. Neutrality in the Metaorganism 1--21.
-
-Morella, N.M., Weng, F.C., Joubert, P.M., Metcalf, C.J.E., Lindow, S., Koskella, B., 2020. Successive passaging of a plant-associated microbiome reveals robust habitat and host genotype- dependent selection 117. <doi:10.1073/pnas.1908600116>
-
-Sloan, W.T., Woodcock, S., Lunn, M., Head, I.M., Curtis, T.P., 2007. Modeling taxa-abundance distributions in microbial communities using environmental sequence data. Microbial Ecology 53, 443--455. <doi:10.1007/s00248-006-9141-x>
-
-Burns, A.R., Stephens, W.Z., Stagaman, K., Wong, S., Rawls, J.F., Guillemin, K., Bohannan, B.J.M., 2015. Contribution of neutral processes to the assembly of gut microbial communities in the zebrafish over host development. The ISME Journal 10, 655--664. <doi:10.1038/ismej.2015.142>
-
-################### 
-
-# MARCELA'S INPUT 
-
-# MA - Changing `plot_scnm_fit` function of TyRA package to pimp the plot 
+MA - Changing `plot_scnm_fit` function of TyRA package to pimp the plot 
 ```{r}
 #Changing `plot_scnm_fit` function of TyRA package to pimp the plot 
 
@@ -277,7 +131,7 @@ plot_sncm_fit2 <- function (spp_out = spp_out, fill = NULL, title = NULL)
 
 ```
 
-# MA - settings for NMDS plots
+MA - settings for NMDS plots
 
 ```{r}
 #settings for NMDS plots 
@@ -290,6 +144,27 @@ axis_looks <- theme(axis.text = element_text(colour = "black", size = 14))+
 
 ```
 
+
+
+# Key references:
+
+Li, W., Yuan, Y., Xia, Y., Sun, Y., Miao, Y., Ma, S., Ma, S., 2018. A Cross-Scale Neutral Theory Approach to the Influence of Obesity on Community Assembly of Human Gut Microbiome 9, 1--8. <doi:10.3389/fmicb.2018.02320> Venkataraman, A., Bassis, C.M., Beck, J.M., Young, V.B., Curtis, J.L., Huffnagle, G.B., Schmidt, T.M., 2015. Application of a Neutral Community Model To Assess Structuring of the Human Lung Microbiome 6. <doi:10.1128/mBio.02284-14.Venkataraman>
+
+Herren, C.M., McMahon, K.D., 2017. Cohesion: A method for quantifying the connectivity of microbial communities. ISME Journal 11, 2426--2438. <doi:10.1038/ismej.2017.91>
+
+Weiland-bra, N., Dirksen, P., Wang, J., Id, M.S., Id, F., Schmitz, R.A., Baines, J.F., Id, B.M., Id, A.T., 2019. Neutrality in the Metaorganism 1--21.
+
+Morella, N.M., Weng, F.C., Joubert, P.M., Metcalf, C.J.E., Lindow, S., Koskella, B., 2020. Successive passaging of a plant-associated microbiome reveals robust habitat and host genotype- dependent selection 117. <doi:10.1073/pnas.1908600116>
+
+Sloan, W.T., Woodcock, S., Lunn, M., Head, I.M., Curtis, T.P., 2007. Modeling taxa-abundance distributions in microbial communities using environmental sequence data. Microbial Ecology 53, 443--455. <doi:10.1007/s00248-006-9141-x>
+
+Burns, A.R., Stephens, W.Z., Stagaman, K., Wong, S., Rawls, J.F., Guillemin, K., Bohannan, B.J.M., 2015. Contribution of neutral processes to the assembly of gut microbial communities in the zebrafish over host development. The ISME Journal 10, 655--664. <doi:10.1038/ismej.2015.142>
+
+################### 
+
+# MARCELA'S INPUT 
+
+# 
 
 
 
@@ -525,27 +400,6 @@ lapply(notreatsplit_ps, function (x)
 
 ```
 
-####  4.6.7 check plots of each subcommunity set
-
-```{r}
-lapply(BO_soil_predicted_list, function(x){
-set.seed(101)
-ordination_NMDS <- phyloseq::ordinate(x, 
-                             method ="NMDS", 
-                             distance="bray", 
-                             try=200,
-                             autotransform=TRUE) 
-
-plot_ordination(physeq = x, 
-                ordination = ordination_NMDS, 
-                type = "sample",
-                color= "MeJA_treatment")+
-                theme_bw()+
-geom_point(size=5, alpha=0.8)+
-  axis_looks
-})
-```
-
 
 
 ####  4.6.8 Make Venn diagram with ASV overlaps 
@@ -776,32 +630,6 @@ lapply(AT_soil_predicted_list, function (x)
 
 ```
 
-#### 4.7.7 check plots of each subcommunity set
-
-```{r}
-lapply(AT_soil_predicted_list, function(x){
-set.seed(101)
-ordination_NMDS <- phyloseq::ordinate(x, 
-                             method ="NMDS", 
-                             distance="bray", 
-                             try=200,
-                             autotransform=TRUE) 
-
-plot_ordination(physeq = x, 
-                ordination = ordination_NMDS, 
-                type = "sample",
-                color= "MeJA_treatment")+
-                theme_bw()+
-geom_point(size=5, alpha=0.8)+
-  axis_looks
-})
-
-
-
-
-```
-
-
 
 
 ####  4.7.8 Make Venn diagram with ASV overlaps 
@@ -848,7 +676,62 @@ ggsave(export_venn,
 
 
 
+
 # 4.8 Join neutral class partitions back together to check possible artefacts
+
+
+```{r}
+
+
+# First, amke a new phyloseq object containing only the OTUs occuring above prediction
+BO_4_model_above<-lapply(ps_list_neutral_BO_Soil, function (x) subset_taxa(x, fit_class == "Above prediction" ))
+
+BO_4_model_asPredicted<-lapply(ps_list_neutral_BO_Soil, function (x) subset_taxa(x, fit_class == "As predicted" ))
+
+BO_4_model_below<-lapply(ps_list_neutral_BO_Soil, function (x) subset_taxa(x, fit_class == "Below prediction" ))
+
+
+
+#I could not merge a physeq object that has a tree becuase of of them has a different number of tips. I could also not simply remove the phy_tree from the phyloseq object. my fix here was to extract the sample dta, tax table and otu table and create a new phyloseq object with it. I don't like this kind of juggling so i need a better solution for this
+
+remove_tree_and_merge<-function(model_4_split){
+  # your input is the phyloseq object split in the 4 different MeJA treatments 
+  # your output is a single re-constructed phyloseq object, wihtout any trees that prevent re-merging
+  
+# extract portions from the physeq object...
+sdata_4<-map(model_4_split, sample_data)
+tax_4<-map(model_4_split, tax_table)
+otu_4<-map(model_4_split, otu_table)
+
+# merge these potions into a single new physeq list...
+uni_4model<-mapply( function (x,y,z) 
+  merge_phyloseq(x,y,z),
+       x= sdata_4,
+       y=tax_4,
+       z=otu_4,
+       SIMPLIFY = FALSE)
+
+# merge the physeq list into a single new physeq object
+uni_4model<-merge_phyloseq(uni_4model$control,
+               uni_4model$MeJA_0.1,
+               uni_4model$MeJA_1.0,
+               uni_4model$oral_secretion)
+
+return(uni_4model)
+}
+
+# remove tree so you can merge physeq objects, then merge physeq objects
+
+
+#########################################
+# ATTENTION! THIS INPUT TO remove_tree_and_merge() WILL INTRODUCE ZEROS
+#########################################
+
+
+uni_4model_BO_above<-remove_tree_and_merge(BO_4_model_above)
+uni_4model_BO_asPredicted<-remove_tree_and_merge(BO_4_model_asPredicted)
+uni_4model_BO_below<-remove_tree_and_merge(BO_4_model_below)
+```
 
 ### 4.8.1 re-join BO_soil and AT_soil
 
@@ -857,243 +740,6 @@ The input for the remove_tree_and_merge() function was different between this ch
 
 this introduces zeros in ASVs that were, for example, present in all samples but were above in control but not above in MeJA. this would turn valid counts into zeros, forcing a separation between samples. if we perform the same operation on random ASVs, we see the clear stress treatment effects on the plots
 
-```{r}
-# original objects: 
-ps_list_rarefied$Brassica_oleraceae.Soil
-ps_list_rarefied$Arabidopsis_thaliana.Soil
-
-#re-merged BO
-check_BO_soil<-remove_tree_and_merge(ps_list_neutral_BO_soil)
-
-sample_sums(check_BO_soil)
-
-set.seed(101)
-nmds_check_BO_soil <- phyloseq::ordinate(check_BO_soil, 
-                             method ="NMDS", 
-                             distance="bray", 
-                             try=200,
-                             autotransform=TRUE) 
-
-
-plot_nmds_check_BO_soil <- plot_ordination(physeq = check_BO_soil, 
-                ordination = nmds_check_BO_soil, 
-                type = "sample",
-                color= "MeJA_treatment")
-
-
-plot_nmds_check_BO_soil_ed <- plot_nmds_check_BO_soil + 
-  geom_point(size=5, alpha=0.8)+
-  axis_looks
-
-
-#re-merged AT
-check_AT_soil<-remove_tree_and_merge(ps_list_neutral_AT_soil)
-
-
-nmds_check_AT_soil <- phyloseq::ordinate(check_AT_soil, 
-                             method ="NMDS", 
-                             distance="bray", 
-                             try=200,
-                             autotransform=TRUE) 
-
-
-plot_nmds_check_AT_soil <- plot_ordination(physeq = check_AT_soil, 
-                ordination = nmds_check_AT_soil, 
-                type = "sample",
-                color= "MeJA_treatment")
-
-plot_nmds_check_AT_soil_ed <- plot_nmds_check_AT_soil + 
-  geom_point(size=5, alpha=0.8)+
-  axis_looks
-
-#Arrange plots 
-plot_nmds_check_AT_BO_soil_ed <- ggarrange(plot_nmds_check_AT_soil_ed, 
-                                           plot_nmds_check_BO_soil_ed,
-                                           ncol = 2)
-#save plots
-ggsave(plot_nmds_check_AT_BO_soil_ed,
-       height = 5, width = 15,
-       file="./R output/Figures_for_publication/NeutralModels_NMDS_soil_AT_BO.svg")
-
-```
-
-### 4.8.2 plot BO with AT, above expected only
-
-First, one plot per species 
-
-```{r}
-
-############## above expected only
-uni_4model_BO_above
-uni_4model_AT_above
-
-#CSS normalization
-BO_above_CSS <- make_CSS_physeq(uni_4model_BO_above)
-AT_above_CSS <- make_CSS_physeq(uni_4model_AT_above)
-
-### plot above BO
-set.seed(123)
-nmds_BO_above_CSS <- phyloseq::ordinate(BO_above_CSS, 
-                             method ="NMDS", 
-                             distance="bray", 
-                             try=200,
-                             autotransform=TRUE) 
-
-plot_nmds_BO_above_CSS <- plot_ordination(physeq = BO_above_CSS, 
-                ordination = nmds_BO_above_CSS, 
-                type = "sample",
-                color= "MeJA_treatment")
-
-plot_nmds_BO_above_CSS_ed <- plot_nmds_BO_above_CSS + 
-  geom_point(size=5, alpha=0.8)+
-  axis_looks
-
-### plot above AT
-set.seed(123)
-nmds_AT_above_CSS <- phyloseq::ordinate(AT_above_CSS, 
-                             method ="NMDS", 
-                             distance="bray", 
-                             try=200,
-                             autotransform=TRUE) 
-
-plot_nmds_AT_above_CSS <- plot_ordination(physeq = AT_above_CSS, 
-                ordination = nmds_AT_above_CSS, 
-                type = "sample",
-                color= "MeJA_treatment")
-
-plot_nmds_AT_above_CSS_ed <- plot_nmds_AT_above_CSS + 
-  geom_point(size=5, alpha=0.8)+
-  axis_looks
-
-#Arrange plots 
-plot_nmds_above_AT_BO_soil_ed <- ggarrange(plot_nmds_AT_above_CSS_ed, 
-                                           plot_nmds_BO_above_CSS_ed,
-                                           ncol = 2)
-#save plots
-ggsave(plot_nmds_above_AT_BO_soil_ed,
-       height = 5, width = 15,
-       file="./R output/Figures_for_publication/NeutralModels_NMDS_above_AT_BO.svg")
-
-
-```
-
-
-Then, both species in a single plot
-```{r}
-############## above expected onlu
-BO_AT_above<-merge_phyloseq(uni_4model_BO_above, uni_4model_AT_above)
-
-BO_AT_above_CSS<-make_CSS_physeq(BO_AT_above)
-
-
-
-
-### plot above
-nmds_BO_AT_above_CSS <- phyloseq::ordinate(BO_AT_above_CSS, 
-                             method ="NMDS", 
-                             distance="bray", 
-                             try=200,
-                             autotransform=TRUE) 
-
-
-plot_ordination(physeq = BO_AT_above_CSS, 
-                ordination = nmds_BO_AT_above_CSS, 
-                type = "sample",
-                color= "MeJA_treatment",
-                shape = "Plant_species")
-
-
-ps_venn(BO_AT_above_CSS,"MeJA_treatment")
-ps_venn(BO_AT_above_CSS,"MeJA_treatment", plot = FALSE)
-
-
-
-############## as predited only
-
-BO_AT_predict<-merge_phyloseq(uni_4model_BO_asPredicted, uni_4model_AT_asPredicted)
-
-BO_AT_predict_CSS<-make_CSS_physeq(BO_AT_predict)
-
-
-
-### plot above
-nmds_BO_AT_predict_CSS <- phyloseq::ordinate(BO_AT_predict_CSS, 
-                             method ="NMDS", 
-                             distance="bray", 
-                             try=200,
-                             autotransform=TRUE) 
-
-
-plot_ordination(physeq = BO_AT_predict_CSS, 
-                ordination = nmds_BO_AT_predict_CSS, 
-                type = "sample",
-                color= "MeJA_treatment",
-                shape = "Plant_species")
-
-
-ps_venn(BO_AT_above_CSS,"MeJA_treatment")
-ps_venn(BO_AT_above_CSS,"MeJA_treatment", plot = FALSE)
-
-
-############## as predited only
-
-BO_AT_Below<-merge_phyloseq(uni_4model_BO_below, uni_4model_AT_below)
-
-BO_AT_Below_CSS<-make_CSS_physeq(BO_AT_Below)
-
-
-
-### plot above
-nmds_BO_AT_Below_CSS <- phyloseq::ordinate(BO_AT_Below_CSS, 
-                             method ="NMDS", 
-                             distance="bray", 
-                             try=200,
-                             autotransform=TRUE) 
-
-
-plot_ordination(physeq = BO_AT_Below_CSS, 
-                ordination = nmds_BO_AT_Below_CSS, 
-                type = "sample",
-                color= "MeJA_treatment",
-                shape = "Plant_species")
-
-
-
-######################### all partitions
-
-
-sample_names(BO_AT_above)<-paste0(sample_names(BO_AT_above), "above")
-sample_data(BO_AT_above)$fitClass<- "above"
-sample_names(BO_AT_predict)<-paste0(sample_names(BO_AT_above), "predict")
-sample_data(BO_AT_predict)$fitClass<- "predict"
-sample_names(BO_AT_Below)<-paste0(sample_names(BO_AT_above), "below")
-sample_data(BO_AT_Below)$fitClass<- "below"
-
-
-
-BO_AT_3fitclass<-merge_phyloseq(BO_AT_above, BO_AT_predict, BO_AT_Below)
-BO_AT_3fitclass_CSS<-make_CSS_physeq(BO_AT_3fitclass)
-
-
-nmds_BO_AT_3fitclass_CSS<- phyloseq::ordinate(BO_AT_3fitclass_CSS, 
-                             method ="NMDS", 
-                             distance="bray", 
-                             try=200,
-                             autotransform=TRUE) 
-
-
-plot_ordination(physeq = BO_AT_3fitclass_CSS, 
-                ordination = nmds_BO_AT_3fitclass_CSS, 
-                type = "split",
-                color= "fit_class",
-                shape = "Plant_species")
-
-
-tax_table(BO_AT_3fitclass_CSS)
-
-
-
-```
 
 ## 4.9.check for artefacts in the methodology
 
@@ -1118,13 +764,13 @@ hundred_permanovas_on_random_otu<-  function (CSS_fraction,ps_4_model_l) {
 set.seed(92342347)
 
 # collect a list of random OTUS, 100 times
-rand_otu_control<-replicate(100, sample(taxa_names(subset_samples(CSS_fraction, MeJA_treatment == "control")), nrow(tax_table(ps_4_model_l[[1]])), replace=FALSE)) #performs randomization operation 100 times
+rand_otu_control<-replicate(1000, sample(taxa_names(subset_samples(CSS_fraction, MeJA_treatment == "control")), nrow(tax_table(ps_4_model_l[[1]])), replace=FALSE)) #performs randomization operation 100 times
 
-rand_otu_MeJA_0.1<-replicate(100, sample(taxa_names(subset_samples(CSS_fraction, MeJA_treatment == "MeJA_0.1")), nrow(tax_table(ps_4_model_l[[2]])), replace=FALSE)) #performs randomization operation 100 times
+rand_otu_MeJA_0.1<-replicate(1000, sample(taxa_names(subset_samples(CSS_fraction, MeJA_treatment == "MeJA_0.1")), nrow(tax_table(ps_4_model_l[[2]])), replace=FALSE)) #performs randomization operation 100 times
 
-rand_otu_MeJA_1.0<-replicate(100, sample(taxa_names(subset_samples(CSS_fraction, MeJA_treatment == "MeJA_1.0")), nrow(tax_table(ps_4_model_l[[3]])), replace=FALSE)) 
+rand_otu_MeJA_1.0<-replicate(1000, sample(taxa_names(subset_samples(CSS_fraction, MeJA_treatment == "MeJA_1.0")), nrow(tax_table(ps_4_model_l[[3]])), replace=FALSE)) 
 
-rand_otu_oral_scretion<-replicate(100, sample(taxa_names(subset_samples(CSS_fraction, MeJA_treatment == "oral_secretion")), nrow(tax_table(ps_4_model_l[[4]])), replace=FALSE)) 
+rand_otu_oral_scretion<-replicate(1000, sample(taxa_names(subset_samples(CSS_fraction, MeJA_treatment == "oral_secretion")), nrow(tax_table(ps_4_model_l[[4]])), replace=FALSE)) 
 
 
 
@@ -1177,13 +823,19 @@ return(permanovas_100)
 
 }
 
+# increases memory limit used by R
+memory.limit(size = 350000)
+
+# make a new phyloseq object containing only the OTUs occuring above prediction
+BO_4_model_above_soil<-lapply(ps_list_neutral_BO_soil, function (x) subset_taxa(x, fit_class == "Above prediction" ))
+AT_4_model_above_soil<-lapply(ps_list_neutral_AT_soil, function (x) subset_taxa(x, fit_class == "Above prediction" ))
 
 
 # now, make the 100 permanovas on random sets of OTUs, using a total number of OTUs equal to the OTUs selected as above aoccurence
 permanovas_BO_100<-hundred_permanovas_on_random_otu(CSS_fraction =  ps_list_CSS$Brassica_oleraceae.Soil, 
-                                                    ps_4_model_l = BO_4_model_above)
+                                                    ps_4_model_l = BO_4_model_above_soil)
 permanovas_AT_100<-hundred_permanovas_on_random_otu(CSS_fraction = ps_list_CSS$Arabidopsis_thaliana.Soil, 
-                                                    ps_4_model_l = AT_4_model_above)
+                                                    ps_4_model_l = AT_4_model_above_soil)
 
 
 
@@ -1238,10 +890,13 @@ length(which(hundrerd_permanovas_pr2$p_values_MeJA_vector_BO<0.05))
 
 
 # compare with the real results of the neutraliy selected otus
+set.seed(5235)
 permanova_AT_above<-permanova_with_blocks(BO_soil_predicted_list, "MeJA_treatment + Block")$Brassica_oleraceae.Soil.above
+set.seed(5235)
 permanova_BO_above<-permanova_with_blocks(AT_soil_predicted_list, "MeJA_treatment + Block")$Arabidopsis_thaliana.Soil.above
 
 # also compare it to the full dataset without any OTU selection
+set.seed(5235)
 full_feature_permanova<-permanova_with_blocks(ps_list_CSS, "MeJA_treatment + Block")
 
 ```
