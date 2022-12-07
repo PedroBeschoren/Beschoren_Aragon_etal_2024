@@ -637,12 +637,6 @@ lapply(AT_Root_predicted_list, function (x)
               Factor= as.factor(as(phyloseq::sample_data(x),"data.frame")$MeJA_treatment)))
 
 
-#pairwise tests
-set.seed(5235)
-
-  adonis.pair(dist.mat= phyloseq::distance(otu_table(AT_Root_predicted_list$Arabidopsis_thaliana.Root.above), method="bray"),
-              Factor= as.factor(as(phyloseq::sample_data(AT_Root_predicted_list$Arabidopsis_thaliana.Root.above),"data.frame")$MeJA_treatment))
-
 ```
 
 
@@ -694,7 +688,6 @@ ggsave(export_venn,
 
 
 # 4.8 Join neutral class partitions back together to check possible artefacts
-####!!! endosphre samples missing funcion and objects:
 
 
 ```{r}
@@ -780,13 +773,13 @@ hundred_permanovas_on_random_otu<-  function (CSS_fraction,ps_4_model_l) {
 set.seed(92342347)
 
 # collect a list of random OTUS, 100 times
-rand_otu_control<-replicate(100, sample(taxa_names(subset_samples(CSS_fraction, MeJA_treatment == "control")), nrow(tax_table(ps_4_model_l[[1]])), replace=FALSE)) #performs randomization operation 100 times
+rand_otu_control<-replicate(1000, sample(taxa_names(subset_samples(CSS_fraction, MeJA_treatment == "control")), nrow(tax_table(ps_4_model_l[[1]])), replace=FALSE)) #performs randomization operation 100 times
 
-rand_otu_MeJA_0.1<-replicate(100, sample(taxa_names(subset_samples(CSS_fraction, MeJA_treatment == "MeJA_0.1")), nrow(tax_table(ps_4_model_l[[2]])), replace=FALSE)) #performs randomization operation 100 times
+rand_otu_MeJA_0.1<-replicate(1000, sample(taxa_names(subset_samples(CSS_fraction, MeJA_treatment == "MeJA_0.1")), nrow(tax_table(ps_4_model_l[[2]])), replace=FALSE)) #performs randomization operation 100 times
 
-rand_otu_MeJA_1.0<-replicate(100, sample(taxa_names(subset_samples(CSS_fraction, MeJA_treatment == "MeJA_1.0")), nrow(tax_table(ps_4_model_l[[3]])), replace=FALSE)) 
+rand_otu_MeJA_1.0<-replicate(1000, sample(taxa_names(subset_samples(CSS_fraction, MeJA_treatment == "MeJA_1.0")), nrow(tax_table(ps_4_model_l[[3]])), replace=FALSE)) 
 
-rand_otu_oral_scretion<-replicate(100, sample(taxa_names(subset_samples(CSS_fraction, MeJA_treatment == "oral_secretion")), nrow(tax_table(ps_4_model_l[[4]])), replace=FALSE)) 
+rand_otu_oral_scretion<-replicate(1000, sample(taxa_names(subset_samples(CSS_fraction, MeJA_treatment == "oral_secretion")), nrow(tax_table(ps_4_model_l[[4]])), replace=FALSE)) 
 
 
 
@@ -838,6 +831,9 @@ return(permanovas_100)
 
 
 }
+
+# increases memory limit used by R
+memory.limit(size = 350000)
 
 # make a new phyloseq object containing only the OTUs occuring above prediction
 BO_4_model_above_root<-lapply(ps_list_neutral_BO_Root, function (x) subset_taxa(x, fit_class == "Above prediction" ))
@@ -901,12 +897,18 @@ sapply(hundrerd_permanovas_pr2, FUN =  sapply_listed_functions)
 length(which(hundrerd_permanovas_pr2$p_values_MeJA_vector_AT<0.05))
 length(which(hundrerd_permanovas_pr2$p_values_MeJA_vector_BO<0.05))
 
+# lets count the number of tests with p< above_neutral ASV p
+length(which(hundrerd_permanovas_pr2$p_values_MeJA_vector_AT<(as.numeric(permanova_AT_above[[5]][1]))))
+length(which(hundrerd_permanovas_pr2$p_values_MeJA_vector_BO<(as.numeric(permanova_BO_above[[5]][1]))))
 
 # compare with the real results of the neutraliy selected otus
+set.seed(5235)
 permanova_AT_above<-permanova_with_blocks(BO_Root_predicted_list, "MeJA_treatment + Block")$Brassica_oleraceae.Root.above
+set.seed(5235)
 permanova_BO_above<-permanova_with_blocks(AT_Root_predicted_list, "MeJA_treatment + Block")$Arabidopsis_thaliana.Root.above
 
 # also compare it to the full dataset without any OTU selection
+set.seed(5235)
 full_feature_permanova<-permanova_with_blocks(ps_list_CSS, "MeJA_treatment + Block")
 
 ```
