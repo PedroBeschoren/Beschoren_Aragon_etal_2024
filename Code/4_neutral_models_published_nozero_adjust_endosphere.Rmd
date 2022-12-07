@@ -22,7 +22,7 @@ Comparing neutral models will take several different views on different slices o
 
 # our lists of split rarefied datasets were already in place since chunk 1.4a
 pslist_sp_rarefied
-pslist_root_soil_rarefied
+pslist_root_Root_rarefied
 ps_list_rarefied
 
 
@@ -82,7 +82,7 @@ Here me make the bulk of the calculations. it can take a moment, so we save the 
 # makes a list of neutral models, according the data splits of your ps_list
 neutral_list<- lapply(ps_list_rarefied, function(x)
   tyRa::fit_sncm(spp = t(otu_table(x)), 
-                 pool = NULL, # Pool acts as a source of microbes, such as full bulk soil diversity. if NULL, you use the input taxa talbe as the pool for every individual sample inside your phyloseq object
+                 pool = NULL, # Pool acts as a source of microbes, such as full bulk Root diversity. if NULL, you use the input taxa talbe as the pool for every individual sample inside your phyloseq object
                  taxon = data.frame(tax_table(x))))
 
 # names for the plots
@@ -297,15 +297,15 @@ axis_looks <- theme(axis.text = element_text(colour = "black", size = 14))+
 
 ##### \*\*\* ADVANCED: EVALUATING SPLITS BASED ON NEUTRAL MODEL\*\*\*
 
-now that we explored some neutral models, we can try to check if the populations that are over-represented are more or less similar across the populations. this is optional, and there are many other ways you can explore a subset of your taxa. But givin how promissing were the results with BO_soil, Pedro strongly suggest you to perform this in-depth analysis if you want to answer the following question: "are the different treatments selecting the same subset of microbes as over-represented?"
+now that we explored some neutral models, we can try to check if the populations that are over-represented are more or less similar across the populations. this is optional, and there are many other ways you can explore a subset of your taxa. But givin how promissing were the results with BO_Root, Pedro strongly suggest you to perform this in-depth analysis if you want to answer the following question: "are the different treatments selecting the same subset of microbes as over-represented?"
 
-These are the key considerations you should make: 1)The Sloan neutral model fits are very sensible to different sample sizes. You can only compare identicals sample sizes. in this example, we are only comparing the soil samples because we ave missing root samples for both AT and BO
+These are the key considerations you should make: 1)The Sloan neutral model fits are very sensible to different sample sizes. You can only compare identicals sample sizes. in this example, we are only comparing the Root samples because we ave missing root samples for both AT and BO
 
-2)  you should set the pool of source microbes for the Sloan neutral model. The model we apply here has 2 crucial datasets: the metacommunity, a source/pool of diversity where migration picks will be derived from, and your target sample set that you try to fit the neutral model. here we are using all BO_soil samples as the source/pool and the 4 individual subsets, one for each MeJA treatment, as the target sample set.
+2)  you should set the pool of source microbes for the Sloan neutral model. The model we apply here has 2 crucial datasets: the metacommunity, a source/pool of diversity where migration picks will be derived from, and your target sample set that you try to fit the neutral model. here we are using all BO_Root samples as the source/pool and the 4 individual subsets, one for each MeJA treatment, as the target sample set.
 
 3)  6 samples/treatment seems to be enought. I would not trust results if working with 4 samples/treatment
 
-# 4.6 one model for each BO_soil treatment, using all BO_soil samples as a pool
+# 4.6 one model for each BO_Root treatment, using all BO_Root samples as a pool
 
 ### 4.6.1 make new physeq object and neutral models
 ```{r}
@@ -317,45 +317,45 @@ ps_list_treat<-lapply( ps_list_rarefied, function (x)
 
 
 # Now, make a list of neutral models with one model for every treatment
-neutral_list_BO_soil<- lapply(ps_list_treat$Brassica_oleraceae.Soil, function(x)
+neutral_list_BO_Root<- lapply(ps_list_treat$Brassica_oleraceae.Root, function(x)
   tyRa::fit_sncm(spp = t(otu_table(x)), 
-                 pool=t(otu_table(ps_list_rarefied$Brassica_oleraceae.Soil)), # Pool acts as a source of microbes, such as full bulk soil diversity. if NULL, you use the input taxa table as the pool for every individual sample inside your phyloseq object
+                 pool=t(otu_table(ps_list_rarefied$Brassica_oleraceae.Root)), # Pool acts as a source of microbes, such as full bulk Root diversity. if NULL, you use the input taxa table as the pool for every individual sample inside your phyloseq object
                  taxon=data.frame(tax_table(x))))
 
 # names for the plots
-plot_titles<-names(neutral_list_BO_soil)
+plot_titles<-names(neutral_list_BO_Root)
 
 # one plot for each list element
-Neutral_plots_list_BO_soil<-mapply(function(x,y) 
+Neutral_plots_list_BO_Root<-mapply(function(x,y) 
   plot_sncm_fit2(x, title=y)+
     theme(axis.title=element_text(face = "bold"))+
     theme(axis.text=element_text(face = "bold", colour="black"))+
     theme(legend.position="none"),
-  neutral_list_BO_soil,plot_titles, SIMPLIFY = FALSE)
+  neutral_list_BO_Root,plot_titles, SIMPLIFY = FALSE)
 
 # arrange 4 plots in 1 figure
-Neutral_plots_list_BO_soil_g <- ggarrange(Neutral_plots_list_BO_soil$control,
-          Neutral_plots_list_BO_soil$MeJA_0.1,
-          Neutral_plots_list_BO_soil$MeJA_1.0,
-          Neutral_plots_list_BO_soil$oral_secretion, #+ rremove("x.text"), 
+Neutral_plots_list_BO_Root_g <- ggarrange(Neutral_plots_list_BO_Root$control,
+          Neutral_plots_list_BO_Root$MeJA_0.1,
+          Neutral_plots_list_BO_Root$MeJA_1.0,
+          Neutral_plots_list_BO_Root$oral_secretion, #+ rremove("x.text"), 
           #labels = c("A", "B", "C", "D"),
           ncol = 2, nrow = 2)
 
 #save plots
-ggsave(Neutral_plots_list_BO_soil_g,
+ggsave(Neutral_plots_list_BO_Root_g,
        height = 9, width = 12,
-       file="./R output/Figures_for_publication/NeutralModels_BO.svg")
+       file="./R output/Figures_for_publication/NeutralModels_BO_endosphere.svg")
 
 ```
 
-### 4.6.2 check metrics of BO_soil neutral models
+### 4.6.2 check metrics of BO_Root neutral models
 
 ```{r}
 
 #### now, R², m and fit class percentage metrics can be extracted 
 
 # fit stats of all neutral models, keeps only M and Rsqure of that list
-fitstats_listed_BO_soil<-lapply(neutral_list_BO_soil, function (x) 
+fitstats_listed_BO_Root<-lapply(neutral_list_BO_Root, function (x) 
   x$fitstats[c(1,4)])#... the other functions from chunk 4.3 use special charathers to separate the column names - it's slightly messy and unnecessary for us to fix only to plot. the list produced here already has the r² and m values for each split, so record that in separate as necessary
 
 
@@ -371,11 +371,11 @@ This facilitates comparison of multiple different models
 ## now, to quickly visualize all the fit_class predictions
 
 # lists predictions of all neutral models, keeps only the fit class and the OTU ID
-  predictions_listed_BO_soil<-lapply(neutral_list_BO_soil, function (x) 
+  predictions_listed_BO_Root<-lapply(neutral_list_BO_Root, function (x) 
   x$predictions[14])
 
 #make a list of tibles, including percentage of each fit class
-list_tibble<-lapply(predictions_listed_BO_soil, function (x)
+list_tibble<-lapply(predictions_listed_BO_Root, function (x)
   x%>%
     group_by(fit_class)%>%
     dplyr::summarize(count = n())%>%
@@ -406,22 +406,22 @@ You might want to have this classification as an additional "taxa", making the o
 # Note that the same OTU bay have different fit classes in different slices of the data. beware if trying to put all fit classes into a single phyloseq object!
 
 # transforms the fit_class definition into a listed phyloseq object
-fit_class_ps_list_BO_soil<-lapply(predictions_listed_BO_soil, function (x) tax_table(as.matrix(x)))
+fit_class_ps_list_BO_Root<-lapply(predictions_listed_BO_Root, function (x) tax_table(as.matrix(x)))
 
 # add fit_class definition to the main (listed) phyloseq object
-ps_list_neutral_BO_soil<-mapply(function (x,y)
+ps_list_neutral_BO_Root<-mapply(function (x,y)
   tax_table(x)<-merge_phyloseq(x,y),
-  ps_list_treat$Brassica_oleraceae.Soil, fit_class_ps_list_BO_soil, SIMPLIFY = FALSE)
+  ps_list_treat$Brassica_oleraceae.Root, fit_class_ps_list_BO_Root, SIMPLIFY = FALSE)
 
 #check if your fit class now show in the taxonomy of your new physeq object
-head(tax_table(ps_list_neutral_BO_soil$control))
+head(tax_table(ps_list_neutral_BO_Root$control))
 
 
 
 #
 ```
 
-#### 4.6.5 select only one of the fit classes in BO_soil, then merge the 4 treatment split
+#### 4.6.5 select only one of the fit classes in BO_Root, then merge the 4 treatment split
 
 ```{r}
 # get a list of phyloseq objects (separated by treatment) that have the neutral model definitions in the taxa table (above/predicted/below) and turn it into 3 phyloseq objects of all taxa occuring above, as predicted or below
@@ -470,9 +470,9 @@ return(output_ps_l)
 }
 
 
-#execute the custom function above on BO soil samples
-BO_soil_predicted_list<-subset_ps_above_neutral_below(ps_l_predictions_in_taxtable = ps_list_neutral_BO_soil,
-                                                      ps_CSS_partition = ps_list_CSS$Brassica_oleraceae.Soil)
+#execute the custom function above on BO Root samples
+BO_Root_predicted_list<-subset_ps_above_neutral_below(ps_l_predictions_in_taxtable = ps_list_neutral_BO_Root,
+                                                      ps_CSS_partition = ps_list_CSS$Brassica_oleraceae.Root)
 
 
 ```
@@ -481,15 +481,15 @@ BO_soil_predicted_list<-subset_ps_above_neutral_below(ps_l_predictions_in_taxtab
 
 ```{r}
 #beta dispersion
-dip_result_BO<-beta_disp_plotAndTest(BO_soil_predicted_list, "MeJA_treatment") 
+dip_result_BO<-beta_disp_plotAndTest(BO_Root_predicted_list, "MeJA_treatment") 
 
 #Permanova
 set.seed(5235)
-permanova_with_blocks(BO_soil_predicted_list, "MeJA_treatment + Block") 
+permanova_with_blocks(BO_Root_predicted_list, "MeJA_treatment + Block") 
 
 #pairwise tests
 set.seed(5235)
-lapply(BO_soil_predicted_list, function (x)
+lapply(BO_Root_predicted_list, function (x)
   adonis.pair(dist.mat= phyloseq::distance(otu_table(x), method="bray"),
               Factor= as.factor(as(phyloseq::sample_data(x),"data.frame")$MeJA_treatment)))
 
@@ -497,7 +497,7 @@ lapply(BO_soil_predicted_list, function (x)
 ```
 
 ####  4.6.6b compare against a single 24-sample model
-compare the metrics of the chunk above to values of a neutral model where the 4 treatmensts are not split (a single model for all 24 smaples in BO_soil). the difference is that we are no longer looking at ASVs that were selected by treatment, but instead we look at ASVs that were selected in BO_soil
+compare the metrics of the chunk above to values of a neutral model where the 4 treatmensts are not split (a single model for all 24 smaples in BO_Root). the difference is that we are no longer looking at ASVs that were selected by treatment, but instead we look at ASVs that were selected in BO_Root
 
 
 ```{r}
@@ -528,7 +528,7 @@ lapply(notreatsplit_ps, function (x)
 ####  4.6.7 check plots of each subcommunity set
 
 ```{r}
-lapply(BO_soil_predicted_list, function(x){
+lapply(BO_Root_predicted_list, function(x){
 set.seed(101)
 ordination_NMDS <- phyloseq::ordinate(x, 
                              method ="NMDS", 
@@ -566,8 +566,8 @@ return(output)
 }
 
 #run the custom function
-Venn_BO<-venn_neutral(ps_l_predictions_in_taxtable = ps_list_neutral_BO_soil)+
-  ggtitle(label = "Above Neutral ASV overlap, B. oleraceae")
+Venn_BO<-venn_neutral(ps_l_predictions_in_taxtable = ps_list_neutral_BO_Root)+
+  ggtitle(label = "Above Neutral ASV overlap, B. oleraceae endosphere")
 
 
 
@@ -579,7 +579,7 @@ Venn_BO<-venn_neutral(ps_l_predictions_in_taxtable = ps_list_neutral_BO_soil)+
 
 
 
-# 4.7 one model for each AT_soil treatment, using all AT_soil samples as a pool
+# 4.7 one model for each AT_Root treatment, using all AT_Root samples as a pool
 
 ### 4.7.1 make new physeq object and neutral models
 
@@ -592,49 +592,49 @@ Venn_BO<-venn_neutral(ps_l_predictions_in_taxtable = ps_list_neutral_BO_soil)+
 
 
 
-###############This is a list fot AT_soil to use later...
+###############This is a list fot AT_Root to use later...
   # makes a list of neutral models, according the data splits of your ps_list
-neutral_list_AT_soil<- lapply(ps_list_treat$Arabidopsis_thaliana.Soil, function(x)
+neutral_list_AT_Root<- lapply(ps_list_treat$Arabidopsis_thaliana.Root, function(x)
   tyRa::fit_sncm(spp = t(otu_table(x)), 
-                 pool=t(otu_table(ps_list_rarefied$Arabidopsis_thaliana.Soil)), # Pool acts as a source of microbes, such as full bulk soil diversity. if NULL, you use the input taxa talbe as the pool for every individual sample inside your phyloseq object
+                 pool=t(otu_table(ps_list_rarefied$Arabidopsis_thaliana.Root)), # Pool acts as a source of microbes, such as full bulk Root diversity. if NULL, you use the input taxa talbe as the pool for every individual sample inside your phyloseq object
                  taxon=data.frame(tax_table(x))))
 
 # names for the plots
-plot_titles<-names(neutral_list_AT_soil)
+plot_titles<-names(neutral_list_AT_Root)
 
 # one plot for each list element
-Neutral_plots_list_AT_soil<-mapply(function(x,y) 
+Neutral_plots_list_AT_Root<-mapply(function(x,y) 
   plot_sncm_fit2(x, title=y)+
     theme(axis.title=element_text(face = "bold"))+
     theme(axis.text=element_text(face = "bold", colour="black"))+
     theme(legend.position="none"),
-  neutral_list_AT_soil,plot_titles, SIMPLIFY = FALSE)
+  neutral_list_AT_Root,plot_titles, SIMPLIFY = FALSE)
 ########################
 
 
 # arrange 4 plots in 1 figure
-Neutral_plots_list_AT_soil_g <- ggarrange(Neutral_plots_list_AT_soil$control,
-          Neutral_plots_list_AT_soil$MeJA_0.1,
-          Neutral_plots_list_AT_soil$MeJA_1.0,
-          Neutral_plots_list_AT_soil$oral_secretion,# + rremove("x.text"), 
+Neutral_plots_list_AT_Root_g <- ggarrange(Neutral_plots_list_AT_Root$control,
+          Neutral_plots_list_AT_Root$MeJA_0.1,
+          Neutral_plots_list_AT_Root$MeJA_1.0,
+          Neutral_plots_list_AT_Root$oral_secretion,# + rremove("x.text"), 
           #labels = c("A", "B", "C", "D"),
           ncol = 2, nrow = 2)
 
 #save plots
-ggsave(Neutral_plots_list_AT_soil_g,
+ggsave(Neutral_plots_list_AT_Root_g,
        height = 9, width = 12,
-       file="./R output/Figures_for_publication/NeutralModels_AT.svg")
+       file="./R output/Figures_for_publication/NeutralModels_ATendosphere.svg")
 
 ```
 
-### 4.7.2 check metrics of AT_soil neutral models
+### 4.7.2 check metrics of AT_Root neutral models
 
 ```{r}
 
 #### now, R², m and fit class percentage metrics can be extracted 
 
 # fit stats of all neutral models, keeps only M and Rsqure of that list
-fitstats_listed_AT_soil<-lapply(neutral_list_AT_soil, function (x) 
+fitstats_listed_AT_Root<-lapply(neutral_list_AT_Root, function (x) 
   x$fitstats[c(1,4)])#... the other functions from chunk 4.3 use special charathers to separate the column names - it's slightly messy and unnecessary for us to fix only to plot. the list produced here already has the r² and m values for each split, so record that in separate as necessary
 
 
@@ -650,11 +650,11 @@ This facilitates comparison of multiple different models
 ## now, to quickly visualize all the fit_class predictions
 
 # lists predictions of all neutral models, keeps only the fit class and the OTU ID
-  predictions_listed_AT_soil<-lapply(neutral_list_AT_soil, function (x) 
+  predictions_listed_AT_Root<-lapply(neutral_list_AT_Root, function (x) 
   x$predictions[14])
 
 #make a list of tibles, including percentage of each fit class
-list_tibble<-lapply(predictions_listed_AT_soil, function (x)
+list_tibble<-lapply(predictions_listed_AT_Root, function (x)
   x%>%
     group_by(fit_class)%>%
     dplyr::summarize(count = n())%>%
@@ -687,20 +687,20 @@ You might want to have this classification as an additional "taxa", making the o
 # Note that the same OTU bay have different fit classes in different slices of the data. beware if trying to put all fit classes into a single phyloseq object!
 
 # transforms the fit_class definition into a listed phyloseq object
-fit_class_ps_list_AT_soil<-lapply(predictions_listed_AT_soil, function (x) tax_table(as.matrix(x)))
+fit_class_ps_list_AT_Root<-lapply(predictions_listed_AT_Root, function (x) tax_table(as.matrix(x)))
 
 # add fit_class definition to the main (listed) phyloseq object
-ps_list_neutral_AT_soil<-mapply(function (x,y)
+ps_list_neutral_AT_Root<-mapply(function (x,y)
   tax_table(x)<-merge_phyloseq(x,y),
-  ps_list_treat$Arabidopsis_thaliana.Soil, fit_class_ps_list_AT_soil, SIMPLIFY = FALSE)
+  ps_list_treat$Arabidopsis_thaliana.Root, fit_class_ps_list_AT_Root, SIMPLIFY = FALSE)
 
 #check if your fit class now show in the taxonomy of your new physeq object
-head(tax_table(ps_list_neutral_AT_soil$control))
+head(tax_table(ps_list_neutral_AT_Root$control))
 
 #
 ```
 
-#### 4.7.5 select only one of the fit classes in AT_soil, then merge the 4 treatment split
+#### 4.7.5 select only one of the fit classes in AT_Root, then merge the 4 treatment split
 
 ```{r}
 # get a list of phyloseq objects (separated by treatment) that have the neutral model definitions in the taxa table (above/predicted/below) and turn it into 3 phyloseq objects of all taxa occuring above, as predicted or below
@@ -749,37 +749,51 @@ return(output_ps_l)
 }
 
 
-#execute the custom function above on BO soil samples
-AT_soil_predicted_list<-subset_ps_above_neutral_below(ps_l_predictions_in_taxtable = ps_list_neutral_AT_soil,
-                                                      ps_CSS_partition = ps_list_CSS$Arabidopsis_thaliana.Soil)
+#execute the custom function above on AT Root samples
+AT_Root_predicted_list<-subset_ps_above_neutral_below(ps_l_predictions_in_taxtable = ps_list_neutral_AT_Root,
+                                                      ps_CSS_partition = ps_list_CSS$Arabidopsis_thaliana.Root)
 
 
 ```
 
 #### 4.7.6 check stats of treatment effects on each subcommunity
 
+error Dec/2022: pairwise comparisons failed. seems to e a problem in the function adonis.pair(), likely due to updates in other packages. this erro does not occurr in BO samples:
+This is not a major topic, so analysis continues
+
+" 'adonis' will be deprecated: use 'adonis2' instead
+Error in `colnames<-`(`*tmp*`, value = colnames(lhs)) : 
+  attempt to set 'colnames' on an object with less than two dimensions" 
+  
 ```{r}
 #beta dispersion
-dip_result_AT<-beta_disp_plotAndTest(AT_soil_predicted_list, "MeJA_treatment") 
+dip_result_AT<-beta_disp_plotAndTest(AT_Root_predicted_list, "MeJA_treatment") 
 
 
 
 #Permanova
 set.seed(5235)
-permanova_with_blocks(AT_soil_predicted_list, "MeJA_treatment + Block") 
+permanova_with_blocks(AT_Root_predicted_list, "MeJA_treatment + Block") 
 
 #pairwise tests
 set.seed(5235)
-lapply(AT_soil_predicted_list, function (x)
+lapply(AT_Root_predicted_list, function (x)
   adonis.pair(dist.mat= phyloseq::distance(otu_table(x), method="bray"),
               Factor= as.factor(as(phyloseq::sample_data(x),"data.frame")$MeJA_treatment)))
+
+
+#pairwise tests
+set.seed(5235)
+
+  adonis.pair(dist.mat= phyloseq::distance(otu_table(AT_Root_predicted_list$Arabidopsis_thaliana.Root.above), method="bray"),
+              Factor= as.factor(as(phyloseq::sample_data(AT_Root_predicted_list$Arabidopsis_thaliana.Root.above),"data.frame")$MeJA_treatment))
 
 ```
 
 #### 4.7.7 check plots of each subcommunity set
 
 ```{r}
-lapply(AT_soil_predicted_list, function(x){
+lapply(AT_Root_predicted_list, function(x){
 set.seed(101)
 ordination_NMDS <- phyloseq::ordinate(x, 
                              method ="NMDS", 
@@ -820,7 +834,7 @@ return(output)
 }
 
 #run the custom function
-Venn_AT<-venn_neutral(ps_l_predictions_in_taxtable = ps_list_neutral_AT_soil)+
+Venn_AT<-venn_neutral(ps_l_predictions_in_taxtable = ps_list_neutral_AT_Root)+
   ggtitle(label = "Above Neutral ASV overlap, A. thaliana")
 
 
@@ -840,7 +854,7 @@ export_venn<-ggarrange(Venn_AT, Venn_BO, labels = c("A", "B"))
 
 ggsave(export_venn,
        height = 5, width = 10,
-       file="./R output/Figures_for_publication/NeutralModel_Veen.svg")
+       file="./R output/Figures_for_publication/NeutralModel_Veenendosphere.svg")
 
 ```
 
@@ -849,9 +863,64 @@ ggsave(export_venn,
 
 
 # 4.8 Join neutral class partitions back together to check possible artefacts
+####!!! endosphre samples missing funcion and objects:
 
-### 4.8.1 re-join BO_soil and AT_soil
 
+```{r}
+
+
+# First, amke a new phyloseq object containing only the OTUs occuring above prediction
+BO_4_model_above<-lapply(ps_list_neutral_BO_Root, function (x) subset_taxa(x, fit_class == "Above prediction" ))
+
+BO_4_model_asPredicted<-lapply(ps_list_neutral_BO_Root, function (x) subset_taxa(x, fit_class == "As predicted" ))
+
+BO_4_model_below<-lapply(ps_list_neutral_BO_Root, function (x) subset_taxa(x, fit_class == "Below prediction" ))
+
+
+
+#I could not merge a physeq object that has a tree becuase of of them has a different number of tips. I could also not simply remove the phy_tree from the phyloseq object. my fix here was to extract the sample dta, tax table and otu table and create a new phyloseq object with it. I don't like this kind of juggling so i need a better solution for this
+
+remove_tree_and_merge<-function(model_4_split){
+  # your input is the phyloseq object split in the 4 different MeJA treatments 
+  # your output is a single re-constructed phyloseq object, wihtout any trees that prevent re-merging
+  
+# extract portions from the physeq object...
+sdata_4<-map(model_4_split, sample_data)
+tax_4<-map(model_4_split, tax_table)
+otu_4<-map(model_4_split, otu_table)
+
+# merge these potions into a single new physeq list...
+uni_4model<-mapply( function (x,y,z) 
+  merge_phyloseq(x,y,z),
+       x= sdata_4,
+       y=tax_4,
+       z=otu_4,
+       SIMPLIFY = FALSE)
+
+# merge the physeq list into a single new physeq object
+uni_4model<-merge_phyloseq(uni_4model$control,
+               uni_4model$MeJA_0.1,
+               uni_4model$MeJA_1.0,
+               uni_4model$oral_secretion)
+
+return(uni_4model)
+}
+
+# remove tree so you can merge physeq objects, then merge physeq objects
+
+
+#########################################
+# ATTENTION! THIS INPUT TO remove_tree_and_merge() WILL INTRODUCE ZEROS
+#########################################
+
+
+uni_4model_BO_above<-remove_tree_and_merge(BO_4_model_above)
+uni_4model_BO_asPredicted<-remove_tree_and_merge(BO_4_model_asPredicted)
+uni_4model_BO_below<-remove_tree_and_merge(BO_4_model_below)
+```
+### 4.8.1 re-join BO_Root and AT_Root
+
+#### 4.6.5 select only one of the fit classesin BO_soil, then merge the treatment 4-split
 #HERE WAS MY ERROR
 The input for the remove_tree_and_merge() function was different between this check code and the original objects. on the original objects, we fisrt subset the data to only include the ASVs that are above/neutral/below, and then we merge the 4 treatments. 
 
@@ -859,61 +928,61 @@ this introduces zeros in ASVs that were, for example, present in all samples but
 
 ```{r}
 # original objects: 
-ps_list_rarefied$Brassica_oleraceae.Soil
-ps_list_rarefied$Arabidopsis_thaliana.Soil
+ps_list_rarefied$Brassica_oleraceae.Root
+ps_list_rarefied$Arabidopsis_thaliana.Root
 
 #re-merged BO
-check_BO_soil<-remove_tree_and_merge(ps_list_neutral_BO_soil)
+check_BO_Root<-remove_tree_and_merge(ps_list_neutral_BO_Root)
 
-sample_sums(check_BO_soil)
+sample_sums(check_BO_Root)
 
 set.seed(101)
-nmds_check_BO_soil <- phyloseq::ordinate(check_BO_soil, 
+nmds_check_BO_Root <- phyloseq::ordinate(check_BO_Root, 
                              method ="NMDS", 
                              distance="bray", 
                              try=200,
                              autotransform=TRUE) 
 
 
-plot_nmds_check_BO_soil <- plot_ordination(physeq = check_BO_soil, 
-                ordination = nmds_check_BO_soil, 
+plot_nmds_check_BO_Root <- plot_ordination(physeq = check_BO_Root, 
+                ordination = nmds_check_BO_Root, 
                 type = "sample",
                 color= "MeJA_treatment")
 
 
-plot_nmds_check_BO_soil_ed <- plot_nmds_check_BO_soil + 
+plot_nmds_check_BO_Root_ed <- plot_nmds_check_BO_Root + 
   geom_point(size=5, alpha=0.8)+
   axis_looks
 
 
 #re-merged AT
-check_AT_soil<-remove_tree_and_merge(ps_list_neutral_AT_soil)
+check_AT_Root<-remove_tree_and_merge(ps_list_neutral_AT_Root)
 
 
-nmds_check_AT_soil <- phyloseq::ordinate(check_AT_soil, 
+nmds_check_AT_Root <- phyloseq::ordinate(check_AT_Root, 
                              method ="NMDS", 
                              distance="bray", 
                              try=200,
                              autotransform=TRUE) 
 
 
-plot_nmds_check_AT_soil <- plot_ordination(physeq = check_AT_soil, 
-                ordination = nmds_check_AT_soil, 
+plot_nmds_check_AT_Root <- plot_ordination(physeq = check_AT_Root, 
+                ordination = nmds_check_AT_Root, 
                 type = "sample",
                 color= "MeJA_treatment")
 
-plot_nmds_check_AT_soil_ed <- plot_nmds_check_AT_soil + 
+plot_nmds_check_AT_Root_ed <- plot_nmds_check_AT_Root + 
   geom_point(size=5, alpha=0.8)+
   axis_looks
 
 #Arrange plots 
-plot_nmds_check_AT_BO_soil_ed <- ggarrange(plot_nmds_check_AT_soil_ed, 
-                                           plot_nmds_check_BO_soil_ed,
+plot_nmds_check_AT_BO_Root_ed <- ggarrange(plot_nmds_check_AT_Root_ed, 
+                                           plot_nmds_check_BO_Root_ed,
                                            ncol = 2)
 #save plots
-ggsave(plot_nmds_check_AT_BO_soil_ed,
-       height = 5, width = 15,
-       file="./R output/Figures_for_publication/NeutralModels_NMDS_soil_AT_BO.svg")
+#ggsave(plot_nmds_check_AT_BO_Root_ed,
+ #      height = 5, width = 15,
+  #     file="./R output/Figures_for_publication/NeutralModels_NMDS_Root_AT_BOendosphere.svg")
 
 ```
 
@@ -966,13 +1035,13 @@ plot_nmds_AT_above_CSS_ed <- plot_nmds_AT_above_CSS +
   axis_looks
 
 #Arrange plots 
-plot_nmds_above_AT_BO_soil_ed <- ggarrange(plot_nmds_AT_above_CSS_ed, 
+plot_nmds_above_AT_BO_Root_ed <- ggarrange(plot_nmds_AT_above_CSS_ed, 
                                            plot_nmds_BO_above_CSS_ed,
                                            ncol = 2)
 #save plots
-ggsave(plot_nmds_above_AT_BO_soil_ed,
+ggsave(plot_nmds_above_AT_BO_Root_ed,
        height = 5, width = 15,
-       file="./R output/Figures_for_publication/NeutralModels_NMDS_above_AT_BO.svg")
+       file="./R output/Figures_for_publication/NeutralModels_NMDS_above_AT_BOendosphere.svg")
 
 
 ```
@@ -1177,13 +1246,16 @@ return(permanovas_100)
 
 }
 
+# make a new phyloseq object containing only the OTUs occuring above prediction
+BO_4_model_above_root<-lapply(ps_list_neutral_BO_Root, function (x) subset_taxa(x, fit_class == "Above prediction" ))
+AT_4_model_above_root<-lapply(ps_list_neutral_AT_Root, function (x) subset_taxa(x, fit_class == "Above prediction" ))
 
-
+BO_4_model_above_root$control@sam_data
 # now, make the 100 permanovas on random sets of OTUs, using a total number of OTUs equal to the OTUs selected as above aoccurence
-permanovas_BO_100<-hundred_permanovas_on_random_otu(CSS_fraction =  ps_list_CSS$Brassica_oleraceae.Soil, 
-                                                    ps_4_model_l = BO_4_model_above)
-permanovas_AT_100<-hundred_permanovas_on_random_otu(CSS_fraction = ps_list_CSS$Arabidopsis_thaliana.Soil, 
-                                                    ps_4_model_l = AT_4_model_above)
+permanovas_BO_100<-hundred_permanovas_on_random_otu(CSS_fraction = ps_list_CSS$Brassica_oleraceae.Root, 
+                                                    ps_4_model_l = BO_4_model_above_root)
+permanovas_AT_100<-hundred_permanovas_on_random_otu(CSS_fraction = ps_list_CSS$Arabidopsis_thaliana.Root, 
+                                                    ps_4_model_l = AT_4_model_above_root)
 
 
 
@@ -1238,8 +1310,8 @@ length(which(hundrerd_permanovas_pr2$p_values_MeJA_vector_BO<0.05))
 
 
 # compare with the real results of the neutraliy selected otus
-permanova_AT_above<-permanova_with_blocks(BO_soil_predicted_list, "MeJA_treatment + Block")$Brassica_oleraceae.Soil.above
-permanova_BO_above<-permanova_with_blocks(AT_soil_predicted_list, "MeJA_treatment + Block")$Arabidopsis_thaliana.Soil.above
+permanova_AT_above<-permanova_with_blocks(BO_Root_predicted_list, "MeJA_treatment + Block")$Brassica_oleraceae.Root.above
+permanova_BO_above<-permanova_with_blocks(AT_Root_predicted_list, "MeJA_treatment + Block")$Arabidopsis_thaliana.Root.above
 
 # also compare it to the full dataset without any OTU selection
 full_feature_permanova<-permanova_with_blocks(ps_list_CSS, "MeJA_treatment + Block")
@@ -1312,7 +1384,7 @@ hundrerd_permanovas_pr2<-bind_rows(p_values_MeJA_vector_AT,p_values_MeJA_vector_
 ##### 4.9.4.2 plot histograms
 
 ```{r}
-# this plot shows the P values of 100 permanovas, with dashed lines for the p values in the above-expected model and solid lines with p values in the full-feature model (all ASVS in BO_soil or AT_soil)
+# this plot shows the P values of 100 permanovas, with dashed lines for the p values in the above-expected model and solid lines with p values in the full-feature model (all ASVS in BO_Root or AT_Root)
 histogram_artefact_p<-ggplot(bind_rows(p_values_MeJA_vector_AT,
                  p_values_MeJA_vector_BO), 
        aes(x=(log(stat_value)), 
@@ -1329,11 +1401,11 @@ histogram_artefact_p<-ggplot(bind_rows(p_values_MeJA_vector_AT,
              linetype="dashed",
              size=1.5,
              colour = "#00BFC4")+ 
-  geom_vline(xintercept = log(full_feature_permanova[[2]][[5]][1]), #p values of AT in the full feature permanova
+  geom_vline(xintercept = log(full_feature_permanova[[1]][[5]][1]), #p values of AT in the full feature permanova
              linetype="dotted",
              size=1.5,
              colour = "#F8766D")+ #  color code for the standard second facotr of a ggplot (teal)
-  geom_vline(xintercept = log(full_feature_permanova[[4]][[5]][1]), #p values of BO in the full feature permanova
+  geom_vline(xintercept = log(full_feature_permanova[[3]][[5]][1]), #p values of BO in the full feature permanova
              linetype="dotted",
              size=1.5,
              colour = "#00BFC4")+ #  color code for the standard second facotr of a ggplot (teal)
@@ -1419,7 +1491,7 @@ histogram_100_permanovas<- ggarrange(histogram_artefact_p,
 #save plots
 ggsave(histogram_100_permanovas,
        height = 5, width = 15,
-       file="./R output/Figures_for_publication/NeutralModel_100_permanovas_histogram.svg")
+       file="./R output/Figures_for_publication/NeutralModel_100_permanovas_histogramendosphere.svg")
 
 
 
@@ -1429,12 +1501,12 @@ ggsave(histogram_100_permanovas,
 
 ```{r}
 
-neutral_heat_tree_AT<-subset_ps_above_neutral_below(ps_l_predictions_in_taxtable = ps_list_neutral_AT_soil,
-                                                      ps_CSS_partition = ps_list_rarefied$Arabidopsis_thaliana.Soil)[[1]]
+neutral_heat_tree_AT<-subset_ps_above_neutral_below(ps_l_predictions_in_taxtable = ps_list_neutral_AT_Root,
+                                                      ps_CSS_partition = ps_list_rarefied$Arabidopsis_thaliana.Root)[[1]]
 
 
 #new ps object, based on rarefied data
-neutral_heat_tree_BO<-lapply(ps_list_neutral_BO_soil, function (x) subset_taxa(x, fit_class == "Above prediction" ))
+neutral_heat_tree_BO<-lapply(ps_list_neutral_BO_Root, function (x) subset_taxa(x, fit_class == "Above prediction" ))
 neutral_heat_tree_BO<-merge_phyloseq(neutral_heat_tree_BO$control,
                                      neutral_heat_tree_BO$MeJA_0.1,
                                      neutral_heat_tree_BO$MeJA_1.0,
@@ -1455,16 +1527,6 @@ tax_table(neutral_heat_tree_BO)[, colnames(tax_table(neutral_heat_tree_BO))] <- 
 
 
 
-#PEDRO, CONTINUE FROM HERE: TRANSFORM NA AND UNKNOWN IN TAX TABLE INTO THE ASV NAME!
-#NORMALIZE DATASET
-
-set.seed(104250)
-neutral_heat_tree_BO<- rarefy_even_depth(neutral_heat_tree_BO,
-                                        sample.size = min(sample_sums(neutral_heat_tree_BO)), 
-                                        rngseed = FALSE, 
-                                        replace = TRUE, 
-                                        trimOTUs = TRUE, 
-                                        verbose = TRUE) 
 library(metacoder)
 # transform from phyloseq to  taxmap object
 neutral_metacoder_BO<-parse_phyloseq(neutral_heat_tree_BO)
@@ -1514,9 +1576,9 @@ heat_tree_matrix(neutral_metacoder_BO,
                  node_size_axis_label = "Size: Number of OTUs",
                  node_color_axis_label = "Color: Log2 ratio median proportions",
                  layout = "davidson-harel", # The primary layout algorithm
-                 initial_layout = "reingold-tilford")
+                 initial_layout = "reingold-tilford",
 # The layout algorithm that initializes node locations
-                 #output_file = "./R output/differential_heat_tree_BO_noKey.pdf") # Saves the plot as a pdf file
+                 output_file = "./R output/differential_heat_tree_BO_root.pdf") # Saves the plot as a pdf file
 
 
 
@@ -1530,7 +1592,7 @@ heat_tree_matrix(neutral_metacoder_BO,
 
 
 #new ps object, based on rarefied data
-neutral_heat_tree_AT<-lapply(ps_list_neutral_AT_soil, function (x) subset_taxa(x, fit_class == "Above prediction" ))
+neutral_heat_tree_AT<-lapply(ps_list_neutral_AT_Root, function (x) subset_taxa(x, fit_class == "Above prediction" ))
 neutral_heat_tree_AT<-merge_phyloseq(neutral_heat_tree_AT$control,
                                      neutral_heat_tree_AT$MeJA_0.1,
                                      neutral_heat_tree_AT$MeJA_1.0,
@@ -1545,16 +1607,6 @@ tax_table(neutral_heat_tree_AT)<-tax_table(neutral_heat_tree_AT)[,1:6]
 # let's remove the "r__"ranks from the taxonomy, they can be useful but will polute our plot
 tax_table(neutral_heat_tree_AT)[, colnames(tax_table(neutral_heat_tree_AT))] <- gsub(tax_table(neutral_heat_tree_AT)[, colnames(tax_table(neutral_heat_tree_AT))],     pattern = "[a-z]__", replacement = "")
 
-
-
-#NORMALIZE DATASET
-set.seed(104250)
-neutral_heat_tree_AT<- rarefy_even_depth(neutral_heat_tree_AT,
-                                        sample.size = min(sample_sums(neutral_heat_tree_AT)), 
-                                        rngseed = FALSE, 
-                                        replace = TRUE, 
-                                        trimOTUs = TRUE, 
-                                        verbose = TRUE) 
 
 
 
@@ -1598,11 +1650,11 @@ heat_tree_matrix(test,
                  node_color_trans = "linear", # The default is scaled by circle area
                  node_color_interval = c(-3, 3), # The range of `log2_median_ratio` to display
                  edge_color_interval = c(-3, 3), # The range of `log2_median_ratio` to display
-                 node_size_axis_label = "Number of OTUs",
-                 node_color_axis_label = "Log2 ratio median proportions",
+                 node_size_axis_label = "Size: Number of OTUs",
+                 node_color_axis_label = "Color: Log2 ratio median proportions",
                  layout = "davidson-harel", # The primary layout algorithm
-                 initial_layout = "reingold-tilford") # The layout algorithm that initializes node locations
-                # output_file = "./R output/differential_heat_tree_AT.pdf") # Saves the plot as a pdf file
+                 initial_layout = "reingold-tilford", # The layout algorithm that initializes node locations
+                 output_file = "./R output/differential_heat_tree_AT_root.pdf") # Saves the plot as a pdf file
 
 
 
@@ -1616,11 +1668,11 @@ heat_tree_matrix(test,
 ```{r}
 
 #new ps object, based on rarefied data
-ps_AT_alpha_cor_above<-subset_ps_above_neutral_below(ps_l_predictions_in_taxtable = ps_list_neutral_BO_soil,
-                                                      ps_CSS_partition = ps_list_rarefied$Brassica_oleraceae.Soil)[[1]]
+ps_AT_alpha_cor_above<-subset_ps_above_neutral_below(ps_l_predictions_in_taxtable = ps_list_neutral_BO_Root,
+                                                      ps_CSS_partition = ps_list_rarefied$Brassica_oleraceae.Root)[[1]]
 
-ps_BO_alpha_cor_above<-subset_ps_above_neutral_below(ps_l_predictions_in_taxtable = ps_list_neutral_AT_soil,
-                                                      ps_CSS_partition = ps_list_rarefied$Arabidopsis_thaliana.Soil)[[1]]
+ps_BO_alpha_cor_above<-subset_ps_above_neutral_below(ps_l_predictions_in_taxtable = ps_list_neutral_AT_Root,
+                                                      ps_CSS_partition = ps_list_rarefied$Arabidopsis_thaliana.Root)[[1]]
 
 
 
@@ -1775,12 +1827,12 @@ return(output)
 ###########################
 ####### class level ####### 
 ###########################
-above_expected_Class<-lapply(pslit_neutraly_selected, function (x)
+  above_expected_Class<-lapply(pslit_neutraly_selected, function (x)
   diversity_per_taxon(ps_object = x,
                       taxa_level = "Class",
                       data_partition = "above_expected"))
 
-full_dataset_Class<-lapply(ps_list_rarefied[c(2,4)], function (x)
+full_dataset_Class<-lapply(ps_list_rarefied[c(1,3)], function (x)
   diversity_per_taxon(ps_object = x,
                       taxa_level = "Class",
                       data_partition = "full_dataset"))
@@ -1807,7 +1859,7 @@ above_expected_Order<-lapply(pslit_neutraly_selected, function (x)
                       taxa_level = "Order",
                       data_partition = "above_expected"))
 
-full_dataset_Order<-lapply(ps_list_rarefied[c(2,4)], function (x)
+full_dataset_Order<-lapply(ps_list_rarefied[c(1,3)], function (x)
   diversity_per_taxon(ps_object = x,
                       taxa_level = "Order",
                       data_partition = "full_dataset"))
@@ -1834,7 +1886,7 @@ above_expected_Family<-lapply(pslit_neutraly_selected, function (x)
                       taxa_level = "Family",
                       data_partition = "above_expected"))
 
-full_dataset_Family<-lapply(ps_list_rarefied[c(2,4)], function (x)
+full_dataset_Family<-lapply(ps_list_rarefied[c(1,3)], function (x)
   diversity_per_taxon(ps_object = x,
                       taxa_level = "Family",
                       data_partition = "full_dataset"))
@@ -1973,7 +2025,7 @@ plot_AlphaCorr_Family <- grid.arrange(plot_l_obs_Family$uni_4model_AT_above, plo
 #save plot
 ggsave(plot_AlphaCorr_Family,
        height = 12, width = 18,
-       file="./R output/Figures_for_publication/NeutralModel_AlphaCorr_Family_AT_BO.svg")
+       file="./R output/Figures_for_publication/NeutralModel_AlphaCorr_Family_AT_BOendosphere.svg")
 
 
 #Order
@@ -1982,7 +2034,7 @@ plot_AlphaCorr_Order <- grid.arrange(plot_l_obs_Order$uni_4model_AT_above, plot_
 #save plot
 ggsave(plot_AlphaCorr_Order,
        height = 12, width = 18,
-       file="./R output/Figures_for_publication/NeutralModel_AlphaCorr_Order_AT_BO.svg")
+       file="./R output/Figures_for_publication/NeutralModel_AlphaCorr_Order_AT_BOendosphere.svg")
 
 
 #Class 
@@ -1991,7 +2043,7 @@ plot_AlphaCorr_Class <- grid.arrange(plot_l_obs_Class$uni_4model_AT_above, plot_
 #save plot
 ggsave(plot_AlphaCorr_Class,
        height = 12, width = 18,
-       file="./R output/Figures_for_publication/NeutralModel_AlphaCorr_Class_AT_BO.svg")
+       file="./R output/Figures_for_publication/NeutralModel_AlphaCorr_Class_AT_BOendosphere.svg")
 
 
 ```
@@ -2041,8 +2093,8 @@ return(above_expected_Family_random)
 
 
 #use custom fucniton defined above
-fivecorr_BO<-hundred_correlations_on_random_otu(CSS_fraction =  ps_list_rarefied$Brassica_oleraceae.Soil, 
-                                              ps_neutral_above = BO_soil_predicted_list$Brassica_oleraceae.Soil.above)
+fivecorr_BO<-hundred_correlations_on_random_otu(CSS_fraction =  ps_list_rarefied$Brassica_oleraceae.Root, 
+                                              ps_neutral_above = BO_Root_predicted_list$Brassica_oleraceae.Root.above)
 
 # put all comamonadaceae ogether
 random_comamonadaceae<-lapply(fivecorr_BO, function(x) dplyr::filter(x, Family =="Comamonadaceae"))%>%bind_rows()
