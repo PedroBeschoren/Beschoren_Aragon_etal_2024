@@ -1455,16 +1455,6 @@ tax_table(neutral_heat_tree_BO)[, colnames(tax_table(neutral_heat_tree_BO))] <- 
 
 
 
-#PEDRO, CONTINUE FROM HERE: TRANSFORM NA AND UNKNOWN IN TAX TABLE INTO THE ASV NAME!
-#NORMALIZE DATASET
-
-set.seed(104250)
-neutral_heat_tree_BO<- rarefy_even_depth(neutral_heat_tree_BO,
-                                        sample.size = min(sample_sums(neutral_heat_tree_BO)), 
-                                        rngseed = FALSE, 
-                                        replace = TRUE, 
-                                        trimOTUs = TRUE, 
-                                        verbose = TRUE) 
 library(metacoder)
 # transform from phyloseq to  taxmap object
 neutral_metacoder_BO<-parse_phyloseq(neutral_heat_tree_BO)
@@ -1514,9 +1504,9 @@ heat_tree_matrix(neutral_metacoder_BO,
                  node_size_axis_label = "Size: Number of OTUs",
                  node_color_axis_label = "Color: Log2 ratio median proportions",
                  layout = "davidson-harel", # The primary layout algorithm
-                 initial_layout = "reingold-tilford")
+                 initial_layout = "reingold-tilford",
 # The layout algorithm that initializes node locations
-                 #output_file = "./R output/differential_heat_tree_BO_noKey.pdf") # Saves the plot as a pdf file
+                 output_file = "./R output/differential_heat_tree_BO_rhizo.pdf") # Saves the plot as a pdf file
 
 
 
@@ -1547,14 +1537,6 @@ tax_table(neutral_heat_tree_AT)[, colnames(tax_table(neutral_heat_tree_AT))] <- 
 
 
 
-#NORMALIZE DATASET
-set.seed(104250)
-neutral_heat_tree_AT<- rarefy_even_depth(neutral_heat_tree_AT,
-                                        sample.size = min(sample_sums(neutral_heat_tree_AT)), 
-                                        rngseed = FALSE, 
-                                        replace = TRUE, 
-                                        trimOTUs = TRUE, 
-                                        verbose = TRUE) 
 
 
 
@@ -1601,8 +1583,8 @@ heat_tree_matrix(test,
                  node_size_axis_label = "Number of OTUs",
                  node_color_axis_label = "Log2 ratio median proportions",
                  layout = "davidson-harel", # The primary layout algorithm
-                 initial_layout = "reingold-tilford") # The layout algorithm that initializes node locations
-                # output_file = "./R output/differential_heat_tree_AT.pdf") # Saves the plot as a pdf file
+                 initial_layout = "reingold-tilford", # The layout algorithm that initializes node locations
+                 output_file = "./R output/differential_heat_tree_AT_rhizo.pdf") # Saves the plot as a pdf file
 
 
 
