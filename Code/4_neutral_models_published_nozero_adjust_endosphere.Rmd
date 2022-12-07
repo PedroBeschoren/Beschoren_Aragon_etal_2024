@@ -1432,11 +1432,11 @@ histogram_artefact_R2<-ggplot(bind_rows(R2_MeJA_vector_AT,
              linetype="dashed",
              size=1.5,
              colour = "#00BFC4")+ #  color code for the standard second facotr of a ggplot (teal)
-  geom_vline(xintercept = full_feature_permanova[[2]][[3]][1], #R2 values of AT in the full feature permanova
+  geom_vline(xintercept = full_feature_permanova[[1]][[3]][1], #R2 values of AT in the full feature permanova
              linetype="dotted",
              size=1.5,
              colour = "#F8766D")+ #  color code for the standard second facotr of a ggplot (teal)
-  geom_vline(xintercept = full_feature_permanova[[4]][[3]][1], #R2 values of BO in the full feature permanova
+  geom_vline(xintercept = full_feature_permanova[[3]][[3]][1], #R2 values of BO in the full feature permanova
              linetype="dotted",
              size=1.5,
              colour = "#00BFC4")+ #  color code for the standard second facotr of a ggplot (teal)
@@ -1465,11 +1465,11 @@ histogram_artefact_F<-ggplot(bind_rows(F_value_vector_AT,
              linetype="dashed",
              size=1.5,
              colour = "#00BFC4")+
-  geom_vline(xintercept = full_feature_permanova[[2]][[4]][1], #F2 values of AT in the full feature permanova
+  geom_vline(xintercept = full_feature_permanova[[1]][[4]][1], #F2 values of AT in the full feature permanova
              linetype="dotted",
              size=1.5,
              colour = "#F8766D")+ #  color code for the standard second facotr of a ggplot (teal)
-  geom_vline(xintercept = full_feature_permanova[[4]][[4]][1], #F2 values of BO in the full feature permanova
+  geom_vline(xintercept = full_feature_permanova[[3]][[4]][1], #F2 values of BO in the full feature permanova
              linetype="dotted",
              size=1.5,
              colour = "#00BFC4")+ #  color code for the standard second facotr of a ggplot (teal)
@@ -1500,9 +1500,6 @@ ggsave(histogram_100_permanovas,
 # 4.10 plot a heat tree of above_expected asvs
 
 ```{r}
-
-neutral_heat_tree_AT<-subset_ps_above_neutral_below(ps_l_predictions_in_taxtable = ps_list_neutral_AT_Root,
-                                                      ps_CSS_partition = ps_list_rarefied$Arabidopsis_thaliana.Root)[[1]]
 
 
 #new ps object, based on rarefied data
@@ -1687,51 +1684,6 @@ names(pslit_neutraly_selected)<-c("uni_4model_AT_above",
 
 
 
-#plot diveristy from that list
-lapply(pslit_neutraly_selected, function (x)
-plot_richness(x, x="MeJA_treatment", measures=c("Shannon"), color="Plant_species")+
-  theme_bw()+
-  theme(axis.text.x = element_text(angle = 90))+
-  labs(color = "Plant species")+
-  ylab("Shannon diversity"))
-
-
-
-
-
-
-# calculates alpha diversity
-diversity_list<-lapply(pslit_neutraly_selected,add_diversity_to_physeq_object)
-
-#only o__Rhizobiales
-diversity_list<-lapply(pslit_neutraly_selected,function (x) add_diversity_to_physeq_object(subset_taxa(x, Order == "o__Rhizobiales" )))
-
-#only f__Comamonadaceae
-diversity_list<-lapply(pslit_neutraly_selected,function (x) add_diversity_to_physeq_object(subset_taxa(x, Family == "f__Comamonadaceae" )))
-
-# check levenes homogeniety over the list
-lapply(diversity_list, function (x)
-  leveneTest((Shannon) ~ MeJA_treatment*Plant_species, data = x))
-
-# since our initial object has been sliced into multiple parts, the anova is much simpler
-#build model
-aov_list<-lapply(diversity_list, function (x)
-  aov(lm((Shannon) ~ Block +  MeJA_treatment, data = x)))
-
-#run anova
-lapply(aov_list, anova)
-
-#check tukey
-lapply(aov_list, function(x)
-  TukeyHSD(x, "MeJA_treatment"))
-
-#Lets see this on a simple boxplot for Shannon diversity index
-ggplot(rbind(diversity_list$AT_above_rerarefied,
-             diversity_list$BO_above_rerarefied),
-      aes(x =MeJA_treatment, y = Shannon, fill=Plant_species))+
-  geom_boxplot()+
-  theme_bw()+
-  facet_wrap(~Sample_type)
 
 
 ```
@@ -1998,13 +1950,6 @@ plot_l_Simp_Order <- plot_simpson_correlation(full_VS_selected_Order)
 plot_l_Simp_Family <- plot_simpson_correlation(full_VS_selected_Family)
 
 
-
-#check how much$ of the taxa diversity is retained
-
-full_VS_selected_Order$uni_4model_BO_above$Observed_above_expected / full_VS_selected_Order$uni_4model_BO_above$Observed_full_dataset
-
-
-# the loop for testing in each taxonomy class was not working properly, so i deleted the code for it! AT and BO data partions are being overwirnt on top of each other
 
 
 
