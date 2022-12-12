@@ -903,9 +903,10 @@ length(which(hundrerd_permanovas_pr2$p_values_MeJA_vector_BO<(as.numeric(permano
 
 # compare with the real results of the neutraliy selected otus
 set.seed(5235)
-permanova_AT_above<-permanova_with_blocks(BO_Root_predicted_list, "MeJA_treatment + Block")$Brassica_oleraceae.Root.above
+permanova_AT_above<-permanova_with_blocks(AT_Root_predicted_list, "MeJA_treatment + Block")$Arabidopsis_thaliana.Root.above
 set.seed(5235)
-permanova_BO_above<-permanova_with_blocks(AT_Root_predicted_list, "MeJA_treatment + Block")$Arabidopsis_thaliana.Root.above
+permanova_BO_above<-permanova_with_blocks(BO_Root_predicted_list, "MeJA_treatment + Block")$Brassica_oleraceae.Root.above
+  
 
 # also compare it to the full dataset without any OTU selection
 set.seed(5235)
