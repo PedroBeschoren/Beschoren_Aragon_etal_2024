@@ -5,7 +5,7 @@
    viewBox="0 0 416 336"
    version="1.1"
    id="svg1752"
-   sodipodi:docname="ed_PCA_network_metrics.svg"
+   sodipodi:docname="ed_Networks_PCA_metrics.svg"
    inkscape:version="1.2.1 (9c6d41e410, 2022-07-14)"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
@@ -36,14 +36,14 @@
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
      inkscape:window-width="1920"
-     inkscape:window-height="1001"
+     inkscape:window-height="986"
      id="namedview1754"
      showgrid="false"
-     inkscape:zoom="2.1071429"
-     inkscape:cx="295.18644"
-     inkscape:cy="93.728814"
-     inkscape:window-x="-9"
-     inkscape:window-y="-9"
+     inkscape:zoom="2.9799501"
+     inkscape:cx="306.38097"
+     inkscape:cy="174.16399"
+     inkscape:window-x="-11"
+     inkscape:window-y="-11"
      inkscape:window-maximized="1"
      inkscape:current-layer="surface66"
      inkscape:showpageshadow="2"
@@ -1212,7 +1212,7 @@
     <g
        style="fill:#ff0000;fill-opacity:1"
        id="g727"
-       transform="matrix(0.40930861,0,0,0.40930861,172.47441,99.356149)">
+       transform="matrix(0.47545356,0,0,0.47545356,162.65645,89.245323)">
       <use
          xlink:href="#glyph1-1"
          x="244.25391"
@@ -1294,7 +1294,7 @@
     <g
        style="fill:#ff0000;fill-opacity:1"
        id="g763"
-       transform="translate(39.517417,0.79605808)">
+       transform="translate(48.326739,0.88504113)">
       <use
          xlink:href="#glyph1-1"
          x="229.94531"
@@ -1418,7 +1418,7 @@
     <g
        style="fill:#ff0000;fill-opacity:1"
        id="g787"
-       transform="matrix(0.40930861,0,0,0.40930861,172.93283,95.393933)">
+       transform="matrix(0.47545356,0,0,0.47545356,158.36511,84.715895)">
       <use
          xlink:href="#glyph1-15"
          x="246.94141"
@@ -1500,7 +1500,7 @@
     <g
        style="fill:#ff0000;fill-opacity:1"
        id="g811"
-       transform="matrix(0.40930861,0,0,0.40930861,171.53528,86.093471)">
+       transform="matrix(0.47545356,0,0,0.47545356,156.74171,73.912463)">
       <use
          xlink:href="#glyph1-17"
          x="248.82031"
@@ -1576,287 +1576,6 @@
          x="292.00793"
          y="152.50781"
          id="use809"
-         width="100%"
-         height="100%" />
-    </g>
-    <g
-       style="fill:#ff0000;fill-opacity:1"
-       id="g837"
-       transform="matrix(0.40930861,0,0,0.40930861,174.34965,95.092996)">
-      <use
-         xlink:href="#glyph1-19"
-         x="242.36328"
-         y="162.77734"
-         id="use813"
-         width="100%"
-         height="100%" />
-      <use
-         xlink:href="#glyph1-16"
-         x="249.47369"
-         y="162.77734"
-         id="use815"
-         width="100%"
-         height="100%" />
-      <use
-         xlink:href="#glyph1-20"
-         x="254.22092"
-         y="162.77734"
-         id="use817"
-         width="100%"
-         height="100%" />
-      <use
-         xlink:href="#glyph1-12"
-         x="256.11731"
-         y="162.77734"
-         id="use819"
-         width="100%"
-         height="100%" />
-      <use
-         xlink:href="#glyph1-7"
-         x="260.86453"
-         y="162.77734"
-         id="use821"
-         width="100%"
-         height="100%" />
-      <use
-         xlink:href="#glyph1-21"
-         x="265.61172"
-         y="162.77734"
-         id="use823"
-         width="100%"
-         height="100%" />
-      <use
-         xlink:href="#glyph1-7"
-         x="271.77603"
-         y="162.77734"
-         id="use825"
-         width="100%"
-         height="100%" />
-      <use
-         xlink:href="#glyph1-12"
-         x="276.52325"
-         y="162.77734"
-         id="use827"
-         width="100%"
-         height="100%" />
-      <use
-         xlink:href="#glyph1-2"
-         x="281.27048"
-         y="162.77734"
-         id="use829"
-         width="100%"
-         height="100%" />
-      <use
-         xlink:href="#glyph1-3"
-         x="286.0177"
-         y="162.77734"
-         id="use831"
-         width="100%"
-         height="100%" />
-      <use
-         xlink:href="#glyph1-6"
-         x="290.76492"
-         y="162.77734"
-         id="use833"
-         width="100%"
-         height="100%" />
-      <use
-         xlink:href="#glyph1-10"
-         x="295.51215"
-         y="162.77734"
-         id="use835"
-         width="100%"
-         height="100%" />
-    </g>
-    <g
-       style="fill:#ff0000;fill-opacity:1"
-       id="g863"
-       transform="matrix(0.40930861,0,0,0.40930861,174.13358,93.842883)">
-      <use
-         xlink:href="#glyph1-19"
-         x="242.65625"
-         y="153.27734"
-         id="use839"
-         width="100%"
-         height="100%" />
-      <use
-         xlink:href="#glyph1-16"
-         x="249.76666"
-         y="153.27734"
-         id="use841"
-         width="100%"
-         height="100%" />
-      <use
-         xlink:href="#glyph1-20"
-         x="254.51389"
-         y="153.27734"
-         id="use843"
-         width="100%"
-         height="100%" />
-      <use
-         xlink:href="#glyph1-12"
-         x="256.41028"
-         y="153.27734"
-         id="use845"
-         width="100%"
-         height="100%" />
-      <use
-         xlink:href="#glyph1-7"
-         x="261.1575"
-         y="153.27734"
-         id="use847"
-         width="100%"
-         height="100%" />
-      <use
-         xlink:href="#glyph1-21"
-         x="265.90469"
-         y="153.27734"
-         id="use849"
-         width="100%"
-         height="100%" />
-      <use
-         xlink:href="#glyph1-7"
-         x="272.069"
-         y="153.27734"
-         id="use851"
-         width="100%"
-         height="100%" />
-      <use
-         xlink:href="#glyph1-6"
-         x="276.81622"
-         y="153.27734"
-         id="use853"
-         width="100%"
-         height="100%" />
-      <use
-         xlink:href="#glyph1-3"
-         x="281.56345"
-         y="153.27734"
-         id="use855"
-         width="100%"
-         height="100%" />
-      <use
-         xlink:href="#glyph1-18"
-         x="286.31067"
-         y="153.27734"
-         id="use857"
-         width="100%"
-         height="100%" />
-      <use
-         xlink:href="#glyph1-6"
-         x="291.05789"
-         y="153.27734"
-         id="use859"
-         width="100%"
-         height="100%" />
-      <use
-         xlink:href="#glyph1-10"
-         x="295.80511"
-         y="153.27734"
-         id="use861"
-         width="100%"
-         height="100%" />
-    </g>
-    <g
-       style="fill:#ff0000;fill-opacity:1"
-       id="g893"
-       transform="translate(33.521314,-5.2358178)">
-      <use
-         xlink:href="#glyph1-19"
-         x="234.77344"
-         y="120.25391"
-         id="use865"
-         width="100%"
-         height="100%" />
-      <use
-         xlink:href="#glyph1-16"
-         x="241.88385"
-         y="120.25391"
-         id="use867"
-         width="100%"
-         height="100%" />
-      <use
-         xlink:href="#glyph1-20"
-         x="246.63107"
-         y="120.25391"
-         id="use869"
-         width="100%"
-         height="100%" />
-      <use
-         xlink:href="#glyph1-12"
-         x="248.52745"
-         y="120.25391"
-         id="use871"
-         width="100%"
-         height="100%" />
-      <use
-         xlink:href="#glyph1-7"
-         x="253.27467"
-         y="120.25391"
-         id="use873"
-         width="100%"
-         height="100%" />
-      <use
-         xlink:href="#glyph1-21"
-         x="258.02188"
-         y="120.25391"
-         id="use875"
-         width="100%"
-         height="100%" />
-      <use
-         xlink:href="#glyph1-7"
-         x="264.18619"
-         y="120.25391"
-         id="use877"
-         width="100%"
-         height="100%" />
-      <use
-         xlink:href="#glyph1-1"
-         x="268.93341"
-         y="120.25391"
-         id="use879"
-         width="100%"
-         height="100%" />
-      <use
-         xlink:href="#glyph1-3"
-         x="276.04382"
-         y="120.25391"
-         id="use881"
-         width="100%"
-         height="100%" />
-      <use
-         xlink:href="#glyph1-6"
-         x="280.79105"
-         y="120.25391"
-         id="use883"
-         width="100%"
-         height="100%" />
-      <use
-         xlink:href="#glyph1-18"
-         x="285.53827"
-         y="120.25391"
-         id="use885"
-         width="100%"
-         height="100%" />
-      <use
-         xlink:href="#glyph1-14"
-         x="290.28549"
-         y="120.25391"
-         id="use887"
-         width="100%"
-         height="100%" />
-      <use
-         xlink:href="#glyph1-6"
-         x="293.12799"
-         y="120.25391"
-         id="use889"
-         width="100%"
-         height="100%" />
-      <use
-         xlink:href="#glyph1-6"
-         x="297.87521"
-         y="120.25391"
-         id="use891"
          width="100%"
          height="100%" />
     </g>
@@ -1980,7 +1699,7 @@
     <g
        style="fill:#ff0000;fill-opacity:1"
        id="g975"
-       transform="matrix(0.40930861,0,0,0.40930861,178.80656,79.481658)">
+       transform="matrix(0.47545356,0,0,0.47545356,165.18804,66.23217)">
       <use
          xlink:href="#glyph1-21"
          x="221"
@@ -2927,7 +2646,7 @@
     <g
        style="fill:#ff0000;fill-opacity:1"
        id="g1245"
-       transform="matrix(0.40930861,0,0,0.40930861,180.81716,103.51736)">
+       transform="matrix(0.47545356,0,0,0.47545356,167.52356,94.152081)">
       <use
          xlink:href="#glyph1-1"
          x="220.21875"
@@ -3079,7 +2798,7 @@
     <g
        style="fill:#ff0000;fill-opacity:1"
        id="g1287"
-       transform="matrix(0.40930861,0,0,0.40930861,179.61298,105.72589)">
+       transform="matrix(0.47545356,0,0,0.47545356,166.12478,96.717514)">
       <use
          xlink:href="#glyph1-1"
          x="221.95312"
@@ -3224,7 +2943,7 @@
     <g
        style="fill:#ff0000;fill-opacity:1"
        id="g1331"
-       transform="matrix(0.40930861,0,0,0.40930861,180.47957,108.28653)">
+       transform="matrix(0.47545356,0,0,0.47545356,167.13141,99.691957)">
       <use
          xlink:href="#glyph1-1"
          x="218.24219"
@@ -3376,7 +3095,7 @@
     <g
        style="fill:#ff0000;fill-opacity:1"
        id="g1373"
-       transform="matrix(0.40930861,0,0,0.40930861,177.77926,111.12259)">
+       transform="matrix(0.47545356,0,0,0.47545356,163.99473,102.98633)">
       <use
          xlink:href="#glyph1-1"
          x="221.21875"
@@ -3521,7 +3240,7 @@
     <g
        style="fill:#ff0000;fill-opacity:1"
        id="g1397"
-       transform="matrix(0.40930861,0,0,0.40930861,172.19737,84.778165)">
+       transform="matrix(0.47545356,0,0,0.47545356,157.5108,72.384601)">
       <use
          xlink:href="#glyph1-1"
          x="244.90234"
@@ -3603,7 +3322,7 @@
     <g
        style="fill:#ff0000;fill-opacity:1"
        id="g1419"
-       transform="matrix(0.40930861,0,0,0.40930861,171.44004,82.313015)">
+       transform="matrix(0.47545356,0,0,0.47545356,156.63108,69.521079)">
       <use
          xlink:href="#glyph1-1"
          x="245.01172"
@@ -3678,7 +3397,7 @@
     <g
        style="fill:#ff0000;fill-opacity:1"
        id="g1453"
-       transform="matrix(0.40930861,0,0,0.40930861,176.39789,91.048747)">
+       transform="matrix(0.47545356,0,0,0.47545356,162.39013,79.66852)">
       <use
          xlink:href="#glyph1-15"
          x="237.38672"
@@ -3693,6 +3412,42 @@
          id="use1423"
          width="100%"
          height="100%" />
+      <use
+         xlink:href="#glyph1-15"
+         x="237.38672"
+         y="153.04297"
+         id="use1421-4"
+         width="100%"
+         height="100%"
+         style="fill:#ff0000;fill-opacity:1"
+         transform="translate(-3.0219024,39.774965)" />
+      <use
+         xlink:href="#glyph1-7"
+         x="243.55103"
+         y="153.04297"
+         id="use1423-7"
+         width="100%"
+         height="100%"
+         style="fill:#ff0000;fill-opacity:1"
+         transform="translate(-3.1756263,39.006345)" />
+      <use
+         xlink:href="#glyph1-15"
+         x="237.38672"
+         y="153.04297"
+         id="use1421-4-7"
+         width="100%"
+         height="100%"
+         style="fill:#ff0000;fill-opacity:1"
+         transform="matrix(1.9309732,0,0,1.9309732,-234.8656,-202.89675)" />
+      <use
+         xlink:href="#glyph1-7"
+         x="243.55103"
+         y="153.04297"
+         id="use1423-7-9"
+         width="100%"
+         height="100%"
+         style="fill:#ff0000;fill-opacity:1"
+         transform="matrix(1.9309732,0,0,1.9309732,-235.16244,-204.38093)" />
       <use
          xlink:href="#glyph1-23"
          x="248.29823"
@@ -3795,7 +3550,7 @@
     <g
        style="fill:#ff0000;fill-opacity:1"
        id="g1487"
-       transform="matrix(0.40930861,0,0,0.40930861,176.99933,89.08933)">
+       transform="matrix(0.47545356,0,0,0.47545356,163.08876,77.392458)">
       <use
          xlink:href="#glyph1-15"
          x="235.74219"
@@ -4167,7 +3922,7 @@
     <g
        style="fill:#ff0000;fill-opacity:1"
        id="g1593"
-       transform="matrix(0.40930861,0,0,0.40930861,177.04887,95.21095)">
+       transform="matrix(0.47545356,0,0,0.47545356,163.14631,84.503342)">
       <use
          xlink:href="#glyph1-1"
          x="236.47266"
@@ -4688,15 +4443,15 @@
        y="33.871143"
        id="text1760-8"><tspan
          sodipodi:role="line"
-         x="81.174225"
+         x="80.004181"
          y="33.871143"
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Arial;-inkscape-font-specification:Arial;text-align:center;text-anchor:middle;stroke-width:0.75px"
          id="tspan1762-2"><tspan
            id="tspan1764-4"
-           style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Arial;-inkscape-font-specification:Arial;text-align:center;text-anchor:middle;stroke-width:0.75px">B. oleracea </tspan></tspan><tspan
+           style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Arial;-inkscape-font-specification:Arial;text-align:center;text-anchor:middle;stroke-width:0.75px">B. olerace </tspan></tspan><tspan
          sodipodi:role="line"
          x="80.004181"
-         y="44.495197"
+         y="44.51569"
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Arial;-inkscape-font-specification:Arial;text-align:center;text-anchor:middle;stroke-width:0.75px"
          id="tspan1766-6">Endosphere</tspan></text>
     <text
@@ -4706,16 +4461,49 @@
        y="32.106735"
        id="text1760-8-8"><tspan
          sodipodi:role="line"
-         x="382.21689"
+         x="381.04684"
          y="32.106735"
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Arial;-inkscape-font-specification:Arial;text-align:center;text-anchor:middle;stroke-width:0.75px"
          id="tspan1762-2-8"><tspan
            id="tspan1764-4-3"
-           style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Arial;-inkscape-font-specification:Arial;text-align:center;text-anchor:middle;stroke-width:0.75px">B. oleracea </tspan></tspan><tspan
+           style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Arial;-inkscape-font-specification:Arial;text-align:center;text-anchor:middle;stroke-width:0.75px">B. olerace </tspan></tspan><tspan
          sodipodi:role="line"
          x="381.04684"
-         y="42.730785"
+         y="42.751282"
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Arial;-inkscape-font-specification:Arial;text-align:center;text-anchor:middle;stroke-width:0.75px"
          id="tspan1766-6-7">Rhizosphere</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:8.93401px;text-align:center;text-anchor:middle;fill:#ff0000;stroke-width:0.744501"
+       x="328.24036"
+       y="113.10184"
+       id="text1053"><tspan
+         sodipodi:role="line"
+         id="tspan1051"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Calibri;-inkscape-font-specification:Calibri;fill:#ff0000;stroke-width:0.744501"
+         x="328.24036"
+         y="113.10184">Main_component_mean_degree</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3.0608px;font-family:Calibri;-inkscape-font-specification:Calibri;text-align:center;text-anchor:middle;fill:#ff0000;stroke-width:0.255067"
+       x="291.40634"
+       y="155.10454"
+       id="text1053-1"><tspan
+         sodipodi:role="line"
+         id="tspan1051-5"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Calibri;-inkscape-font-specification:Calibri;fill:#ff0000;stroke-width:0.255067"
+         x="291.40634"
+         y="155.10454">Main_component_edges</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3.0608px;font-family:Calibri;-inkscape-font-specification:Calibri;text-align:center;text-anchor:middle;fill:#ff0000;stroke-width:0.255067"
+       x="291.85712"
+       y="161.41916"
+       id="text1053-1-0"><tspan
+         sodipodi:role="line"
+         id="tspan1051-5-9"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Calibri;-inkscape-font-specification:Calibri;fill:#ff0000;stroke-width:0.255067"
+         x="291.85712"
+         y="161.41916">Main_component_nodes</tspan></text>
   </g>
 </svg>
