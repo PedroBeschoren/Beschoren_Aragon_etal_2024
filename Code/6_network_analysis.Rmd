@@ -858,6 +858,26 @@ ggplot(data = filter(df_nodes_taxCount, module<7, n>2),
 })
 
 
+
+
+
+  # degree at family level
+lapply(complete_node_metrics_withFitClass, function(df_nodes){
+  
+  tax_count<-dplyr::count(x = df_nodes,Family)
+  
+  df_nodes_taxCount<-left_join(df_nodes,tax_count)
+  
+  df_nodes_taxCount<-filter(df_nodes_taxCount, Family !="NA")
+  
+ggplot(data = filter(df_nodes_taxCount, module<99, n>2),
+        aes(x = as.factor(Family), y = log(Degree) )  )+
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))+
+  geom_boxplot(aes())
+})
+
+
+
   # first 6 modules, Order
 lapply(complete_node_metrics_withFitClass, function(df_nodes){
   
@@ -1010,6 +1030,168 @@ network_melted$Family<-as.character(network_melted$Family)
 x = ps_list_network_rarefied,
 y = complete_node_metrics_withFitClass,
 SIMPLIFY = FALSE)
+
+```
+
+
+
+
+
+here we make a baloon plot showing the classes per modules, but the output is still too complex to find a pattern between the modules that correlated to lox2 or not
+```{r}
+mapply(function (x,y){
+
+network_melted<-psmelt(x)
+
+diversity_order<-diversity_per_taxon(ps_object = x,
+                      taxa_level = "Order",
+                      data_partition = "network")
+
+module_size<- dplyr::count(y, module)
+
+
+network_melted<-left_join(network_melted,y)
+
+network_melted<-left_join(network_melted, diversity_order)
+
+network_melted<-left_join(network_melted,module_size )
+
+
+network_melted$Family<-as.character(network_melted$Family)
+ 
+ baloon<-ggballoonplot(data=filter(network_melted,n>2),
+               x = "module",
+               y = "Class",
+               size = "Abundance",
+               fill = "Shannon_network",
+               color = "Shannon_network",
+               xticks.by = 1,
+               size.range = c(4, 16))+
+   scale_fill_viridis()+
+ scale_color_viridis()
+ 
+ return(baloon)
+ 
+},
+x = ps_list_network_rarefied,
+y = complete_node_metrics_withFitClass,
+SIMPLIFY = FALSE)
+
+
+
+
+#subset to important taxa
+imp_network_data<-lapply(complete_node_metrics_withFitClass, function(x)
+filter(x, Zi>=2.5 | Pi >=0.62 | keystone_taxa =="Keystone"))
+
+
+
+# change null value of kystone
+imp_network_data<-lapply(imp_network_data, function(x){
+x$keystone_taxa[is.na(x$keystone_taxa)]<-""
+return(x)
+})
+
+
+
+
+
+
+# set new varaible with all definitions
+imp_network_data<-lapply(imp_network_data, function(x)
+  mutate(x, network_tag = ifelse(test = keystone_taxa =="Keystone", 
+                                 yes = "keystone", 
+                                 no = ifelse(test = Zi>=2.5, 
+                                             yes ="module_hub",
+                                             no = ifelse(test = Pi>=0.62, 
+                                                         yes = "module_connector",
+                                                         no = "peripheral")))))
+
+#check most common classes, families adn orders
+imp_network_data_unlisted<-bind_rows(imp_network_data, .id = "sub_community")
+table(imp_network_data_unlisted$Class)%>%sort
+table(imp_network_data_unlisted$Order)%>%sort
+table(imp_network_data_unlisted$Family)%>%sort
+table(imp_network_data_unlisted$Genus)%>%sort
+
+# make the table longer
+ggplot_input<-lapply(imp_network_data, function(x)
+  pivot_longer(data =x,
+               cols =  c("freq_in_control", "freq_in_MeJA_0.1", "freq_in_MeJA_1.0","freq_in_oral_secretion" ),
+               values_to = "frequency",
+               names_to = "Stress"))
+
+
+
+# unlist so we can make a facet wrap plot
+ggplot_input_unlisted<-bind_rows(ggplot_input, .id = "sub_community")
+
+
+ggplot_input_unlisted$Row.names<-as.character(ggplot_input_unlisted$Row.names)
+
+#plot
+ggplot(ggplot_input_unlisted, aes(x = name, y = log(frequency), fill = network_tag))+
+  geom_boxplot()+
+  facet_wrap(~sub_community)
+
+ggplot(ggplot_input_unlisted, aes(x = name, y = log(frequency), fill = network_tag))+
+  geom_boxplot()
+
+ggplot(ggplot_input, aes(x = name, y = log(frequency), fill = sub_community))+
+  geom_violin()
+
+
+
+#plot
+ggplot(ggplot_input_unlisted, aes(x = name, y = log(frequency), fill = network_tag))+
+  geom_violin()+
+  facet_wrap(~sub_community)
+
+
+#log scale
+ggplot_input_unlisted$log_frequency<-log(ggplot_input_unlisted$frequency)
+
+ggballoonplot(data=ggplot_input_unlisted,
+               x = "network_tag",
+               y = "name",
+              facet.by = c("sub_community"),
+              size = "Degree",
+              fill = "log_frequency")+
+   scale_fill_viridis()+
+ scale_color_viridis()
+str(ggplot_input)
+
+
+
+# test frequencies
+
+
+#two-way anova, shanon diversity index
+tx <- with(total_diversity, interaction(MeJA_treatment, Plant_species, Sample_type)) #needed for tukey to test interaction
+aovTukey<-aov(Shannon ~ tx, data = total_diversity)#needed for tukey to test interaction
+
+Anova(lm((frequency) ~  network_tag *sub_community* Stress, data = ggplot_input_unlisted, contrasts=list(network_tag=contr.sum, sub_community=contr.sum)), type = "2") 
+HSD.test(aovTukey, "tx", group=TRUE, console=TRUE)#post-hoc
+
+
+# data partitions make a huge differe,ce, let's separate them
+lapply(ggplot_input, function(x)
+leveneTest(log(frequency) ~ network_tag* Stress, data = x) )
+
+lapply(ggplot_input, function(x)
+Anova(lm((log(frequency)) ~  network_tag * Stress, data = x, contrasts=list(network_tag=contr.sum, Stress=contr.sum)), type = "2") )
+
+
+
+
+
+
+
+#############try a heatmap
+
+
+
+
 
 ```
 
