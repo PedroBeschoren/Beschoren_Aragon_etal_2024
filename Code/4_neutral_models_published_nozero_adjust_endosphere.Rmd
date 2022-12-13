@@ -903,10 +903,9 @@ length(which(hundrerd_permanovas_pr2$p_values_MeJA_vector_BO<(as.numeric(permano
 
 # compare with the real results of the neutraliy selected otus
 set.seed(5235)
-permanova_AT_above<-permanova_with_blocks(AT_Root_predicted_list, "MeJA_treatment + Block")$Arabidopsis_thaliana.Root.above
+permanova_AT_above<-permanova_with_blocks(BO_Root_predicted_list, "MeJA_treatment + Block")$Brassica_oleraceae.Root.above
 set.seed(5235)
-permanova_BO_above<-permanova_with_blocks(BO_Root_predicted_list, "MeJA_treatment + Block")$Brassica_oleraceae.Root.above
-  
+permanova_BO_above<-permanova_with_blocks(AT_Root_predicted_list, "MeJA_treatment + Block")$Arabidopsis_thaliana.Root.above
 
 # also compare it to the full dataset without any OTU selection
 set.seed(5235)
@@ -1458,10 +1457,6 @@ full_VS_selected_Class
 full_VS_selected_Order
 full_VS_selected_Family
 
-# define a vector with interesting taxa we want to plot
-interesting_taxa<-c("Actinobacteria", "Alphaproteobacteria", "Bacilli", "Bacteroidia", "Gammaproteobacteria", "Chloroflexi", "Firmicutes", "Acidobacteriota")
-                    
-
 
 # make plot - correlation between observed umber of taxa in the full data VS selected subset
 plot_observed_correlation<-function(full_VS_selected_TaxaLevel){
@@ -1490,9 +1485,9 @@ plot_l_obs_Class <- plot_observed_correlation(full_VS_selected_Class)
 plot_l_obs_Order <-plot_observed_correlation(full_VS_selected_Order)
 plot_l_obs_Family <-plot_observed_correlation(full_VS_selected_Family)
 
-ggplot(plot_l_obs_Family$uni_4model_AT_above) + ggplot(plot_l_obs_Family$uni_4model_BO_above)
 
-plot_l_obs_Family$uni_4model_AT_above + plot_l_obs_Family$uni_4model_BO_above
+
+
 
 plot_shannon_correlation<-function(full_VS_selected_TaxaLevel){
 untitled_plot_list<-lapply(full_VS_selected_TaxaLevel, function(z)
@@ -1550,62 +1545,10 @@ plot_l_Simp_Order <- plot_simpson_correlation(full_VS_selected_Order)
 plot_l_Simp_Family <- plot_simpson_correlation(full_VS_selected_Family)
 
 
-plot_simpson_correlation(full_VS_selected_Family)
-
-full_VS_selected_Family$uni_4model_AT_above
 
 
 
 
-ggplot(data=full_VS_selected_Family$uni_4model_AT_above[full_VS_selected_Family$uni_4model_AT_above$Simpson_above_expected>0,], #only includes shannon >0
-       aes(x=Simpson_full_dataset,y=Simpson_above_expected ))+
-  geom_point() +
-   theme_bw()+
-  theme(axis.title=element_text(size=11, face = "bold"))+
-  xlab(label = "Simpson diversity in full dataset")+
-  ylab(label = "Simpson diversity in above-expected subset")+
-  geom_smooth(method="loess")+ #values of y are based on the values of x
-    geom_text_repel(aes(label=full_VS_selected_Family$uni_4model_AT_above[(full_VS_selected_Family$uni_4model_AT_above[,1] %in% intereting_taxa),][,1]), 
-                    data = full_VS_selected_Family$uni_4model_AT_above[(full_VS_selected_Family$uni_4model_AT_above[,1] %in% intereting_taxa),], size = 3)
-
-interesting_taxa<-c("Burkholderiaceae", "Comamonadaceae", "Rhizobiaceae", "asdas")
-
-full_VS_selected_Family$uni_4model_AT_above[(full_VS_selected_Family$uni_4model_AT_above[,1] %in% intereting_taxa),][,1]
-
-z[(z[,1] %in% intereting_taxa),][,1]
-
-label=full_VS_selected_Family$uni_4model_AT_above[full_VS_selected_Family$uni_4model_AT_above$Simpson_above_expected >0,1]
-
-
-
-
-
-interesting_taxa
-
-
-
-# make plot - correlation between observed umber of taxa in the full data VS selected subset
-plot_observed_correlation<-function(full_VS_selected_TaxaLevel){
-untitled_plot_list<-lapply(full_VS_selected_TaxaLevel, function(z)
-ggplot(data=z,aes(x=Observed_full_dataset,y=Observed_above_expected ))+
-  geom_point() +
-  theme_bw()+
-  theme(axis.title=element_text(size=11, face = "bold"))+
-  xlab(label = "Number of taxa in full dataset")+
-  ylab(label = "Number of taxa in above-expected subset")+
-  geom_smooth(method="loess")+ #values of y are based on the values of x
-  geom_text_repel(aes(label=z[(z[,1] %in% interesting_taxa),][,1]), data = z[(z[,1] %in% interesting_taxa),], size = 3))
-
-tiles_list<-names(untitled_plot_list) 
-
-Plot_list<-mapply(function (x,z) # use mapply again to put those listed names in the list of plots
-  x + ggtitle(z),
-  x = untitled_plot_list,
-  z = tiles_list, 
-  SIMPLIFY = FALSE)
-return(Plot_list)
-
-}
 
 
 ```
