@@ -261,7 +261,7 @@ rarecurve(t(physeq_filtered_df),
           col = sample_data(physeq_filtered)$Sample_type, 
           label = FALSE, 
           step = 200,
-          main="Rarefaction at 8652 reads, 8+ occurences, 4529 of 4572 taxa retained", ylab = "Number of ASVs", xlab = "Number of DNA Sequences",
+          main="Rarefaction at 8678 reads, 8+ occurences, 4898 of 4943 taxa retained", ylab = "Number of ASVs", xlab = "Number of DNA Sequences",
           abline(v = min(sample_sums(physeq_filtered)), col="red", lwd=3, lty=2))
 
 # the rarefraction curve is actually quite ok! we won't lose much ASV diversity if we cut at the minimal depth. of course, this is after all the filtering, which removed most rare species
