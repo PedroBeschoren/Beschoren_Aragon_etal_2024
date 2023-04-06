@@ -112,7 +112,76 @@ fisher_result_l<-mapply(function (x,y)
                    y = ps_list_rarefied,
                    SIMPLIFY = FALSE)
 
+#quick plot showing proportions of alphaproteobacteria and mucilaginibacter in BO_soil
+#alphaprotteoac
+alphaprot_DF<-c(
+ntaxa(subset_taxa(ps_imp_taxa_l$Brassica_oleraceae.Soil, Class =="c__Alphaproteobacteria")),
+ntaxa(ps_imp_taxa_l$Brassica_oleraceae.Soil)-ntaxa(subset_taxa(ps_imp_taxa_l$Brassica_oleraceae.Soil, Class =="c__Alphaproteobacteria")),
+ntaxa(subset_taxa(ps_list_rarefied$Brassica_oleraceae.Soil, Class =="c__Alphaproteobacteria")),
+ntaxa(ps_list_rarefied$Brassica_oleraceae.Soil)-ntaxa(subset_taxa(ps_list_rarefied$Brassica_oleraceae.Soil, Class =="c__Alphaproteobacteria")))
+alphaprot_DF<-as.data.frame(alphaprot_DF)
+alphaprot_DF$subset<-c("important", "important", "non-important", "non-important")
+alphaprot_DF$taxa<-c("Alphaproteobacteria", "other", "Alphaproteobacteria", "other")
 
+ggplot(alphaprot_DF, aes(y = alphaprot_DF, x = subset, fill = taxa))+
+  geom_col(position = "fill")+
+  theme_bw()+
+  xlab(label = "ASV importance group")+
+  ylab(label = "Proportion of Alphaproteobacteria")+
+  theme(legend.position = "top")+
+scale_fill_manual(values=c("#F8766D", "#00BFC4"))+
+  geom_text(aes(label = alphaprot_DF), vjust = 1.1, position = "fill", color = "white")
+
+  
+
+
+
+#mucilaginibac
+mucilag_DF<-c(
+ntaxa(subset_taxa(ps_imp_taxa_l$Brassica_oleraceae.Soil, Genus =="g__Mucilaginibacter")),
+ntaxa(ps_imp_taxa_l$Brassica_oleraceae.Soil),
+ntaxa(subset_taxa(ps_list_rarefied$Brassica_oleraceae.Soil, Genus =="g__Mucilaginibacter")),
+ntaxa(ps_list_rarefied$Brassica_oleraceae.Soil))
+mucilag_DF<-as.data.frame(mucilag_DF)
+mucilag_DF$subset<-c("important", "important", "non-important", "non-important")
+mucilag_DF$taxa<-c("Mucilaginibacter", "other", "Mucilaginibacter", "other")
+
+ggplot(mucilag_DF, aes(y = mucilag_DF, x = subset, fill = taxa))+
+  geom_col(position = "fill")+
+  theme_bw()+
+  xlab(label = "ASV importance group")+
+  ylab(label = "Proportion of Mucilaginibacter")+
+  theme(legend.position = "top")+
+scale_fill_manual(values=c("#F8766D", "#00BFC4"))+
+  geom_text(aes(label = mucilag_DF), vjust = 1.1, position = "fill", color = "white")
+
+
+
+
+
+#mucilaginibac
+Comamonadaceae_DF<-c(
+ntaxa(subset_taxa(ps_imp_taxa_l$Brassica_oleraceae.Soil, Family =="f__Comamonadaceae")),
+ntaxa(ps_imp_taxa_l$Brassica_oleraceae.Soil)-ntaxa(subset_taxa(ps_imp_taxa_l$Brassica_oleraceae.Soil, Family =="f__Comamonadaceae")),
+ntaxa(subset_taxa(ps_list_rarefied$Brassica_oleraceae.Soil, Family =="f__Comamonadaceae")),
+ntaxa(ps_list_rarefied$Brassica_oleraceae.Soil)-ntaxa(subset_taxa(ps_list_rarefied$Brassica_oleraceae.Soil, Family =="f__Comamonadaceae")))
+Comamonadaceae_DF<-as.data.frame(Comamonadaceae_DF)
+Comamonadaceae_DF$subset<-c("important", "important", "non-important", "non-important")
+Comamonadaceae_DF$taxa<-c("Comamonadaceae", "other", "Comamonadaceae", "other")
+
+ggplot(Comamonadaceae_DF, aes(y = Comamonadaceae_DF, x = subset, fill = taxa))+
+  geom_col(position = "fill")+
+  theme_bw()+
+  xlab(label = "ASV importance group")+
+  ylab(label = "Proportion of Alphaproteobacteria")+
+  theme(legend.position = "top")+
+scale_fill_manual(values=c("#F8766D", "#00BFC4"))+
+  geom_text(aes(label = Comamonadaceae_DF), vjust = 1.1, position = "fill", color = "white")
+
+
+
+
+  
 
 
 ```
