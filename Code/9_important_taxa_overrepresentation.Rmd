@@ -136,8 +136,6 @@ lapply(fisher_result_l, function(x) map(x,2))
 # odds ratio for each fisher comparison
 lapply(fisher_result_l, function(x) map(x,3))
 
-# sample change to show to shaphan
-1+1
 
 
 #apply FDR correction to the p values
