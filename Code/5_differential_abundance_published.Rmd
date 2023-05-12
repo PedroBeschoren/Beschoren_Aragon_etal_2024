@@ -6,6 +6,15 @@ output: html_document
 editor_options: 
   chunk_output_type: console
 ---
+
+# load libraries and data
+```{r}
+source("./Code/Functions/load_libraries.R")
+load("./R output/env.1_Loading_and_pre_processing.RData")
+```
+
+
+
 ## 5.0 Deseq2 differential abundance analysis on lists of comparisons
 The use of lists in this analysis greatly reduces the amount of hard code. if running this for the first time, read carefully about the use of deseq2 for amplicon data. Each dataset may need tweaks on the selected p levels or minimal fold changes; for that you will edit build_sig_tab()
 
@@ -17,27 +26,24 @@ heatmap for final plot: http://rstudio-pubs-static.s3.amazonaws.com/288398_185f2
 This will be the bulk of the calculations and can take a moment
 
 ```{r}
-ps_list_nonraref<-phyloseq_sep_variable(physeq_filtered, variable = c("Plant_species","Sample_type")) # this makes one list wth 4 NON-RAREFIED objects
+ps_list_nonraref <- phyloseq_sep_variable(physeq_filtered, variable = c("Plant_species", "Sample_type")) # this makes one list wth 4 NON-RAREFIED objects
 
 
 # make list of deseqed phyloseq objects
-ps_list_deseq <- lapply (ps_list_nonraref, function (x) phyloseq_to_deseq2(x, ~ MeJA_treatment))
-ps_list_deseq <- lapply (ps_list_deseq, function (x) DESeq(x, test="Wald", fitType="parametric"))
+ps_list_deseq <- lapply(ps_list_nonraref, function(x) phyloseq_to_deseq2(x, ~MeJA_treatment))
+ps_list_deseq <- lapply(ps_list_deseq, function(x) DESeq(x, test = "Wald", fitType = "parametric"))
 
 # this unlisted, unsplit deseq2 object will be necessary to construct the heatmap
-ps_deseq <- phyloseq_to_deseq2(physeq_filtered, ~ MeJA_treatment)
-ps_deseq <- DESeq(ps_deseq, test="Wald", fitType="parametric")
+ps_deseq <- phyloseq_to_deseq2(physeq_filtered, ~MeJA_treatment)
+ps_deseq <- DESeq(ps_deseq, test = "Wald", fitType = "parametric")
 
-# make a list of the pairwise comparisons you want to run according the treatment ; 
+# make a list of the pairwise comparisons you want to run according the treatment ;
 #  positive fold change: higher in fist factor (treatment) / negative fold change: higher in second factor(control)
-pairwise_comparison<-list(
-c("MeJA_treatment", "MeJA_0.1", "control"),
-c("MeJA_treatment", "MeJA_1.0", "control"), 
-c("MeJA_treatment", "oral_secretion", "control"),
-c("MeJA_treatment", "oral_secretion", "MeJA_0.1"),
-c("MeJA_treatment", "oral_secretion", "MeJA_1.0"),
-c("MeJA_treatment", "MeJA_0.1", "MeJA_1.0"))
-
+pairwise_comparison <- list(
+  c("MeJA_treatment", "MeJA_0.1", "control"),
+  c("MeJA_treatment", "MeJA_1.0", "control"),
+  c("MeJA_treatment", "oral_secretion", "control")
+)
 ```
 ### 5.2 make the pairwise comparisons
 These comparisons will be based on the data splits and the pairwise_comparison list you generated in the previous chunk
@@ -46,43 +52,47 @@ These comparisons will be based on the data splits and the pairwise_comparison l
 # this function will build the significance table for each list, and has to be run once for each pairwise comparison (contro_VS_Meja1.0 and Control_VS_MeJA0.1)
 # I don't know why it is not working for the last contrast of the list above. it could be due to different sample sizes
 
-build_sig_tab<-function (deseq_list, contrast_cha_vector){
+build_sig_tab <- function(deseq_list, contrast_cha_vector) {
+  alpha <- 0.05 # defines the alpha level for p adjustment to control for false discovery rate
+  min_fold <- 4 # defines minimum fold difference in counts to classify an OTU as differential
 
-  alpha<-0.05 # defines the alpha level for p adjustment to control for false discovery rate
-  min_fold<-4 # defines minimum fold difference in counts to classify an OTU as differential
+
+  list_res <- lapply(deseq_list, function(x) {
+    results(x, contrast = contrast_cha_vector, cooksCutoff = FALSE)
+  })
+
+  list_sigtab <- lapply(list_res, function(x) {
+    x[which(x$padj < alpha), ]
+  }) # cuts results based on alpha for FDR
+
+  list_sigtab <- lapply(list_sigtab, function(x) {
+    x[which(abs(x$log2FoldChange) > min_fold), ]
+  }) # cuts results based on minimum fold change
+
+  list_sigtab <- lapply(list_sigtab, function(x) {
+    x[order(x$padj), ]
+  }) # sorts lists of OTUs based on p values of pairwise abundance differences
 
 
-  list_res <- lapply(deseq_list, function(x) 
-    results(x, contrast=contrast_cha_vector, cooksCutoff = FALSE))
 
-  list_sigtab <- lapply(list_res, function (x) 
-    x[which(x$padj < alpha), ]) # cuts results based on alpha for FDR
-  
-   list_sigtab <- lapply(list_sigtab, function (x) 
-    x[which(abs(x$log2FoldChange) > min_fold), ]) # cuts results based on minimum fold change
-   
-  list_sigtab <- lapply(list_sigtab, function (x) 
-    x[order(x$padj),])  # sorts lists of OTUs based on p values of pairwise abundance differences
-  
-  
-  
-  
-  
-  
+
+
+
   # this silenced chuck allows you to limit the number of OTUs accepted as diferential in each comparision. note that if you define the minimum number as 1:40 (1 to 40) but you only hace 39 differentially abundannt OTUs the function will crash and you will not have these results. just remove the hashtags below to limt to 3 top differentially abundant OTUs
-  
-    # max_OTU_n<-1:3 # defines the maximum number of OTUs to include in each pairwise coparison
-    # list_sigtab <- lapply(list_sigtab, function (x) 
-    # x[max_OTU_n,])  # cuts results based on maximum numer of OTUs counted as differential
-  
-  
-  
-  
-  
-  
-    
-  list_sigtab <- lapply(list_sigtab, function (x) 
-    cbind(as(x, "data.frame"), as(tax_table(physeq_filtered)[rownames(x), ], "matrix"))) # here we only colect the taxa names from the original, unsplit, phyloseq object
+
+  # max_OTU_n<-1:3 # defines the maximum number of OTUs to include in each pairwise coparison
+  # list_sigtab <- lapply(list_sigtab, function (x)
+  # x[max_OTU_n,])  # cuts results based on maximum numer of OTUs counted as differential
+
+
+
+
+
+
+
+  list_sigtab <- lapply(list_sigtab, function(x) {
+    cbind(as(x, "data.frame"), as(tax_table(physeq_filtered)[rownames(x), ], "matrix"))
+  }) # here we only colect the taxa names from the original, unsplit, phyloseq object
   return(list_sigtab)
 }
 
@@ -90,33 +100,29 @@ build_sig_tab<-function (deseq_list, contrast_cha_vector){
 
 
 
-#now use the custom function to build the significance tables for each comparison defined in the contrasts. 
+# now use the custom function to build the significance tables for each comparison defined in the contrasts.
 # these represent only treatment vs control comparisons
-Sigtab1<-build_sig_tab(deseq_list = ps_list_deseq, 
-                       contrast_cha_vector = pairwise_comparison[[1]])
-Sigtab2<-build_sig_tab(deseq_list = ps_list_deseq, 
-                       contrast_cha_vector = pairwise_comparison[[2]])
-Sigtab3<-build_sig_tab(deseq_list = ps_list_deseq, 
-                       contrast_cha_vector = pairwise_comparison[[3]]) # we can use lists here too, mayme mapply() or map() but I won't fix it at this point
+Sigtab1 <- build_sig_tab(
+  deseq_list = ps_list_deseq,
+  contrast_cha_vector = pairwise_comparison[[1]]
+)
+Sigtab2 <- build_sig_tab(
+  deseq_list = ps_list_deseq,
+  contrast_cha_vector = pairwise_comparison[[2]]
+)
+Sigtab3 <- build_sig_tab(
+  deseq_list = ps_list_deseq,
+  contrast_cha_vector = pairwise_comparison[[3]]
+) # we can use lists here too, mayme mapply() or map() but I won't fix it at this point
 
 
 
-Sigtab4<-build_sig_tab(deseq_list = ps_list_deseq, 
-                       contrast_cha_vector = pairwise_comparison[[4]])
-Sigtab5<-build_sig_tab(deseq_list = ps_list_deseq, 
-                       contrast_cha_vector = pairwise_comparison[[5]])
-Sigtab6<-build_sig_tab(deseq_list = ps_list_deseq, 
-                       contrast_cha_vector = pairwise_comparison[[6]])
 
-
-
-#now extract the rownames of the significance tables and put it into a single vector
-select_listed <- do.call(c, list(Sigtab1, Sigtab2, Sigtab3))%>%#,Sigtab4, Sigtab5, Sigtab6))%>% #concatenate the lists resulting from build_sig_tab(), then...
-  lapply(function (x) rownames(x))%>% # extract the rownames from the list, then....
-unlist(use.names=FALSE)%>% # flatten the rowname (OTU ID) list, ignoring the names of the lists, then...
+# now extract the rownames of the significance tables and put it into a single vector
+select_listed <- do.call(c, list(Sigtab1, Sigtab2, Sigtab3)) %>% # concatenate the lists resulting from build_sig_tab(), then...
+  lapply(function(x) rownames(x)) %>% # extract the rownames from the list, then....
+  unlist(use.names = FALSE) %>% # flatten the rowname (OTU ID) list, ignoring the names of the lists, then...
   unique() # remove duplications of the same OTUs
-
-
 ```
 ### 5.3 Construct heatmaps
 A heatmap like this is a convinient way to represent the key differences across OTUs and treatments
@@ -126,239 +132,146 @@ note that on this heatmap, all comparisons are made against the control. you wil
 # finally, build the heatmap
 # note that the log change calculations are based on the full, unsplit and unlisted deseq2 object (that is, our complete dataset)
 ntb <- normTransform(ps_deseq) # defaults to log2(x+1)
-log2.norm.countsb <- assay(ntb)[select_listed, ] #these colnames should match rownames(df)
-df <- as.data.frame(colData(ps_deseq)[,c("MeJA_treatment", "Sample_type", "Plant_species")])
-row.names(df)<-row.names(as.data.frame(colData(ps_deseq)))
-df_row <- as.data.frame((tax_table(physeq_filtered))[,c("Family")])
+log2.norm.countsb <- assay(ntb)[select_listed, ] # these colnames should match rownames(df)
+df <- as.data.frame(colData(ps_deseq)[, c("MeJA_treatment", "Sample_type", "Plant_species")])
+row.names(df) <- row.names(as.data.frame(colData(ps_deseq)))
+df_row <- as.data.frame((tax_table(physeq_filtered))[, c("Family")])
 # this chnk of code lets us remove some families form the legend
-df_row$main_families<-df_row$Family %in%  c("f__Burkholderiaceae", # define if the family is on this list of famillies...
-                                             "f__Chitinophagaceae",
-                                             "f__Comamonadaceae",
-                                             "f__Flavobacteriaceae",
-                                             "f__Oxalobacteraceae",
-                                             "f__Rhizobiaceae",
-                                             "f__Sphingobacteriaceae",
-                                             "f__Streptomycetaceae",
-                                             "f__Xanthobacteraceae")
-df_row<-mutate(df_row, main_fam = if_else(main_families=="TRUE", df_row$Family, "Other" ))%>% # make new variable: if the family is on the lsit of families, add it to the new variale, if not wirte is as "Other"
+df_row$main_families <- df_row$Family %in% c(
+  "f__Burkholderiaceae", # define if the family is on this list of famillies...
+  "f__Chitinophagaceae",
+  "f__Comamonadaceae",
+  "f__Flavobacteriaceae",
+  "f__Oxalobacteraceae",
+  "f__Rhizobiaceae",
+  "f__Sphingobacteriaceae",
+  "f__Streptomycetaceae",
+  "f__Xanthobacteraceae"
+)
+df_row <- mutate(df_row, main_fam = if_else(main_families == "TRUE", df_row$Family, "Other")) %>% # make new variable: if the family is on the lsit of families, add it to the new variale, if not wirte is as "Other"
   select(main_fam) # remove old columns
 
-#now plot the ehatmap
-pheatmap::pheatmap(log2.norm.countsb, color=viridis(24), annotation_col=df, annotation_row=df_row, main="log2(counts + 1)", 
-                   scale="none", fontsize_row = 3, fontsize_col = 8)
+# now plot the ehatmap
+pheatmap::pheatmap(log2.norm.countsb,
+  color = viridis(24), annotation_col = df, annotation_row = df_row, main = "log2(counts + 1)",
+  scale = "none", fontsize_row = 3, fontsize_col = 8
+)
 
 
 
 
-# if you are dealing with too many samples and it's difficult to read, plot one list element at a time
-ntb <- normTransform(ps_list_deseq[[4]]) # defaults to log2(x+1)
-differential_OTUs_in_deseq_list_element <- select_listed[which(select_listed%in%row.names(assay(ntb)))]# subsets selection of differentially abundant OTUs so that only those represented in the deseq2 list portion are present
-log2.norm.countsb <- assay(ntb)[differential_OTUs_in_deseq_list_element, ] #these colnames should match rownames(df)
-df <- as.data.frame(colData(ps_list_deseq[[4]])[,c("MeJA_treatment", "Sample_type", "Plant_species")])
-row.names(df)<-row.names(as.data.frame(colData(ps_list_deseq[[4]])))
-df_row <- as.data.frame((tax_table(ps_list[[4]]))[,c("Class")])
-pheatmap::pheatmap(log2.norm.countsb, color=viridis(24), annotation_col=df, annotation_row=df_row, main="log2(counts + 1)", 
-                   scale="none", fontsize_row = 8, fontsize_col = 8)
 
 
 
-# if you are dealing with too many samples and it's difficult to read, plot one list element at a time with this function:
-mapply (function(list_deseq_objects, list_ps_objects) {
 
-ntb <- normTransform(list_deseq_objects) # defaults to log2(x+1)
-differential_OTUs_in_deseq_list_element <- select_listed[which(select_listed%in%row.names(assay(ntb)))]# subsets selection of differentially abundandt OTUs so that only those represented in the deseq2 list portion are present
-log2.norm.countsb <- assay(ntb)[differential_OTUs_in_deseq_list_element, ] #these colnames should match rownames(df)
-df <- as.data.frame(colData(list_deseq_objects)[,c("MeJA_treatment", "Sample_type", "Plant_species")])
-row.names(df)<-row.names(as.data.frame(colData(list_deseq_objects)))
-df_row <- as.data.frame((tax_table(list_ps_objects))[,c("Class")])
-pheatmap::pheatmap(log2.norm.countsb, color=viridis(24), annotation_col=df, annotation_row=df_row, main="log2(counts + 1)", 
-                   scale="none", fontsize_row = 3, fontsize_col = 8)
 
+
+
+
+
+# Alternative: if you are dealing with too many samples and it's difficult to read, plot one list element at a time with this function:
+mapply(function(list_deseq_objects, list_ps_objects) {
+  ntb <- normTransform(list_deseq_objects) # defaults to log2(x+1)
+  differential_OTUs_in_deseq_list_element <- select_listed[which(select_listed %in% row.names(assay(ntb)))] # subsets selection of differentially abundandt OTUs so that only those represented in the deseq2 list portion are present
+  log2.norm.countsb <- assay(ntb)[differential_OTUs_in_deseq_list_element, ] # these colnames should match rownames(df)
+  df <- as.data.frame(colData(list_deseq_objects)[, c("MeJA_treatment", "Sample_type", "Plant_species")])
+  row.names(df) <- row.names(as.data.frame(colData(list_deseq_objects)))
+  df_row <- as.data.frame((tax_table(list_ps_objects))[, c("Class")])
+  pheatmap::pheatmap(log2.norm.countsb,
+    color = viridis(24), annotation_col = df, annotation_row = df_row, main = "log2(counts + 1)",
+    scale = "none", fontsize_row = 3, fontsize_col = 8
+  )
 },
 list_deseq_objects = ps_list_deseq,
-  list_ps_objects = ps_list_rarefied,
-  SIMPLIFY = FALSE)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+list_ps_objects = ps_list_rarefied,
+SIMPLIFY = FALSE
+)
 ```
 
 
 
-### 5.4 plot a logfoldchange summary
-this is the base sample from the tutorial
 
+# overwrite saved session
 ```{r}
-library("ggplot2")
 
-theme_set(theme_bw())
-scale_fill_discrete <- function(palname = "Set1", ...) {
-    scale_fill_brewer(palette = palname, ...)
-}
-
-# Phylum order
-x = tapply(Sigtab1$Arabidopsis_thaliana.Root$log2FoldChange, Sigtab1$Arabidopsis_thaliana.Root$Phylum, function(x) max(x))
-x = sort(x, TRUE)
-Sigtab1$Arabidopsis_thaliana.Root$Phylum = factor(as.character(Sigtab1$Arabidopsis_thaliana.Root$Phylum), levels=names(x))
-# Genus order
-x = tapply(Sigtab1$Arabidopsis_thaliana.Root$log2FoldChange, Sigtab1$Arabidopsis_thaliana.Root$Genus, function(x) max(x))
-x = sort(x, TRUE)
-Sigtab1$Arabidopsis_thaliana.Root$Genus = factor(as.character(Sigtab1$Arabidopsis_thaliana.Root$Genus), levels=names(x))
-ggplot(Sigtab1$Arabidopsis_thaliana.Root, aes(x=Genus, y=log2FoldChange, color=Phylum)) + geom_point(size=6) + 
-  theme(axis.text.x = element_text(angle = -90, hjust = 0, vjust=0.5))
-
-
-
-
-
-lapply()
-
-
-
-
-
-
-
-
-
-
-
-library("ggplot2")
-
-theme_set(theme_bw())
-scale_fill_discrete <- function(palname = "Set1", ...) {
-    scale_fill_brewer(palette = palname, ...)
-}
-
-# Phylum order
-x = tapply(sigtab$log2FoldChange, sigtab$Phylum, function(x) max(x))
-x = sort(x, TRUE)
-sigtab$Phylum = factor(as.character(sigtab$Phylum), levels=names(x))
-# Genus order
-x = tapply(sigtab$log2FoldChange, sigtab$Genus, function(x) max(x))
-x = sort(x, TRUE)
-sigtab$Genus = factor(as.character(sigtab$Genus), levels=names(x))
-ggplot(sigtab, aes(x=Genus, y=log2FoldChange, color=Phylum)) + geom_point(size=6) + 
-  theme(axis.text.x = element_text(angle = -90, hjust = 0, vjust=0.5))
-
-
-
-
-
-
-
-
+save.image("./R output/analysis_session.RData")
 
 ```
 
+Differential abudance analysed! proceed to scrip 6_network analysis!
 
-
-
-
-
-
-
-
-
-
-
-If your analyis is difficult to read because it has too many OTUs, you might want to decrease the aplha, inrease the minimum fold or activate the maximimum number of otus in the custom build_sig_tab() function
 
 ### 5.4 add differential abudance classification to phyloseq object 
+
+NOTE: THIS ENTIRE SECTION MAY HAVE A BIG DELETE
 ```{r}
-
-
-########### automate
-# i need 4 lists (sp/niche) of OTUs that are differential related to contorl or not
-# this classification will be simplified: is it more abundant in any treatment when compared to control?
-# this way they can be ploted on the network or other visualizations/tables
 
 
 
 # puts all sigtabs from one environment in only 2 strings...
-abundant_taxa_list<-mapply (function (x, y,z){
-# the input here is the output of the build_sig_tab() custom function  
-  
-#get the row names, but only of ASVs that satisfity the condition based on size of logfold change
-abundand_in_treatment1<-row.names(x[x$log2FoldChange>0,]) #more common in treatment
-abundand_in_control1<-row.names(x[x$log2FoldChange<0,]) #more common in control
+abundant_taxa_list <- mapply(function(x, y, z) {
+  # the input here is the output of the build_sig_tab() custom function
 
-abundand_in_treatment2<-row.names(y[y$log2FoldChange>0,]) #more common in treatment
-abundand_in_control2<-row.names(y[y$log2FoldChange<0,]) #more common in control
+  # get the row names, but only of ASVs that satisfity the condition based on size of logfold change
+  abundand_in_treatment1 <- row.names(x[x$log2FoldChange > 0, ]) # more common in treatment
+  abundand_in_control1 <- row.names(x[x$log2FoldChange < 0, ]) # more common in control
 
-abundand_in_treatment3<-row.names(z[z$log2FoldChange>0,]) #more common in treatment
-abundand_in_control3<-row.names(z[z$log2FoldChange<0,]) #more common in control
+  abundand_in_treatment2 <- row.names(y[y$log2FoldChange > 0, ]) # more common in treatment
+  abundand_in_control2 <- row.names(y[y$log2FoldChange < 0, ]) # more common in control
 
-#redeplicate, removing repetitive ASV entries
-abundand_in_treatment<-unique(c(abundand_in_treatment1, abundand_in_treatment2,abundand_in_treatment3))
-abundand_in_control<-unique(c(abundand_in_control1, abundand_in_control2,abundand_in_control3))
+  abundand_in_treatment3 <- row.names(z[z$log2FoldChange > 0, ]) # more common in treatment
+  abundand_in_control3 <- row.names(z[z$log2FoldChange < 0, ]) # more common in control
 
-# put it into a list, and  give names to the list portions
-output<-list(abundand_in_treatment,abundand_in_control)
-names(output)<-c("abundand_in_treatment","abundand_in_control" )
+  # redeplicate, removing repetitive ASV entries
+  abundand_in_treatment <- unique(c(abundand_in_treatment1, abundand_in_treatment2, abundand_in_treatment3))
+  abundand_in_control <- unique(c(abundand_in_control1, abundand_in_control2, abundand_in_control3))
 
-return(output)
+  # put it into a list, and  give names to the list portions
+  output <- list(abundand_in_treatment, abundand_in_control)
+  names(output) <- c("abundand_in_treatment", "abundand_in_control")
 
+  return(output)
 },
-
-x = Sigtab1, 
+x = Sigtab1,
 y = Sigtab2,
 z = Sigtab3,
-SIMPLIFY = FALSE)
+SIMPLIFY = FALSE
+)
 
 
 
 # now check if any OTU is above in both control AND one of the treatments (suchas abudance Meja0.1>control>Mejas1.0 )
-lapply(abundant_taxa_list, function (x) intersect(x$abundand_in_treatment, x$abundand_in_control)) # do this lists share a value?
-lapply(abundant_taxa_list, function (x) (x$abundand_in_treatment%in%x$abundand_in_control)) #is list element 1 found in list element2?
-lapply(abundant_taxa_list, function (x) (x$abundand_in_control%in%x$abundand_in_treatment)) #is list element 2 found in list element1?
+lapply(abundant_taxa_list, function(x) intersect(x$abundand_in_treatment, x$abundand_in_control)) # do this lists share a value?
+lapply(abundant_taxa_list, function(x) (x$abundand_in_treatment %in% x$abundand_in_control)) # is list element 1 found in list element2?
+lapply(abundant_taxa_list, function(x) (x$abundand_in_control %in% x$abundand_in_treatment)) # is list element 2 found in list element1?
 
 
 
 # this makes a new phyloseq object, adding the deseq2 classifications over a list
-list_ps_with_deseq2<-mapply(function (list_ps_object,abundant_taxa_list_output){
-  output<-mutate( #make a new df wiht a new column...
-  as.data.frame(tax_table(list_ps_object)), # on the dataframe-converted  taxa table of your phyloseq object,
-       deseq2_ASV_class = if_else( # the new column is named deseq2_ASV_class...
-         taxa_names(list_ps_object)%in%
-           abundant_taxa_list_output$abundand_in_treatment == TRUE , "abundant_in_treatment", if_else( #if the taxa name is on the list of taxa classified as abudand in treatment, give this claissification on the enw variable, or else...
-             taxa_names(list_ps_object)%in%
-              abundant_taxa_list_output$abundand_in_control == TRUE, "abundant_in_control", "non-differential")))# check if the taxa is abundant in control and add the tag. if it is not in the list, tag it as non-differential
-     tax_table(list_ps_object)<-merge_phyloseq(list_ps_object, tax_table(as.matrix(output))) #now update the tax_table of the original phyloseq object
-     
+list_ps_with_deseq2 <- mapply(function(list_ps_object, abundant_taxa_list_output) {
+  output <- mutate( # make a new df wiht a new column...
+    as.data.frame(tax_table(list_ps_object)), # on the dataframe-converted  taxa table of your phyloseq object,
+    deseq2_ASV_class = if_else( # the new column is named deseq2_ASV_class...
+      taxa_names(list_ps_object) %in%
+        abundant_taxa_list_output$abundand_in_treatment == TRUE, "abundant_in_treatment", if_else( # if the taxa name is on the list of taxa classified as abudand in treatment, give this claissification on the enw variable, or else...
+        taxa_names(list_ps_object) %in%
+          abundant_taxa_list_output$abundand_in_control == TRUE, "abundant_in_control", "non-differential"
+      )
+    )
+  ) # check if the taxa is abundant in control and add the tag. if it is not in the list, tag it as non-differential
+  tax_table(list_ps_object) <- merge_phyloseq(list_ps_object, tax_table(as.matrix(output))) # now update the tax_table of the original phyloseq object
 },
-  list_ps_object = ps_list_rarefied,
-  abundant_taxa_list_output = abundant_taxa_list,
-  SIMPLIFY = FALSE)
-
-
-
-tax_table(ps_list_rarefied$Arabidopsis_thaliana.Root)
-
-write.csv(tax_table(list_ps_with_deseq2$Arabidopsis_thaliana.Root)[,9], "AT_root_deseq.csv")
-write.csv(tax_table(list_ps_with_deseq2$Arabidopsis_thaliana.Soil)[,9], "AT_soil_deseq.csv")
-write.csv(tax_table(list_ps_with_deseq2$Brassica_oleraceae.Root)[,9], "BO_root_deseq.csv")
-write.csv(tax_table(list_ps_with_deseq2$Brassica_oleraceae.Soil)[,9], "BO_soil_deseq.csv")
+list_ps_object = ps_list_rarefied,
+abundant_taxa_list_output = abundant_taxa_list,
+SIMPLIFY = FALSE
+)
 
 
 
 
-       
-
-
-
+# these lists of differential and non-differential ASVs can later be loaded on cytsocape by using the ASVID as a key
+write.csv(tax_table(list_ps_with_deseq2$Arabidopsis_thaliana.Root)[, 9], "AT_root_deseq.csv")
+write.csv(tax_table(list_ps_with_deseq2$Arabidopsis_thaliana.Soil)[, 9], "AT_soil_deseq.csv")
+write.csv(tax_table(list_ps_with_deseq2$Brassica_oleraceae.Root)[, 9], "BO_root_deseq.csv")
+write.csv(tax_table(list_ps_with_deseq2$Brassica_oleraceae.Soil)[, 9], "BO_soil_deseq.csv")
 ```

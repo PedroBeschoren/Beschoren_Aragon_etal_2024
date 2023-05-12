@@ -6,6 +6,17 @@ output: html_document
 editor_options: 
   chunk_output_type: console
 ---
+
+
+# load libraries and data
+```{r}
+source("./Code/Functions/load_libraries.R")
+load("./R output/analysis_session.RData")
+```
+
+
+
+
 # 3.0 Basic alpha diversity analysis for pilot data
 Aplha diversity will show you the quantifiable diversity within a sample - this way you compare which treatment is more or less diverse or species-rich than the other. Like in all the other steps we are evaluating here, there are countless variations and methods you could use. this is just a convenient template for you to get started.
 
@@ -16,194 +27,123 @@ Alpha diversity requires counts from samples with equal samples sizes. this mean
 
 # as noted above, we will use rarefied data, filtered at at least 8 occurences in the dataset
 # This is a very simple plot, but will serve for a visualization
-plot_richness(physeq_filtered_rarefied, x="MeJA_treatment", measures=c("Observed"), color="Plant_species")+
-  theme_bw()+
-  theme(axis.text.x = element_text(angle = 90))+
-  labs(color = "Plant species")+
-  ylab("Observed number of ASVs")+
+plot_richness(physeq_filtered_rarefied, x = "MeJA_treatment", measures = c("Observed"), color = "Plant_species") +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 90)) +
+  labs(color = "Plant species") +
+  ylab("Observed number of ASVs") +
   facet_wrap(~Sample_type)
 # as we could already expect, soils are more diverse than roots. for Brassica However the difference, if significant, is very small
-
-
 ```
 ## 3.1 Alpha diversity testing
 
-Here we check both observed diversity and shanon diversity indexes
+Here we check shanon diversity indexes
 ```{r}
-#Calculate richness for root and soil
-total_diversity<-estimate_richness(physeq_filtered_rarefied)%>%
+# Calculate richness for root and soil
+total_diversity <- estimate_richness(physeq_filtered_rarefied) %>%
   rownames_to_column(var = "Sample")
-  total_diversity$Sample<-sub("X", "", total_diversity$Sample)# why the hell that X popped up? this fix it
-total_diversity<-column_to_rownames(total_diversity, var= "Sample")
+total_diversity$Sample <- sub("X", "", total_diversity$Sample) # why the hell that X popped up? this fix it
+total_diversity <- column_to_rownames(total_diversity, var = "Sample")
 
 
 #### add diversity metrics to mapping file of phyloseq objects
 # we do this so we can perform anovas, acess metadat, make nicer plots, etc
-merg_to_ps<-sample_data(total_diversity) # makes the diversity calculations  sample_data for phyloseq oject...
-sample_data(physeq_filtered_rarefied)<-merge_phyloseq(physeq_filtered_rarefied,merg_to_ps) # merge the new phyloseq object with the old phyloseq object
-total_diversity<-as(sample_data(physeq_filtered_rarefied),"data.frame") # forces sample data of updated phyloseq object into a dataframe
+merg_to_ps <- sample_data(total_diversity) # makes the diversity calculations  sample_data for phyloseq oject...
+sample_data(physeq_filtered_rarefied) <- merge_phyloseq(physeq_filtered_rarefied, merg_to_ps) # merge the new phyloseq object with the old phyloseq object
+total_diversity <- as(sample_data(physeq_filtered_rarefied), "data.frame") # forces sample data of updated phyloseq object into a dataframe
 
 
-#check homogeniety of variances
-leveneTest((Observed) ~ Plant_species* MeJA_treatment * Sample_type, data = total_diversity) 
-leveneTest((Shannon) ~ Plant_species* MeJA_treatment * Sample_type, data = total_diversity) 
+# check homogeniety of variances
+leveneTest((Shannon) ~ Plant_species * MeJA_treatment * Sample_type, data = total_diversity)
 
-#two-way anova, observed number of species
-tx <- with(total_diversity, interaction(MeJA_treatment, Plant_species, Sample_type)) #needed for tukey to test interaction
-aovTukey<-aov(Observed ~ tx, data = total_diversity)#needed for tukey to test interaction
-Anova(lm((Observed) ~ Block + Plant_species* MeJA_treatment * Sample_type, data = total_diversity, contrasts=list(MeJA_treatment=contr.sum, Plant_species=contr.sum)), type = "2") 
-HSD.test(aovTukey, "tx", group=TRUE, console=TRUE)#post-hoc
+# two-way anova, shanon diversity index
+tx <- with(total_diversity, interaction(MeJA_treatment, Plant_species, Sample_type)) # needed for tukey to test interaction
+aovTukey <- aov(Shannon ~ tx, data = total_diversity) # needed for tukey to test interaction
+Anova(lm((Shannon) ~ Block + Plant_species * MeJA_treatment * Sample_type, data = total_diversity, contrasts = list(MeJA_treatment = contr.sum, Plant_species = contr.sum)), type = "2")
+HSD.test(aovTukey, "tx", group = TRUE, console = TRUE) # post-hoc
 
-#two-way anova, shanon diversity index
-tx <- with(total_diversity, interaction(MeJA_treatment, Plant_species, Sample_type)) #needed for tukey to test interaction
-aovTukey<-aov(Shannon ~ tx, data = total_diversity)#needed for tukey to test interaction
-Anova(lm((Shannon) ~ Block + Plant_species* MeJA_treatment * Sample_type, data = total_diversity, contrasts=list(MeJA_treatment=contr.sum, Plant_species=contr.sum)), type = "2") 
-HSD.test(aovTukey, "tx", group=TRUE, console=TRUE)#post-hoc
-
-#Lets see this on a simple boxplot for observed number of species
-ggplot(total_diversity, aes(x =MeJA_treatment, y = Observed, fill=Plant_species))+
-  geom_boxplot()+
-  theme_bw()+
-  theme(axis.text.x = element_text(angle = 45, vjust = 0.5, hjust=1))+
+# Lets see this on a simple boxplot for Shannon diversity index
+plot_alpha_BySample <- ggplot(total_diversity, aes(x = MeJA_treatment, y = Shannon, fill = Plant_species)) +
+  geom_boxplot() +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  labs(y = "Shannon diversity index") +
+  theme(
+    panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank()
+  ) +
   facet_wrap(~Sample_type)
-
-#Lets see this on a simple boxplot for Shannon diversity index
-plot_alpha_BySample <- ggplot(total_diversity, aes(x =MeJA_treatment, y = Shannon, fill=Plant_species))+
-  geom_boxplot()+
-  #geom_jitter(color="black", size=0.7, alpha=0.5, width = 0.2)+
-  theme_bw()+
-  theme(axis.text.x = element_text(angle = 45, hjust=1))+
-  labs(y = "Shannon diversity index")+
-  theme(panel.grid.major = element_blank(),
-        panel.grid.minor = element_blank())+
-  facet_wrap(~Sample_type)
-
-
-ggplot(total_diversity, aes(x =MeJA_treatment, y = Shannon))+
-  geom_boxplot()+
-  theme_bw()
-
-
-
-# sample type (root/soil) has a huge effect on diversity (which we knew before we started the experiment), which depends on species (and we could see this on the first plot). let's try to further separate this, slicing out dataset into lists
 
 ```
-### 3.1.2a testing lists - observed number of taxa
+
+### 3.1.2b testing lists - Shannon diversity
+
 
 Now that we see clear diversity effects, let's check in details to detect key pairwise differences
-```{r}
-
-# this will add the diversity metrics to a phyloseq object
-add_diversity_to_physeq_object<-function (phyloseq_object){
-
-#Calculate richness for root and soil of a sigle phyloseq object
-total_diversity<-estimate_richness(phyloseq_object)%>%
-  rownames_to_column(var = "Sample")
-
-total_diversity$Sample<-sub("X", "", total_diversity$Sample)# why the hell that X popped up? this fix it
-total_diversity<-column_to_rownames(total_diversity, var= "Sample")
 
 
-#### add diversity metrics to mapping file of phyloseq objects
-# we do this so we can perform anovas, acess metadat, make nicer plots, etc
-merg_to_ps<-sample_data(total_diversity) # makes the diversity calculations  sample_data for phyloseq oject...
-sample_data(phyloseq_object)<-merge_phyloseq(phyloseq_object,merg_to_ps) # merge the new phyloseq object with the old phyloseq object
-diversity<-as(sample_data(phyloseq_object),"data.frame") # forces sample data of updated phyloseq object into a dataframe
-
-return (diversity)
-}
-
-
-#runs new custom function on a list of phyloseq objects, making a list of dataframes with alpha diversity indexes - OBSERVED taxa numbers
-diversity_list<-lapply(ps_list_rarefied,add_diversity_to_physeq_object)
-
-# check levenes homogeniety over the list
-lapply(diversity_list, function (x)
-  leveneTest((Observed) ~ MeJA_treatment, data = x))
-
-# since our initial object has been sliced into multiple parts, the anova is much simpler
-#build model
-aov_list<-lapply(diversity_list, function (x)
-  aov(lm((Observed) ~ Block +  MeJA_treatment, data = x)))
-
-#run anova
-lapply(aov_list, anova)
-
-#check tukey
-lapply(aov_list, function(x)
-  TukeyHSD(x, "MeJA_treatment"))
-
-
-
-# separate root and oils, keep specie together
-
-diversity_list<-lapply(pslist_root_soil_rarefied,add_diversity_to_physeq_object)
-
-# check levenes homogeniety over the list
-lapply(diversity_list, function (x)
-  leveneTest((Observed) ~ MeJA_treatment*Plant_species, data = x))
-
-# since our initial object has been sliced into multiple parts, the anova is much simpler
-#build model
-aov_list<-lapply(diversity_list, function (x)
-  aov(lm((Observed) ~ Block +  MeJA_treatment*Plant_species, data = x)))
-
-#run anova
-lapply(aov_list, anova)
-
-#check tukey
-lapply(aov_list, function(x)
-  TukeyHSD(x, "MeJA_treatment"))
-
-
-```
-### 3.1.2b testing lists - Shannon diversity
 Eveness and species distribution seem to give a better resolution of diversity in this dataset, so let's focus on that and check pairwise differences
 ```{r}
 
+
+# this will add the diversity metrics to a phyloseq object
+add_diversity_to_physeq_object <- function(phyloseq_object) {
+
+  # Calculate richness for root and soil of a sigle phyloseq object
+  total_diversity <- estimate_richness(phyloseq_object) %>%
+    rownames_to_column(var = "Sample")
+
+  total_diversity$Sample <- sub("X", "", total_diversity$Sample) # why the hell that X popped up? this fix it
+  total_diversity <- column_to_rownames(total_diversity, var = "Sample")
+
+
+  #### add diversity metrics to mapping file of phyloseq objects
+  # we do this so we can perform anovas, acess metadat, make nicer plots, etc
+  merg_to_ps <- sample_data(total_diversity) # makes the diversity calculations  sample_data for phyloseq oject...
+  sample_data(phyloseq_object) <- merge_phyloseq(phyloseq_object, merg_to_ps) # merge the new phyloseq object with the old phyloseq object
+  diversity <- as(sample_data(phyloseq_object), "data.frame") # forces sample data of updated phyloseq object into a dataframe
+
+  return(diversity)
+}
+
+
 # runs new custom function on a list of phyloseq objects, making a list of dataframes with alpha diversity indexes
-diversity_list<-lapply(ps_list_rarefied,add_diversity_to_physeq_object)
+diversity_list <- lapply(ps_list_rarefied, add_diversity_to_physeq_object)
 
 # check levenes homogeniety over the list
-lapply(diversity_list, function (x)
-  leveneTest((Shannon) ~ MeJA_treatment, data = x))
+lapply(diversity_list, function(x) {
+  leveneTest((Shannon) ~ MeJA_treatment, data = x)
+})
 
 # since our initial object has been sliced into multiple parts, the anova is much simpler
-#build model
-aov_list<-lapply(diversity_list, function (x)
-  aov(lm((Shannon) ~ Block +  MeJA_treatment, data = x)))
+# build model
+aov_list <- lapply(diversity_list, function(x) {
+  aov(lm((Shannon) ~ Block + MeJA_treatment, data = x))
+})
 
-#run anova
+# run anova
 lapply(aov_list, anova)
 
-#check tukey
-lapply(aov_list, function(x)
-  TukeyHSD(x, "MeJA_treatment"))
+# check tukey
+lapply(aov_list, function(x) {
+  TukeyHSD(x, "MeJA_treatment")
+})
 
-
-
-# separate root and oils, keep specie together
-
-diversity_list<-lapply(pslist_root_soil_rarefied,add_diversity_to_physeq_object)
-
-# check levenes homogeniety over the list
-lapply(diversity_list, function (x)
-  leveneTest((Shannon) ~ MeJA_treatment*Plant_species, data = x))
-
-# since our initial object has been sliced into multiple parts, the anova is much simpler
-#build model
-aov_list<-lapply(diversity_list, function (x)
-  aov(lm((Shannon) ~ Block +  MeJA_treatment*Plant_species, data = x)))
-
-#run anova
-lapply(aov_list, anova)
-
-#check tukey
-lapply(aov_list, function(x)
-  TukeyHSD(x, "MeJA_treatment"))
 
 ```
 
-# Alpha Diversity analyised! proceed to scrip 4_neutral_models!
 
-There are dozens of different models and methods you can use to check diversity levels in your samples, and how they relate to the metadata you have.  This script will hopefully help get started on this topic. 
+
+
+# overwrite saved session
+```{r}
+
+save.image("./R output/analysis_session.RData")
+```
+
+
+
+
+Alpha Diversity analyised! proceed to scrip 4_neutral_models!
+
+

@@ -12,44 +12,46 @@ from CRAN and then loaded.
 
 installation of packages in ".renv/library/R-4.1/x86_64-w64-mingw32" can be facilitated if you run renv::restore()
 
-```{r results=hide}
+```{r load_install_packages}
 
 
 ## First specify the packages of interest
-packages <- c("devtools",# needed to install some packages
-             "BiocManager", # needed to install some packages
-             "remotes",# needed to install some packages
-             "ggplot2",
-             "dplyr",
-             "tibble", 
-             "stringr",# to wrangle string vectors
-             "Boruta", # for random forest feature selection
-             "mlbench", # for random forest
-             "caret", # for random forest
-             "randomForest", # for random forest
-             "tidyr",
-             "vegan", # for several essential statistical tests
-             "forcats",
-             "ggrepel", # to avoid legends overlapping in your plot
-             "ggpubr",
-             "igraph", # calculates entowrk metrics and manipulates netowrk objects
-             #"WGCNA", # needed for eigen_correlation (), allowing you to correlate metadata to network modules
-             "metagMisc", #  lets you create lists of split phyloseq objects
-             "pheatmap", # heatmaps for deseq2
-             "viridis", # nice colors
-             "agricolae",# includes some anova post-hoc options
-             "minpack.lm", #lets you do som HSD tests, output is a nive table
-             "Hmisc", # for neutral models
-             "spaa", # need to install Ecoutils
-             "stats4",# for neutral models
-             "car", #for levene test
-             "indicspecies", #runs indicator species analysis
-             "metacoder", # plots heat trees
-             "purrr", # has map() to select table elements
-             "viridis") # prety colors for deseq2 heatmaps
+packages <- c(
+  "devtools", # needed to install some packages
+  "BiocManager", # needed to install some packages
+  "remotes", # needed to install some packages
+  "ggplot2",
+  "dplyr",
+  "tibble",
+  "stringr", # to wrangle string vectors
+  "Boruta", # for random forest feature selection
+  "mlbench", # for random forest
+  "caret", # for random forest
+  "randomForest", # for random forest
+  "tidyr",
+  "vegan", # for several essential statistical tests
+  "forcats",
+  "ggrepel", # to avoid legends overlapping in your plot
+  "ggpubr",
+  "igraph", # calculates entowrk metrics and manipulates netowrk objects
+  # "WGCNA", # needed for eigen_correlation (), allowing you to correlate metadata to network modules
+  "metagMisc", #  lets you create lists of split phyloseq objects
+  "pheatmap", # heatmaps for deseq2
+  "viridis", # nice colors
+  "agricolae", # includes some anova post-hoc options
+  "minpack.lm", # lets you do som HSD tests, output is a nive table
+  "Hmisc", # for neutral models
+  "spaa", # need to install Ecoutils
+  "stats4", # for neutral models
+  "car", # for levene test
+  "indicspecies", # runs indicator species analysis
+  "metacoder", # plots heat trees
+  "purrr", # has map() to select table elements
+  "viridis"
+) # prety colors for deseq2 heatmaps
 
 
-## Now load or install & load packages 
+## Now load or install & load packages
 lapply(
   packages,
   FUN = function(x) {
@@ -62,11 +64,12 @@ lapply(
 
 
 biocManager_packages <- c(
-             "phyloseq", # essential to produce phyloseq objects with OTU, metadata, and taxa info in one single place
-             "microbiome", # has convinient data wrangling functions
-             "decontam", # to make use of no-template blank DNA extractions
-             "metagenomeSeq", # to normalize library sizes without rarefying them
-             "DESeq2") # used for differential abundance analysis
+  "phyloseq", # essential to produce phyloseq objects with OTU, metadata, and taxa info in one single place
+  "microbiome", # has convinient data wrangling functions
+  "decontam", # to make use of no-template blank DNA extractions
+  "metagenomeSeq", # to normalize library sizes without rarefying them
+  "DESeq2"
+) # used for differential abundance analysis
 
 
 
@@ -82,29 +85,26 @@ lapply(
 )
 
 
-#additional packages outside CRAN or bioconductor
-if (!require(pairwiseAdonis)) install_github("pmartinezarbizu/pairwiseAdonis/pairwiseAdonis")
-library("pairwiseAdonis") # has a wrapper for pairwise comparison of adonis
-
+# additional packages outside CRAN or bioconductor
 if (!require(tyRa)) install_github("DanielSprockett/tyRa")
-library("tyRa")  #need for neutral models
+library("tyRa") # need for neutral models
 
 if (!require(metagMisc)) devtools::install_github("vmikk/metagMisc")
-library("metagMisc")  #n lets you split a phyloseq object in a list
+library("metagMisc") # n lets you split a phyloseq object in a list
 
 if (!require(EcolUtils)) devtools::install_github("GuillemSalazar/EcolUtils")
-library("EcolUtils")  #pairwise adonis fucntion
+library("EcolUtils") # pairwise adonis fucntion
 
 if (!require(ggVennDiagram)) remotes::install_github("gaospecial/ggVennDiagram")
-library("ggVennDiagram")  #for venn diagrams on SPSS objects
+library("ggVennDiagram") # for venn diagrams on SPSS objects
 
 if (!require(SpiecEasi)) install_github("zdk123/SpiecEasi")
 library("SpiecEasi") # builds the sparse networks
 
+library(styler) # used to clean up R code
 
-rm(packages,biocManager_packages) # we don't need this anymore so let's remove them from the environemnt
-gc()#decluters memory usage
-
+rm(packages, biocManager_packages) # we don't need this anymore so let's remove them from the environemnt
+gc() # decluters memory usage
 ```
 
 
@@ -116,10 +116,11 @@ our data (processed in qiime2) was saved in BIOM format, making importing easier
 ##### Loading Microbiome data ##########
 
 # This will load all the essential data (OTU frequencies, representative sequences, mapping files with metadata, taxonomy) for a single phyloseq object
-physeq<-import_biom("./Data/Pilot_phyloseq_input_FeatureTable_metadata_taxonomy.biom",
-                    refseqfilename="./Data/dna-sequences.fasta")
+physeq <- import_biom("./Data/Pilot_phyloseq_input_FeatureTable_metadata_taxonomy.biom",
+  refseqfilename = "./Data/dna-sequences.fasta"
+)
 
-# let's check the imported objects. Often errors will arise from typos when filling up the data sheets 
+# let's check the imported objects. Often errors will arise from typos when filling up the data sheets
 head(otu_table(physeq))
 head(sample_data(physeq))
 head(tax_table(physeq))
@@ -127,10 +128,8 @@ head(tax_table(physeq))
 # note that dada2 will give us horrible OTU names, let's change this with a custom function
 source("./Code/Functions/backup_and_rename.R") # source will load the function inside the Code folder of this R project
 
-#this will run the custom function and update the phyloseq object
-physeq<-backup_and_rename(physeq) # this function runs slow inside the chuck but fast on the console.... to solve this, click on the gear icon just next to the knit button and set "chuck output in the console" instead of "chunk output inline"
-
-
+# this will run the custom function and update the phyloseq object
+physeq <- backup_and_rename(physeq) # this function runs slow inside the chuck but fast on the console.... to solve this, click on the gear icon just next to the knit button and set "chuck output in the console" instead of "chunk output inline"
 ```
 
 
@@ -140,49 +139,55 @@ Decontamination with the decontam package only removed a single OTU from analysi
 
 ```{r}
 # Before we proceed, let's prepere phyloseq object for decontamination using the decontam package
-physeq_norm<-transform_sample_counts(physeq, function(OTU) OTU/sum(OTU)) # transforms to relative frequency
+physeq_norm <- transform_sample_counts(physeq, function(OTU) OTU / sum(OTU)) # transforms to relative frequency
 colSums(otu_table(physeq_norm)) # checks if sums are 1
 sample_data(physeq_norm)$is.neg <- sample_data(physeq_norm)$Plant_species == "Blank" # set negatives as TRUE in a  new column
 
 # decontaminate! read details on decontam package. grouping your blanks in batches (such as sampling blanks, DNA extraction blanks, PCR blanks) can help you remove contaminants according different sources. Try to obtain the DNA concentration from the PCR product to include this variable in the decontamination process.
 decontam_output <- isContaminant(physeq_norm,
-                                         neg="is.neg",
-                                         threshold=0.1) # using 0.1  gave us only one single contaminant
+  neg = "is.neg",
+  threshold = 0.1
+) # using 0.1  gave us only one single contaminant
 table(decontam_output$contaminant) # this shows the number of  contaminates (=TRUE)
 head(decontam_output) # checks decontam output
 
-contaminants <- rownames(subset(decontam_output, contaminant%in%c("TRUE")))
-contaminants #this is a list of otus classified as contaminants
+contaminants <- rownames(subset(decontam_output, contaminant %in% c("TRUE")))
+contaminants # this is a list of otus classified as contaminants
 
 
 # Make phyloseq object of presence-absence (pa) in negative controls and true samples
-physeq_norm_pa <- transform_sample_counts(physeq_norm, function(abund) 1*(abund>0))
-physeq_norm_pa_neg <- prune_samples(sample_data(physeq_norm_pa)$Plant_species == "Blank", 
-                                                 physeq_norm_pa)
-physeq_norm_pa_pos <- prune_samples(sample_data(physeq_norm_pa)$Plant_species != "Blank", 
-                                                 physeq_norm_pa)
+physeq_norm_pa <- transform_sample_counts(physeq_norm, function(abund) 1 * (abund > 0))
+physeq_norm_pa_neg <- prune_samples(
+  sample_data(physeq_norm_pa)$Plant_species == "Blank",
+  physeq_norm_pa
+)
+physeq_norm_pa_pos <- prune_samples(
+  sample_data(physeq_norm_pa)$Plant_species != "Blank",
+  physeq_norm_pa
+)
 
 # Make data.frame of prevalence in positive and negative samples
-physeq_norm_df_pa <- data.frame(pa.pos=taxa_sums(physeq_norm_pa_pos), 
-                                                pa.neg=taxa_sums(physeq_norm_pa_neg),
-                                                contaminant=decontam_output$contaminant)
+physeq_norm_df_pa <- data.frame(
+  pa.pos = taxa_sums(physeq_norm_pa_pos),
+  pa.neg = taxa_sums(physeq_norm_pa_neg),
+  contaminant = decontam_output$contaminant
+)
 
-ggplot(data=physeq_norm_df_pa, aes(x=pa.neg, y=pa.pos, color=contaminant)) + 
+ggplot(data = physeq_norm_df_pa, aes(x = pa.neg, y = pa.pos, color = contaminant)) +
   geom_point() +
-  xlab("Prevalence (Negative Controls)") + 
+  xlab("Prevalence (Negative Controls)") +
   ylab("Prevalence (True Samples)")
 
-#clean physeq object by removing contaminant OTUS, then remove blank sample 
+# clean physeq object by removing contaminant OTUS, then remove blank sample
 physeq_decontaminated <- prune_taxa(!taxa_names(physeq) %in% contaminants, physeq) # keep only taxa that are not in the list of contaminants
-physeq_decontaminated <- subset_samples(physeq_decontaminated, colSums(otu_table(physeq_decontaminated))>0)
+physeq_decontaminated <- subset_samples(physeq_decontaminated, colSums(otu_table(physeq_decontaminated)) > 0)
 
-#clean physeq object by removing blank samples
+# clean physeq object by removing blank samples
 physeq_decontaminated <- subset_samples(physeq_decontaminated, Plant_species != "Blank")
 
-#now that we finished decontamination, let's remove unecessary objects and liberate some memory
-rm(physeq_norm_df_pa, physeq_norm_pa_pos,physeq_norm_pa,physeq_norm)
+# now that we finished decontamination, let's remove unecessary objects and liberate some memory
+rm(physeq_norm_df_pa, physeq_norm_pa_pos, physeq_norm_pa, physeq_norm)
 gc()
-
 ```
 
 
@@ -195,19 +200,17 @@ Here, we remove this plant sequences according the taxonomy given to the ASV by 
 ```{r}
 
 # First, a quick check to detect the presence of  o__Chloroplast or f__Mitochondria
-plot_bar(subset_taxa(physeq_decontaminated, Order=="o__Chloroplast"),facet_grid=~Sample_type) # this shows we do have some plastid DNA arround
-plot_bar(subset_taxa(physeq_decontaminated, Family=="f__Mitochondria"),facet_grid=~Sample_type) # this shows we do have some mitochndrial DNA arround
+plot_bar(subset_taxa(physeq_decontaminated, Order == "o__Chloroplast"), facet_grid = ~Sample_type) # this shows we do have some plastid DNA arround
+plot_bar(subset_taxa(physeq_decontaminated, Family == "f__Mitochondria"), facet_grid = ~Sample_type) # this shows we do have some mitochndrial DNA arround
 
 
-#load and run  the fucntion that will remove the plant DNA. press F2 after selecting the custom function to open it on a new tab
-source("./Code/Functions/remove_Chloroplast_Mitochondria.R") 
-physeq_clean<- remove_Chloroplast_Mitochondria(physeq_decontaminated)
+# load and run  the fucntion that will remove the plant DNA. press F2 after selecting the custom function to open it on a new tab
+source("./Code/Functions/remove_Chloroplast_Mitochondria.R")
+physeq_clean <- remove_Chloroplast_Mitochondria(physeq_decontaminated)
 
 # This will check if you still have those taxa in your phyloseq object. if the output is FALSE, then you got rid of them
 "o__Chloroplast" %in% tax_table(physeq_clean)
 "f__Mitochondria" %in% tax_table(physeq_clean)
-
-
 ```
 
 Now your bacterial phyloseq object is rid of detectable contaminants and plant DNA. note that for fungal ITS sequences you may  have some plant or microfauna DNA in the middle of your fungal sequences!
@@ -221,18 +224,17 @@ now that our sequences are free of contaminants and plant DNA, let's remove read
 
 ```{r echo=TRUE, fig.show=hold}
 # to be valid, an ASV may not be a singleton
-physeq_filtered<-physeq_clean#... but first let's save the non-filtered phyloseq object in separate
-otu_table(physeq_filtered) <- otu_table(physeq_filtered)[which (rowSums(otu_table(physeq_filtered)) > 8),] #this drops ~3000 taxa. 
+physeq_filtered <- physeq_clean # ... but first let's save the non-filtered phyloseq object in separate
+otu_table(physeq_filtered) <- otu_table(physeq_filtered)[which(rowSums(otu_table(physeq_filtered)) > 8), ] # this drops ~3000 taxa.
 
-#let's see how many sequences were kept after this filtering
-sum(sample_sums(physeq_filtered))/sum(sample_sums(physeq_clean))*100 
+# let's see how many sequences were kept after this filtering
+sum(sample_sums(physeq_filtered)) / sum(sample_sums(physeq_clean)) * 100
 
 # we kept 99.48% of sequences. let's now compare the histograms
-ggplot() + 
-  geom_density(aes(x=sample_sums(physeq_filtered)),fill=3, alpha=0.5) + 
-  geom_density(aes(x=sample_sums(physeq_clean)),fill=1, alpha=0.5) 
+ggplot() +
+  geom_density(aes(x = sample_sums(physeq_filtered)), fill = 3, alpha = 0.5) +
+  geom_density(aes(x = sample_sums(physeq_clean)), fill = 1, alpha = 0.5)
 
-# there's barely noticeable difference in library sizes when the library size is ~20000 reads
 
 ```
 
@@ -251,37 +253,40 @@ Still, we will use rarefied data for alpha diversity, neutral model fits, and co
 
 ```{r}
 # let's first adjust some factors
-sample_data(physeq_filtered)$Sample_type<-as.factor(sample_data(physeq_filtered)$Sample_type)
-sample_data(physeq_clean)$Sample_type<-as.factor(sample_data(physeq_clean)$Sample_type)
+sample_data(physeq_filtered)$Sample_type <- as.factor(sample_data(physeq_filtered)$Sample_type)
+sample_data(physeq_clean)$Sample_type <- as.factor(sample_data(physeq_clean)$Sample_type)
 
 # draw rarefaction curve
 # here we want to find a plateau: despite increase in the number of DNA reads, we do not increase the number of observed species. essentially, sequencing was deep enought to saturate your sampling effort.
 physeq_filtered_df <- as.data.frame(otu_table(physeq_filtered))
-rarecurve(t(physeq_filtered_df), 
-          col = sample_data(physeq_filtered)$Sample_type, 
-          label = FALSE, 
-          step = 200,
-          main="Rarefaction at 8678 reads, 8+ occurences, 4898 of 4943 taxa retained", ylab = "Number of ASVs", xlab = "Number of DNA Sequences",
-          abline(v = min(sample_sums(physeq_filtered)), col="red", lwd=3, lty=2))
+rarecurve(t(physeq_filtered_df),
+  col = sample_data(physeq_filtered)$Sample_type,
+  label = FALSE,
+  step = 200,
+  main = "Rarefaction at 8678 reads, 8+ occurences, 4898 of 4943 taxa retained", ylab = "Number of ASVs", xlab = "Number of DNA Sequences",
+  abline(v = min(sample_sums(physeq_filtered)), col = "red", lwd = 3, lty = 2)
+)
 
 # the rarefraction curve is actually quite ok! we won't lose much ASV diversity if we cut at the minimal depth. of course, this is after all the filtering, which removed most rare species
 
 # now, let's rarefy the data
 set.seed(100) # set a random seed so that whenever you re-run this code you draw the same set of OTUs
-min(sample_sums(physeq_filtered)) #minumum library size
+min(sample_sums(physeq_filtered)) # minumum library size
 sort.default(colSums(otu_table(physeq_filtered))) # sometimes you might want to lose/remove one or more samples that have a very low library size. you would have to ballance the number of samples with the minimum number of sequences. in this particular dataset, we won't cut any samples as the rarefaction curve looks very good
 
-#runt he rarefaction. with 1 argument per line it becomes easier to see what is going on. naming the arguments also help a lot!
-physeq_filtered_rarefied = rarefy_even_depth(physeq = physeq_filtered, 
-                                             sample.size = min(sample_sums(physeq_filtered)), 
-                                             rngseed = FALSE, 
-                                             replace = TRUE, 
-                                             trimOTUs = TRUE, 
-                                             verbose = TRUE) 
+# runt he rarefaction. with 1 argument per line it becomes easier to see what is going on. naming the arguments also help a lot!
+physeq_filtered_rarefied <- rarefy_even_depth(
+  physeq = physeq_filtered,
+  sample.size = min(sample_sums(physeq_filtered)),
+  rngseed = FALSE,
+  replace = TRUE,
+  trimOTUs = TRUE,
+  verbose = TRUE
+)
 
 
 # this will remove any ASVs with 0 reads accidentally put in place
-otu_table(physeq_filtered_rarefied) <- otu_table(physeq_filtered_rarefied)[which                                                                        (rowSums(otu_table(physeq_filtered_rarefied)) >= 1),] 
+otu_table(physeq_filtered_rarefied) <- otu_table(physeq_filtered_rarefied)[which(rowSums(otu_table(physeq_filtered_rarefied)) >= 1), ]
 
 # at this point all your samples should have an identical library size
 colSums(otu_table(physeq_filtered_rarefied))
@@ -290,27 +295,26 @@ colSums(otu_table(physeq_filtered_rarefied))
 any(taxa_sums(physeq_filtered_rarefied) == 0)
 
 # this will show how much of our sequencing still makes part of our phyloseq object
-sum(otu_table(physeq_filtered_rarefied))/sum(otu_table(physeq_filtered))
+sum(otu_table(physeq_filtered_rarefied)) / sum(otu_table(physeq_filtered))
 
-#this is your final phyloseq object
+# this is your final phyloseq object
 physeq_filtered_rarefied
 
 # results of rarefraction: no ASV lost, no samples lost. this is because we used a high filtering (option 1.3c), rarefaction curve achieved a plateau, and minimal library size was not too low.
 
-#assign meja treatment as a factor
-sample_data(physeq_filtered_rarefied)$MeJA_treatment<-as.factor(sample_data(physeq_filtered_rarefied)$MeJA_treatment)
+# assign meja treatment as a factor
+sample_data(physeq_filtered_rarefied)$MeJA_treatment <- as.factor(sample_data(physeq_filtered_rarefied)$MeJA_treatment)
 
 # splits rarefied phyloseq object into several lists
-pslist_sp_rarefied<-phyloseq_sep_variable(physeq_filtered_rarefied, variable = "Plant_species")
+pslist_sp_rarefied <- phyloseq_sep_variable(physeq_filtered_rarefied, variable = "Plant_species")
 # one list of 2 phyloseq objects for root/soil samples
-pslist_root_soil_rarefied<-phyloseq_sep_variable(physeq_filtered_rarefied, variable = "Sample_type") 
+pslist_root_soil_rarefied <- phyloseq_sep_variable(physeq_filtered_rarefied, variable = "Sample_type")
 # one list of 4 phyloseq objects for sample type + species
-ps_list_rarefied<-phyloseq_sep_variable(physeq_filtered_rarefied, variable = c("Plant_species","Sample_type"))
+ps_list_rarefied <- phyloseq_sep_variable(physeq_filtered_rarefied, variable = c("Plant_species", "Sample_type"))
 
 ##### *** THIS DATA IS NOW READY FOR ANALYSIS *** ##########
 
-gc() #garbage collection
-
+gc() # garbage collection
 ```
  
 #### 1.4b Metagenomseq
@@ -319,57 +323,57 @@ We use this package to be able to normalize library sizes without using rarefact
 We will use CSS-normalized data for beta diversity analysis: ordinations, permanovas and beta dispersion
 ```{r}
 # first, let's transform the phyloseq object into an MR experiment object
-MRexp_objt<-phyloseq_to_metagenomeSeq(physeq_filtered)
+MRexp_objt <- phyloseq_to_metagenomeSeq(physeq_filtered)
 
 # normalizes the object by cumulative sum scaling, a widely used method
-cumNorm(MRexp_objt) 
+cumNorm(MRexp_objt)
 
-#here you can acess the abundance matrix normalized by cumulative sum scaling. you could overwrite the phyloseq object with this
+# here you can acess the abundance matrix normalized by cumulative sum scaling. you could overwrite the phyloseq object with this
 CSS_matrix <- MRcounts(MRexp_objt, norm = TRUE, log = TRUE) # using a log scale will essentially reduce the impact of common species and increase the impact of rare species
 
-#make a new phyloseq object...
-physeq_filtered_CSS<-physeq_filtered
+# make a new phyloseq object...
+physeq_filtered_CSS <- physeq_filtered
 
 # and now change it's taxa table
-otu_table(physeq_filtered_CSS)<-otu_table(CSS_matrix, taxa_are_rows = TRUE)
+otu_table(physeq_filtered_CSS) <- otu_table(CSS_matrix, taxa_are_rows = TRUE)
 
-#this is your final phyloseq object
+# this is your final phyloseq object
 physeq_filtered_CSS
 
 
 
-#assign meja treatment as a factor
-sample_data(physeq_filtered_CSS)$MeJA_treatment<-as.factor(sample_data(physeq_filtered_CSS)$MeJA_treatment)
+# assign meja treatment as a factor
+sample_data(physeq_filtered_CSS)$MeJA_treatment <- as.factor(sample_data(physeq_filtered_CSS)$MeJA_treatment)
 
 
-#creating lists of phyloseq objects
+# creating lists of phyloseq objects
 # one list of 2 for B.ole and A.tha
-pslist_sp_CSS<-phyloseq_sep_variable(physeq_filtered_CSS, variable = "Plant_species")
+pslist_sp_CSS <- phyloseq_sep_variable(physeq_filtered_CSS, variable = "Plant_species")
 # one list of 2 phyloseq objects for root/soil samples
-pslist_root_soil_CSS<-phyloseq_sep_variable(physeq_filtered_CSS, variable = "Sample_type") 
+pslist_root_soil_CSS <- phyloseq_sep_variable(physeq_filtered_CSS, variable = "Sample_type")
 # one list of 4 phyloseq objects for sample type + species
-ps_list_CSS<-phyloseq_sep_variable(physeq_filtered_CSS, variable = c("Plant_species","Sample_type"))
+ps_list_CSS <- phyloseq_sep_variable(physeq_filtered_CSS, variable = c("Plant_species", "Sample_type"))
 
 
 ###########################
 
-gc() #garbage collection
+gc() # garbage collection
 ```
 #### 1.4c list of different normalization options
 
 ```{r}
 
-#now that we have multiple ways of looking at our data, let's make a list of different normalization options
-normalization_listed<-list(physeq_filtered_CSS,physeq_filtered_rarefied,physeq_filtered)
+# now that we have multiple ways of looking at our data, let's make a list of different normalization options
+normalization_listed <- list(physeq_filtered_CSS, physeq_filtered_rarefied, physeq_filtered)
 
 
-names(normalization_listed)<-c("physeq_filtered_CSS",
-                               "physeq_filtered_rarefied",
-                               "physeq_filtered")
-#this is a list of 3 phyloseq objects, each with a different normalization approach
+names(normalization_listed) <- c(
+  "physeq_filtered_CSS",
+  "physeq_filtered_rarefied",
+  "physeq_filtered"
+)
+# this is a list of 3 phyloseq objects, each with a different normalization approach
 normalization_listed
-
-
 ```
 
 # Data ready for analysis! proceed to scrip 2_Beta_Diversity!
@@ -380,6 +384,4 @@ Save R objects
 ```{r}
 
 save.image("./R output/env.1_Loading_and_pre_processing.RData")
-
 ```
-

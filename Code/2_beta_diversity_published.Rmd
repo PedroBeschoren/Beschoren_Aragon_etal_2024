@@ -7,6 +7,15 @@ editor_options:
   chunk_output_type: console
 ---
 
+# load libraries and data
+```{r}
+source("./Code/Functions/load_libraries.R")
+load("./R output/env.1_Loading_and_pre_processing.RData")
+```
+
+
+
+
 # 2.0 - basic beta diversity analysis
 this script should be run after script "1_loading_and_pre_processing.rmd" because it generates all the global environment objects and also loads the libraries
 
@@ -20,54 +29,26 @@ Beta diversity plots are the beating heart or microbiome analysis. here you will
 ```{r}
 
 # Let's make a Non-Metric Multidimensional Scaling (NMDS) of all our samples based on CSS normalization
-nmds_rootAndSoil <- phyloseq::ordinate(physeq_filtered_CSS, 
-                             method ="NMDS", # this method has few assumptions and readly accepts different data structures
-                             distance="bray", # bray-curtis distance is suitable for sparse data - such as the zero-inflated microbiome data we have
-                             try=200, # number of iterations
-                             autotransform=TRUE) # automatically transforms your data, if needed. reduces weight of outliers
-                              #weakties = FALSE prevests tress from colapsing into zero
+nmds_rootAndSoil <- phyloseq::ordinate(physeq_filtered_CSS,
+  method = "NMDS", # this method has few assumptions and readly accepts different data structures
+  distance = "bray", # bray-curtis distance is suitable for sparse data - such as the zero-inflated microbiome data we have
+  try = 200, # number of iterations
+  autotransform = TRUE
+) # automatically transforms your data, if needed. reduces weight of outliers
+# weakties = FALSE prevests tress from colapsing into zero
 
-plot_ordination(physeq = physeq_filtered_CSS, 
-                ordination = nmds_rootAndSoil, 
-                color= "MeJA_treatment", 
-                shape = "Plant_species") + 
+plot_ordination(
+  physeq = physeq_filtered_CSS,
+  ordination = nmds_rootAndSoil,
+  color = "MeJA_treatment",
+  shape = "Plant_species"
+) +
   theme_classic() +
   theme(plot.title = element_text(size = 10, face = "bold", hjust = 0.5)) +
-  geom_point(aes(size=Sample_type), alpha=1) +
-  theme(legend.position="right")
+  geom_point(aes(size = Sample_type), alpha = 1) +
+  theme(legend.position = "right")
 
 metadata <- as(sample_data(physeq_filtered_CSS), "data.frame")
-
-
-
-# let's split root and soil as we know those will be different and we are not that interested in this differecnes
-filtered_root<-subset_samples(physeq_filtered_CSS, Sample_type=="Root")
-otu_table(filtered_root) <- otu_table(filtered_root)[which(rowSums(otu_table(filtered_root)) >= 1),]
-
-filtered_soil<-subset_samples(physeq_filtered_CSS, Sample_type=="Soil")
-otu_table(filtered_soil) <- otu_table(filtered_soil)[which(rowSums(otu_table(filtered_soil)) >= 1),]
-
-
-#root NMDS
-nmds_root <- ordinate(filtered_root, method ="NMDS", distance="bray", try=200, autotransform=TRUE) #weakties = FALSE prevests tress from colapsing into zero
-nmds_root
-
-plot_ordination(filtered_root, nmds_root, 
-                color="MeJA_treatment", shape = "Plant_species") + 
-  theme_classic() +
-  theme(plot.title = element_text(size = 10, face = "bold", hjust = 0.5)) +
-  theme(legend.position="right")
-
-
-#Soil NMDS
-nmds_soil <- ordinate(filtered_soil, method ="NMDS", distance="bray", try=200, autotransform=TRUE) #weakties = FALSE prevests tress from colapsing into zero
-nmds_soil
-
-plot_ordination(filtered_soil, nmds_soil, 
-                color="MeJA_treatment", shape = "Plant_species") + 
-  theme_classic() +
-  theme(plot.title = element_text(size = 10, face = "bold", hjust = 0.5)) +
-  theme(legend.position="right")
 ```
 
 
@@ -75,55 +56,54 @@ plot_ordination(filtered_soil, nmds_soil,
 
 ```{r}
 
+# define custom fucntion to plot a list of NMDS results
+NMDS_listing <- function(physeq_list) { # first the name of the new function you are saving, then you say you are going to define a function, and then you set it's arguments - here, a single list of phyloseq objects. the {} indicate where the contents of the custom function start and end.
 
-NMDS_listing <- function(physeq_list) { #first the name of the new function you are saving, then you say you are going to define a function, and then you set it's arguments - here, a single list of phyloseq objects. the {} indicate where the contents of the custom function start and end.
-  
-#here we perform the NMDS on all elements of the list using phyloseq::ordinate()
-NMDS_list<-lapply(physeq_list, function (x) ordinate(physeq = x, # your phyloseq object, each element x in the list
-                                                     method ="NMDS", # ordination method to use
-                                                     distance="bray", # distance metric to use
-                                                     try=200, # number of permutations
-                                                     autotransform=TRUE)) # automatic data transformation
+  # here we perform the NMDS on all elements of the list using phyloseq::ordinate()
+  NMDS_list <- lapply(physeq_list, function(x) {
+    ordinate(
+      physeq = x, # your phyloseq object, each element x in the list
+      method = "NMDS", # ordination method to use
+      distance = "bray", # distance metric to use
+      try = 200, # number of permutations
+      autotransform = TRUE
+    )
+  }) # automatic data transformation
 
-# mapply will perform one function on two lists. define the lists in the end of the function
-untitled_plot_list<-mapply (function (x,y) # mapply will run one function on 2 lists
-    plot_ordination(physeq = x, # your phyloseq object, each element x in the list
-                    ordination = y, # your phyloseq-generated ordination object, each element y in the list made above
-                    color="MeJA_treatment") + # dot colors in the plot
-    theme_classic() + #ggplot option to remove background
-    labs(subtitle = paste("Stress:", round(y$stress, digits=4)))+  # this adds the NMDS stress to the plot as subtitle
-    theme(plot.title = element_text(size = 10, face = "bold")) + #options for the title
-    theme(legend.position="right"), #position for the legend
-  x = physeq_list, #note that you only define x here, after you define your plot function
-  y = NMDS_list, #note that you only definee y here, after you define your plot function
-  SIMPLIFY = FALSE) # if you simply, all resusts are saved in a vector
+  # mapply will perform one function on two lists. define the lists in the end of the function
+  untitled_plot_list <- mapply(function(x, y) { # mapply will run one function on 2 lists
+    plot_ordination(
+      physeq = x, # your phyloseq object, each element x in the list
+      ordination = y, # your phyloseq-generated ordination object, each element y in the list made above
+      color = "MeJA_treatment"
+    ) + # dot colors in the plot
+      theme_classic() + # ggplot option to remove background
+      labs(subtitle = paste("Stress:", round(y$stress, digits = 4))) + # this adds the NMDS stress to the plot as subtitle
+      theme(plot.title = element_text(size = 10, face = "bold")) + # options for the title
+      theme(legend.position = "right")
+  }, # position for the legend
+  x = physeq_list, # note that you only define x here, after you define your plot function
+  y = NMDS_list, # note that you only definee y here, after you define your plot function
+  SIMPLIFY = FALSE
+  ) # if you simply, all resusts are saved in a vector
 
-# The plots above miss a title, so you don't really know who is root and who is soil. this code create a list of names to be used as titles in your plot
-tiles_list<-names(untitled_plot_list) 
+  # The plots above miss a title, so you don't really know who is root and who is soil. this code create a list of names to be used as titles in your plot
+  tiles_list <- names(untitled_plot_list)
 
-Plot_list<-mapply(function (z,w) # use mapply again to put those listed names in the list of plots
-  z + ggtitle(w),
+  Plot_list <- mapply(function(z, w) { # use mapply again to put those listed names in the list of plots
+    z + ggtitle(w)
+  },
   z = untitled_plot_list,
-  w = tiles_list, 
-  SIMPLIFY = FALSE)
+  w = tiles_list,
+  SIMPLIFY = FALSE
+  )
 
-return (list(NMDS_list,Plot_list)) # with this you specify the output of your custom function. Note we are saving both the NMDS calculations and the plot as a list, so we don't ahve to re-calculate the NMDS later
-
-  
+  return(list(NMDS_list, Plot_list)) # with this you specify the output of your custom function. Note we are saving both the NMDS calculations and the plot as a list, so we don't ahve to re-calculate the NMDS later
 }
 
-#let's run our custom function
-NMDS_Root_soil<-NMDS_listing(pslist_root_soil_CSS)
-
-NMDS_Root_soil[1]# the first list element will have the NMDS calculation output, for both root and soil
-NMDS_Root_soil[2]# the second list element will have the NMDS plots, for both root and soil
-
-
-NMDS_AT_BO<-NMDS_listing(pslist_sp_CSS)
+# let's run our custom function
 set.seed(5235)
-NMDS_4_slice<-NMDS_listing(ps_list_CSS)
-
-
+NMDS_4_slice <- NMDS_listing(ps_list_CSS)
 ```
 
 
@@ -137,64 +117,59 @@ What if you don't have homogeniety of variances? then your permanova results are
 ```{r}
 
 # this will test beta dispersions over a list by considering a factor
-####-------- soft-coded, 3 lists of phyloseq objects ---###
-beta_disp_plotAndTest<-function(phyloseq_list, group){
+#### -------- soft-coded, 3 lists of phyloseq objects ---###
+beta_disp_plotAndTest <- function(phyloseq_list, group) {
   # phyloseq_list = a list of phyloseq objects
   # group = the variale you want to test the beta dispersion of, in quotes
-    beta_disper_list<-lapply(phyloseq_list, function (x) 
-  betadisper(phyloseq::distance(t(otu_table(x)), method="bray"), sample_data(x)[[group]])) #selects only column "group""
+  beta_disper_list <- lapply(phyloseq_list, function(x) {
+    betadisper(phyloseq::distance(t(otu_table(x)), method = "bray"), sample_data(x)[[group]])
+  }) # selects only column "group""
 
   # gets the names of the list
-tiles_list<-names(beta_disper_list)
-  
-  #runs anova on beta dispersions
-get_p<-lapply(beta_disper_list, function (x) 
-  anova(x, permutations = 999))
+  tiles_list <- names(beta_disper_list)
+
+  # runs anova on beta dispersions
+  get_p <- lapply(beta_disper_list, function(x) {
+    anova(x, permutations = 999)
+  })
 
 
-p_dispersion<-map(get_p, 5) # gets the p value of the dispersion test
-p_dispersion <- p_dispersion[!is.na(p_dispersion)] # removes the generated NA
+  p_dispersion <- map(get_p, 5) # gets the p value of the dispersion test
+  p_dispersion <- p_dispersion[!is.na(p_dispersion)] # removes the generated NA
 
 
-#runs anova on beta dispersions
-bet_disp_PCOa_plot<-mapply(function (x,y,z) 
-  plot(x, 
-       main = y, 
-       sub =z, 
-       xlab="p value for homogeniety test:", 
-       ylab="PCoA"),
+  # runs anova on beta dispersions
+  bet_disp_PCOa_plot <- mapply(function(x, y, z) {
+    plot(x,
+      main = y,
+      sub = z,
+      xlab = "p value for homogeniety test:",
+      ylab = "PCoA"
+    )
+  },
   x = beta_disper_list,
   y = tiles_list,
   z = p_dispersion,
-  SIMPLIFY = FALSE) 
+  SIMPLIFY = FALSE
+  )
 
-#runs anova on beta dispersions
-bet_disp_boxplot<-mapply(function (x,y) 
-  boxplot(x, main = y),
+  # runs anova on beta dispersions
+  bet_disp_boxplot <- mapply(function(x, y) {
+    boxplot(x, main = y)
+  },
   x = beta_disper_list,
   y = tiles_list,
-  SIMPLIFY = FALSE)
+  SIMPLIFY = FALSE
+  )
 
 
-return(list(bet_disp_PCOa_plot,bet_disp_boxplot))
+  return(list(bet_disp_PCOa_plot, bet_disp_boxplot))
 }
 
 # now that we have a custom function, we can run it across all lists and variables
-dip_result1<-beta_disp_plotAndTest(normalization_listed, "Sample_type")
-dip_result2<-beta_disp_plotAndTest(normalization_listed, "Plant_species")
 set.seed(5235)
-dip_result3<-beta_disp_plotAndTest(ps_list_CSS, "MeJA_treatment")
-
-
-str(ps_list_CSS)
-
-# that was much better! note that we calculate the homogeniety within the function, acess the P value of the test, and then palce it on the plot
-#It's common to take a lot of time to handle an aparently simple problem when wirting these fucntions. pedro took ~3h to make the "group" in the fucntion be correctly evaluated and executed...
-
-#CONCLUSION:  all beta dispersions are similar. we can safely tust in the permanova results
+dip_result3 <- beta_disp_plotAndTest(ps_list_CSS, "MeJA_treatment")
 ```
-
-
 
 
 # 2.3 - P values for beta diversity
@@ -209,101 +184,82 @@ you will need to run, test and check several different models and data slices to
 
 ```{r}
 # Running the permanova with vegan::adonis2() on a single phyloseq object is very simple
-metadata<-as(sample_data(physeq_filtered_CSS),"data.frame")
-#let's first define permitation design with permute::how()
-perm2<-how(within = Within (type = "free"), # permute observations freely within the blocks. got to ask Fred how to handle grid arrangements!
-           blocks = metadata$Block, # define blocks
-           nperm=999)# n of permutations
+metadata <- as(sample_data(physeq_filtered_CSS), "data.frame")
+# let's first define permitation design with permute::how()
+perm2 <- how(
+  within = Within(type = "free"), # permute observations freely within the blocks. got to ask Fred how to handle grid arrangements!
+  blocks = metadata$Block, # define blocks
+  nperm = 999
+) # n of permutations
 set.seed(5235)
 # now let's calculate the permanova
-adonis2(phyloseq::distance(t(otu_table(physeq_filtered_CSS)), method="bray") # this is your distance matrix of OTU abundances 
-        ~ MeJA_treatment*Plant_species*Sample_type + Block, # this is your model
-        permutations=perm2, # we jsut defined the permutation settings above, you place them here
-        data = metadata) # metadata for the community matrix
-
-# intepreting a three-way interaction can be tricky. a good aproach is to start you analysis with simpler models, or to split the sample types. for example, if you already know root and soil will be different, why wuold you add it as a complicating factor in the model? finally, you will need to run several permanovas to have a good understanding of your data. 
-
-
-####-------- running adonis on a list of phyloseq objects ---###
-
-# now let's run the PERMANOVA across the elements of the list. here we check if species differ acros sample type
-lapply(pslist_root_soil_CSS, function (x)
-       adonis2(phyloseq::distance(t(otu_table(x)), 
-              method="bray") ~ MeJA_treatment*Plant_species + Block, 
-              data = as(sample_data(x),"data.frame"), # changing with as.data.frame is insufficient
-              permutations = how(within = Within (type = "free"),blocks = as(sample_data(x),"data.frame")$Block, nperm=999))) # how() defines the permutations, it is important to adjust it to the experimental design such as a time series
-
-# if we are going to run this several times only change input and factors, let's write a custom function we can use later
+three_way_permanova <- adonis2(phyloseq::distance(t(otu_table(physeq_filtered_CSS)), method = "bray") # this is your distance matrix of OTU abundances
+~ MeJA_treatment * Plant_species * Sample_type + Block, # this is your model
+permutations = perm2, # we jsut defined the permutation settings above, you place them here
+data = metadata
+) # metadata for the community matrix
 
 
 
-
-
-####-------- soft-coded, 3 lists of phyloseq objects with 1 formula ---###
+#### -------- soft-coded, 3 lists of phyloseq objects with 1 formula ---###
 
 # let's check now if sample type differ per species. note that this function uses Blocks as strata
-permanova_with_blocks<-function(phyloseq_list, rhs_model){
+permanova_with_blocks <- function(phyloseq_list, rhs_model) {
   # phyloseq_list = list of phyloseq objects
   # RHS_model = right hand side model, such as MeJA_treatment*Sample_type + Block
-  lapply(phyloseq_list, function (x){
-    lhs_data<-phyloseq::distance(t(otu_table(x)), method="bray")
-    rhs_model_in<- paste(rhs_model)
-    form<- as.formula(paste("lhs_data~", paste(rhs_model_in))) # getting the formulat properly evaluated as custom string is tricky
-       output<-adonis2(form, 
-              data = as(sample_data(x),"data.frame"), # changing with as.data.frame is insufficient
-              permutations = how(within = Within (type = "free"),blocks = as(sample_data(x),"data.frame")$Block, nperm=9999)) # how defines the permutations, it is important to adjust it to the experimental design such as a time series
-       return(output)
+  lapply(phyloseq_list, function(x) {
+    lhs_data <- phyloseq::distance(t(otu_table(x)), method = "bray")
+    rhs_model_in <- paste(rhs_model)
+    form <- as.formula(paste("lhs_data~", paste(rhs_model_in))) # getting the formulat properly evaluated as custom string is tricky
+    output <- adonis2(form,
+      data = as(sample_data(x), "data.frame"), # changing with as.data.frame is insufficient
+      permutations = how(within = Within(type = "free"), blocks = as(sample_data(x), "data.frame")$Block, nperm = 9999)
+    ) # how defines the permutations, it is important to adjust it to the experimental design such as a time series
+    return(output)
   })
 }
 
-# now let's run the custom functions on lists
-permanova_with_blocks(pslist_root_soil_CSS, "MeJA_treatment*Plant_species + Block") # here we see that the effects of MeJA in roots and soils depend on species
-
-permanova_with_blocks(pslist_sp_CSS, "Sample_type*MeJA_treatment + Block") # here we see that in both species the effects of MeJA are independet of the effects sample type
+# run custom funcion
 set.seed(5235)
-permanova_with_blocks(ps_list_CSS, "MeJA_treatment + Block") # finally we see MeJA has effect on all sample types and species, but with a a p = 0.0554 for Brassica_oleraceae.Soil
+permanova_with_blocks(ps_list_CSS, "MeJA_treatment + Block")
 
-# we already knew roots and soils would differ greatly. we could observe that plant species also differ in comunity composition. our biological conclusion is that the MeJA treatments altered community composition in both roots and soils for both species. Note the the explained variance for MeJA treatments (R2) is smaller than those of sample type or plant species.
-
-
-
-####### check formula####
-set.seed(5235)
-adonis2(phyloseq::distance(t(otu_table(ps_list_CSS$Brassica_oleraceae.Soil)), method="bray")  ~ MeJA_treatment + Block,
-        data = as(sample_data(ps_list_CSS$Brassica_oleraceae.Soil),"data.frame"),
-        permutations = how(within = Within (type = "free"),blocks = as(sample_data(ps_list_CSS$Brassica_oleraceae.Soil),"data.frame")$Block, nperm=9999))
-
-set.seed(5235)
-adonis(formula = phyloseq::distance(t(otu_table(ps_list_CSS$Brassica_oleraceae.Soil)), method="bray")  ~ MeJA_treatment + Block,
-      data = as(sample_data(ps_list_CSS$Brassica_oleraceae.Soil),"data.frame"),
-      permutations = 9999,
-      strata = as(sample_data(ps_list_CSS$Brassica_oleraceae.Soil),"data.frame")$Block)
 
 ```
 ## 2.3.2 pairwise PERMANOVA
+
 Now that we know the fixed factor effects and interactions, let's make pairwise comparisons.
-we will use 2 different functions - EcolUtils::adonis.pair and pairwiseAdonis::pairwise.adonis2.
+
 
 ### 2.3.2a EcolUtils::adonis.pair - with lists and p adjust, no blocks. 
 ```{r}
-  
 
-# EcolUtils::adonis.pair pairwise comparisons with p adjustment but wihtout strata/blocks. we can easely make it iterate over a list
-lapply(ps_list_CSS, function (x)
-  adonis.pair(dist.mat= phyloseq::distance(otu_table(x), method="bray"),
-              Factor= as.factor(as(phyloseq::sample_data(x),"data.frame")$MeJA_treatment)))
+# pairwise coparisons over a list fo 4 ps obects
+set.seed(5235)
+lapply(ps_list_CSS, function(x) {
+  adonis.pair(
+    dist.mat = phyloseq::distance(otu_table(x), method = "bray"),
+    Factor = as.factor(as(phyloseq::sample_data(x), "data.frame")$MeJA_treatment)
+  )
+})
 
-lapply(pslist_root_soil_CSS, function (x)
-  adonis.pair(dist.mat= phyloseq::distance(otu_table(x), method="bray"),
-              Factor= as.factor(as(phyloseq::sample_data(x),"data.frame")$MeJA_treatment)))
 
-lapply(pslist_sp_CSS, function (x)
-  adonis.pair(dist.mat= phyloseq::distance(otu_table(x), method="bray"),
-              Factor= as.factor(as(phyloseq::sample_data(x),"data.frame")$MeJA_treatment)))
+# pairwise coparisons over afull community
+adonis.pair(
+dist.mat = phyloseq::distance(otu_table(physeq_filtered_CSS), method = "bray"),
+Factor = as.factor(as(phyloseq::sample_data(physeq_filtered_CSS), "data.frame")$MeJA_treatment)
+)
 
-# conclusion: the only significant pairwise comparison in for MeJA 0.1 to MeJA 1.0 on the roots of AT (p=0.06 for roots of BO)
+
+
 ```
 
-# Beta Diversity analyised! proceed to scrip 3_Alpha_Diversity!
 
-There are dozens of different models and methods you can use to check if your communities are "similar" or not. This script will hopefully help get started on this topic. 
+# save session
+```{r}
+
+save.image("./R output/analysis_session.RData")
+```
+
+
+Beta Diversity analysed! proceed to scrip 3_Alpha_Diversity!
+

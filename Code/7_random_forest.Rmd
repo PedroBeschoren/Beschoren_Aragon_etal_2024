@@ -7,17 +7,20 @@ editor_options:
   chunk_output_type: console
 ---
 
+# load libraries and data
+```{r}
+source("./Code/Functions/load_libraries.R")
+load("./R output/env.1_Loading_and_pre_processing.RData")
+```
+
+
+
 
 # 7.0 Random forest
 I've used this tutorial https://www.andreaperlato.com/mlpost/feature-selection-using-boruta-algorithm/
 you can also conside rthis: https://www.analyticsvidhya.com/blog/2016/03/select-important-variables-boruta-package/
 https://www.analyticsvidhya.com/blog/2021/05/boruta-with-r-is-a-great-way-to-address-the-curse-of-dimensionality/
 
-attention: do not allow NAs to be included in the boruta input data
-
-How to handle features classified as tentative? You could consider increasing the maxRuns parameter if tentative features are left. However, note that you can also provide values of mtry and ntree parameters, which will be passed to randomForest() function. The first allows you to specify the number of variables that are randomly sampled as candidates at each split, while the latter is used to specify the number of trees you want to grow. With these arguments specified, the Random Forest classifier will achieve a convergence at minimal value of the out of bag error.
-
-problem: if boruta's precision and accurace are based on randomly (seed) split test and train datasets, how to accounr from randomness of the process? Should I itirate this process so there are ~100 different train and test datasets with fixed seeds, and then get the average prediction over those? then we ahve average +/- SD predictions for random forest with and wihtout boruta. without this, the precsion oscilates ebtween 67% and 90% for my 24-sample dataset
 
 
 
@@ -27,73 +30,82 @@ problem: if boruta's precision and accurace are based on randomly (seed) split t
 ```{r boruta}
 
 
-#prepare phyloseq object to be an input in Boruta
-physeq_to_borutaInput<-function (list_physeq_object, variable_to_be_classified){
-# key input: transposed OTU table with Meja_treatment as a added variable
-# the output is a list of df ready to be used as input to boruta  
-  #transpose phtseq otu table  
-otu_cells_wide_list <-lapply(list_physeq_object, function(x) #transpose the feature table...
-                              as.data.frame(t(otu_table(x)))%>%
-                              rownames_to_column(var = "sample"))
+# prepare phyloseq object to be an input in Boruta
+physeq_to_borutaInput <- function(list_physeq_object, variable_to_be_classified) {
+  # key input: transposed OTU table with Meja_treatment as a added variable
+  # the output is a list of df ready to be used as input to boruta
+  # transpose phtseq otu table
+  otu_cells_wide_list <- lapply(list_physeq_object, function(x) { # transpose the feature table...
+    as.data.frame(t(otu_table(x))) %>%
+      rownames_to_column(var = "sample")
+  })
 
-# extract sample data
-metadata_list <-lapply(list_physeq_object, function(x)
-  as(sample_data(x),"data.frame")%>%
-  rownames_to_column(var = "sample"))
+  # extract sample data
+  metadata_list <- lapply(list_physeq_object, function(x) {
+    as(sample_data(x), "data.frame") %>%
+      rownames_to_column(var = "sample")
+  })
 
-#add the variable classification you want to predict with the random forest
-output<-mapply(function (x,y)
-  merge(select(x,sample, variable_to_be_classified),
-        y,
-        by = "sample",
-        all.y = TRUE),
+  # add the variable classification you want to predict with the random forest
+  output <- mapply(function(x, y) {
+    merge(select(x, sample, variable_to_be_classified),
+      y,
+      by = "sample",
+      all.y = TRUE
+    )
+  },
   x = metadata_list,
   y = otu_cells_wide_list,
-  SIMPLIFY = FALSE)
+  SIMPLIFY = FALSE
+  )
 
 
-return(output)
+  return(output)
 }
 
-rf_variable<-"MeJA_treatment"
-list_boruta_input<-physeq_to_borutaInput(ps_list_rarefied,rf_variable)
+rf_variable <- "MeJA_treatment"
+list_boruta_input <- physeq_to_borutaInput(ps_list_rarefied, rf_variable)
 
 
-#check your df
-str(list_boruta_input$Arabidopsis_thaliana.Root[1:10,1:10]) # if your "rf_variable" is not a factor, boruta won't work
+# check your df
+str(list_boruta_input$Arabidopsis_thaliana.Root[1:10, 1:10]) # if your "rf_variable" is not a factor, boruta won't work
 
 
-#run borura
+# run borura
 set.seed(456987)
-boruta_objt_list<-lapply(list_boruta_input, function(x)
-  Boruta(MeJA_treatment~.,   data = x,doTrace=2, maxRuns = 500, ntree = 5000)) #increase the maximum number of runs to decrease the number of tenttively important OTUs. increase the number of trees to increase precision. decrease either to reduce computational time.
-
+boruta_objt_list <- lapply(list_boruta_input, function(x) {
+  Boruta(MeJA_treatment ~ ., data = x, doTrace = 2, maxRuns = 500, ntree = 5000)
+}) # increase the maximum number of runs to decrease the number of tenttively important OTUs. increase the number of trees to increase precision. decrease either to reduce computational time.
 ```
 
 ## 7.2 visualize boruta results over a list (list as input, list as output)
 
 ```{r boruta}
 
-#let Boruta decide if tentative features are ultimatetly important or not ; 
-fixed_boruta_objt_list<-lapply(boruta_objt_list, function(x)
-  TentativeRoughFix(x))
+# let Boruta decide if tentative features are ultimatetly important or not ;
+fixed_boruta_objt_list <- lapply(boruta_objt_list, function(x) {
+  TentativeRoughFix(x)
+})
 
 # get a list of ASVs defined as inportant by Boruta
-boruta_ASV_list<-lapply(fixed_boruta_objt_list, function(x)
-  getSelectedAttributes(x))
+boruta_ASV_list <- lapply(fixed_boruta_objt_list, function(x) {
+  getSelectedAttributes(x)
+})
 
 # get the list of ASVs defined as inportant by Boruta in formula format ; this can be used to calculate precision
-boruta_formula_list<-lapply(fixed_boruta_objt_list, function(x)
-  getConfirmedFormula(x))
+boruta_formula_list <- lapply(fixed_boruta_objt_list, function(x) {
+  getConfirmedFormula(x)
+})
 
-#make a plot showing imporance of features
-boruta_plot<-lapply(fixed_boruta_objt_list, function(x)
-  plot(x))
+# make a plot showing imporance of features
+boruta_plot <- lapply(fixed_boruta_objt_list, function(x) {
+  plot(x)
+})
 
-#make a plot showing imporance and classification of features over iteration time
-boruta_history<-lapply(fixed_boruta_objt_list, function(x)
-  plotImpHistory(x))
-
+# make a plot showing imporance and classification of features over iteration time
+boruta_history <- lapply(fixed_boruta_objt_list, function(x) {
+  plotImpHistory(x)
+})
 ```
 
 
@@ -103,7 +115,7 @@ boruta_history<-lapply(fixed_boruta_objt_list, function(x)
 ##7.3 Cheking Boruta precision with 100-repeated 5-fold cross-validation, over the list of 4 borutized random forested
 ```{r boruta}
 
-############################3
+############################ 3
 # 100-repeated 5-fold cross-validation
 #############################
 
@@ -112,17 +124,20 @@ boruta_history<-lapply(fixed_boruta_objt_list, function(x)
 #################### full-features forest
 
 set.seed(4551)
-full_feature_rf_repeatedcv<-lapply(list_boruta_input, function (x) {
+full_feature_rf_repeatedcv <- lapply(list_boruta_input, function(x) {
+  train.control <- trainControl(
+    method = "repeatedcv", # set trainig/data split controls for the train function
+    number = 5, repeats = 100
+  )
 
-train.control <- trainControl(method = "repeatedcv", # set trainig/data split controls for the train function
-                              number = 5, repeats = 100)
-
-model_full_feature <- train(MeJA_treatment~., data = x, method = "rf", #execute training based on random forest; model is based on borut formula of important features
-               trControl = train.control, ntree=1000)
-
+  model_full_feature <- train(MeJA_treatment ~ .,
+    data = x, method = "rf", # execute training based on random forest; model is based on borut formula of important features
+    trControl = train.control, ntree = 1000
+  )
 
 
-return(model_full_feature)
+
+  return(model_full_feature)
 })
 
 full_feature_rf_repeatedcv
@@ -134,33 +149,28 @@ map(full_feature_rf_repeatedcv, confusionMatrix)
 
 #################### borutized forest
 set.seed(4551)
-boruta_feature_rf_repeatedcv<-mapply(function (x,z) {
+boruta_feature_rf_repeatedcv <- mapply(function(x, z) {
+  train.control <- trainControl(
+    method = "repeatedcv", # set trainig/data split controls for the train function
+    number = 5, repeats = 100
+  )
 
-train.control <- trainControl(method = "repeatedcv", # set trainig/data split controls for the train function
-                              number = 5, repeats = 100)
-
-model_borutized <- train(z, data = x, method = "rf", #execute training based on random forest; model is based on borut formula of important features
-               trControl = train.control, ntree=1000)
-
+  model_borutized <- train(z,
+    data = x, method = "rf", # execute training based on random forest; model is based on borut formula of important features
+    trControl = train.control, ntree = 1000
+  )
 
 
-return(model_borutized)
+
+  return(model_borutized)
 },
 x = list_boruta_input,
 z = boruta_formula_list,
-SIMPLIFY = FALSE)
+SIMPLIFY = FALSE
+)
 
-boruta_feature_rf_repeatedcv
+# check confusion matrix
 map(boruta_feature_rf_repeatedcv, confusionMatrix)
-
-
-
-boruta_feature_rf_repeatedcv$Arabidopsis_thaliana.Root$method
-
-
-
-
-
 ```
 
 
@@ -174,123 +184,27 @@ boruta_feature_rf_repeatedcv$Arabidopsis_thaliana.Root$method
 ##############################################################################################################
 
 
-# to a list of dataframes      
-rf_added_tax<-mapply(function (x,y)
-  tax_table(x)%>% #get tax table of the phyloseq object...
-  as.data.frame()%>% # turn it into a dataframe so mutate can work
-mutate(random_forest_relevance = # make anew variable caled random_forest_relevance, where...
-         if_else(taxa_names(x)%in%y == TRUE,"important", "uninportant")),#%>% # if the taxa names are present in the boruta list of selected ASVs, tag them as inportant
-  #tax_table(), # make it a phyloseq object again #this still needs adjustment
-  x =ps_list_rarefied,
-  y =boruta_ASV_list, 
-  SIMPLIFY = FALSE)   
+# to a list of dataframes
+rf_added_tax <- mapply(function(x, y) {
+  tax_table(x) %>% # get tax table of the phyloseq object...
+    as.data.frame() %>% # turn it into a dataframe so mutate can work
+    mutate(
+      random_forest_relevance = # make anew variable caled random_forest_relevance, where...
+        if_else(taxa_names(x) %in% y == TRUE, "important", "uninportant")
+    )
+}, # %>% # if the taxa names are present in the boruta list of selected ASVs, tag them as inportant
+# tax_table(), # make it a phyloseq object again #this still needs adjustment
+x = ps_list_rarefied,
+y = boruta_ASV_list,
+SIMPLIFY = FALSE
+)
 
 # export to add to network visualizations
 write.csv(select(rf_added_tax$Arabidopsis_thaliana.Soil, random_forest_relevance), "at_soil_rfimp.csv", row.names = TRUE)
 write.csv(select(rf_added_tax$Brassica_oleraceae.Soil, random_forest_relevance), "bo_soil_rfimp.csv", row.names = TRUE)
 write.csv(select(rf_added_tax$Arabidopsis_thaliana.Root, random_forest_relevance), "at_root_rfimp.csv", row.names = TRUE)
 write.csv(select(rf_added_tax$Brassica_oleraceae.Root, random_forest_relevance), "bo_root_rfimp.csv", row.names = TRUE)
-
-
-
 ```
-
-## 7.5 heat_tree of important features 
-
-```{r boruta}
-#create a list of phyloseq objecs that only contain the rf_important ASVss
-
-#mapply refused to give me list of phyloseq objects, so I hard-coded this
-rf_important_ps_l<-list(
-subset_taxa(ps_list_rarefied$Arabidopsis_thaliana.Root, taxa_names(ps_list_rarefied$Arabidopsis_thaliana.Root) %in% boruta_ASV_list$Arabidopsis_thaliana.Root),
-
-subset_taxa(ps_list_rarefied$Arabidopsis_thaliana.Soil, taxa_names(ps_list_rarefied$Arabidopsis_thaliana.Soil) %in% boruta_ASV_list$Arabidopsis_thaliana.Soil),
-
-subset_taxa(ps_list_rarefied$Brassica_oleraceae.Root, taxa_names(ps_list_rarefied$Brassica_oleraceae.Root) %in% boruta_ASV_list$Brassica_oleraceae.Root),
-
-subset_taxa(ps_list_rarefied$Brassica_oleraceae.Soil, taxa_names(ps_list_rarefied$Brassica_oleraceae.Soil) %in% boruta_ASV_list$Brassica_oleraceae.Soil)
-)
-
-names(rf_important_ps_l)<-c("Arabidopsis_thaliana.Root", "Arabidopsis_thaliana.Soil", "Brassica_oleraceae.Root", "Brassica_oleraceae.Soil")
-
-#visualize the taxonomies by table
-map(rf_important_ps_l, tax_table)
-
-
-# pie charts in ggplot
-#https://www.r-graph-gallery.com/piechart-ggplot2.html
-
-
-#this will show a heat tree of the RF important ASVs... but is it ultimattly interesting?
-
-rf_heat_tree<-rf_important_ps_l
-
-plot_bar(rf_important_ps_l$Arabidopsis_thaliana.Root)
-
-rf_heat_tree$merged<-merge_phyloseq(rf_heat_tree$Arabidopsis_thaliana.Root,
-                                     rf_heat_tree$Arabidopsis_thaliana.Soil,
-                                     rf_heat_tree$Brassica_oleraceae.Root,
-                                     rf_heat_tree$Brassica_oleraceae.Soil)
-
-make_list_of_heat_trees<-function(phyloseq_object){
-#remove unecessary taxonomic indo (dada2id, "S__" and" above_selected)
-#tax_table(phyloseq_object)<-tax_table(phyloseq_object)[,c(1:6)]
-
-
-
-
-# transform from phyloseq to  taxmap object
-test<-parse_phyloseq(phyloseq_object)
-
-
-
-#get abundance per taxon
-test$data$tax_abund<-calc_taxon_abund(obj = test, 
-                                      data = "otu_table",
-                                      cols = test$data$sample_data$sample_id)
-#get occuence of per sample type
-test$data$tax_occ <- calc_n_samples(obj = test, 
-                                    data = "tax_abund", 
-                                    groups = test$data$sample_data$MeJA_treatment, 
-                                    cols = test$data$sample_data$sample_id)
-
-
-############################## now, let's plot a matrix heat tree for the MeJA comparisons
-
-
-test$data$diff_table <- compare_groups(obj = test,
-                                      dataset = "tax_abund",
-                                      cols = test$data$sample_data$sample_id, # What columns of sample data to use
-                                      groups = test$data$sample_data$MeJA_treatment) # What category each sample is assigned to
-
-# set differental log ratio to 0 ased on adjusted p values
-test$data$diff_table$log2_median_ratio[test$data$diff_table$wilcox_p_value > 0.05] <- 0
-
-
-#plot matrix tree
-set.seed(1)
-heat_tree(test,
-                 node_size = n_obs, # n_obs is a function that calculates, in this case, the number of OTUs per taxon
-                 node_label = taxon_names,
-                 node_color = control,
-                 node_size_axis_label = "Number of samples present",
-                 node_color_axis_label = "ASV count",
-                 layout = "davidson-harel", # The primary layout algorithm
-                 initial_layout = "reingold-tilford") # The layout algorithm that initializes node locations
-               #  output_file = ".\R output\differential_heat_tree_AT.pdf") # Saves the plot as a pdf file
-
-
-
-}
-
-
-lapply(rf_heat_tree, function (x) make_list_of_heat_trees(x))
-
-
-
-
-```
-
 
 
 
@@ -300,71 +214,64 @@ lapply(rf_heat_tree, function (x) make_list_of_heat_trees(x))
 
 
 
-  #get boruta stats of ASVs confirmed to be important
-rf_importance_byOTU<-lapply(fixed_boruta_objt_list, function (x)
-   filter(attStats(x), decision=="Confirmed")%>%
-    tibble::rownames_to_column(var = "OTU"))
+# get boruta stats of ASVs confirmed to be important
+rf_importance_byOTU <- lapply(fixed_boruta_objt_list, function(x) {
+  filter(attStats(x), decision == "Confirmed") %>%
+    tibble::rownames_to_column(var = "OTU")
+})
 
-#turn ps object into a dataframe
-melted_ps<-lapply(rf_important_ps_l, psmelt)
+# turn ps object into a dataframe
+melted_ps <- lapply(rf_important_ps_l, psmelt)
 
- # join melted ps object created above with the boruta stats
- rf_ASVs_df<-mapply(function (x,y)
-                    left_join(x,y),
-                    x = melted_ps,
-                    y = rf_importance_byOTU,
-                    SIMPLIFY = FALSE)
- 
+# join melted ps object created above with the boruta stats
+rf_ASVs_df <- mapply(function(x, y) {
+  left_join(x, y)
+},
+x = melted_ps,
+y = rf_importance_byOTU,
+SIMPLIFY = FALSE
+)
+
 # setup a new color pallete
-color_treatments <- hcl.colors(4,palette="Geyser")
+color_treatments <- hcl.colors(4, palette = "Geyser")
 color_treatments <- c("#E6C186", "#B8CDAE", "#008585", "#C7522B")
 
 # quick plot bar with relative abudances, for a quick overview of  data
-plot_rf_asvs<-lapply(rf_ASVs_df, function(x)
-  ggplot(data=x, aes(x=OTU, y =Abundance, fill=MeJA_treatment ))+
-  geom_boxplot(aes())+
-  scale_fill_manual(values = color_treatments)+
-  theme_bw()+
-  theme(axis.title=element_text(size=13, face = "bold"))+
-  theme(panel.border = element_blank(), panel.grid.major = element_blank(),
-  panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"))+
-  theme(axis.text=element_text(size=10, face = "bold", colour="black"))+
-  theme(axis.title.x = element_blank())+
-  geom_line(data = x, aes(x=OTU, y = meanImp), size = 2)+
-  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1)) )
-
-
-diff(rf_ASVs_df$Arabidopsis_thaliana.Root$Abundance)/diff(rf_ASVs_df$Arabidopsis_thaliana.Root$meanImp)
-diff(ylim.prim)/diff(ylim.sec)
-
-filter(attStats(fixed_boruta_objt_list$Arabidopsis_thaliana.Root)$meanImp, decision=="Confirmed")
-
-
+plot_rf_asvs <- lapply(rf_ASVs_df, function(x) {
+  ggplot(data = x, aes(x = OTU, y = Abundance, fill = MeJA_treatment)) +
+    geom_boxplot(aes()) +
+    scale_fill_manual(values = color_treatments) +
+    theme_bw() +
+    theme(axis.title = element_text(size = 13, face = "bold")) +
+    theme(
+      panel.border = element_blank(), panel.grid.major = element_blank(),
+      panel.grid.minor = element_blank(), axis.line = element_line(colour = "black")
+    ) +
+    theme(axis.text = element_text(size = 10, face = "bold", colour = "black")) +
+    theme(axis.title.x = element_blank()) +
+    geom_line(data = x, aes(x = OTU, y = meanImp), size = 2) +
+    theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1))
+})
 ```
 
 #Figures
 ```{r}
 
-plot_rf <- grid.arrange(plot_rf_asvs$Arabidopsis_thaliana.Root, plot_rf_asvs$Arabidopsis_thaliana.Soil, plot_rf_asvs$Brassica_oleraceae.Root, plot_rf_asvs$Brassica_oleraceae.Soil, nrow=2, ncol=2)
-  
-  
-#save plot
+plot_rf <- grid.arrange(plot_rf_asvs$Arabidopsis_thaliana.Root, plot_rf_asvs$Arabidopsis_thaliana.Soil, plot_rf_asvs$Brassica_oleraceae.Root, plot_rf_asvs$Brassica_oleraceae.Soil, nrow = 2, ncol = 2)
+
+
+# save plot
 ggsave(plot_rf,
-       height = 9, width = 18,
-       file="./R output/Figures_for_publication/RF_ASVs_AT_BO.svg")
-
-
+  height = 9, width = 18,
+  file = "./R output/Figures_for_publication/RF_ASVs_AT_BO.svg"
+)
 ```
 
 
 
+# overwrite saved session
+```{r}
 
+save.image("./R output/analysis_session.RData")
 
-
-
-
-
-
-
-
-
+```
