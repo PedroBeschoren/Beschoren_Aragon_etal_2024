@@ -25,7 +25,7 @@ packages <- c(
   "ggrepel", # to avoid legends overlapping in your plot
   "ggpubr",
   "igraph", # calculates entowrk metrics and manipulates netowrk objects
-  # "WGCNA", # needed for eigen_correlation (), allowing you to correlate metadata to network modules # this paakge can be difficult to install
+  # "WGCNA", # needed for eigen_correlation (), allowing you to correlate metadata to network modules # this pacakge can be difficult to install
   "metagMisc", #  lets you create lists of split phyloseq objects
   "pheatmap", # heatmaps for deseq2
   "viridis", # nice colors
@@ -92,7 +92,8 @@ library("ggVennDiagram") # for venn diagrams on SPSS objects
 if (!require(SpiecEasi)) install_github("zdk123/SpiecEasi")
 library("SpiecEasi") # builds the sparse networks
 
-library(styler) # used to clean up R code
+if (!require(MicEco)) install_github("Russel88/MicEco")
+library("MicEco") # better venn daigrams
 
 rm(packages, biocManager_packages) # we don't need this anymore so let's remove them from the environemnt
 gc() # decluters memory usage
