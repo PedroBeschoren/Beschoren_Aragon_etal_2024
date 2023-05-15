@@ -946,3 +946,6 @@ write.csv(
 save.image("./R output/analysis_session.RData")
 
 ```
+
+
+after this, plot netowrk on cytoscape. network analysis complete! proceed to script 7_random_forest

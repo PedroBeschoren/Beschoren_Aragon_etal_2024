@@ -275,3 +275,6 @@ ggsave(plot_rf,
 save.image("./R output/analysis_session.RData")
 
 ```
+
+
+Random forest analysis complete! proceed to script 8_joint_ASV_claissications
