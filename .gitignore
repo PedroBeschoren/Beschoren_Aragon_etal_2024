@@ -10,4 +10,6 @@ list_spiec_objct.rds
 MeJA-Pilot.Rproj
 Docs/
 R output/Figures_for_publication
+all_output_saved_neutral_error_fix.Rdata
+all_output_saved.Rdata
 
