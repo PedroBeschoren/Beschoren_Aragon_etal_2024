@@ -65,7 +65,7 @@ list_spiec_objct <- lapply(ps_list_network, function(x) {
   )
 }) # iteration of starts, n)
 
-saveRDS(list_spiec_objct, "list_spiec_objct.rds") # save the object in saparate, since it can take several minutes to compute
+
 # *************************** Done!
 ```
 
@@ -134,18 +134,16 @@ by changing parameters I improved from ~ 20 metrics similar to random to just 2 
 # run the custom function on a a list of networks
 list_random_VS_real_1000 <- map(listed_igraph, Real_VS_random_networks)
 
-as.data.frame(map(list_random_VS_real, 2)) # is the real network different from the random network?
+as.data.frame(map(list_random_VS_real_1000, 2)) # is the real network different from the random network?
 
 # *************************** Done!
 ```
 
 ##### 6.6 - Define network node proprieties ####
 Now that we know our networks differ from random we can check their general proprieties. this can help us compare multiple different network we create, telling apart treatment or sample type effects ~ puttig the results on a PCA migt be a good idea.. also, check if your metrics increase or decrease according gradients you may have in your experiments
+
+At core/paths/shortest_paths.c:188 : Weight vector must be non-negative, got -0.126345. Invalid value
 ```{r}
-
-
-# The Generate_RealNetworks_metrics() custom function will generate network metrics that you can use to compare different networks
-
 
 # on a list of networks
 list_partial_network_metrics <- map(listed_igraph, Generate_RealNetworks_metrics)
@@ -215,9 +213,15 @@ list_network_metrics <- do.call(
   Map(c, map(ZiPi_listed, 2), list_partial_network_metrics)
 )
 
+#median module size has no variation, causing a PCA to fail. let's remove it
+list_network_metrics<-list_network_metrics[,-25]
+  
+
+#calculate a PCA to pplot with autoplot
+list_network_metrics_pca<-prcomp(list_network_metrics, scale. = TRUE)
+
 # make a PCA of network metrics
-library(ggfortify)
-autoplot(list_network_metrics.pca,
+autoplot(list_network_metrics_pca,
   label = TRUE,
   loadings = TRUE,
   loadings.colour = "red",
