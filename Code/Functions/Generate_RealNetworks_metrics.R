@@ -47,7 +47,7 @@ Generate_RealNetworks_metrics<-function (igraph_object){
   Network_transitivity<-transitivity(igraph_object)
   
   # calculate shortest path (geodesic) distance
-  Network_mean_shortest_path<-mean_distance(igraph_object)
+  Network_mean_shortest_path<-mean_distance(igraph_posWeight)
   
   #calculates modularity
   Network_modularity<-modularity(igraph_posWeight,
