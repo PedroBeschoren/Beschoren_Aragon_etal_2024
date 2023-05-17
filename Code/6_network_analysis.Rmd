@@ -492,405 +492,26 @@ complete_node_metrics
 ```
 
 
-
-###### 6.6.5 - add neutral fit class categories as a node classification propriety ####
-
-We can only do this fot AT_soil and BO_soil as neutral model fits could not be applied to root samples due to uneven samples sizes.
-
-If you have uneven sample sizes and really wants to apply the neutral model to them, you may bootstrap subsets: say you have 13 to 15 samples, then make an X number of neutral models based on 10 samples and record how eften the OTU is classified as above, expected, or bellow. 
-```{r}
-# make a backup..
-complete_node_metrics_withFitClass <- complete_node_metrics
-
-# get shared ASV names from the neutral model in-depth analysis
-ps_list_neutral_BO_soil
-
-
-# here the input are the node metrics and the a list of SP abojects after the fit classes have been added to them on chunk #4.6.4 and 4.7.4
-
-# this custom function is not good as it includes hard-coded, repetitive commands. we might not need it again in the future so I did not invest time in automating this.
-add_fit_class_to_nodes <- function(node_metrics_df, ps_list_neutral_SP_niche) {
-
-  # add fit class in control samples
-  added_ft_class <- merge(
-    x = node_metrics_df,
-    y = as.data.frame(tax_table(ps_list_neutral_SP_niche$control)[, "fit_class"]),
-    by.x = "Row.names",
-    by.y = 0,
-    all.x = TRUE
-  )
-  names(added_ft_class)[names(added_ft_class) == "fit_class"] <- "control_fit_class"
-
-  # add fit class in Meja 0.1 samples
-  added_ft_class <- merge(
-    x = added_ft_class,
-    y = as.data.frame(tax_table(ps_list_neutral_SP_niche$MeJA_0.1)[, "fit_class"]),
-    by.x = "Row.names",
-    by.y = 0,
-    all.x = TRUE
-  )
-  names(added_ft_class)[names(added_ft_class) == "fit_class"] <- "MeJA_0.1_fit_class"
-
-  # add fit class in Meja 1.0 samples
-  added_ft_class <- merge(
-    x = added_ft_class,
-    y = as.data.frame(tax_table(ps_list_neutral_SP_niche$MeJA_1.0)[, "fit_class"]),
-    by.x = "Row.names",
-    by.y = 0,
-    all.x = TRUE
-  )
-  names(added_ft_class)[names(added_ft_class) == "fit_class"] <- "MeJA_1.0_fit_class"
-
-  # add fit class in oral secretion samples
-  added_ft_class <- merge(
-    x = added_ft_class,
-    y = as.data.frame(tax_table(ps_list_neutral_SP_niche$oral_secretion)[, "fit_class"]),
-    by.x = "Row.names",
-    by.y = 0,
-    all.x = TRUE
-  )
-  names(added_ft_class)[names(added_ft_class) == "fit_class"] <- "oral_secretion_fit_class"
-  return(added_ft_class)
-}
-
-# apply function to AT_soil
-complete_node_metrics_withFitClass$Arabidopsis_thaliana.Soil <-
-  add_fit_class_to_nodes(
-    node_metrics_df = complete_node_metrics_withFitClass$Arabidopsis_thaliana.Soil,
-    ps_list_neutral_SP_niche = ps_list_neutral_AT_soil
-  )
-
-# apply function to BO_soil
-complete_node_metrics_withFitClass$Brassica_oleraceae.Soil <-
-  add_fit_class_to_nodes(
-    node_metrics_df = complete_node_metrics_withFitClass$Brassica_oleraceae.Soil,
-    ps_list_neutral_SP_niche = ps_list_neutral_BO_soil
-  )
-```
-
-
-###### 6.6.6 - add venn diagram shared ASV lists to the node proprieties ####
-we only do this for above-expected ASVs to reduce complexity of the analysis - we are interested in detecting modules of treatment-selected ASVs
-```{r}
-# generate list of shared above-expected ASVs for BO and AT
-venn_asv_list_BO <- ps_venn(uni_4model_BO_above, "MeJA_treatment", plot = FALSE)
-venn_asv_list_AT <- ps_venn(uni_4model_AT_above, "MeJA_treatment", plot = FALSE)
-
-# check for the soil networks
-complete_node_metrics_withFitClass[2] # AT
-complete_node_metrics_withFitClass[4] # BO
-
-
-
-# we want a new node propriety named "above_expected_in" which shows in which treatments is this ASV occuring above expected values
-# this function will add this definition for each compartment of the venn diagram
-add_venn_compartment <- function(venn_asv_list, list_position_in_complete_node_metrics) {
-  lapply(names(venn_asv_list), function(x) {
-    mutate(filter(complete_node_metrics_withFitClass[[list_position_in_complete_node_metrics]], Row.names %in% venn_asv_list[[x]]), above_expected_in = paste(x)) # this assings the Venn diagram compartment to the ASVs in the node df
-  })
-}
-
-# assign the venn compartment fit class to the ASVs in AT_soil
-venn_list <- add_venn_compartment(
-  venn_asv_list = venn_asv_list_AT,
-  list_position_in_complete_node_metrics = 2
-)
-
-# now merge that list into a single dataframe, removing the other node metrics in AT_soil
-venn_compartments <- as.data.frame(do.call(rbind, venn_list))[, c("Row.names", "above_expected_in")]
-
-# now merge the single dataframe with (Row.names and above_expected_in columns) back into the original node metrics df (otherwise ASVs outside the venn diagram lists are lost in AT_soil)
-complete_node_metrics_withFitClass[[2]] <- (merge(
-  x = venn_compartments,
-  y = complete_node_metrics_withFitClass[[2]],
-  by = "Row.names",
-  all.y = TRUE
-))
-
-
-
-
-
-############################################################################################################
-################# repeat the code to apply it to BO_soil. ##################################################
-################# we only have to do this once so it's OK to copy-paste code ###############################
-################# We will have to put this in a custom fucntion when running 100 networks ##################
-############################################################################################################
-
-
-
-# assing the venn compartment fit class to the ASVs in BO_soil
-venn_list <- add_venn_compartment(
-  venn_asv_list = venn_asv_list_BO,
-  list_position_in_complete_node_metrics = 4
-)
-
-# now merge that list into a single dataframe, removing the other node metrics in BO_soil
-venn_compartments <- as.data.frame(do.call(rbind, venn_list))[, c("Row.names", "above_expected_in")]
-
-# now merge the single dataframe with (Row.names and above_expected_in columns) back into the original node metrics df (otherwise ASVs outside the venn diagram lists are lost in BO_soil)
-complete_node_metrics_withFitClass[[4]] <- (merge(
-  x = venn_compartments,
-  y = complete_node_metrics_withFitClass[[4]],
-  by = "Row.names",
-  all.y = TRUE
-))
-```
-
-###### 6.6.7 - create a neutrality score to indicate how often an OTU is classified as above/neutral/below ####
-
-
-```{r}
-# this is our df of node metrics with fit class definitions
-complete_node_metrics_withFitClass
-
-
-###################################################
-###### once again due to total brain failiure I could not automate this fucntion. I simply want to apply it over different vectors of my dataframe!
-# this neutrality score is very experimental. let's not invest hours rying to automate this calculations if we are not sure we will ever use them
-#################################################
-
-complete_node_metrics_withFitClass[[2]] <- complete_node_metrics_withFitClass[[2]] %>%
-  mutate(
-    neutral_score_A = # utate to create a new variable...
-      if_else(control_fit_class == "Above prediction", +3, # if it is above prediction score it as +3, or else...
-        if_else(control_fit_class == "As predicted", +2, # if it is as prediction score it as +2, or else...
-          if_else(control_fit_class == "Below prediction", +1, +0)
-        )
-      ) # if it is below prediction score it as +1, or else give it zero
-  )
-
-complete_node_metrics_withFitClass[[2]] <- complete_node_metrics_withFitClass[[2]] %>%
-  mutate(
-    neutral_score_B =
-      if_else(MeJA_0.1_fit_class == "Above prediction", +3,
-        if_else(MeJA_0.1_fit_class == "As predicted", +2,
-          if_else(MeJA_0.1_fit_class == "Below prediction", +1, +0)
-        )
-      )
-  )
-
-
-complete_node_metrics_withFitClass[[2]] <- complete_node_metrics_withFitClass[[2]] %>%
-  mutate(
-    neutral_score_C =
-      if_else(MeJA_1.0_fit_class == "Above prediction", +3,
-        if_else(MeJA_1.0_fit_class == "As predicted", +2,
-          if_else(MeJA_1.0_fit_class == "Below prediction", +1, +0)
-        )
-      )
-  )
-
-
-complete_node_metrics_withFitClass[[2]] <- complete_node_metrics_withFitClass[[2]] %>%
-  mutate(
-    neutral_score_D =
-      if_else(oral_secretion_fit_class == "Above prediction", +3,
-        if_else(oral_secretion_fit_class == "As predicted", +2,
-          if_else(oral_secretion_fit_class == "Below prediction", +1, +0)
-        )
-      )
-  )
-
-complete_node_metrics_withFitClass[[2]] <- complete_node_metrics_withFitClass[[2]] %>%
-  mutate(
-    neutral_score = neutral_score_A +
-      neutral_score_B +
-      neutral_score_C +
-      neutral_score_D,
-    .keep = "unused"
-  )
-
-##############################################
-# my eyes hurt everytime i resort to these barbaric practices
-# let's extend my suffering by doing the exact same thing on BO_soil networks.... with copy-pasting
-##################################
-
-
-complete_node_metrics_withFitClass[[4]] <- complete_node_metrics_withFitClass[[4]] %>%
-  mutate(
-    neutral_score_A =
-      if_else(control_fit_class == "Above prediction", +3,
-        if_else(control_fit_class == "As predicted", +2,
-          if_else(control_fit_class == "Below prediction", +1, +0)
-        )
-      )
-  )
-
-complete_node_metrics_withFitClass[[4]] <- complete_node_metrics_withFitClass[[4]] %>%
-  mutate(
-    neutral_score_B =
-      if_else(MeJA_0.1_fit_class == "Above prediction", +3,
-        if_else(MeJA_0.1_fit_class == "As predicted", +2,
-          if_else(MeJA_0.1_fit_class == "Below prediction", +1, +0)
-        )
-      )
-  )
-
-
-complete_node_metrics_withFitClass[[4]] <- complete_node_metrics_withFitClass[[4]] %>%
-  mutate(
-    neutral_score_C =
-      if_else(MeJA_1.0_fit_class == "Above prediction", +3,
-        if_else(MeJA_1.0_fit_class == "As predicted", +2,
-          if_else(MeJA_1.0_fit_class == "Below prediction", +1, +0)
-        )
-      )
-  )
-
-
-complete_node_metrics_withFitClass[[4]] <- complete_node_metrics_withFitClass[[4]] %>%
-  mutate(
-    neutral_score_D =
-      if_else(oral_secretion_fit_class == "Above prediction", +3,
-        if_else(oral_secretion_fit_class == "As predicted", +2,
-          if_else(oral_secretion_fit_class == "Below prediction", +1, +0)
-        )
-      )
-  )
-
-complete_node_metrics_withFitClass[[4]] <- complete_node_metrics_withFitClass[[4]] %>%
-  mutate(
-    neutral_score = neutral_score_A +
-      neutral_score_B +
-      neutral_score_C +
-      neutral_score_D,
-    .keep = "unused"
-  )
-# quick histogram
-hist(complete_node_metrics_withFitClass[[4]]$neutral_score)
-```
-
-###### 6.6.8 - export data on keystone, connector and hub nodes ####
-test/trail, might not be used
-
-```{r}
-# input data
-complete_node_metrics_withFitClass
-
-# keep only relevant nodes
-relevant_nodes <- lapply(complete_node_metrics_withFitClass, function(x) {
-  filter(
-    x,
-    #      Zi > 2.5 |
-    #      Pi > 0.62 |
-    keystone_taxa == "Keystone"
-  )
-})
-
-lapply(relevant_nodes, function(x) {
-  if_else(x$Zi > 2.5, "Module hub", "")
-})
-```
-
-
-### 6.7 - Correlate netowrk module structure to plant metadata ####
-
-### 6.7 a - normalize counts ### 
-
-siec-easi usues it's own normalization options. here we must normalized the subset ps object used as input in the networks (only including the most frequnt/abudnant ASVs) so we can correlate these abudnances to plant metadata
-```{r}
-# first, let's transform the phyloseq object into an MR experiment object
-
-MRexp_objt_l <- map(ps_list_network, phyloseq_to_metagenomeSeq)
-
-# normalizes the object by cummulative sum scaling, a widely used method
-map(MRexp_objt_l, cumNorm)
-
-# here you can acess the abundance matrix normalized by cummulative sum scaling. you could overwirte the phyloseq object with this
-CSS_matrix_l <- lapply(MRexp_objt_l, function(x) {
-  MRcounts(x, norm = TRUE, log = TRUE)
-}) # using a log scale will essentially reduce the impact of common species and increase the impact of rare species
-
-# make a new phyloseq object...
-ps_list_network_CSS <- ps_list_network
-
-# and now change it's taxa table
-ps_list_network_CSS <- mapply(function(x, y) {
-  otu_table(x) <- otu_table(y, taxa_are_rows = TRUE)
-  return(x)
-},
-x = ps_list_network_CSS,
-y = CSS_matrix_l,
-SIMPLIFY = FALSE
-)
-
-# this is your normalized otu table
-ps_list_network_CSS$Arabidopsis_thaliana.Root@otu_table
-``` 
-
-
-### 6.7 b -calculate correlations ####
-now that we normalized the input data for eigengene calculations, we can use it as an input
-```{r}
-
-
-# run the custom function adjustInput_run_eigen_correlation_adjustOutput() to adjust input adn output of eigen_correlation() , besides runing eigen_correlation(). Here we run it in lists
-module_and_metadata_correlations <- mapply(function(x, y) {
-  adjustInput_run_eigen_correlation_adjustOutput(igraph_obj = x, phyloseq_ob = y)
-},
-x = listed_igraph,
-y = ps_list_network_CSS,
-SIMPLIFY = FALSE
-)
-
-
-# remove modules disconnected from the main graph from the metadata correlations
-module_and_metadata_correlations <- mapply(function(x, y) {
-  x[x$module_number %in% y$module, ]
-},
-x = module_and_metadata_correlations,
-y = complete_node_metrics_withFitClass,
-SIMPLIFY = FALSE
-)
-
-
-# now make plots with titles according your lists. note that the name of the metadata variables is hard-coded within the function
-plot_module_and_metadata_correlations_output <- function(list_objc) {
-  lapply(names(list_objc), function(x) { # sets a list of titles for plots...
-    ggplot(data = filter(list_objc[[x]], nodes_in_module > 2), aes(x = as.factor(module_number), y = category, fill = ifelse(pval <= 0.1, value, NA))) + # filts the list of objects, drawing one at a time
-      geom_tile(colour = "#B8B8B8") +
-      ggtitle(paste(x)) + # draws a title from the list
-      scale_fill_gradient2("Correlation to \n metadata", guide = "colourbar", high = "#7DEB5F", mid = "#F0EE54", low = "#F3633F", na.value = "white", limits = c(-1, 1)) +
-      ylab("") +
-      xlab("Cluster/Module") +
-      labs(fill = "Cluster to Deconstruction") +
-      scale_y_discrete(labels = c("leaf dry weight (g)", "MYC2 (fold DD)", "LOX2 (fold DD)"))
-  })
-}
-
-# run the plot defined above to visualize results
-plots_eigengenes <- plot_module_and_metadata_correlations_output(module_and_metadata_correlations)
-
-ggarrange(
-  plotlist = plots_eigengenes,
-  common.legend = TRUE,
-  labels = c("A", "B", "C", "D")
-)
-
-# if it works, proceed to laugh maniacally
-```
+`
 
 
 ##### 6.8 - Export network data ####
 we will now use the edge file to import it as a network file to cytoscape. then we can importe the node proprieties to the enw visualizations
 ```{r}
 
-# remove NAs as they may crahs cytoscape
+# remove NAs as they may crash cytoscape
 
-
-complete_node_metrics_withFitClass$Arabidopsis_thaliana.Root[is.na(complete_node_metrics_withFitClass$Arabidopsis_thaliana.Root)] <- ""
-
-complete_node_metrics_withFitClass$Arabidopsis_thaliana.Soil[is.na(complete_node_metrics_withFitClass$Arabidopsis_thaliana.Soil)] <- ""
-complete_node_metrics_withFitClass$Brassica_oleraceae.Root[is.na(complete_node_metrics_withFitClass$Brassica_oleraceae.Root)] <- ""
-complete_node_metrics_withFitClass$Brassica_oleraceae.Soil[is.na(complete_node_metrics_withFitClass$Brassica_oleraceae.Soil)] <- ""
+complete_node_metrics$Arabidopsis_thaliana.Root[is.na(complete_node_metrics$Arabidopsis_thaliana.Root)] <- ""
+complete_node_metrics$Arabidopsis_thaliana.Soil[is.na(complete_node_metrics$Arabidopsis_thaliana.Soil)] <- ""
+complete_node_metrics$Brassica_oleraceae.Root[is.na(complete_node_metrics$Brassica_oleraceae.Root)] <- ""
+complete_node_metrics$Brassica_oleraceae.Soil[is.na(complete_node_metrics$Brassica_oleraceae.Soil)] <- ""
 
 
 
 
 # save these network metrics externally. we will do this manually for only 4 networks
 write.csv(
-  x = complete_node_metrics_withFitClass$Arabidopsis_thaliana.Root,
+  x = complete_node_metrics$Arabidopsis_thaliana.Root,
   file = "./R output/Nodes_AT_root.csv",
   quote = FALSE,
   row.names = FALSE
@@ -903,7 +524,7 @@ write.csv(
 
 
 write.csv(
-  x = complete_node_metrics_withFitClass$Arabidopsis_thaliana.Soil,
+  x = complete_node_metrics$Arabidopsis_thaliana.Soil,
   file = "./R output/Nodes_AT_soil.csv",
   quote = FALSE,
   row.names = FALSE
@@ -916,7 +537,7 @@ write.csv(
 
 
 write.csv(
-  x = complete_node_metrics_withFitClass$Brassica_oleraceae.Root,
+  x = complete_node_metrics$Brassica_oleraceae.Root,
   file = "./R output/Nodes_BO_root.csv",
   quote = FALSE,
   row.names = FALSE
@@ -929,7 +550,7 @@ write.csv(
 
 
 write.csv(
-  x = complete_node_metrics_withFitClass$Brassica_oleraceae.Soil,
+  x = complete_node_metrics$Brassica_oleraceae.Soil,
   file = "./R output/Nodes_BO_soil.csv",
   quote = FALSE,
   row.names = FALSE

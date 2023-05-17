@@ -26,7 +26,6 @@ packages <- c(
   "ggfortify", # to run autoplot on PCA from prcomp
   "ggpubr",
   "igraph", # calculates entowrk metrics and manipulates netowrk objects
-  # "WGCNA", # needed for eigen_correlation (), allowing you to correlate metadata to network modules # this pacakge can be difficult to install
   "metagMisc", #  lets you create lists of split phyloseq objects
   "pheatmap", # heatmaps for deseq2
   "viridis", # nice colors
