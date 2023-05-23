@@ -10,93 +10,54 @@ editor_options:
 # load libraries and data
 ```{r}
 source("./Code/Functions/load_libraries.R")
-load("./R output/env.1_Loading_and_pre_processing.RData")
+load("./R output/analysis_session.RData")
 ```
 
 
 
-# 9.0 important taxa overrepresentation
+# 8.0 important taxa overrepresentation
 Here we take the output of script 8 that defines teh ASVs that were importnat, and then look into the taxonomies of important taxa. It tests if  these taxa are overperesented in the importnat subset, when compared to the full subset. 
 
 This script will awnser the following question: if 6 out of 17 taxa in RF_importnat of B.Ole roots are from f__Commonadacea, and 211 out of 2453 of the taxas in B.Ole roots are from f__Commonadacea, are these proportions similar or different?
 
-# 9.1 important taxa overrepresentation
+# 8.1 important taxa overrepresentation
 set a list of important taxa based on the list of important ASVs
 ```{r}
 
+#RF aSVs
+boruta_ASV_list
 
-#list of ASVs tagged as important (chunk # 8.6.1b )
-simplified_ASV_importance_scores
+#network ASVs
+network_ASVs<-lapply(complete_node_metrics, function(x) 
+  filter(x,  x$Zi >= 2.5 | Pi>=0.62 | keystone_taxa =="Keystone")$Row.names)
+ # make new variable is_module_hub, based on Zi values
 
-# generate a table to count occurences of tags across samples
-imp_asv_table<-simplified_ASV_importance_scores
-imp_asv_table<-lapply(imp_asv_table, function(x) x[,c(-2, -5)]) # remove info on neutral models and sum of tags
-imp_asv_table<-lapply(imp_asv_table, function(x) x[rowSums(x)>0,]) # remove remove unimportat ASVs
-imp_asv_table_colsum<-lapply(imp_asv_table, function(x) colSums(x)) # get sum of columns
+#differentially abudnant ASVs.
+abundant_ASV_list <- mapply(function(x, y, z) {
+  output <- c(rownames(x), rownames(y), rownames(z))
+  return(output)
+},
+x = Sigtab1,
+y = Sigtab2,
+z = Sigtab3,
+SIMPLIFY = FALSE
+)
 
+#important ASV list
+important_ASV_list <- mapply(function(x, y, z) {
+  output <- c(x, y, z)%>%unique
+  return(output)
+},
+x = boruta_ASV_list,
+y = network_ASVs,
+z = abundant_ASV_list,
+SIMPLIFY = FALSE
+)
 
-
-
-#make table
-imp_asv_table_colsum<-rbind(imp_asv_table_colsum[[1]],
-  imp_asv_table_colsum[[2]],
-  imp_asv_table_colsum[[3]],
-  imp_asv_table_colsum[[4]])%>%as.data.frame()
-
-#adjust rownmaes fo table
-rownames(imp_asv_table_colsum)<-names(simplified_ASV_importance_scores)
-
-#count number of ASVs with more than 1 tag, then add it to previous table
-two_tags<-lapply(imp_asv_table, function(x) count(rowSums(x)>1))%>%unlist()%>%as.vector()
-imp_asv_table_colsum$ASVs_with_two_tags<-two_tags
-
-
-#total ASVs
-n_taxa_imp<-lapply(imp_asv_table, function(x) dim(x)[1])%>%unlist()%>%as.vector()
-imp_asv_table_colsum$n_taxa_imp<-n_taxa_imp
-
-
-# get the ASV names of any ASV that had any tag (that is, remove uninportnat ASVS)
-important_ASV_list<-lapply(simplified_ASV_importance_scores, function(x)
-  row.names(x[x$sum_of_tags>0,]))
-
-#as taxas above expected in neutral definitions were not defined in root samples but were explored in other figures, let's remove them from this analysis
-important_ASV_list<-lapply(simplified_ASV_importance_scores, function(x){
-  x<-x[,c(-2, -5)]
-  x$sum_of_tags<-rowSums(x)
-  row.names(x[x$sum_of_tags>0,])
-})
-
-# this is the total number of unique ASVs that had any tag  
-important_ASV_list%>%unlist()%>%unique%>%length()
-
-# total number of ASVs that had a network tag (derreplicated names
-lapply(simplified_ASV_importance_scores, function(x)
-  row.names(x[x$has_network_tag >0,]))%>%unlist()%>%unique()%>%length()
-
-
-# this is the total number of unique ASVs that had any tag  
-important_ASV_list%>%unlist()%>%unique%>%length()
-
-
-# make list by hand as mapply fails us
-ps_imp_taxa_l<-list(
-  subset_taxa(ps_list_rarefied$Arabidopsis_thaliana.Root, 
-              (taxa_names(ps_list_rarefied$Arabidopsis_thaliana.Root) %in% important_ASV_list$Arabidopsis_thaliana.Root)),
-  
-  subset_taxa(ps_list_rarefied$Arabidopsis_thaliana.Soil, 
-              (taxa_names(ps_list_rarefied$Arabidopsis_thaliana.Soil) %in% important_ASV_list$Arabidopsis_thaliana.Soil)),
-  
-  subset_taxa(ps_list_rarefied$Brassica_oleraceae.Root, 
-              (taxa_names(ps_list_rarefied$Brassica_oleraceae.Root) %in% important_ASV_list$Brassica_oleraceae.Root)),
-  
-  subset_taxa(ps_list_rarefied$Brassica_oleraceae.Soil, 
-                        (taxa_names(ps_list_rarefied$Brassica_oleraceae.Soil) %in% important_ASV_list$Brassica_oleraceae.Soil)))
-# assign names to list
-names(ps_imp_taxa_l)<-c("Arabidopsis_thaliana.Root",
-                         "Arabidopsis_thaliana.Soil",
-                         "Brassica_oleraceae.Root",
-                        "Brassica_oleraceae.Soil")
+#make one ps object with importnat taxa
+ps_imp_taxa_l<-mapply(function (z,y)
+  prune_taxa(taxa = y, x =z ),
+  y = important_ASV_list, z = ps_list_rarefied)
 
 
 ```
@@ -104,7 +65,7 @@ names(ps_imp_taxa_l)<-c("Arabidopsis_thaliana.Root",
 
 
 
-# 9.2 prepare data and calculate proportions with fisher's exact test
+# 8.2 prepare data and calculate proportions with fisher's exact test
 
 note: There was a problem on the loop when it is called inside the function: objects "i" in the loop were literally passed as charather "i", so classes/orders could not be found. the same code works fine when hard-coded. this was a problem when using phyloseq::subset_taxa(), but not now when using phyloseq::prune_taxa() 
 
@@ -119,74 +80,6 @@ fisher_result_l<-mapply(function (x,y)
                    y = ps_list_rarefied,
                    SIMPLIFY = FALSE)
 
-#quick plot showing proportions of alphaproteobacteria and mucilaginibacter in BO_soil
-#alphaprotteoac
-alphaprot_DF<-c(
-ntaxa(subset_taxa(ps_imp_taxa_l$Brassica_oleraceae.Soil, Class =="c__Alphaproteobacteria")),
-ntaxa(ps_imp_taxa_l$Brassica_oleraceae.Soil)-ntaxa(subset_taxa(ps_imp_taxa_l$Brassica_oleraceae.Soil, Class =="c__Alphaproteobacteria")),
-ntaxa(subset_taxa(ps_list_rarefied$Brassica_oleraceae.Soil, Class =="c__Alphaproteobacteria")),
-ntaxa(ps_list_rarefied$Brassica_oleraceae.Soil)-ntaxa(subset_taxa(ps_list_rarefied$Brassica_oleraceae.Soil, Class =="c__Alphaproteobacteria")))
-alphaprot_DF<-as.data.frame(alphaprot_DF)
-alphaprot_DF$subset<-c("important", "important", "non-important", "non-important")
-alphaprot_DF$taxa<-c("Alphaproteobacteria", "other", "Alphaproteobacteria", "other")
-
-ggplot(alphaprot_DF, aes(y = alphaprot_DF, x = subset, fill = taxa))+
-  geom_col(position = "fill")+
-  theme_bw()+
-  xlab(label = "ASV importance group")+
-  ylab(label = "Proportion of Alphaproteobacteria")+
-  theme(legend.position = "top")+
-scale_fill_manual(values=c("#F8766D", "#00BFC4"))+
-  geom_text(aes(label = alphaprot_DF), vjust = 1.1, position = "fill", color = "white")
-
-  
-
-
-
-#mucilaginibac
-mucilag_DF<-c(
-ntaxa(subset_taxa(ps_imp_taxa_l$Brassica_oleraceae.Soil, Genus =="g__Mucilaginibacter")),
-ntaxa(ps_imp_taxa_l$Brassica_oleraceae.Soil),
-ntaxa(subset_taxa(ps_list_rarefied$Brassica_oleraceae.Soil, Genus =="g__Mucilaginibacter")),
-ntaxa(ps_list_rarefied$Brassica_oleraceae.Soil))
-mucilag_DF<-as.data.frame(mucilag_DF)
-mucilag_DF$subset<-c("important", "important", "non-important", "non-important")
-mucilag_DF$taxa<-c("Mucilaginibacter", "other", "Mucilaginibacter", "other")
-
-ggplot(mucilag_DF, aes(y = mucilag_DF, x = subset, fill = taxa))+
-  geom_col(position = "fill")+
-  theme_bw()+
-  xlab(label = "ASV importance group")+
-  ylab(label = "Proportion of Mucilaginibacter")+
-  theme(legend.position = "top")+
-scale_fill_manual(values=c("#F8766D", "#00BFC4"))+
-  geom_text(aes(label = mucilag_DF), vjust = 1.1, position = "fill", color = "white")
-
-
-
-
-
-#mucilaginibac
-Comamonadaceae_DF<-c(
-ntaxa(subset_taxa(ps_imp_taxa_l$Brassica_oleraceae.Soil, Family =="f__Comamonadaceae")),
-ntaxa(ps_imp_taxa_l$Brassica_oleraceae.Soil)-ntaxa(subset_taxa(ps_imp_taxa_l$Brassica_oleraceae.Soil, Family =="f__Comamonadaceae")),
-ntaxa(subset_taxa(ps_list_rarefied$Brassica_oleraceae.Soil, Family =="f__Comamonadaceae")),
-ntaxa(ps_list_rarefied$Brassica_oleraceae.Soil)-ntaxa(subset_taxa(ps_list_rarefied$Brassica_oleraceae.Soil, Family =="f__Comamonadaceae")))
-Comamonadaceae_DF<-as.data.frame(Comamonadaceae_DF)
-Comamonadaceae_DF$subset<-c("important", "important", "non-important", "non-important")
-Comamonadaceae_DF$taxa<-c("Comamonadaceae", "other", "Comamonadaceae", "other")
-
-ggplot(Comamonadaceae_DF, aes(y = Comamonadaceae_DF, x = subset, fill = taxa))+
-  geom_col(position = "fill")+
-  theme_bw()+
-  xlab(label = "ASV importance group")+
-  ylab(label = "Proportion of Alphaproteobacteria")+
-  theme(legend.position = "top")+
-scale_fill_manual(values=c("#F8766D", "#00BFC4"))+
-  geom_text(aes(label = Comamonadaceae_DF), vjust = 1.1, position = "fill", color = "white")
-
-
-
 
   
 
@@ -194,7 +87,7 @@ scale_fill_manual(values=c("#F8766D", "#00BFC4"))+
 ```
 
 
-# 9.3 extract p values and odds ratio
+# 8.3 extract p values and odds ratio
 Now that we have large lists of fisher tests, let's fish out important metrics for visualization
 ```{r}
 
@@ -245,7 +138,7 @@ min3_adjustp<-str(lapply (fdr_p_fisher_l, function (x)
 
 
 
-# 9.4 make a heat tree of important taxa
+# 8.4 make a heat tree of important taxa
 metacoder heat trees are made to visualize differences in taxonomic composition, so let's incoporate p and odds ratio values into such trees
 ```{r}
 
@@ -398,15 +291,15 @@ output_fisher_summary_trees<-mapply(function(x,y)
     SIMPLIFY = FALSE)
 
 #make a single 4-pannel plot with A-D labels
-output_fisher_summary_trees<-ggarrange(output_fisher_summary_trees$fisher_result_AT_root,
-                                        output_fisher_summary_trees$fisher_result_AT_soil,
-                                        output_fisher_summary_trees$fisher_result_BO_root,
-                                        output_fisher_summary_trees$fisher_result_BO_soil,
+output_fisher_summary_trees_plot<-ggarrange(output_fisher_summary_trees$Arabidopsis_thaliana.Root,
+                                        output_fisher_summary_trees$Arabidopsis_thaliana.Soil,
+                                        output_fisher_summary_trees$Brassica_oleraceae.Root,
+                                        output_fisher_summary_trees$Brassica_oleraceae.Soil,
                                         common.legend = TRUE,
                                         labels = c("A)", "B)", "C)", "D)"))
 
 #save plot
-ggsave(output_fisher_summary_trees,
+ggsave(output_fisher_summary_trees_plot,
        height = 22, width = 22,
        file="./R output/Figures_for_publication/fisher_fourpartiitons.svg")
 
