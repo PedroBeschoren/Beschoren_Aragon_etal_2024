@@ -10,7 +10,7 @@ editor_options:
 # load libraries and data
 ```{r}
 source("./Code/Functions/load_libraries.R")
-load("./R output/env.1_Loading_and_pre_processing.RData")
+load("./R output/analysis_session.RData")
 ```
 
 
@@ -20,9 +20,6 @@ load("./R output/env.1_Loading_and_pre_processing.RData")
 I've used this tutorial https://www.andreaperlato.com/mlpost/feature-selection-using-boruta-algorithm/
 you can also conside rthis: https://www.analyticsvidhya.com/blog/2016/03/select-important-variables-boruta-package/
 https://www.analyticsvidhya.com/blog/2021/05/boruta-with-r-is-a-great-way-to-address-the-curse-of-dimensionality/
-
-
-
 
 
 
@@ -70,8 +67,8 @@ list_boruta_input <- physeq_to_borutaInput(ps_list_rarefied, rf_variable)
 # check your df
 str(list_boruta_input$Arabidopsis_thaliana.Root[1:10, 1:10]) # if your "rf_variable" is not a factor, boruta won't work
 
-
 # run borura
+RNGversion("4.0.2")
 set.seed(456987)
 boruta_objt_list <- lapply(list_boruta_input, function(x) {
   Boruta(MeJA_treatment ~ ., data = x, doTrace = 2, maxRuns = 500, ntree = 5000)
@@ -118,31 +115,6 @@ boruta_history <- lapply(fixed_boruta_objt_list, function(x) {
 ############################ 3
 # 100-repeated 5-fold cross-validation
 #############################
-
-
-
-#################### full-features forest
-
-set.seed(4551)
-full_feature_rf_repeatedcv <- lapply(list_boruta_input, function(x) {
-  train.control <- trainControl(
-    method = "repeatedcv", # set trainig/data split controls for the train function
-    number = 5, repeats = 100
-  )
-
-  model_full_feature <- train(MeJA_treatment ~ .,
-    data = x, method = "rf", # execute training based on random forest; model is based on borut formula of important features
-    trControl = train.control, ntree = 1000
-  )
-
-
-
-  return(model_full_feature)
-})
-
-full_feature_rf_repeatedcv
-map(full_feature_rf_repeatedcv, confusionMatrix)
-
 
 
 
@@ -212,13 +184,18 @@ write.csv(select(rf_added_tax$Brassica_oleraceae.Root, random_forest_relevance),
 ```{r}
 
 
-
-
 # get boruta stats of ASVs confirmed to be important
 rf_importance_byOTU <- lapply(fixed_boruta_objt_list, function(x) {
   filter(attStats(x), decision == "Confirmed") %>%
     tibble::rownames_to_column(var = "OTU")
 })
+
+#make ps object that only contains RF-imporantt ASVs
+rf_important_ps_l<-mapply(function (z,y)
+  prune_taxa(taxa = z$OTU,x = y),
+  z=rf_importance_byOTU,
+  y=ps_list_rarefied,
+  SIMPLIFY = FALSE)
 
 # turn ps object into a dataframe
 melted_ps <- lapply(rf_important_ps_l, psmelt)
@@ -256,8 +233,13 @@ plot_rf_asvs <- lapply(rf_ASVs_df, function(x) {
 
 #Figures
 ```{r}
-
-plot_rf <- grid.arrange(plot_rf_asvs$Arabidopsis_thaliana.Root, plot_rf_asvs$Arabidopsis_thaliana.Soil, plot_rf_asvs$Brassica_oleraceae.Root, plot_rf_asvs$Brassica_oleraceae.Soil, nrow = 2, ncol = 2)
+library(gridExtra)
+plot_rf <- grid.arrange(plot_rf_asvs$Arabidopsis_thaliana.Root, 
+                        plot_rf_asvs$Arabidopsis_thaliana.Soil,
+                        plot_rf_asvs$Brassica_oleraceae.Root,
+                        plot_rf_asvs$Brassica_oleraceae.Soil, 
+                        nrow = 2, 
+                        ncol = 2)
 
 
 # save plot
