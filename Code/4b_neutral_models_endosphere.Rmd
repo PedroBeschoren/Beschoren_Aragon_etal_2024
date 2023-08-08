@@ -262,7 +262,7 @@ SIMPLIFY = FALSE
 ) 
 ```
 
-### 4.6.4 Add neutral fit classes of OTUs to your original phyloseq objects
+#### 4.6.4 Add neutral fit classes of OTUs to your original phyloseq objects
 
 finally let's add the  fit class as a taxonomy value of the main phyloseq object. Note that the same OTU bay have different fit classes in different slices of the data. beware if trying to put all fit classes into a single phyloseq object!
 
@@ -493,7 +493,7 @@ SIMPLIFY = FALSE
 ) 
 ```
 
-### 4.7.4 Add neutral fit classes of OTUs to your original phyloseq objects
+#### 4.7.4 Add neutral fit classes of OTUs to your original phyloseq objects
 
 finally let's add the  fit class as a taxonomy value of the main phyloseq object. Note that the same OTU bay have different fit classes in different slices of the data. beware if trying to put all fit classes into a single phyloseq object!
 ```{r}
@@ -622,7 +622,7 @@ Venn_AT <- venn_neutral(ps_l_predictions_in_taxtable = ps_list_neutral_AT_Root) 
   ggtitle(label = "Above Neutral ASV overlap, A. thaliana")
 ```
 
-##### 4.7.9 - Export veen diagram with both plant species
+##### 4.7.9 Export veen diagram with both plant species
 ```{r}
 
 export_venn <- ggarrange(Venn_AT, Venn_BO, labels = c("A", "B"))
@@ -666,7 +666,7 @@ One possible criticism for this aporach is that we are seriously biasing the ord
 
 we should then draw X random OTUS (instead of those X selected by the neutral models) and check ordinations/permanova results. we perform this several times, and check the output witht the real data
 
-### 4.9.1a run 1000 permanovas on randomly selected OTUs - here, we take teh random otus from inside each tretment and later join them, instead of simply collecing X otus from the full table
+## 4.9.1a run 1000 permanovas on randomly selected OTUs - here, we take teh random otus from inside each tretment and later join them, instead of simply collecing X otus from the full table
 
 thousand
 
@@ -822,7 +822,7 @@ full_feature_permanova <- permanova_with_blocks(ps_list_CSS, "MeJA_treatment + B
 ```
 
 #### 4.9.4 plot histograms of F, R2 and P values for the full dataset, neutrally selected OTUs, and random OTUs
-##### 4.9.4.1 prepare dataframe
+##### 4.9.5 prepare dataframe
 
 Ploting the histograms gives a more intuitive view. preparing the dataframe is slightly different from chunk 4.9.2 This code is really bad and ugly - repetitive, based on copy-pasting. Pedro won't change it for now
 
@@ -884,7 +884,7 @@ hundrerd_permanovas_pr2 <- bind_rows(p_values_MeJA_vector_AT, p_values_MeJA_vect
 
 
 
-##### 4.9.4.2 plot histograms
+##### 4.9.6 plot histograms
 
 ```{r}
 # this plot shows the P values of 100 permanovas, with dashed lines for the p values in the above-expected model and solid lines with p values in the full-feature model (all ASVS in BO_Root or AT_Root)
@@ -1610,7 +1610,7 @@ ggsave(plot_AlphaCorr_Class,
 )
 ```
 
-# overwrite saved session
+# 4.14 overwrite saved session
 ```{r}
 
 save.image("./R output/analysis_session.RData")

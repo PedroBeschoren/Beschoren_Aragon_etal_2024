@@ -76,13 +76,12 @@ plot_alpha_BySample <- ggplot(total_diversity, aes(x = MeJA_treatment, y = Shann
 
 ```
 
-### 3.1.2b testing lists - Shannon diversity
+## 3.2 Alpha diversity testing on individual data parittions
 
 
-Now that we see clear diversity effects, let's check in details to detect key pairwise differences
+Now that we see clear diversity effects, let's check in details to detect key pairwise differences wiht lists and loops
 
 
-Eveness and species distribution seem to give a better resolution of diversity in this dataset, so let's focus on that and check pairwise differences
 ```{r}
 
 
@@ -135,7 +134,7 @@ lapply(aov_list, function(x) {
 
 
 
-# overwrite saved session
+# 3.3 - overwrite saved session
 ```{r}
 
 save.image("./R output/analysis_session.RData")
