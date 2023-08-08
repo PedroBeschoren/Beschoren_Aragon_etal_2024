@@ -74,7 +74,7 @@ axis_looks <- theme(axis.text.x = element_text(colour = "black", size = 9,
                                                face = "bold", angle=0, hjust=0.5))+
   theme(axis.text.y = element_text(colour = "black", size = 9, face = "bold"))+
   theme(axis.title=element_text(size=11, face = "bold"))+
-  theme(axis.title.y = element_text(margin = margin(t = 0, r = 10, b = 0, l = 0)))+
+  theme(axis.title.y = element_text(margin = ggplot2::margin(t = 0, r = 10, b = 0, l = 0)))+
   theme(panel.grid.major = element_blank(),
         panel.grid.minor = element_blank())+
   theme(legend.position="none")+
