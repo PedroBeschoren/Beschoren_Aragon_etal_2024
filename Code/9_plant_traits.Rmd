@@ -6,7 +6,7 @@ editor_options:
   chunk_output_type: console
 ---
 
-# 10.0 Plant traits 
+# 9.0 Plant traits 
 
 During the experiment, several plant traits were measured to characterize the plant's phenotypic response to the different stress treatments. For both *A. thaliana* and *B. oleracea* 1. Dry weight was measured. Additionally 2. Leaf area, 3. Leaf length and 4.Leaf width were measured only for *B. oleraceae* and  5.Number of fruits and 6.Inflorescence dry weight were measure only for Arabidopsis as plants were already flowering. 
 
@@ -25,22 +25,28 @@ library(vegan)
 library(Hmisc)
 library(tibble)
 library(ggpubr)
+if (!require(DHARMa)) install.packages("DHARMa")
 library(DHARMa)
 library(lmtest)
+if (!require(fitdistrplus)) install.packages("fitdistrplus")
 library(fitdistrplus)
+if (!require(emmeans)) install.packages("emmeans")
 library(emmeans)
+if (!require(AICcmodavg)) install.packages("AICcmodavg")
 library(AICcmodavg)
+if (!require(jtools)) install.packages("jtools")
 library(jtools)
 library(car)
+if (!require(multcompView)) install.packages("multcompView")
 library(multcompView)
 library(multcomp)
+if (!require(lsr)) install.packages("lsr")
 library(lsr)
+if (!require(effsize)) install.packages("effsize")
 library(effsize)
 library(gridExtra)
 #source("./renv/0_load_libraries.R")
 
-# increases memory limit used by R
-memory.limit(size = 350000)
 
 ```
 
@@ -144,7 +150,7 @@ source("./Code/Functions/data_distribution_and_GLM_functions.R")
 ```
 
 
-## 10.1 Dry weight
+## 9.1 Dry weight
 
 ### Plots
 
@@ -260,7 +266,7 @@ cld <- cld(emm.Bole,
 
 --> There's only difference between 0.1 and 1% MeJA, but not against control for *B. oleraceae*, for *A. thaliana* there's no difference in dry weight. 
 
-## 10.2 Leaf area
+## 9.2 Leaf area
 
 ### Plots
 
@@ -319,7 +325,7 @@ cld.la <- cld(emm.la.Bole,
 
 MeJA 1% had significantly lower leaf area than the rest of the treatments. 
 
-## 10.3 Leaf lenght
+## 9.3 Leaf lenght
 
 ### Plots
 
@@ -366,7 +372,7 @@ Anova(lm.l.Bole)
 
 No effect of treatment nor block on leaf area for *B. oleracea*
 
-## 10.4 Leaf width 
+## 9.4 Leaf width 
 ### Plots
 
 ```{r}
@@ -409,7 +415,7 @@ summary(lm.w.Bole)
 
 No significant effect of treatment nor block on leaf width for *B. oleracea*
 
-## 10.5 Number of Fruits (Arabidopsis)
+## 9.5 Number of Fruits (Arabidopsis)
 
 ### Plots
 ```{r}
@@ -479,7 +485,7 @@ cld.nf <- cld(emm.nf.Atha,
 There was significantly less numbers of siliques on Arabidopsis plants treated with MeJA 1% compared to the other treatments. 
 
 
-## 10.6 Inforescence dry weight (Arabidopsis)
+## 9.6 Inforescence dry weight (Arabidopsis)
 
 ### Plots
 ```{r}
@@ -540,7 +546,7 @@ cld.inf <- cld(emm.inf.Atha,
 
 Significantly less with MeJA 1% compared to control and MeJA 0.1%
 
-## 10.8 Aboveground dry weight (Arabidopsis)
+## 9.7 Aboveground dry weight (Arabidopsis)
 
 ### Plots
 ```{r}
@@ -598,7 +604,7 @@ cld.inf <- cld(emm.ab.Atha,
 Even when using full aboveground weight (leaves+flowers) there's no effect of treatment on A. thaliana dry biomass (although now differences seem bigger)
 
 
-## 10.8 LOX2 gene expression
+## 9.8 LOX2 gene expression
 
 ```{r}
 #make traits df longer
@@ -749,7 +755,7 @@ In both Brassica oleracea and Arabidopsis thaliana there's a significant effect 
 
 This, however is not found back once the emmeans approach is taken. Pair contrast between Control and MeJA 1% is not significant (but barely!) p=0.0520
 
-## 10.9 MYC2 gene expression 
+## 9.9 MYC2 gene expression 
 
 ### Plots
 ```{r}
@@ -882,7 +888,7 @@ cld.myc2.Bole <- multcomp::cld(emm.myc2.Bole,
 Only for Arabidopsis thaliana there's a significant effect of the treatment in the relative expression levels of MYC2, specifically, plants treated with the highest concentration of MeJA had higher expression of MYC2 compared to controls. 
 
 
-## 10.10 Cohen's D comparison 
+## 9.10 Cohen's D comparison 
 
 The standardized mean difference (cohen's D) with confidence intervals were calculated for:  
 
@@ -1080,7 +1086,7 @@ grid.arrange(p.cohensD.Atha, tab1, tab2, layout_matrix = lay)
 It's difficult to align with groups per treatment, I will stop and add it on inkscape, perhaps it's better to add an '**' when effects are large. 
 ---Cancelled
 
-##10.X Cohen's D without geneExp
+## 10.X Cohen's D without geneExp
 
 Link for fixing distance between bars:
 https://stackoverflow.com/questions/51892875/how-to-increase-the-space-between-grouped-bars-in-ggplot2 
