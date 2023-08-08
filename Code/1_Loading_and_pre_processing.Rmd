@@ -376,7 +376,7 @@ names(normalization_listed) <- c(
 normalization_listed
 ```
 
-# Data ready for analysis! proceed to scrip 2_Beta_Diversity!
+# 1.5 - Data ready for analysis! proceed to scrip 2_Beta_Diversity!
 
 Save R objects 
 

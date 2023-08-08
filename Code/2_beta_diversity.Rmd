@@ -17,12 +17,10 @@ load("./R output/env.1_Loading_and_pre_processing.RData")
 
 
 # 2.0 - basic beta diversity analysis
-this script should be run after script "1_loading_and_pre_processing.rmd" because it generates all the global environment objects and also loads the libraries
-
 On this script we will evaluate beta diversity - the differences in the microbial community compositions across samples. we will make ordination plots and multivariate tests
 
- ***
-# 2.1 - Beta Diversity plots
+
+## 2.1 - Beta Diversity plots
 Beta diversity plots are the beating heart or microbiome analysis. here you will be able to visually tell if communities differ according to treatment or not. It can be a very long topic but here I only use one option.
 
 
@@ -52,7 +50,7 @@ metadata <- as(sample_data(physeq_filtered_CSS), "data.frame")
 ```
 
 
-##2.1.1 - custom NMDS function for automation of split datasets
+### 2.1.1 - custom NMDS function for automation of split datasets
 
 ```{r}
 
@@ -107,13 +105,13 @@ NMDS_4_slice <- NMDS_listing(ps_list_CSS)
 ```
 
 
-# 2.2 - Beta Dispersion
+## 2.2 - Beta Dispersion
 
 Beta dispersion indicates variance in the multidimensional space. It essentially measures the spread of your data points in the ordination, according your different treatments. As you might expect, statistical tests will have a hard time comparing a treatment with high beta dispersion (wide, sparse datapoint cloud) against a treatment with low beta dispersion (clustered, compact datapoint cloud), just like it is difficult to compare large error bars to small error bars.  You can test for homogeniety of this variance, similarly to a levene test of homogeniety before an anova. 
 
 What if you don't have homogeniety of variances? then your permanova results are not as reliale. This can be difficult to solve. there are a few transformations you could try (log or sqrt of your counts), outliers you could remove (specially if you observed that a particular outlier was specially unhealthy) or just split your permanovas accordingly (if soil samples have higher beta dispersion than root samples, test root and soil in separate permanovas). sometimes however these alternatives do no solve the problem - proceed with your tests as normal but be cautious with your conclusions.
 
-#### 2.2.1 - Beta Dipersion Metrics & plots ####
+with this chunk we evaluate Beta Dipersion Metrics & plots 
 ```{r}
 
 # this will test beta dispersions over a list by considering a factor
@@ -172,13 +170,11 @@ dip_result3 <- beta_disp_plotAndTest(ps_list_CSS, "MeJA_treatment")
 ```
 
 
-# 2.3 - P values for beta diversity
 
+## 2.3 - Run PERMANOVA 
 
 A permutation anova will tell if the differences in the microbial community structure are significant or not. they will essentially help you separate the data clouds of your ordination with confidence levels
 
-
-## 2.3.1 - Run PERMANOVA 
 
 you will need to run, test and check several different models and data slices to have final insight into the dataset you are evaluating. get used with testing multiple models!
 
@@ -225,12 +221,10 @@ permanova_with_blocks(ps_list_CSS, "MeJA_treatment + Block")
 
 
 ```
-## 2.3.2 pairwise PERMANOVA
+## 2.4 pairwise PERMANOVA
 
-Now that we know the fixed factor effects and interactions, let's make pairwise comparisons.
+Now that we know the fixed factor effects and interactions, let's make pairwise comparisons.for this we will use EcolUtils::adonis.pair - with lists and p adjust, no blocks
 
-
-### 2.3.2a EcolUtils::adonis.pair - with lists and p adjust, no blocks. 
 ```{r}
 
 # pairwise coparisons over a list fo 4 ps obects
@@ -254,7 +248,7 @@ Factor = as.factor(as(phyloseq::sample_data(physeq_filtered_CSS), "data.frame")$
 ```
 
 
-# save session
+# 2.5 - Save session
 ```{r}
 
 save.image("./R output/analysis_session.RData")

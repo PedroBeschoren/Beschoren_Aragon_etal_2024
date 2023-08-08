@@ -15,12 +15,12 @@ load("./R output/analysis_session.RData")
 
 
 
-# 8.0 important taxa overrepresentation
+# 8.0 - important taxa overrepresentation
 Here we take the output of script 8 that defines teh ASVs that were importnat, and then look into the taxonomies of important taxa. It tests if  these taxa are overperesented in the importnat subset, when compared to the full subset. 
 
 This script will awnser the following question: if 6 out of 17 taxa in RF_importnat of B.Ole roots are from f__Commonadacea, and 211 out of 2453 of the taxas in B.Ole roots are from f__Commonadacea, are these proportions similar or different?
 
-# 8.1 important taxa overrepresentation
+# 8.1 - put toget random forest, netowrk analysis, and differential abudance to define importan ASVs
 set a list of important taxa based on the list of important ASVs
 ```{r}
 
@@ -65,7 +65,7 @@ ps_imp_taxa_l<-mapply(function (z,y)
 
 
 
-# 8.2 prepare data and calculate proportions with fisher's exact test
+# 8.2 - prepare data and calculate proportions with fisher's exact test
 
 note: There was a problem on the loop when it is called inside the function: objects "i" in the loop were literally passed as charather "i", so classes/orders could not be found. the same code works fine when hard-coded. this was a problem when using phyloseq::subset_taxa(), but not now when using phyloseq::prune_taxa() 
 
@@ -87,7 +87,7 @@ fisher_result_l<-mapply(function (x,y)
 ```
 
 
-# 8.3 extract p values and odds ratio
+# 8.3 - extract p values and odds ratio
 Now that we have large lists of fisher tests, let's fish out important metrics for visualization
 ```{r}
 
@@ -138,7 +138,7 @@ min3_adjustp<-str(lapply (fdr_p_fisher_l, function (x)
 
 
 
-# 8.4 make a heat tree of important taxa
+# 8.4 - make a heat tree of important taxa
 metacoder heat trees are made to visualize differences in taxonomic composition, so let's incoporate p and odds ratio values into such trees
 ```{r}
 
@@ -308,13 +308,13 @@ ggsave(output_fisher_summary_trees_plot,
 
 
 
-# overwrite saved session
+# 8.5 - save session as the final step of the microbiome analysis
 ```{r}
 
-save.image("./R output/analysis_session.RData")
+save.image("./R output/completed_analysis_session.RData")
 
 ```
 
 
-analysis complete!
+microbiome analysis complete! run script 9_plant_traits to evaluate plant phenotype
 

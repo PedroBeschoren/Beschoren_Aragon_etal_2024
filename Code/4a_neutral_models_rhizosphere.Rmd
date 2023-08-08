@@ -17,11 +17,11 @@ load("./R output/analysis_session.RData")
 
 
 
-## 4.0 Neutral models on lists of comparisons
+## 4a.0  Neutral models on lists of comparisons
 
 Comparing neutral models will take several different views on different slices of data. the following code serves as a base to evaluate a data split. It generates the base neutral model plots, and also graphical summaries of both neutral model fit for every slice and percentages of fit classes for every data slice. finally, the input list lements receive the fit classes of each list element as a taxa classification
 
-### 4.1 Settings for plotting 
+### 4a.1 Settings for plotting 
 
 ```{r}
 # settings for plotting
@@ -164,9 +164,9 @@ axis_looks <- theme(axis.text = element_text(colour = "black", size = 14)) +
 ```
 
 
-# 4.6 one model for each BO_soil treatment, using all BO_soil samples as a pool
+# 4a.6 one model for each BO_soil treatment, using all BO_soil samples as a pool
 
-### 4.6.1 make new physeq object and neutral models
+### 4a.6.1 make new physeq object and neutral models
 ```{r}
 
 # first, we get out list of 4 phyloseq objects and split it further according to treatment
@@ -214,7 +214,7 @@ ggsave(Neutral_plots_list_BO_soil_g,
 )
 ```
 
-### 4.6.2 check metrics of BO_soil neutral models
+### 4a.6.2 check metrics of BO_soil neutral models
 
 ```{r}
 
@@ -226,7 +226,7 @@ fitstats_listed_BO_soil <- lapply(neutral_list_BO_soil, function(x) {
 })
 ```
 
-### 4.6.3 check distribution of the different classes across your listed phyloseq objects
+### 4a.6.3 check distribution of the different classes across your listed phyloseq objects
 
 This facilitates comparison of multiple different models
 
@@ -261,7 +261,7 @@ SIMPLIFY = FALSE
 )
 ```
 
-### 4.6.4 Add neutral fit classes of OTUs to your original phyloseq objects
+#### 4a.6.4 Add neutral fit classes of OTUs to your original phyloseq objects
 
 finally let's add the  fit class as a taxonomy value of the main phyloseq object Note that the same OTU bay have different fit classes in different slices of the data. beware if trying to put all fit classes into a single phyloseq object!
 
@@ -282,7 +282,7 @@ SIMPLIFY = FALSE
 head(tax_table(ps_list_neutral_BO_soil$control))
 ```
 
-#### 4.6.5 select only one of the fit classes in BO_soil, then merge the 4 treatment split
+#### 4a.6.5 select only one of the fit classes in BO_soil, then merge the 4 treatment split
 
 ```{r}
 # get a list of phyloseq objects (separated by treatment) that have the neutral model definitions in the taxa table (above/predicted/below) and turn it into 3 phyloseq objects of all taxa occuring above, as predicted or below
@@ -339,7 +339,7 @@ BO_soil_predicted_list <- subset_ps_above_neutral_below(
 )
 ```
 
-####  4.6.6 check stats of treatment effects on each subcommunity
+####  4a.6.6 check stats of treatment effects on each subcommunity
 
 ```{r}
 # beta dispersion
@@ -361,7 +361,7 @@ lapply(BO_soil_predicted_list, function(x) {
 
 
 
-####  4.6.8 Make Venn diagram with ASV overlaps 
+####  4a.6.8 Make Venn diagram with ASV overlaps 
 This could be used in place of the ordinations
 
 ```{r}
@@ -387,9 +387,9 @@ Venn_BO <- venn_neutral(ps_l_predictions_in_taxtable = ps_list_neutral_BO_soil) 
 
 
 
-# 4.7 one model for each AT_soil treatment, using all AT_soil samples as a pool
+# 4a.7 one model for each AT_soil treatment, using all AT_soil samples as a pool
 
-### 4.7.1 make new physeq object and neutral models
+### 4a.7.1 make new physeq object and neutral models
 
 ```{r}
 
@@ -442,7 +442,7 @@ ggsave(Neutral_plots_list_AT_soil_g,
 )
 ```
 
-### 4.7.2 check metrics of AT_soil neutral models
+### 4a.7.2 check metrics of AT_soil neutral models
 R², m and fit class percentage metrics can be extracted 
 ```{r}
 
@@ -452,7 +452,7 @@ fitstats_listed_AT_soil <- lapply(neutral_list_AT_soil, function(x) {
 })
 ```
 
-### 4.7.3 check distribution of the different classes across your listed phyloseq objects
+### 4a.7.3 check distribution of the different classes across your listed phyloseq objects
 
 quickly visualize all the fit_class predictions
 
@@ -485,7 +485,7 @@ SIMPLIFY = FALSE
 )
 ```
 
-### 4.7.4 Add neutral fit classes of OTUs to your original phyloseq objects
+#### 4a.7.4 Add neutral fit classes of OTUs to your original phyloseq objects
 
 
 ```{r}
@@ -505,7 +505,7 @@ SIMPLIFY = FALSE
 head(tax_table(ps_list_neutral_AT_soil$control))
 ```
 
-#### 4.7.5 select only one of the fit classes in AT_soil, then merge the 4 treatment split
+#### 4a.7.5 select only one of the fit classes in AT_soil, then merge the 4 treatment split
 
 ```{r}
 # get a list of phyloseq objects (separated by treatment) that have the neutral model definitions in the taxa table (above/predicted/below) and turn it into 3 phyloseq objects of all taxa occuring above, as predicted or below
@@ -562,7 +562,7 @@ AT_soil_predicted_list <- subset_ps_above_neutral_below(
 )
 ```
 
-#### 4.7.6 check stats of treatment effects on each subcommunity
+#### 4a.7.6 check stats of treatment effects on each subcommunity
 
 NOTE: EcoUtils::adonispair() may give an error "attempt to set 'colnames' on an object with less than two dimensions". it happens after running the function a second time. if this happens, refresh session and reload, skipping the first run.
 
@@ -588,7 +588,7 @@ lapply(AT_soil_predicted_list, function(x) {
 
 
 
-####  4.7.8 Make Venn diagram with ASV overlaps 
+####  4a.7.8 Make Venn diagram with ASV overlaps 
 This could be used in place of the ordinations
 
 ```{r}
@@ -608,7 +608,7 @@ Venn_AT <- venn_neutral(ps_l_predictions_in_taxtable = ps_list_neutral_AT_soil) 
   ggtitle(label = "Above Neutral ASV overlap, A. thaliana")
 ```
 
-##### 4.7.9 - Export veen diagram with both plant species
+##### 4.7.9 Export veen diagram with both plant species
 ```{r}
 
 export_venn <- ggarrange(Venn_AT, Venn_BO, labels = c("A", "B"))
@@ -628,7 +628,7 @@ ggsave(export_venn,
 
 
 
-# 4.8 Join neutral class partitions back together to check possible artefacts
+# 4a.8 Join neutral class partitions back together to check possible artefacts
 
 
 ```{r}
@@ -642,13 +642,13 @@ BO_4_model_asPredicted <- lapply(ps_list_neutral_BO_soil, function(x) subset_tax
 BO_4_model_below <- lapply(ps_list_neutral_BO_soil, function(x) subset_taxa(x, fit_class == "Below prediction"))
 ```
 
-## 4.9.check for artefacts in the methodology
+# 4a.9 check for artefacts in the methodology
 
 One possible criticism for this aporach is that we are seriously biasing the ordinations by drawing OTUS from a subset of the data before comparing subsets of the data
 
 we should then draw X random OTUS (instead of those X selected by the neutral models) and check ordinations/permanova results. we perform this several times, and check the output witht the real data
 
-### 4.9.1a run 1000 permanovas on randomly selected OTUs - here, we take teh random otus from inside each tretment and later join them, instead of simply collecing X otus from the full table
+### 4a.9.1 run 1000 permanovas on randomly selected OTUs - here, we take teh random otus from inside each tretment and later join them, instead of simply collecing X otus from the full table
 
 
 ```{r}
@@ -744,7 +744,7 @@ permanovas_AT_100 <- thousand_permanovas_on_random_otu(
 
 
 
-#### 4.9.2 acess the P, F and R2 values of the 100 permanovas for each species, then put it into a single object for both species
+#### 4a.9.2 acess the P, F and R2 values of the 1000 permanovas for each species, then put it into a single object for both species
 
 ```{r}
 
@@ -772,7 +772,7 @@ F_value_vector_AT <- unlist(map(F_value_list_AT, 1)) # F_value values for residu
 hundrerd_permanovas_pr2 <- data.frame(p_values_MeJA_vector_AT, p_values_MeJA_vector_BO, R2_MeJA_vector_AT, R2_MeJA_vector_BO, F_value_vector_AT, F_value_vector_BO)
 ```
 
-#### 4.9.3 get summary statistics of the 100 the P, F and R2 values
+#### 4a.9.3 get summary statistics of the 1000 the P, F and R2 values
 
 ```{r}
 # prepare a list of fucntions to sapply our joint dataframe to
@@ -799,10 +799,11 @@ set.seed(5235)
 full_feature_permanova <- permanova_with_blocks(ps_list_CSS, "MeJA_treatment + Block")
 ```
 
-#### 4.9.4 plot histograms of F, R2 and P values for the full dataset, neutrally selected OTUs, and random OTUs
-##### 4.9.4.1 prepare dataframe
+#### 4a.9.4 plot histograms of F, R2 and P values for the full dataset, neutrally selected OTUs, and random OTUs
 
-Ploting the histograms gives a more intuitive view. preparing the dataframe is slightly different from chunk 4.9.2 This code is really bad and ugly - repetitive, based on copy-pasting. Pedro won't change it for now
+##### 4a.9.5 prepare dataframe
+
+Ploting the histograms gives a more intuitive view. This code is really bad and ugly - repetitive, based on copy-pasting. Pedro won't change it for now
 
 ```{r}
 
@@ -862,7 +863,7 @@ hundrerd_permanovas_pr2 <- bind_rows(p_values_MeJA_vector_AT, p_values_MeJA_vect
 
 
 
-##### 4.9.4.2 plot histograms
+##### 4a.9.6 plot histograms
 
 ```{r}
 # this plot shows the P values of 100 permanovas, with dashed lines for the p values in the above-expected model and solid lines with p values in the full-feature model (all ASVS in BO_soil or AT_soil)
@@ -1031,7 +1032,7 @@ ggsave(histogram_100_permanovas,
 )
 ```
 
-# 4.10 plot a heat tree of above_expected asvs
+# 4a.10 plot a heat tree of above_expected asvs
 
 ```{r}
 
@@ -1216,7 +1217,7 @@ heat_tree_matrix(test,
 
 
 
-# 4.11 Alpha Diversity of ASVs selected by neutral models
+# 4a.11 Alpha Diversity of ASVs selected by neutral models
 
 ```{r}
 
@@ -1304,7 +1305,7 @@ ggplot(
 ```
 
 
-# 4.12  correlate alpha diversity to full dataset to selected ASV dataset
+# 4a.12  correlate alpha diversity to full dataset to selected ASV dataset
 ```{r}
 
 
@@ -1625,7 +1626,7 @@ full_VS_selected_Order$uni_4model_BO_above$Observed_above_expected / full_VS_sel
 ```
 
 
-#4.13 Figures
+#4a.13 Figures
 ```{r}
 
 library(gridExtra)
@@ -1661,11 +1662,11 @@ ggsave(plot_AlphaCorr_Class,
 ```
 
 
-# overwrite saved session
+# 4a.14 overwrite saved session
 ```{r}
 
 save.image("./R output/analysis_session.RData")
 ```
 
 
- Neutral model analysis finished. Proceed to script 5_differential_abundance!
+ Neutral model analysis finished. Proceed to script 4b_neutral_models_endosphere!

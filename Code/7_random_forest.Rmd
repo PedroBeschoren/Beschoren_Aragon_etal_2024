@@ -16,14 +16,14 @@ load("./R output/analysis_session.RData")
 
 
 
-# 7.0 Random forest
+# 7.0 - Random forest
 I've used this tutorial https://www.andreaperlato.com/mlpost/feature-selection-using-boruta-algorithm/
 you can also conside rthis: https://www.analyticsvidhya.com/blog/2016/03/select-important-variables-boruta-package/
 https://www.analyticsvidhya.com/blog/2021/05/boruta-with-r-is-a-great-way-to-address-the-curse-of-dimensionality/
 
 
 
-## 7.1 using borutra over a list of phyloseq objects
+## 7.1 - using borutra over a list of phyloseq objects
 ```{r boruta}
 
 
@@ -75,7 +75,7 @@ boruta_objt_list <- lapply(list_boruta_input, function(x) {
 }) # increase the maximum number of runs to decrease the number of tenttively important OTUs. increase the number of trees to increase precision. decrease either to reduce computational time.
 ```
 
-## 7.2 visualize boruta results over a list (list as input, list as output)
+## 7.2 - visualize boruta results over a list (list as input, list as output)
 
 ```{r boruta}
 
@@ -109,7 +109,7 @@ boruta_history <- lapply(fixed_boruta_objt_list, function(x) {
 
 
 
-##7.3 Cheking Boruta precision with 100-repeated 5-fold cross-validation, over the list of 4 borutized random forested
+##7.3 - Cheking Boruta precision with 100-repeated 5-fold cross-validation, over the list of 4 borutized random forested
 ```{r boruta}
 
 ############################ 3
@@ -149,7 +149,7 @@ map(boruta_feature_rf_repeatedcv, confusionMatrix)
 
 
 
-## 7.4 add the rf classification as part of the OTU taxonomy
+## 7.4 - add the rf classification as part of the OTU taxonomy
 ```{r boruta}
 ##############################################################################################################
 # add the rf classification as part of the OTU taxonomy
@@ -180,7 +180,7 @@ write.csv(select(rf_added_tax$Brassica_oleraceae.Root, random_forest_relevance),
 
 
 
-#7.6 barplot of rf features
+#7.6 - barplot of rf features
 ```{r}
 
 
@@ -231,7 +231,7 @@ plot_rf_asvs <- lapply(rf_ASVs_df, function(x) {
 })
 ```
 
-#Figures
+# 7.7 - export Figures
 ```{r}
 library(gridExtra)
 plot_rf <- grid.arrange(plot_rf_asvs$Arabidopsis_thaliana.Root, 
@@ -251,7 +251,7 @@ ggsave(plot_rf,
 
 
 
-# overwrite saved session
+# 7.8 - overwrite saved session
 ```{r}
 
 save.image("./R output/analysis_session.RData")
@@ -259,4 +259,4 @@ save.image("./R output/analysis_session.RData")
 ```
 
 
-Random forest analysis complete! proceed to script 8_joint_ASV_claissications
+Random forest analysis complete! proceed to script 8_joint_ASV_classifications

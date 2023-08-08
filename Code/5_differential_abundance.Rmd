@@ -15,14 +15,14 @@ load("./R output/env.1_Loading_and_pre_processing.RData")
 
 
 
-## 5.0 Deseq2 differential abundance analysis on lists of comparisons
+## 5.0 - Deseq2 differential abundance analysis on lists of comparisons
 The use of lists in this analysis greatly reduces the amount of hard code. if running this for the first time, read carefully about the use of deseq2 for amplicon data. Each dataset may need tweaks on the selected p levels or minimal fold changes; for that you will edit build_sig_tab()
 
 
 base tutorial used here: https://joey711.github.io/phyloseq-extensions/DESeq2.html
 heatmap for final plot: http://rstudio-pubs-static.s3.amazonaws.com/288398_185f2889a5f641c6b9aa7b14fa15b635.html
 
-### 5.1 Load libraries and create deseq2 object
+### 5.1 - Load libraries and create deseq2 object
 This will be the bulk of the calculations and can take a moment
 
 ```{r}
@@ -45,7 +45,7 @@ pairwise_comparison <- list(
   c("MeJA_treatment", "oral_secretion", "control")
 )
 ```
-### 5.2 make the pairwise comparisons
+### 5.2 - make the pairwise comparisons
 These comparisons will be based on the data splits and the pairwise_comparison list you generated in the previous chunk
 
 ```{r}
@@ -124,7 +124,7 @@ select_listed <- do.call(c, list(Sigtab1, Sigtab2, Sigtab3)) %>% # concatenate t
   unlist(use.names = FALSE) %>% # flatten the rowname (OTU ID) list, ignoring the names of the lists, then...
   unique() # remove duplications of the same OTUs
 ```
-### 5.3 Construct heatmaps
+### 5.3 - Construct heatmaps
 A heatmap like this is a convinient way to represent the key differences across OTUs and treatments
 
 note that on this heatmap, all comparisons are made against the control. you will need to change the contrasts to make, for example, a 1.0 Meja - 0.1MeJA comparison
@@ -191,7 +191,7 @@ SIMPLIFY = FALSE
 
 
 
-# overwrite saved session
+# 5.4 - overwrite saved session
 ```{r}
 
 save.image("./R output/analysis_session.RData")
