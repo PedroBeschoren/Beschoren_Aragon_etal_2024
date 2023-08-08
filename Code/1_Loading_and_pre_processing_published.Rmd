@@ -93,7 +93,7 @@ if (!require(metagMisc)) devtools::install_github("vmikk/metagMisc")
 library("metagMisc") # n lets you split a phyloseq object in a list
 
 if (!require(EcolUtils)) devtools::install_github("GuillemSalazar/EcolUtils")
-library("EcolUtils") # pairwise adonis fucntion
+library("EcolUtils") # pairwise adonis function
 
 if (!require(ggVennDiagram)) remotes::install_github("gaospecial/ggVennDiagram")
 library("ggVennDiagram") # for venn diagrams on SPSS objects
@@ -191,7 +191,7 @@ gc()
 ```
 
 
-### 1.2 Chloroplast and mitochondrial DNA removal ##########
+### 1.2 Chloroplast and mitochondrial DNA removal
 Chloroplast and mitochondria DNA can be amplified by 16s primers that target bacteria. there are many approaches to reduce this problem, such as PCR blockers called PNA clamps. sometimes this is simply not enough, depending on bacterial populations and plastid DNA. A good sequencing of leaf bacterial communities can be extremely challenging due to this problem 
 
 Here, we remove this plant sequences according the taxonomy given to the ASV by the taxa classifier in qiime2. On this chunk we will not perform any in-depht analysis or calculation.
@@ -218,7 +218,7 @@ Now your bacterial phyloseq object is rid of detectable contaminants and plant D
 
 
 
-### 1.3 Filtering out rare ASVs ##########
+### 1.3 Filtering out rare ASVs
 now that our sequences are free of contaminants and plant DNA, let's remove reads that are much too rare. Here we will use the UNOISE3 standard of removing ASVs that occur less than 8 times (https://drive5.com/usearch/manual/cmd_unoise3.html)
 
 
@@ -241,12 +241,12 @@ ggplot() +
 
 
 
-### 1.4 Data Normalization ##########
+### 1.4 Data Normalization
 
 
 A big challenge in microbiome data is the difference in library sizes: some samples are covered more in depth than others. this means sample1 may have 12.000 sequences, while samples2 may have 150.000 sequences. This is because of the sequencing machinery, and makes the data "compositional". You must normalize this data to avoid generating artefacts. there is *extensive* literature on this topic. here we will use 2 methods: rarefaction, a classic approach necessary for some analysis models, and cumulative sum scaling with MetagenomeSeq. 
 
-#### 1.4a Rarefaction & rarefying ##########
+#### 1.4a Rarefaction & rarefying
 This method will cut your library sizes to the minimum library size of your sequencing effort, and then repopulate the OTU tables by picking OTUs/ASVs at random. This method effectively trows away a lot of data, so it's coming into disuse.
 
 Still, we will use rarefied data for alpha diversity, neutral model fits, and core microiome definition
