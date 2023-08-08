@@ -263,6 +263,7 @@ SIMPLIFY = FALSE
 
 #### 4a.6.4 Add neutral fit classes of OTUs to your original phyloseq objects
 
+
 finally let's add the  fit class as a taxonomy value of the main phyloseq object Note that the same OTU bay have different fit classes in different slices of the data. beware if trying to put all fit classes into a single phyloseq object!
 
 ```{r}
@@ -485,8 +486,8 @@ SIMPLIFY = FALSE
 )
 ```
 
-#### 4a.7.4 Add neutral fit classes of OTUs to your original phyloseq objects
 
+#### 4a.7.4 Add neutral fit classes of OTUs to your original phyloseq objects
 
 ```{r}
 
@@ -642,11 +643,14 @@ BO_4_model_asPredicted <- lapply(ps_list_neutral_BO_soil, function(x) subset_tax
 BO_4_model_below <- lapply(ps_list_neutral_BO_soil, function(x) subset_taxa(x, fit_class == "Below prediction"))
 ```
 
+
 # 4a.9 check for artefacts in the methodology
+
 
 One possible criticism for this aporach is that we are seriously biasing the ordinations by drawing OTUS from a subset of the data before comparing subsets of the data
 
 we should then draw X random OTUS (instead of those X selected by the neutral models) and check ordinations/permanova results. we perform this several times, and check the output witht the real data
+
 
 ### 4a.9.1 run 1000 permanovas on randomly selected OTUs - here, we take teh random otus from inside each tretment and later join them, instead of simply collecing X otus from the full table
 
@@ -746,6 +750,8 @@ permanovas_AT_100 <- thousand_permanovas_on_random_otu(
 
 #### 4a.9.2 acess the P, F and R2 values of the 1000 permanovas for each species, then put it into a single object for both species
 
+
+
 ```{r}
 
 
@@ -774,6 +780,7 @@ hundrerd_permanovas_pr2 <- data.frame(p_values_MeJA_vector_AT, p_values_MeJA_vec
 
 #### 4a.9.3 get summary statistics of the 1000 the P, F and R2 values
 
+
 ```{r}
 # prepare a list of fucntions to sapply our joint dataframe to
 sapply_listed_functions <- function(x) {
@@ -799,7 +806,9 @@ set.seed(5235)
 full_feature_permanova <- permanova_with_blocks(ps_list_CSS, "MeJA_treatment + Block")
 ```
 
+
 #### 4a.9.4 plot histograms of F, R2 and P values for the full dataset, neutrally selected OTUs, and random OTUs
+
 
 ##### 4a.9.5 prepare dataframe
 
@@ -864,6 +873,7 @@ hundrerd_permanovas_pr2 <- bind_rows(p_values_MeJA_vector_AT, p_values_MeJA_vect
 
 
 ##### 4a.9.6 plot histograms
+
 
 ```{r}
 # this plot shows the P values of 100 permanovas, with dashed lines for the p values in the above-expected model and solid lines with p values in the full-feature model (all ASVS in BO_soil or AT_soil)
@@ -1662,7 +1672,9 @@ ggsave(plot_AlphaCorr_Class,
 ```
 
 
+
 # 4a.14 overwrite saved session
+
 ```{r}
 
 save.image("./R output/analysis_session.RData")
