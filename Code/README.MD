@@ -33,6 +33,7 @@ The first chunk of script 1_Loading_and_pre_processing.Rmd has code to install t
 * **8_important_taxa_overrepresentation.Rmd:** load necessary libraries and data with the first code chunk. The script will then make the fisher proportion tests for each taxonomy. Chunk 8.1 will subset the ASVs tagged as important in scripts 5,6 and 7. Chunk 8.2 will load and execute a function to calculate the fisher proportions on all taxa at all taxonomic levels. Chunk 8.3 will extract key metrics from the fisher test, and chunk 8.4 will put these metrics into heat trees. In the end, saves the final analysis session for the microbiome data analysis.
 * **9_plant_traits.Rmd:** install and load additional packages, then load and prepare plant phenotype data. Chunks 9.2 to 9.7 will run analysis, checks and plots for plant phenotypes (such as plant dry weight)
 
+
 ### Key custom functions executed in theses scripts
 
 Some of these functions have some hard-coded variables within them, and may need adjustments to be reproduced on different datasets.
