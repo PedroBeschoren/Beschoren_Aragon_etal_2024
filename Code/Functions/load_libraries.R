@@ -53,6 +53,10 @@ lapply(
   }
 )
 
+# renv dependency dection works for these packages only if you laod them like this
+library(Boruta)
+library(DESeq2)
+
 
 biocManager_packages <- c(
   "phyloseq", # essential to produce phyloseq objects with OTU, metadata, and taxa info in one single place
