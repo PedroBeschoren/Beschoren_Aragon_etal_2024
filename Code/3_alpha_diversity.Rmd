@@ -1,5 +1,5 @@
 ---
-title: "3_alpha diversity"
+title: "3_alpha_diversity"
 author: "Pedro Beschoren da Costa"
 date: "August 27, 2021"
 output: html_document

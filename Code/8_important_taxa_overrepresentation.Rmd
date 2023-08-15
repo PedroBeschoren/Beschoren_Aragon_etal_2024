@@ -1,5 +1,5 @@
 ---
-title: "9_important_taxa_overrepresentation"
+title: "8_important_taxa_overrepresentation"
 author: "Pedro"
 date: "2/7/2022"
 output: html_document
@@ -270,7 +270,7 @@ set.seed(1)
                  node_size = fisher_for_heatTree$odds_ratio, # n_obs is a function that calculates, in this case, the number of OTUs per taxon
                  node_color = fisher_for_heatTree$fdr_p,
                  node_label = taxon_names,
-                 node_size_axis_label = "Size: oods_ratio",
+                 node_size_axis_label = "Size: odds_ratio",
                  node_color_interval = c(0, 0.15),
                  edge_color_interval = c(0, 0.15),
                  node_color_range = c("darkgreen", "seagreen", "yellowgreen", "grey"),

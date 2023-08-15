@@ -1,5 +1,5 @@
 ---
-title: "10_plant_traits"
+title: "9_plant_traits"
 author: "Marcela Aragon"
 date: "8/17/2022"
 editor_options: 
@@ -16,9 +16,8 @@ Finally, as both plants are phenotypically different *per se* we compared the ef
 
 ```{r}
 
-# set working directory to project directory 
 
-# this will load all key libraries for the whole project
+# this will load or install libraries for this script
 library(tidyr)
 library(dplyr)
 library(vegan)
@@ -45,7 +44,6 @@ library(lsr)
 if (!require(effsize)) install.packages("effsize")
 library(effsize)
 library(gridExtra)
-#source("./renv/0_load_libraries.R")
 
 
 ```
@@ -638,7 +636,6 @@ p.lox2.Atha <- ggplot(data = subset(qpcr.summ, species=="Arabidopsis_thaliana" &
   geom_errorbar(aes(ymin=mean-se, ymax=mean+se), width=.4, size=0.8, position = position_dodge(width = 0.8))+
   scale_fill_manual(values = color_treatments)+
   labs(y="relative expression of LOX2", x=" ") +
-  labs(title = "Atha")+
   scale_y_continuous(expand = c(0, 0), #start graph at y = min and x = min
                      limits = c(0,7)) + #y limits
   scale_x_discrete(labels=treatment_names)+
@@ -656,16 +653,27 @@ p.lox2.Bole <- ggplot(data = subset(qpcr.summ, species=="Brassica_oleraceae" & g
   geom_errorbar(aes(ymin=mean-se, ymax=mean+se), width=.4, size=0.8, position = position_dodge(width = 0.8))+
   scale_fill_manual(values = color_treatments)+
   labs(y="relative expression of LOX2", x=" ") +
-  labs(title = "Bole")+
   scale_y_continuous(expand = c(0, 0), #start graph at y = min and x = min
                      limits = c(0, 6)) + #y limits
   scale_x_discrete(labels=treatment_names)+
   axis_looks
 
+
+
+
 #save plot
 ggsave(p.lox2.Bole,
        height = 3.52, width = 3.55,
        file="./R output/Figures_for_publication/traits_BO_LOX2.svg")
+
+# save both pltos as a pannel
+p.lox2.Atha.Bole<-ggarrange(p.lox2.Atha, p.lox2.Bole, common.legend = TRUE, labels = "AUTO")
+
+ggsave(p.lox2.Atha.Bole,
+       height = 90, width = 180, units = "mm",
+       file="./R output/Figures_for_publication/traits_BOAT_pannel_LOX2.svg")
+
+
 
 ```
 
@@ -747,7 +755,7 @@ pairs(emm.lox2.Bole)
 cld.lox2.Bole <- cld(emm.lox2.Bole,
            alpha = 0.05,
            Letters = letters,
-           adjust = "lsd")
+           adjust = "tukey")
 
 ```
 

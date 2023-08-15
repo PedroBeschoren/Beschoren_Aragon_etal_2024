@@ -1,5 +1,5 @@
 ---
-title: "4_neutral_model"
+title: "4a_neutral_models_rhizosphere"
 author: "Pedro"
 date: "9/17/2021"
 output: html_document
@@ -661,7 +661,7 @@ we should then draw X random OTUS (instead of those X selected by the neutral mo
 thousand_permanovas_on_random_otu <- function(CSS_fraction, ps_4_model_l) {
   # the input is one of the 4-split fraction of the CSS-normalized phyloseq object as the first argument
   # the second argument is the phyloseq object containing only the OTUs classified as above expected
-  # The output is a list of 100 permanovas
+  # The output is a list of 1000 permanovas
 
   # Set seed for consistency
   set.seed(92342347)
@@ -678,7 +678,7 @@ thousand_permanovas_on_random_otu <- function(CSS_fraction, ps_4_model_l) {
 
 
 
-  # turn the n_rows x 100df into a list of 100 vectors
+  # turn the n_rows x 1000df into a list of 1000 vectors
   Rand_otus_control_lists <- list() # make empty list
   for (i in 1:ncol(rand_otu_control)) { # Using for-loop to add columns to list
     Rand_otus_control_lists[[i]] <- rand_otu_control[, i]
@@ -715,7 +715,7 @@ thousand_permanovas_on_random_otu <- function(CSS_fraction, ps_4_model_l) {
 
 
 
-  # make 100 phyloseq objects with the same number of OTUs as the above_selected models
+  # make 1000 phyloseq objects with the same number of OTUs as the above_selected models
   list_100_phyloseqs <- lapply(merged_100_asv_names, function(x) {
     prune_taxa(x, CSS_fraction)
   })
