@@ -27,7 +27,6 @@ All code is svailable on the “Code/qiime2_preProcessing/” folder
 * **0_Trimmomatic.sb:** trims low quality reads based on a sliding window approach with Trimmomatic
 * **2_remove_primers.sb:** remove primer sequences with the cutadapt plugin of qiime2
 * **3_dada2.sb:** runs dada2 pipeline (merging, denoising, chimera removal, filtering) with the pluging in qiime2
-
 * **4_AlphaBetaDiv.sb:** performs a handful of preliminary alpha and beta diversity analysis for basic data quality checks
 * **5_taxonomy.sb:** assigns taxonomies based on a re-trained SILVA 138 database, considering primer sequence and fragment length. Reference training was performed as in the standard qiime2 tutorials. Our code for this step can be found in “Code/qiime2_preProcessing/Reference_training”
 * ** 6_export_as_biom.sb:** exports qiime2 artefacts as a .biom file (much lighter, can include taxonomy and metadata)
