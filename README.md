@@ -2,29 +2,29 @@
 
 This repository holds the full data and code for this manuscript (auhtor names and affiliations available upon publication)
 
-Instructions for the use of the qiime2 pipeline used for this repository can be found [here](https://github.com/PedroBeschoren/Beschoren_Aragon_etal_2023/blob/main/Code/qiime2_preProcessing/README.MD)
+**Instructions for the use of the qiime2** pipeline used for this repository can be found [here](https://github.com/PedroBeschoren/Beschoren_Aragon_etal_2023/blob/main/Code/qiime2_preProcessing/README.MD)
 
-Instructions for the use of the R pipeline used for this repository can be found [here](https://github.com/PedroBeschoren/Beschoren_Aragon_etal_2023/blob/main/Code/README.MD)
+**Instructions for the use of the R pipeline** used for this repository can be found [here](https://github.com/PedroBeschoren/Beschoren_Aragon_etal_2023/blob/main/Code/README.MD)
 
 This research, and the public availability of the code, was funded by the Dutch Research Council (NWO, Gravitation programme, MiCRop project, 024.004.014).
 
 ### These are the main analysis methods employed
-    * Permanovas, beta dispersion and NMDS ordinations on CSS normalized microbiome data
-    * basic alpha diversity analysis (shannon)
-    * Classic DeSeq2 analysis for differentially abundant ASVs
-    * Random Forest, defining ASVs that predict treatment classes
-    * Network analysis, defining keystone taxa, module connectors and module hubs
-    * Summarization of ASVs classified as important by random forest, networks and deseq with fisher tests
-        * visualization of ASV taxonomies with heat trees
-    * Neutral models per treatment using species + compartment as the source
-        * follow-up with above-expected communities permanovas and heat tree visualization
-        * follow-up with diversity indexes (Shannon, simpson and obseved richness) within every single taxonomic group
+* Permanovas, beta dispersion and NMDS ordinations on CSS normalized microbiome data
+* basic alpha diversity analysis (shannon)
+* Classic DeSeq2 analysis for differentially abundant ASVs
+* Random Forest, defining ASVs that predict treatment classes
+* Network analysis, defining keystone taxa, module connectors and module hubs
+* Summarization of ASVs classified as important by random forest, networks and deseq with fisher tests
+    * visualization of ASV taxonomies with heat trees
+* Neutral models per treatment using species + compartment as the source
+    * follow-up with above-expected communities permanovas and heat tree visualization
+    * follow-up with diversity indexes (Shannon, simpson and obseved richness) within every single taxonomic group
 
 ### Can I just donwload all of it and re-run locally?
 
-Yes! If you don't feel like cloning the github repository you can jsut download a .zip from the green "code" box just above
+Yes! If you don't feel like cloning the github repository you can just download a .zip from the green "code" box above
 
-run the scripts serially as in the instructions linked above. R package isntallation is facilitated by the first chunk of the first script
+run the scripts serially as in the instructions linked [here](https://github.com/PedroBeschoren/Beschoren_Aragon_etal_2023/blob/main/Code/README.MD) R package isntallation is facilitated by the first chunk of the first script
 
 
 ### Suggested tutorials for key tools used in this repository
